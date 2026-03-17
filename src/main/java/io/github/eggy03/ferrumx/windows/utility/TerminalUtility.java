@@ -6,6 +6,7 @@
 package io.github.eggy03.ferrumx.windows.utility;
 
 import io.github.eggy03.ferrumx.windows.exception.TerminalExecutionException;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
@@ -41,7 +42,7 @@ public class TerminalUtility {
      * @throws TerminalExecutionException When the process is killed pre-maturely upon reaching the timeout or when the command yields an error
      * @throws IllegalArgumentException   If the provided timeout is in the negative
      */
-    public static String executeCommand(@NotNull String command, long timeoutSeconds) {
+    public static @NotNull String executeCommand(@NonNull String command, long timeoutSeconds) {
 
         if (timeoutSeconds < 0)
             throw new IllegalArgumentException("Timeout cannot be negative");

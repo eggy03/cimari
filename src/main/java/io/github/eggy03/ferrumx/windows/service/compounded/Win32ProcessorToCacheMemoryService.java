@@ -18,6 +18,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -94,9 +95,8 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * Returns an empty list if no processors and related cache information are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32ProcessorToCacheMemory> get() {
+    public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get() {
         try (PowerShell shell = PowerShell.openSession()) {
             PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_PROCESSOR_TO_CACHE_MEMORY_SCRIPT.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -113,9 +113,8 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * Returns an empty list if no processors and related cache information are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32ProcessorToCacheMemory> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_PROCESSOR_TO_CACHE_MEMORY_SCRIPT.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32ProcessorToCacheMemoryMapper().mapToList(response.getCommandOutput(), Win32ProcessorToCacheMemory.class);
@@ -135,9 +134,8 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * Returns an empty list if no processors and related cache information are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<Win32ProcessorToCacheMemory> get(long timeout) {
+    public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
 
         String command = PowerShellScript.getScript(PowerShellScript.WIN32_PROCESSOR_TO_CACHE_MEMORY_SCRIPT.getScriptPath());
         String response = TerminalUtility.executeCommand(command, timeout);

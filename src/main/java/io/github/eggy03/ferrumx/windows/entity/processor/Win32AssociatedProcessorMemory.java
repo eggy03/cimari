@@ -5,6 +5,7 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.processor;
 
+import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
@@ -34,7 +35,6 @@ import org.jetbrains.annotations.Nullable;
  *     the {@code DeviceID} (from {@code Win32_CacheMemory}) or the {@code DeviceID}
  *     (from {@code Win32_Processor}) as standalone properties.
  *     Instead, these values are nested within its references: {@code Antecedent} and {@code Dependent}.
- *
  * </p>
  * <p>
  *     To simplify data mapping, the PowerShell query defined in
@@ -65,6 +65,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Value
 @Builder(toBuilder = true)
+@Immutable
 public class Win32AssociatedProcessorMemory {
 
     /**

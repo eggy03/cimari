@@ -10,6 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -57,6 +58,7 @@ public interface CommonMappingInterface<S> {
      * @since 3.0.0
      */
     @NotNull
+    @Unmodifiable
     default List<S> mapToList(@NonNull String json, @NonNull Class<S> objectClass) {
 
         if (json.startsWith("[")) {
@@ -91,6 +93,7 @@ public interface CommonMappingInterface<S> {
      * @since 3.0.0
      */
     @NotNull
+    @Unmodifiable
     default Optional<S> mapToObject(@NonNull String json, @NonNull Class<S> objectClass) {
         // this returns null iff JSON is null or empty.
         // Former is annotation checked while the latter is taken care of by Optional

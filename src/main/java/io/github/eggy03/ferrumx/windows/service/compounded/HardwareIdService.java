@@ -89,9 +89,8 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      * the HWID. Returns {@link Optional#empty()} if no information is detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public Optional<HardwareId> get() {
+    public @NotNull Optional<HardwareId> get() {
         try (PowerShell shell = PowerShell.openSession()) {
             PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.HWID_SCRIPT.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -108,9 +107,8 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      * the HWID. Returns {@link Optional#empty()} if no information is detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public Optional<HardwareId> get(@NonNull PowerShell powerShell) {
+    public @NotNull Optional<HardwareId> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.HWID_SCRIPT.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
@@ -131,9 +129,8 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      * is detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public Optional<HardwareId> get(long timeout) {
+    public @NotNull Optional<HardwareId> get(long timeout) {
 
         String script = PowerShellScript.getScript(PowerShellScript.HWID_SCRIPT.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);

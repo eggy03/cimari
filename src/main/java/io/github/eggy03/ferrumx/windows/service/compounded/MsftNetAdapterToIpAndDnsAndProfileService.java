@@ -19,6 +19,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -97,9 +98,8 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      * connected adapters with their configs. Returns an empty list if no data is found.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<MsftNetAdapterToIpAndDnsAndProfile> get() {
+    public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get() {
         try (PowerShell shell = PowerShell.openSession()) {
             PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE_SCRIPT.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -116,9 +116,8 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      * and their configs. Returns an empty list if no data is found.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<MsftNetAdapterToIpAndDnsAndProfile> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE_SCRIPT.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
@@ -138,9 +137,8 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      * and their configs. Returns an empty list if no data is found.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
+    public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
 
         String script = PowerShellScript.getScript(PowerShellScript.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE_SCRIPT.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);

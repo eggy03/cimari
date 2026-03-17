@@ -20,6 +20,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -99,9 +100,8 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * with their partitions and logical disks. Returns an empty list if no data is found.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32DiskDriveToPartitionAndLogicalDisk> get() {
+    public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get() {
         try (PowerShell shell = PowerShell.openSession()) {
             PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK_SCRIPT.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -118,9 +118,8 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * with their partitions and logical disks. Returns an empty list if no data is found.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32DiskDriveToPartitionAndLogicalDisk> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK_SCRIPT.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskDriveToPartitionAndLogicalDisk.class);
@@ -140,9 +139,8 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * with their partitions and logical disks. Returns an empty list if no data is found.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {
+    public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {
 
         String script = PowerShellScript.getScript(PowerShellScript.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK_SCRIPT.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);

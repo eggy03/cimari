@@ -16,6 +16,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -92,9 +93,8 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      *                             or parsing the output.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32VideoController> get() {
+    public @NotNull @Unmodifiable List<Win32VideoController> get() {
 
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_VIDEO_CONTROLLER_QUERY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -110,9 +110,8 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      * Returns an empty list if none are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32VideoController> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32VideoController> get(@NonNull PowerShell powerShell) {
 
         PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_VIDEO_CONTROLLER_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -133,9 +132,8 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      * Returns an empty list if none are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<Win32VideoController> get(long timeout) {
+    public @NotNull @Unmodifiable List<Win32VideoController> get(long timeout) {
         String command = Cimv2Namespace.WIN32_VIDEO_CONTROLLER_QUERY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);

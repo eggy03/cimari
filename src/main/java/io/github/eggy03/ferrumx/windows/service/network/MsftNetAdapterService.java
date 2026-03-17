@@ -15,6 +15,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -89,9 +90,8 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * Returns an empty list if no adapters are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<MsftNetAdapter> get() {
+    public @NotNull @Unmodifiable List<MsftNetAdapter> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2Namespace.MSFT_NET_ADAPTER_QUERY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new MsftNetAdapterMapper().mapToList(response.getCommandOutput(), MsftNetAdapter.class);
@@ -105,9 +105,8 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * Returns an empty list if no adapters are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<MsftNetAdapter> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<MsftNetAdapter> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(StandardCimv2Namespace.MSFT_NET_ADAPTER_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new MsftNetAdapterMapper().mapToList(response.getCommandOutput(), MsftNetAdapter.class);
@@ -127,9 +126,8 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * Returns an empty list if no adapters are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<MsftNetAdapter> get(long timeout) {
+    public @NotNull @Unmodifiable List<MsftNetAdapter> get(long timeout) {
         String command = StandardCimv2Namespace.MSFT_NET_ADAPTER_QUERY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);

@@ -5,6 +5,7 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.user;
 
+import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import lombok.Builder;
 import lombok.Value;
@@ -42,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value
 @Builder(toBuilder = true)
+@Immutable
 public class User {
 
     /**

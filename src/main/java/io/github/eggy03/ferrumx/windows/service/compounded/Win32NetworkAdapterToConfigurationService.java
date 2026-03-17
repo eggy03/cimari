@@ -18,6 +18,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -95,9 +96,8 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * Returns an empty list if no network adapter and related configuration are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32NetworkAdapterToConfiguration> get() {
+    public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get() {
         try (PowerShell shell = PowerShell.openSession()) {
             PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -114,9 +114,8 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * Returns an empty list if no network adapter and related configuration are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32NetworkAdapterToConfiguration> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
@@ -136,9 +135,8 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * Returns an empty list if no network adapter and related configuration are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<Win32NetworkAdapterToConfiguration> get(long timeout) {
+    public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(long timeout) {
 
         String command = PowerShellScript.getScript(PowerShellScript.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath());
         String response = TerminalUtility.executeCommand(command, timeout);

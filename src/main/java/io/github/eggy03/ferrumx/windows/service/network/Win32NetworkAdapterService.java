@@ -15,6 +15,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -89,9 +90,8 @@ public class Win32NetworkAdapterService implements CommonServiceInterface<Win32N
      * Returns an empty list if no adapters are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32NetworkAdapter> get() {
+    public @NotNull @Unmodifiable List<Win32NetworkAdapter> get() {
 
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_NETWORK_ADAPTER_QUERY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -106,9 +106,8 @@ public class Win32NetworkAdapterService implements CommonServiceInterface<Win32N
      * Returns an empty list if no adapters are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32NetworkAdapter> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32NetworkAdapter> get(@NonNull PowerShell powerShell) {
 
         PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_NETWORK_ADAPTER_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -129,9 +128,8 @@ public class Win32NetworkAdapterService implements CommonServiceInterface<Win32N
      * Returns an empty list if no adapters are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<Win32NetworkAdapter> get(long timeout) {
+    public @NotNull @Unmodifiable List<Win32NetworkAdapter> get(long timeout) {
         String command = Cimv2Namespace.WIN32_NETWORK_ADAPTER_QUERY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
