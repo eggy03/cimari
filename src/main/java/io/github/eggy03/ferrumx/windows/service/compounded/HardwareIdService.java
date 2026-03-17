@@ -7,9 +7,10 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.PowerShellScript;
 import io.github.eggy03.ferrumx.windows.entity.compounded.HardwareId;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.HardwareIdMapper;
+import io.github.eggy03.ferrumx.windows.script.ScriptEnum;
+import io.github.eggy03.ferrumx.windows.script.ScriptLoader;
 import io.github.eggy03.ferrumx.windows.service.OptionalCommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
@@ -21,7 +22,7 @@ import java.util.Optional;
 /**
  * Service class for fetching the HWID information from a system running Windows.
  * <p>
- * This class executes the {@link PowerShellScript#HWID_SCRIPT} PowerShell script
+ * This class executes the {@link ScriptEnum#HWID_SCRIPT} PowerShell script
  * and maps the resulting JSON into an {@link Optional} {@link HardwareId} object.
  * </p>
  *
@@ -92,7 +93,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
     @Override
     public @NotNull Optional<HardwareId> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.HWID_SCRIPT.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.HWID_SCRIPT.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
         }
@@ -109,7 +110,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      */
     @Override
     public @NotNull Optional<HardwareId> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.HWID_SCRIPT.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.HWID_SCRIPT.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
     }
@@ -132,7 +133,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
     @Override
     public @NotNull Optional<HardwareId> get(long timeout) {
 
-        String script = PowerShellScript.getScript(PowerShellScript.HWID_SCRIPT.getScriptPath());
+        String script = ScriptLoader.loadScript(ScriptEnum.HWID_SCRIPT.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new HardwareIdMapper().mapToObject(response, HardwareId.class);
