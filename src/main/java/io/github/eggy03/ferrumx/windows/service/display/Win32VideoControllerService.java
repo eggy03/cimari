@@ -111,7 +111,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      * @since 3.0.0
      */
     @Override
-    public  @NotNull @Unmodifiable List<Win32VideoController> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32VideoController> get(@NonNull PowerShell powerShell) {
 
         PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_VIDEO_CONTROLLER_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());

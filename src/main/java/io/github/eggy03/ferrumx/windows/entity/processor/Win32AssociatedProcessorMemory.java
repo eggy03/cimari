@@ -35,7 +35,6 @@ import org.jetbrains.annotations.Nullable;
  *     the {@code DeviceID} (from {@code Win32_CacheMemory}) or the {@code DeviceID}
  *     (from {@code Win32_Processor}) as standalone properties.
  *     Instead, these values are nested within its references: {@code Antecedent} and {@code Dependent}.
- *
  * </p>
  * <p>
  *     To simplify data mapping, the PowerShell query defined in
