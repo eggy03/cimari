@@ -90,8 +90,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      * @since 3.0.0
      */
     @Override
-    @NotNull
-    public Optional<Win32ComputerSystem> get() {
+    public @NotNull Optional<Win32ComputerSystem> get() {
 
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_COMPUTER_SYSTEM_QUERY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -108,8 +107,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      * @since 3.0.0
      */
     @Override
-    @NotNull
-    public Optional<Win32ComputerSystem> get(@NonNull PowerShell powerShell) {
+    public @NotNull Optional<Win32ComputerSystem> get(@NonNull PowerShell powerShell) {
 
         PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_COMPUTER_SYSTEM_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -131,9 +129,8 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      * is detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public Optional<Win32ComputerSystem> get(long timeout) {
+    public @NotNull Optional<Win32ComputerSystem> get(long timeout) {
         String command = Cimv2Namespace.WIN32_COMPUTER_SYSTEM_QUERY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);

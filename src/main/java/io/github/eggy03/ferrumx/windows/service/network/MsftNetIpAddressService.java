@@ -15,6 +15,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -89,9 +90,8 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
      * Returns an empty list if no configs are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<MsftNetIpAddress> get() {
+    public @NotNull @Unmodifiable List<MsftNetIpAddress> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2Namespace.MSFT_NET_IP_ADDRESS_QUERY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new MsftNetIpAddressMapper().mapToList(response.getCommandOutput(), MsftNetIpAddress.class);
@@ -106,9 +106,8 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
      * Returns an empty list if no configs are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<MsftNetIpAddress> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<MsftNetIpAddress> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(StandardCimv2Namespace.MSFT_NET_IP_ADDRESS_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new MsftNetIpAddressMapper().mapToList(response.getCommandOutput(), MsftNetIpAddress.class);
@@ -128,9 +127,8 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
      * Returns an empty list if no configs are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<MsftNetIpAddress> get(long timeout) {
+    public @NotNull @Unmodifiable List<MsftNetIpAddress> get(long timeout) {
         String command = StandardCimv2Namespace.MSFT_NET_IP_ADDRESS_QUERY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);

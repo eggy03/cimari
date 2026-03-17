@@ -15,6 +15,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -90,8 +91,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      * @since 3.0.0
      */
     @Override
-    @NotNull
-    public List<Win32UserAccount> get() {
+    public @NotNull @Unmodifiable List<Win32UserAccount> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_USER_ACCOUNT_QUERY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32UserAccountMapper().mapToList(response.getCommandOutput(), Win32UserAccount.class);
@@ -106,8 +106,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      * @since 3.0.0
      */
     @Override
-    @NotNull
-    public List<Win32UserAccount> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32UserAccount> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_USER_ACCOUNT_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32UserAccountMapper().mapToList(response.getCommandOutput(), Win32UserAccount.class);
@@ -127,9 +126,8 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      * Returns an empty list if no user accounts are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<Win32UserAccount> get(long timeout) {
+    public @NotNull @Unmodifiable List<Win32UserAccount> get(long timeout) {
         String command = Cimv2Namespace.WIN32_USER_ACCOUNT_QUERY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);

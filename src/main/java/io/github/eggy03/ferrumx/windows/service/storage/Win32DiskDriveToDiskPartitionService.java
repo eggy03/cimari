@@ -17,6 +17,7 @@ import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -91,9 +92,8 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * a {@link Win32DiskDrive} and it's {@link Win32DiskPartition}. Returns an empty list if none are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32DiskDriveToDiskPartition> get() {
+    public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_DISK_DRIVE_TO_DISK_PARTITION_QUERY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32DiskDriveToDiskPartitionMapper().mapToList(response.getCommandOutput(), Win32DiskDriveToDiskPartition.class);
@@ -109,9 +109,8 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * a {@link Win32DiskDrive} and it's {@link Win32DiskPartition}. Returns an empty list if none are detected.
      * @since 3.0.0
      */
-    @NotNull
     @Override
-    public List<Win32DiskDriveToDiskPartition> get(@NonNull PowerShell powerShell) {
+    public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_DISK_DRIVE_TO_DISK_PARTITION_QUERY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32DiskDriveToDiskPartitionMapper().mapToList(response.getCommandOutput(), Win32DiskDriveToDiskPartition.class);
@@ -132,9 +131,8 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * Returns an empty list if none are detected.
      * @since 3.1.0
      */
-    @NotNull
     @Override
-    public List<Win32DiskDriveToDiskPartition> get(long timeout) {
+    public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get(long timeout) {
         String command = Cimv2Namespace.WIN32_DISK_DRIVE_TO_DISK_PARTITION_QUERY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
