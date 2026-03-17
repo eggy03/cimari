@@ -40,7 +40,7 @@ The following headings may be used while categorizing the list of changes made i
 ### Non-Breaking Changes
 
 - Infer nullability for fields and methods via JetBrain's `Nullable` and `NotNull` annotations.
-This also covers fields which were accidentally left devoid of any annotations
+  This also covers fields which were accidentally left devoid of any annotations
 - Add null checks to method parameters where-ever required via Lombok's `@NonNull` annotation
 - Apply style formats to code and Javadocs
 
@@ -49,8 +49,8 @@ This also covers fields which were accidentally left devoid of any annotations
 ### Breaking Changes
 
 - Service classes now return immutable lists of entity objects instead of mutable lists.
-The entity objects themselves were already immutable prior to this change.
-This change is only breaking for users who relied on mutating the returned lists directly.
+  The entity objects themselves were already immutable prior to this change.
+  This change is only breaking for users who relied on mutating the returned lists directly.
 
 ### Non-Breaking Changes
 
@@ -64,9 +64,10 @@ This change is only breaking for users who relied on mutating the returned lists
 ### Documentation
 
 - Update Javadoc to reflect the immutability of the lists returned by the service classes.
-- Update Javadocs in `CommonMappingInterface` to properly describe return behavior for empty, schema mismatched, null and malformed JSON.
-- Update Javadocs in service interfaces to notify that either the 
-default or custom implementations of `CommonMappingInterface` may be used for mapping results
+- Update Javadocs in `CommonMappingInterface` to properly describe return behavior for empty, schema mismatched, null
+  and malformed JSON.
+- Update Javadocs in service interfaces to notify that either the
+  default or custom implementations of `CommonMappingInterface` may be used for mapping results
 
 ## [3.1.2] - January 28, 2026
 
@@ -93,8 +94,9 @@ default or custom implementations of `CommonMappingInterface` may be used for ma
   of `jPowerShell` to launch and close PowerShell sessions
 
 - Service classes now implement a new `get(long timeout)` method which uses `TerminalUtility` and allows you to specify
-how long the PowerShell session will run before it is forcefully terminated regardless of the completion status
-of the script or command. This method does not rely on `jPowerShell` and can be safely used in Executor based workflows
+  how long the PowerShell session will run before it is forcefully terminated regardless of the completion status
+  of the script or command. This method does not rely on `jPowerShell` and can be safely used in Executor based
+  workflows
   unlike the other methods
 
 ### Documentation
@@ -133,8 +135,8 @@ Please consult the documentation in README, WIKI, Javadocs and Examples to know 
 
 *Add the following new compounded WMI retrieval functions*
 
-- HardwareId, 
-- MsftNetAdapterToIpAndDnsAndProfile, 
+- HardwareId,
+- MsftNetAdapterToIpAndDnsAndProfile,
 - Win32DiskDriveToPartitionAndLogicalDisk,
 - Win32DiskPartitionToLogicalDisk,
 - Win32NetworkAdapterToConfiguration,
@@ -150,8 +152,9 @@ Please consult the documentation in README, WIKI, Javadocs and Examples to know 
 ### Non-Breaking Changes
 
 - Added a ReflectionUtility utility class.
-This change solves issue #22 which dynamically retrieves the properties to fetch, from the entity classes, so that
-only select properties to be fetched are passed on to the PowerShell query at runtime, instead of fetching all the properties.
+  This change solves issue #22 which dynamically retrieves the properties to fetch, from the entity classes, so that
+  only select properties to be fetched are passed on to the PowerShell query at runtime, instead of fetching all the
+  properties.
 - Add `@Nullable` annotations in missing entity fields
 - Added `trace` level logging for service methods
 - Re-organize unit test package structure
@@ -209,7 +212,8 @@ only select properties to be fetched are passed on to the PowerShell query at ru
 
 ### Breaking Changes
 
-- Reversed from multi-module project to single module. The module that contained examples have been shifted to a new repository.
+- Reversed from multi-module project to single module. The module that contained examples have been shifted to a new
+  repository.
 - Base package has been renamed from `org.ferrumx` to `io.github.eggy03.ferrumx.windows`
 - Maven `group id` changed from `io.github.egg-03` to `io.github.eggy03`. The artifact id has been changed from
   `ferrumx-core` to `ferrumx-windows`
@@ -221,12 +225,14 @@ only select properties to be fetched are passed on to the PowerShell query at ru
 ### Dependency Updates
 
 Updated dependencies:
+
 - lombok: 1.18.38 -> 1.18.42
 - org.jetbrains:annotations: 13.0 -> 26.0.2
 - junit-jupiter-engine: 5.13.4 -> 6.0.0
 - mockito-core: 5.19.0 -> 5.20.0
 
 Updated plugins:
+
 - maven-javadoc-plugin: 3.11.2 -> 3.12.0
 - central-publishing-maven-plugin: 0.8.0 -> 0.9.0
 
@@ -251,7 +257,7 @@ Updated plugins:
 ### Breaking Changes
 
 - Deprecated the `getProcessor()` method of the `ProcessorService` class as it only returns a single processor
-and fails in case of systems with multiple CPUs. It is now encouraged to use the `getProcessors()` method instead,
+  and fails in case of systems with multiple CPUs. It is now encouraged to use the `getProcessors()` method instead,
   which returns a list of processors
 
 - Entity classes now have a builder pattern
@@ -284,21 +290,25 @@ have been removed which will slowly be re-added with the upcoming pre-view relea
 
 - Removed custom HWID generation logic.
 - Removed `Win32_Printer` and `Win32_SoundDevice` classes.
-- Removed the associative classes `Win32_AssociatedProcessorMemory`, `Win32_NetworkAdapterSetting`, `Win32_DiskDriveToDiskPartition` and `Win32_LogicalDiskToPartition`
+- Removed the associative classes `Win32_AssociatedProcessorMemory`, `Win32_NetworkAdapterSetting`,
+  `Win32_DiskDriveToDiskPartition` and `Win32_LogicalDiskToPartition`
 
 ### Breaking Changes
 
-- The legacy shell classes and custom parsing logic have been completely removed and replaced with a new service/entity structure.
-- Each service now runs a PowerShell query via `jPowershell` that parses the JSON output to its respective entity class via GSON. Instead of a Map data structure in v1, you now get typed objects with their fields which are accessible via the provided getters.
+- The legacy shell classes and custom parsing logic have been completely removed and replaced with a new service/entity
+  structure.
+- Each service now runs a PowerShell query via `jPowershell` that parses the JSON output to its respective entity class
+  via GSON. Instead of a Map data structure in v1, you now get typed objects with their fields which are accessible via
+  the provided getters.
 - Removed all forced checked exceptions. The only time an unchecked exception may be thrown is if the JSON is malformed,
-or if a PowerShell session fails to load.
+  or if a PowerShell session fails to load.
 - Improved null safety with the usage of Optional and empty Lists.
 - Multi-Module Project: The codebase is now split into a multi-module Maven project:
-*_ferrumx-core_*: Contains the main library logic.
-*_ferrumx-examples_*: Provides practical usage demonstrations.
+  *_ferrumx-core_*: Contains the main library logic.
+  *_ferrumx-examples_*: Provides practical usage demonstrations.
 
-- Package Refactoring: All core packages have been moved under the `org.ferrumx.core` namespace, and the root package was renamed from `com.ferrumx` to `org.ferrumx` to align with open-source conventions.
-
+- Package Refactoring: All core packages have been moved under the `org.ferrumx.core` namespace, and the root package
+  was renamed from `com.ferrumx` to `org.ferrumx` to align with open-source conventions.
 
 ### Dependency Updates
 
@@ -363,7 +373,7 @@ or if a PowerShell session fails to load.
 ### Breaking Changes
 
 - Associated classes have been moved to a separate package with its custom formatter.
-This has caused the following imports to change:
+  This has caused the following imports to change:
 
 ```java
     import com.ferrumx.system.hardware.Win32_AssociatedProcessorMemory;
@@ -371,6 +381,7 @@ This has caused the following imports to change:
     import com.ferrumx.system.operating_system.Win32_DiskDriveToDiskPartition;
     import com.ferrumx.system.operating_system.Win32_LogicalDiskToPartition;
 ```
+
 to
 
 ```java
@@ -403,7 +414,8 @@ to
 
 ## [1.3.0] - September 11, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### New Features
 
@@ -421,11 +433,13 @@ to
 
 ## [1.2.4] - June 23, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### Non-Breaking Changes
 
 HardwareID changes:
+
 - Removed Username, DeviceName, RAM Count and Storage Count
 - Added DriveIDs
 
@@ -435,7 +449,8 @@ New ID format: CPUName/CPUID/MotherboardName/DriveIDs [58741d85f84727720c90dad05
 
 ## [1.2.3] - June 21, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### Non-Breaking Changes
 
@@ -445,32 +460,37 @@ New ID format: CPUName/CPUID/MotherboardName/DriveIDs [58741d85f84727720c90dad05
 
 ## [1.2.2] - June 11, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### Non-Breaking Changes
 
 - The ExecutorService object in HardwareID class now uses the AutoCloseable interface
-- The implicit constructor of HardwareID class has it's access modifier changed from private to protected to allow inheritance
+- The implicit constructor of HardwareID class has it's access modifier changed from private to protected to allow
+  inheritance
 
 ---
 
 ## [1.2.1] - June 11, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### New Features
 
 - Win32_Processor class includes a new property called "NumberOfLogicalProcessors".
-This is different from "ThreadCount" in a way that "ThreadCount always reports the number of hardware threads in a CPU,
-whereas the other reports the number of threads that the OS has been allowed to access.
-For example, you have a CPU that has 12 hardware threads, and you have configured your OS to boot with 8 threads.
-In this case, the "ThreadCount" would be 12 and "NumberOfLogicalProcessors" would be 8.
+  This is different from "ThreadCount" in a way that "ThreadCount always reports the number of hardware threads in a
+  CPU,
+  whereas the other reports the number of threads that the OS has been allowed to access.
+  For example, you have a CPU that has 12 hardware threads, and you have configured your OS to boot with 8 threads.
+  In this case, the "ThreadCount" would be 12 and "NumberOfLogicalProcessors" would be 8.
 
 ---
 
 ## [1.2.0] - May 7, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### New Features
 
@@ -480,18 +500,20 @@ In this case, the "ThreadCount" would be 12 and "NumberOfLogicalProcessors" woul
 
 ## [1.1.0] - May 7, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### Breaking Changes
 
 - The formatters are now classified into CIM_ML and CIM_SL
-ML stands for Multi-Line and SL for Single-Line
-The Win32 Relation Classes will still have their own formatter.
-The rest of the Win32_Classes will call either CIM_SL or CIM_ML for formatting.
-The Win32_Classes now call either CIM_SL or CIM_ML methods and pass on the attributes, which then carry out the parsing,
-formatting and error handling.
-HWID Generation retains it's Multi-threading capability following CIM_SL refactor
-The Win32 Relation Classes still have their own formatter.
+  ML stands for Multi-Line and SL for Single-Line
+  The Win32 Relation Classes will still have their own formatter.
+  The rest of the Win32_Classes will call either CIM_SL or CIM_ML for formatting.
+  The Win32_Classes now call either CIM_SL or CIM_ML methods and pass on the attributes, which then carry out the
+  parsing,
+  formatting and error handling.
+  HWID Generation retains it's Multi-threading capability following CIM_SL refactor
+  The Win32 Relation Classes still have their own formatter.
 
 - Win32_SystemDrivers has been removed
 - Changed the package naming scheme from `com.egg.*` to `com.ferrumx.*`
@@ -500,14 +522,16 @@ The Win32 Relation Classes still have their own formatter.
 
 ## [1.0.2] - April 16, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### Bug Fixes
 
 - Removed () from the class name literal
 - Fixed an error in naming a property in `Win32_Printer` which caused the property's value to be not displayed
 - Fixed HWID generation functions
-They will now be generated based on the following nomenclature: Username/DeviceName/CPU/CPUID/MotherboardName/RAM-COUNT/STORAGE-COUNT
+  They will now be generated based on the following nomenclature:
+  Username/DeviceName/CPU/CPUID/MotherboardName/RAM-COUNT/STORAGE-COUNT
 
 ### Non-Breaking Changes
 
@@ -517,13 +541,14 @@ They will now be generated based on the following nomenclature: Username/DeviceN
 
 ## [1.0.1] - April 13, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 ### Non-Breaking Changes
 
 - Shifted WMIC to FerrumL (a.k.a. Ferrum Legacy) that supports Windows Vista and Windows 7
-This does not break functionality since none of the existing functions depend on WMIC
-for information retrieval
+  This does not break functionality since none of the existing functions depend on WMIC
+  for information retrieval
 
 - If a PowerShell process fails, the functions will now return empty Collections.
 
@@ -531,10 +556,10 @@ for information retrieval
 
 - Changed `Win32_Processor` function name from `getDeviceIDList()` to `getProcessorList()`
 
-
 ## [1.0.0] - April 10, 2024
 
-*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate repository.*
+*GUI Changelogs are omitted since they are out of scope for the library. GUI code is maintained in a separate
+repository.*
 
 Project name changed from `WSIL` to `FerrumX`
 
@@ -553,7 +578,8 @@ Project name changed from `WSIL` to `FerrumX`
 
 ### Breaking Changes
 
-- Removed the Bank variable from `Win32_PhysicalMemory` as a form of device ID collection method (when Tag cannot be found)
-as it may no longer be necessary
+- Removed the Bank variable from `Win32_PhysicalMemory` as a form of device ID collection method (when Tag cannot be
+  found)
+  as it may no longer be necessary
 
 ---
