@@ -5,6 +5,7 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.network;
 
+import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import lombok.AccessLevel;
@@ -52,6 +53,7 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
+@Immutable
 public class Win32NetworkAdapterConfiguration {
 
     /**
