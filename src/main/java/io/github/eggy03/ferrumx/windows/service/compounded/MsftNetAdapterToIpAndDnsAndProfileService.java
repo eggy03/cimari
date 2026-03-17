@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Service class for fetching net adapter, ip, dns and profile configuration information from the system.
  * <p>
- * This class executes the {@link ScriptEnum#MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE_SCRIPT} script
+ * This class executes the {@link ScriptEnum#MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE} script
  * and maps the resulting JSON into an immutable list of {@link MsftNetAdapterToIpAndDnsAndProfile} objects.
  * </p>
  *
@@ -102,7 +102,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE_SCRIPT.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
         }
@@ -119,7 +119,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE_SCRIPT.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
     }
@@ -141,7 +141,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
 
-        String script = ScriptLoader.loadScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE_SCRIPT.getScriptPath());
+        String script = ScriptLoader.loadScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response, MsftNetAdapterToIpAndDnsAndProfile.class);

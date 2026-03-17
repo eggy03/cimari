@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Service class for fetching physical disk and related logical disk information from the system.
  * <p>
- * This class executes the {@link ScriptEnum#WIN32_DISK_PARTITION_TO_LOGICAL_DISK_SCRIPT} script
+ * This class executes the {@link ScriptEnum#WIN32_DISK_PARTITION_TO_LOGICAL} script
  * and maps the resulting JSON into an immutable list of {@link Win32DiskPartitionToLogicalDisk} objects.
  * </p>
  *
@@ -105,7 +105,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL_DISK_SCRIPT.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new Win32DiskPartitionToLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskPartitionToLogicalDisk.class);
         }
@@ -122,7 +122,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
      */
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL_DISK_SCRIPT.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32DiskPartitionToLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskPartitionToLogicalDisk.class);
     }
@@ -144,7 +144,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get(long timeout) {
 
-        String command = ScriptLoader.loadScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL_DISK_SCRIPT.getScriptPath());
+        String command = ScriptLoader.loadScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath());
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32DiskPartitionToLogicalDiskMapper().mapToList(response, Win32DiskPartitionToLogicalDisk.class);

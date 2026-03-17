@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  * Service class for fetching the HWID information from a system running Windows.
  * <p>
- * This class executes the {@link ScriptEnum#HWID_SCRIPT} PowerShell script
+ * This class executes the {@link ScriptEnum#HWID} PowerShell script
  * and maps the resulting JSON into an {@link Optional} {@link HardwareId} object.
  * </p>
  *
@@ -93,7 +93,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
     @Override
     public @NotNull Optional<HardwareId> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.HWID_SCRIPT.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.HWID.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
         }
@@ -110,7 +110,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      */
     @Override
     public @NotNull Optional<HardwareId> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.HWID_SCRIPT.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.HWID.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
     }
@@ -133,7 +133,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
     @Override
     public @NotNull Optional<HardwareId> get(long timeout) {
 
-        String script = ScriptLoader.loadScript(ScriptEnum.HWID_SCRIPT.getScriptPath());
+        String script = ScriptLoader.loadScript(ScriptEnum.HWID.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new HardwareIdMapper().mapToObject(response, HardwareId.class);

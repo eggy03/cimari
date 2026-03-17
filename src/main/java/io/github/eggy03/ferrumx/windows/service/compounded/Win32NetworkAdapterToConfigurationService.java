@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Service class for fetching network adapter and related configuration information from the system.
  * <p>
- * This class executes the {@link ScriptEnum#WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT} script
+ * This class executes the {@link ScriptEnum#WIN32_NETWORK_ADAPTER_TO_CONFIGURATION} script
  * and maps the resulting JSON into an immutable list of {@link Win32NetworkAdapterToConfiguration} objects.
  * </p>
  *
@@ -100,7 +100,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
         }
@@ -117,7 +117,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
     }
@@ -139,7 +139,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(long timeout) {
 
-        String command = ScriptLoader.loadScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath());
+        String command = ScriptLoader.loadScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath());
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32NetworkAdapterToConfigurationMapper().mapToList(response, Win32NetworkAdapterToConfiguration.class);
