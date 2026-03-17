@@ -18,6 +18,23 @@ The following headings may be used while categorizing the list of changes made i
 - Documentation
 - Known Issues
 
+## [4.0.2] - March 18, 2026
+
+### Non-Breaking Changes
+
+- apply `@Immutable` annotation to data entities
+- apply `@Unmodifiable` annotation to default methods in `CommonMappingInterface`
+- apply `@Unmodifiable` annotation to collection return types for service class methods
+- enforce null checking in `command` parameter for `TerminalUtility#executeCommand` via Lombok's `@NonNull` annotation
+
+### Dependency Updates
+
+- Update `lombok` from `1.18.42` to `1.18.44`
+- Update `jetbrains.annotations` from `26.0.2` to `26.1.0`
+- Update `junit.jupiter` from `6.0.0` to `6.0.3`
+- Update `mockito.core` from `5.21.0` to `5.23.0`
+- Update `maven.compiler.plugin` from `3.14.1` to `3.15.0`
+
 ## [4.0.1] - February 07, 2026
 
 ### Non-Breaking Changes
