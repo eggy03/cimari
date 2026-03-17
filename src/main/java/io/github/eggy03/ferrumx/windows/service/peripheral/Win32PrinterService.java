@@ -7,9 +7,9 @@ package io.github.eggy03.ferrumx.windows.service.peripheral;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
 import io.github.eggy03.ferrumx.windows.entity.peripheral.Win32Printer;
 import io.github.eggy03.ferrumx.windows.mapping.peripheral.Win32PrinterMapper;
+import io.github.eggy03.ferrumx.windows.query.Cimv2;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Service class for fetching printer information from the system.
  * <p>
- * This class executes the {@link Cimv2Namespace#WIN32_PRINTER_QUERY} PowerShell command
+ * This class executes the {@link Cimv2#WIN32_PRINTER} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link Win32Printer} objects.
  * </p>
  *
@@ -91,7 +91,7 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Printer> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_PRINTER_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_PRINTER.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32PrinterMapper().mapToList(response.getCommandOutput(), Win32Printer.class);
     }
@@ -107,7 +107,7 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Printer> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_PRINTER_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_PRINTER.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32PrinterMapper().mapToList(response.getCommandOutput(), Win32Printer.class);
     }
@@ -128,7 +128,7 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Printer> get(long timeout) {
-        String command = Cimv2Namespace.WIN32_PRINTER_QUERY.getQuery();
+        String command = Cimv2.WIN32_PRINTER.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32PrinterMapper().mapToList(response, Win32Printer.class);

@@ -8,9 +8,9 @@ package io.github.eggy03.ferrumx.windows.service.display;
 import com.google.gson.JsonSyntaxException;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
 import io.github.eggy03.ferrumx.windows.entity.display.Win32VideoController;
 import io.github.eggy03.ferrumx.windows.mapping.display.Win32VideoControllerMapper;
+import io.github.eggy03.ferrumx.windows.query.Cimv2;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Service class for fetching video controller (GPU) information from the system.
  * <p>
- * This class executes the {@link Cimv2Namespace#WIN32_VIDEO_CONTROLLER_QUERY} PowerShell command
+ * This class executes the {@link Cimv2#WIN32_VIDEO_CONTROLLER} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link Win32VideoController} objects.
  * </p>
  *
@@ -96,7 +96,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
     @Override
     public @NotNull @Unmodifiable List<Win32VideoController> get() {
 
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_VIDEO_CONTROLLER_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_VIDEO_CONTROLLER.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32VideoControllerMapper().mapToList(response.getCommandOutput(), Win32VideoController.class);
     }
@@ -113,7 +113,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
     @Override
     public @NotNull @Unmodifiable List<Win32VideoController> get(@NonNull PowerShell powerShell) {
 
-        PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_VIDEO_CONTROLLER_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_VIDEO_CONTROLLER.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32VideoControllerMapper().mapToList(response.getCommandOutput(), Win32VideoController.class);
     }
@@ -134,7 +134,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      */
     @Override
     public @NotNull @Unmodifiable List<Win32VideoController> get(long timeout) {
-        String command = Cimv2Namespace.WIN32_VIDEO_CONTROLLER_QUERY.getQuery();
+        String command = Cimv2.WIN32_VIDEO_CONTROLLER.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32VideoControllerMapper().mapToList(response, Win32VideoController.class);

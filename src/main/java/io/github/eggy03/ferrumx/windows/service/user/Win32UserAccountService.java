@@ -7,9 +7,9 @@ package io.github.eggy03.ferrumx.windows.service.user;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
 import io.github.eggy03.ferrumx.windows.entity.user.Win32UserAccount;
 import io.github.eggy03.ferrumx.windows.mapping.user.Win32UserAccountMapper;
+import io.github.eggy03.ferrumx.windows.query.Cimv2;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Service class for fetching information about User Accounts in a Windows System.
  * <p>
- * This class executes the {@link Cimv2Namespace#WIN32_USER_ACCOUNT_QUERY} PowerShell command
+ * This class executes the {@link Cimv2#WIN32_USER_ACCOUNT} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link Win32UserAccount} objects.
  * </p>
  *
@@ -92,7 +92,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      */
     @Override
     public @NotNull @Unmodifiable List<Win32UserAccount> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_USER_ACCOUNT_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_USER_ACCOUNT.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32UserAccountMapper().mapToList(response.getCommandOutput(), Win32UserAccount.class);
     }
@@ -107,7 +107,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      */
     @Override
     public @NotNull @Unmodifiable List<Win32UserAccount> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_USER_ACCOUNT_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_USER_ACCOUNT.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32UserAccountMapper().mapToList(response.getCommandOutput(), Win32UserAccount.class);
     }
@@ -128,7 +128,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      */
     @Override
     public @NotNull @Unmodifiable List<Win32UserAccount> get(long timeout) {
-        String command = Cimv2Namespace.WIN32_USER_ACCOUNT_QUERY.getQuery();
+        String command = Cimv2.WIN32_USER_ACCOUNT.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32UserAccountMapper().mapToList(response, Win32UserAccount.class);

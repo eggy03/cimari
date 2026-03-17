@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  * See the LICENSE file in the project root for more information.
  */
-package io.github.eggy03.ferrumx.windows.constant.namespace;
+package io.github.eggy03.ferrumx.windows.query;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import io.github.eggy03.ferrumx.windows.entity.display.Win32DesktopMonitor;
@@ -28,13 +28,11 @@ import io.github.eggy03.ferrumx.windows.entity.system.Win32OperatingSystem;
 import io.github.eggy03.ferrumx.windows.entity.system.Win32PnPEntity;
 import io.github.eggy03.ferrumx.windows.entity.system.Win32Process;
 import io.github.eggy03.ferrumx.windows.entity.user.Win32UserAccount;
+import io.github.eggy03.ferrumx.windows.utility.ReflectionUtility;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import static io.github.eggy03.ferrumx.windows.constant.PowerShellCmdlets.CONVERT_TO_JSON;
-import static io.github.eggy03.ferrumx.windows.constant.PowerShellCmdlets.SELECT_OBJECT_PROPERTY;
-import static io.github.eggy03.ferrumx.windows.utility.ReflectionUtility.getFromSerializedNames;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Enum representing the predefined WMI (CIM) queries for the classes available in the {@code root/cimv2} namespace.
@@ -50,241 +48,216 @@ import static io.github.eggy03.ferrumx.windows.utility.ReflectionUtility.getFrom
  */
 @RequiredArgsConstructor
 @Getter
-public enum Cimv2Namespace {
+public enum Cimv2 {
 
     /**
      * Query to fetch the properties of {@code Win32_Battery} class
      *
      * @since 2.0.0
      */
-    WIN32_BATTERY_QUERY("Get-CimInstance Win32_Battery" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32Battery.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_BATTERY(generateQuery("Win32_Battery", Win32Battery.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DesktopMonitor} class
      *
      * @since 2.0.0
      */
-    WIN32_DESKTOP_MONITOR_QUERY("Get-CimInstance Win32_DesktopMonitor" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32DesktopMonitor.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_DESKTOP_MONITOR(generateQuery("Win32_DesktopMonitor", Win32DesktopMonitor.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_VideoController} class
      *
      * @since 2.0.0
      */
-    WIN32_VIDEO_CONTROLLER_QUERY("Get-CimInstance Win32_VideoController" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32VideoController.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_VIDEO_CONTROLLER(generateQuery("Win32_VideoController", Win32VideoController.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Processor} class
      *
      * @since 2.0.0
      */
-    WIN32_PROCESSOR_QUERY("Get-CimInstance Win32_Processor" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32Processor.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_PROCESSOR(generateQuery("Win32_Processor", Win32Processor.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_CacheMemory} class
      *
      * @since 2.0.0
      */
-    WIN32_CACHE_MEMORY_QUERY("Get-CimInstance Win32_CacheMemory" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32CacheMemory.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_CACHE_MEMORY(generateQuery("Win32_CacheMemory", Win32CacheMemory.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_AssociatedProcessorMemory} class in a custom object
      *
      * @since 3.0.0
      */
-    WIN32_ASSOCIATED_PROCESSOR_MEMORY_QUERY("Get-CimInstance Win32_AssociatedProcessorMemory " +
+    WIN32_ASSOCIATED_PROCESSOR_MEMORY(
+            "Get-CimInstance Win32_AssociatedProcessorMemory " +
             "| ForEach-Object { [PSCustomObject]@{ CacheMemoryDeviceID = $_.Antecedent.DeviceID; ProcessorDeviceID = $_.Dependent.DeviceID } } " +
-            "| ConvertTo-Json"),
+                    "| ConvertTo-Json"
+    ),
 
     /**
      * Query to fetch the properties of {@code Win32_BIOS} class
      *
      * @since 2.0.0
      */
-    WIN32_BIOS_QUERY("Get-CimInstance Win32_BIOS" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32Bios.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_BIOS(generateQuery("Win32_BIOS", Win32Bios.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Baseboard} class
      *
      * @since 2.0.0
      */
-    WIN32_BASEBOARD_QUERY("Get-CimInstance Win32_Baseboard" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32Baseboard.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_BASEBOARD(generateQuery("Win32_Baseboard", Win32Baseboard.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PortConnector} class
      *
      * @since 2.0.0
      */
-    WIN32_PORT_CONNECTOR_QUERY("Get-CimInstance Win32_PortConnector" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32PortConnector.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_PORT_CONNECTOR(generateQuery("Win32_PortConnector", Win32PortConnector.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PhysicalMemory} class
      *
      * @since 2.0.0
      */
-    WIN32_PHYSICAL_MEMORY_QUERY("Get-CimInstance Win32_PhysicalMemory" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32PhysicalMemory.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_PHYSICAL_MEMORY(generateQuery("Win32_PhysicalMemory", Win32PhysicalMemory.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapter} class
      *
      * @since 2.0.0
      */
-    WIN32_NETWORK_ADAPTER_QUERY("Get-CimInstance Win32_NetworkAdapter" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32NetworkAdapter.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_NETWORK_ADAPTER(generateQuery("Win32_NetworkAdapter", Win32NetworkAdapter.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapterConfiguration} class
      *
      * @since 2.0.0
      */
-    WIN32_NETWORK_ADAPTER_CONFIGURATION_QUERY("Get-CimInstance Win32_NetworkAdapterConfiguration" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32NetworkAdapterConfiguration.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_NETWORK_ADAPTER_CONFIGURATION(generateQuery("Win32_NetworkAdapterConfiguration", Win32NetworkAdapterConfiguration.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapterSetting} in a custom object
      *
      * @since 3.0.0
      */
-    WIN32_NETWORK_ADAPTER_SETTING_QUERY("Get-CimInstance Win32_NetworkAdapterSetting " +
+    WIN32_NETWORK_ADAPTER_SETTING(
+            "Get-CimInstance Win32_NetworkAdapterSetting " +
             "| ForEach-Object { [PSCustomObject]@{ NetworkAdapterDeviceID = $_.Element.DeviceID; NetworkAdapterConfigurationIndex = $_.Setting.Index } } " +
-            "| ConvertTo-Json"),
+                    "| ConvertTo-Json"
+    ),
 
     /**
      * Query to fetch the properties of {@code Win32_OperatingSystem} class
      *
      * @since 2.0.0
      */
-    WIN32_OPERATING_SYSTEM_QUERY("Get-CimInstance Win32_OperatingSystem" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32OperatingSystem.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_OPERATING_SYSTEM(generateQuery("Win32_OperatingSystem", Win32OperatingSystem.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskDrive} class
      *
      * @since 2.0.0
      */
-    WIN32_DISK_DRIVE_QUERY("Get-CimInstance Win32_DiskDrive" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32DiskDrive.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_DISK_DRIVE(generateQuery("Win32_DiskDrive", Win32DiskDrive.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskPartition} class
      *
      * @since 2.0.0
      */
-    WIN32_DISK_PARTITION_QUERY("Get-CimInstance Win32_DiskPartition" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32DiskPartition.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_DISK_PARTITION(generateQuery("Win32_DiskPartition", Win32DiskPartition.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_LogicalDisk} class
      *
      * @since 3.0.0
      */
-    WIN32_LOGICAL_DISK_QUERY("Get-CimInstance Win32_LogicalDisk" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32LogicalDisk.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_LOGICAL_DISK(generateQuery("Win32_LogicalDisk", Win32LogicalDisk.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskDriveToDiskPartition} class in a custom object
      *
      * @since 3.0.0
      */
-    WIN32_DISK_DRIVE_TO_DISK_PARTITION_QUERY("Get-CimInstance Win32_DiskDriveToDiskPartition " +
+    WIN32_DISK_DRIVE_TO_DISK_PARTITION(
+            "Get-CimInstance Win32_DiskDriveToDiskPartition " +
             "| ForEach-Object { [PSCustomObject]@{ DiskDriveDeviceID = $_.Antecedent.DeviceID; DiskPartitionDeviceID = $_.Dependent.DeviceID } } " +
-            "| ConvertTo-Json"),
+                    "| ConvertTo-Json"
+    ),
 
     /**
      * Query to fetch the properties of {@code Win32_LogicalDiskToPartition} class in a custom object
      *
      * @since 3.0.0
      */
-    WIN32_LOGICAL_DISK_TO_PARTITION_QUERY("Get-CimInstance Win32_LogicalDiskToPartition " +
+    WIN32_LOGICAL_DISK_TO_PARTITION(
+            "Get-CimInstance Win32_LogicalDiskToPartition " +
             "| ForEach-Object { [PSCustomObject]@{ DiskPartitionDeviceID = $_.Antecedent.DeviceID; LogicalDiskDeviceID = $_.Dependent.DeviceID } } " +
-            "| ConvertTo-Json"),
+                    "| ConvertTo-Json"
+    ),
 
     /**
      * Query to fetch the properties of {@code Win32_ComputerSystem} class
      *
      * @since 3.0.0
      */
-    WIN32_COMPUTER_SYSTEM_QUERY("Get-CimInstance -ClassName Win32_ComputerSystem" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32ComputerSystem.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_COMPUTER_SYSTEM(generateQuery("Win32_ComputerSystem", Win32ComputerSystem.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Environment} class
      *
      * @since 3.0.0
      */
-    WIN32_ENVIRONMENT_QUERY("Get-CimInstance -ClassName Win32_Environment" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32Environment.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_ENVIRONMENT(generateQuery("Win32_Environment", Win32Environment.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Printer} class
      *
      * @since 3.0.0
      */
-    WIN32_PRINTER_QUERY("Get-CimInstance -ClassName Win32_Printer" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32Printer.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_PRINTER(generateQuery("Win32_Printer", Win32Printer.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_UserAccount} class
      *
      * @since 3.0.0
      */
-    WIN32_USER_ACCOUNT_QUERY("Get-CimInstance -ClassName Win32_UserAccount" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32UserAccount.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_USER_ACCOUNT(generateQuery("Win32_UserAccount", Win32UserAccount.class)),
 
     /**
      * Query to fetch some select properties of {@code Win32_Process} class
      *
      * @since 3.0.0
      */
-    WIN32_PROCESS_QUERY("Get-CimInstance -ClassName Win32_Process" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32Process.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_PROCESS(generateQuery("Win32_Process", Win32Process.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_SoundDevice} class
      *
      * @since 3.0.0
      */
-    WIN32_SOUND_DEVICE_QUERY("Get-CimInstance -ClassName Win32_SoundDevice" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32SoundDevice.class) +
-            CONVERT_TO_JSON.getCmdlet()),
+    WIN32_SOUND_DEVICE(generateQuery("Win32_SoundDevice", Win32SoundDevice.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PnPEntity} class
      */
-    WIN32_PNP_ENTITY_QUERY("Get-CimInstance -ClassName Win32_PnPEntity" +
-            SELECT_OBJECT_PROPERTY.getCmdlet() + getFromSerializedNames(Win32PnPEntity.class) +
-            CONVERT_TO_JSON.getCmdlet());
+    WIN32_PNP_ENTITY(generateQuery("Win32_PnPEntity", Win32PnPEntity.class));
 
     @NonNull
     private final String query;
+
+    // Dev Note: In future refactors, it might be possible to not need wmiClassName by making an annotation
+    // that would sit on the entity classes, and we could use reflection to get the name from it
+    // example @WmiClass("Win32_Process)
+    @NotNull
+    private static <T> String generateQuery(@NonNull String wmiClassName, @NonNull Class<T> equivalentEntity) {
+        return "Get-CimInstance -ClassName " + wmiClassName +
+                " | Select-Object -Property " + ReflectionUtility.getFromSerializedNames(equivalentEntity) +
+                " | ConvertTo-Json";
+
+    }
 
 }

@@ -7,9 +7,9 @@ package io.github.eggy03.ferrumx.windows.service.peripheral;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
 import io.github.eggy03.ferrumx.windows.entity.peripheral.Win32SoundDevice;
 import io.github.eggy03.ferrumx.windows.mapping.peripheral.Win32SoundDeviceMapper;
+import io.github.eggy03.ferrumx.windows.query.Cimv2;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Service class for fetching sound device information from the system.
  * <p>
- * This class executes the {@link Cimv2Namespace#WIN32_SOUND_DEVICE_QUERY} PowerShell command
+ * This class executes the {@link Cimv2#WIN32_SOUND_DEVICE} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link Win32SoundDevice} objects.
  * </p>
  *
@@ -91,7 +91,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      */
     @Override
     public @NotNull @Unmodifiable List<Win32SoundDevice> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_SOUND_DEVICE_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_SOUND_DEVICE.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32SoundDeviceMapper().mapToList(response.getCommandOutput(), Win32SoundDevice.class);
     }
@@ -107,7 +107,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      */
     @Override
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_SOUND_DEVICE_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_SOUND_DEVICE.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32SoundDeviceMapper().mapToList(response.getCommandOutput(), Win32SoundDevice.class);
     }
@@ -128,7 +128,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      */
     @Override
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(long timeout) {
-        String command = Cimv2Namespace.WIN32_SOUND_DEVICE_QUERY.getQuery();
+        String command = Cimv2.WIN32_SOUND_DEVICE.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32SoundDeviceMapper().mapToList(response, Win32SoundDevice.class);

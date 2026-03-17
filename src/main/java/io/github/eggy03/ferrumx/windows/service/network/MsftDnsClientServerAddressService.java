@@ -7,9 +7,9 @@ package io.github.eggy03.ferrumx.windows.service.network;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.StandardCimv2Namespace;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.ferrumx.windows.mapping.network.MsftDnsClientServerAddressMapper;
+import io.github.eggy03.ferrumx.windows.query.StandardCimv2;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Service class for fetching DNS Client and Server information for a network adapter.
  * <p>
- * This class executes the {@link StandardCimv2Namespace#MSFT_NET_DNS_CLIENT_SERVER_ADDRESS_QUERY} PowerShell command
+ * This class executes the {@link StandardCimv2#MSFT_NET_DNS_CLIENT_SERVER_ADDRESS} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link MsftDnsClientServerAddress} objects.
  * </p>
  *
@@ -92,7 +92,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      */
     @Override
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2Namespace.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new MsftDnsClientServerAddressMapper().mapToList(response.getCommandOutput(), MsftDnsClientServerAddress.class);
     }
@@ -108,7 +108,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      */
     @Override
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(StandardCimv2Namespace.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new MsftDnsClientServerAddressMapper().mapToList(response.getCommandOutput(), MsftDnsClientServerAddress.class);
     }
@@ -129,7 +129,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      */
     @Override
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(long timeout) {
-        String command = StandardCimv2Namespace.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS_QUERY.getQuery();
+        String command = StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new MsftDnsClientServerAddressMapper().mapToList(response, MsftDnsClientServerAddress.class);

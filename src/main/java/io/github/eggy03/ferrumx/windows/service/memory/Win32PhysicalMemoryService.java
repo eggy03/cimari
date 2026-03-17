@@ -7,9 +7,9 @@ package io.github.eggy03.ferrumx.windows.service.memory;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
 import io.github.eggy03.ferrumx.windows.entity.memory.Win32PhysicalMemory;
 import io.github.eggy03.ferrumx.windows.mapping.memory.Win32PhysicalMemoryMapper;
+import io.github.eggy03.ferrumx.windows.query.Cimv2;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Service class for fetching information about physical memory modules (RAM) in the system.
  * <p>
- * This class executes the {@link Cimv2Namespace#WIN32_PHYSICAL_MEMORY_QUERY} PowerShell command
+ * This class executes the {@link Cimv2#WIN32_PHYSICAL_MEMORY} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link Win32PhysicalMemory} objects.
  * </p>
  *
@@ -96,7 +96,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
     @Override
     public @NotNull @Unmodifiable List<Win32PhysicalMemory> get() {
 
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_PHYSICAL_MEMORY_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_PHYSICAL_MEMORY.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32PhysicalMemoryMapper().mapToList(response.getCommandOutput(), Win32PhysicalMemory.class);
     }
@@ -112,7 +112,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
     @Override
     public @NotNull @Unmodifiable List<Win32PhysicalMemory> get(@NonNull PowerShell powerShell) {
 
-        PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_PHYSICAL_MEMORY_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_PHYSICAL_MEMORY.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32PhysicalMemoryMapper().mapToList(response.getCommandOutput(), Win32PhysicalMemory.class);
     }
@@ -133,7 +133,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
      */
     @Override
     public @NotNull @Unmodifiable List<Win32PhysicalMemory> get(long timeout) {
-        String command = Cimv2Namespace.WIN32_PHYSICAL_MEMORY_QUERY.getQuery();
+        String command = Cimv2.WIN32_PHYSICAL_MEMORY.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32PhysicalMemoryMapper().mapToList(response, Win32PhysicalMemory.class);
