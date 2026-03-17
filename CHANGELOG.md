@@ -79,28 +79,28 @@ default or custom implementations of `CommonMappingInterface` may be used for ma
 ### Bug Fixes
 
 - Fixed a bug in the `get(timeout)` service function in `Win32DiskDriveToPartitionAndLogicalDisk` class
-that caused it to execute the wrong script and always fetch null values 1619a732365c2d210fa9b46defd43b9906d9cac0
+  that caused it to execute the wrong script and always fetch null values
 
 ### New Features
 
-- add `architecture` property to `Win32Processor` b8aa0e87bd6c582b52bff3fd66344c05578c49f4
+- add `architecture` property to `Win32Processor`
 
 ## [3.1.0] - December 30, 2025
 
 ### New Features
 
 - Introduce `TerminalUtility` for executing PowerShell commands with a timeout. This utility uses Commons Exec instead
-of `jPowerShell` to launch and close PowerShell sessions bc38f98a6bfe19dd2c0567a035ed3619551f53fb
+  of `jPowerShell` to launch and close PowerShell sessions
 
 - Service classes now implement a new `get(long timeout)` method which uses `TerminalUtility` and allows you to specify
 how long the PowerShell session will run before it is forcefully terminated regardless of the completion status
 of the script or command. This method does not rely on `jPowerShell` and can be safely used in Executor based workflows
-unlike the other methods bc38f98a6bfe19dd2c0567a035ed3619551f53fb
+  unlike the other methods
 
 ### Documentation
 
 - Documented the new code
-- Corrected`PCMCIA Type II (18)` to `PCMCIA Type I (18)` in `Win32PortConnector.java` b7556bf032289364a8fddd21c1e00aaccf53c117
+- Corrected`PCMCIA Type II (18)` to `PCMCIA Type I (18)` in `Win32PortConnector.java`
 
 ### Known Issues
 
@@ -117,19 +117,19 @@ Please consult the documentation in README, WIKI, Javadocs and Examples to know 
 
 *Added the following new and previously removed associated and simple WMI retrieval functions*
 
-- Win32AssociatedProcessorMemory 4be83b3a8aba9e98e769ca7c76b68232516dcff5
-- Win32NetworkAdapterSetting 520f69ecc138096aeb5caa17990ea7f8be469e96
-- Win32DiskDriveToPartition 45390f10e23e69a2781739c32a888cafb71fa367
-- Win32LogicalDisk cd6aa4998df21175f3fe9312c55dfa712a900365
-- Win32LogicalDiskToPartition 21e737e1b945998ad880653ac2826a290d927ab3
-- MSFTNetAdapter c575179b6f740feb329188f2dd19e38f16769ed9
-- MSFTNetIPAddress, MSFTDNSClientServerAddress, MSFTNetConnectionProfile 762b43cce80451cde99f5f7180d1220af544e159
-- Win32Environment 6d3605be184502f325212d85b33b5007140d43af
-- Win32Printer 7098aaddf99688d4df7861b8b324e6e850661b62
-- Win32UserAccount af7f8b931483f22b75c59a018e0a02091daec827
-- Win32Process fd8c8d698acdfc633945a2a041ee83c4f64bf101
-- Win32SoundDevice 4173b4e3a56f85e34a309a7f5a4c3d23487c769e
-- Win32PnPDevice bbabdca77c4bddca5a1b596d5f8d8da8935c9b45
+- Win32AssociatedProcessorMemory
+- Win32NetworkAdapterSetting
+- Win32DiskDriveToPartition
+- Win32LogicalDisk
+- Win32LogicalDiskToPartition
+- MSFTNetAdapter
+- MSFTNetIPAddress, MSFTDNSClientServerAddress, MSFTNetConnectionProfile
+- Win32Environment
+- Win32Printer
+- Win32UserAccount
+- Win32Process
+- Win32SoundDevice
+- Win32PnPDevice
 
 *Add the following new compounded WMI retrieval functions*
 
@@ -138,37 +138,39 @@ Please consult the documentation in README, WIKI, Javadocs and Examples to know 
 - Win32DiskDriveToPartitionAndLogicalDisk,
 - Win32DiskPartitionToLogicalDisk,
 - Win32NetworkAdapterToConfiguration,
-- Win32ProcessorToCacheMemory d25c37b2cf06489a7a6208cd3a43b0adf8d1af6d
+- Win32ProcessorToCacheMemory
 
 ### Bug Fixes
 
-- Corrected the APM reversed query mapping (c9a33dbe5dfd4aa1d85dc8ea166fb1bb5901d523). This fix is related to a new feature introduced in this PR: AssociatedProcessorMemory (4be83b3a8aba9e98e769ca7c76b68232516dcff5)
-- Refactor PowerShell script loading to use input stream (678c6c39a96140ca30b7d1bb38a12848b376cce2). This fix is related to a new feature introduced in this PR : Compounded Entity Classes (ca885e82e903ec69127d44c36dd425f0a0f2e672)
+- Corrected the APM reversed query mapping (c9a33dbe5dfd4aa1d85dc8ea166fb1bb5901d523).
+  This fix is related to a new feature introduced in the commit (4be83b3a8aba9e98e769ca7c76b68232516dcff5).
+- Refactor PowerShell script loading to use input stream (678c6c39a96140ca30b7d1bb38a12848b376cce2).
+  This fix is related to a new feature introduced in the commit (ca885e82e903ec69127d44c36dd425f0a0f2e672).
 
 ### Non-Breaking Changes
 
-- Added a ReflectionUtility utility class (45a21c72bc529fd5fde9af17baf91efbef50349b).
+- Added a ReflectionUtility utility class.
 This change solves issue #22 which dynamically retrieves the properties to fetch, from the entity classes, so that
 only select properties to be fetched are passed on to the PowerShell query at runtime, instead of fetching all the properties.
-- Add `@Nullable` annotations in missing entity fields 9da65f3d3bb83a6cbcd5bcce48d6ddd370290dca
-- Added `trace` level logging for service methods 5d291c4c00129721d863420cb0dc66cf147fbe26
-- Re-organize unit test package structure 121731bfdd0c28ab40cc409f5f4966479d1f8857
-- Tests now validate entity fields 2597f911482536496047bc1eadbe99ceb47f16b1
-- Test method name changes following the 2.2.0 Interface Update 26dbf045cca23af38ff13c8c3f3832266469c59e
+- Add `@Nullable` annotations in missing entity fields
+- Added `trace` level logging for service methods
+- Re-organize unit test package structure
+- Tests now validate entity fields
+- Test method name changes following the 2.2.0 Interface Update
 - Tests added for all the new code
-- Centralize dependency versions and generate de-lombok source.jar (pom.xml) 4b5832d896dcf2e8214629a40f511559a0b3cc31
+- Centralize dependency versions and generate de-lombok source.jar (pom.xml)
 
 ### Breaking Changes
 
-- Replace static MapperUtil with CommonMappingInterface c9f9390ae83998f28fa653f0a1a456f083d614f4
-- Transfer Battery entities, services, mappers and tests to the peripheral package 93155e59f40739b51fa8b439f99b89857955fd6e
-- Rename CimQuery to Cimv2Namespace and extracted the MSFT queries into StandardCimv2Namespace enum e79f5800461b0559383d7e79a437e4f7ccb12cde
-- Replace Win32ComputerSystemProduct with Win32ComputerSystem WMI class 4723db1dcc632ae0fdd02e2368cb95dce16444da
+- Replace static MapperUtil with CommonMappingInterface
+- Transfer Battery entities, services, mappers and tests to the peripheral package
+- Rename CimQuery to Cimv2Namespace and extracted the MSFT queries into StandardCimv2Namespace enum
+- Replace Win32ComputerSystemProduct with Win32ComputerSystem WMI class
 - Move Win32OperatingSystem class to the system package
-- Rename all the query enum names in Cimv2Namespace to have the "Win32_" prefix 6252187e6b7d5f8e245cc99fdc0ae788c4bb22f5
-- Update the return types of certain Win32 Entity fields to match with the Microsoft docs bd206dc6c2ca48484f9a25aac8caefba29a4adb8
-- Make Win32BaseboardService implement CommonServiceInterface instead of OptionalCommonServiceInterface c847d10708eb6874d5874f50225f3ffa739e9a31
-- Entity fields which return Boolean now have custom getters instead of Lombok generated ones ff9e5d3e7fbdba8fafae16b2253656924c5ef39c
+- Rename all the query enum names in Cimv2Namespace to have the "Win32_" prefix
+- Update the return types of certain Win32 Entity fields to match with the Microsoft docs
+- Make Win32BaseboardService implement CommonServiceInterface instead of OptionalCommonServiceInterface
+- Entity fields which return Boolean now have custom getters instead of Lombok generated ones
 
 ### Dependency Updates
 
@@ -178,12 +180,12 @@ only select properties to be fetched are passed on to the PowerShell query at ru
 
 - Document all the new classes
 - Add granular `@since` tags to individual methods
-- Fix API usage examples e588a9be37dc280279919167120be9a4a03895ab
-- Clarify use cases of the interfaces 714abe84440e5b3463c1da5260d57d354fee2f51
-- Add package-info docs for base packages a33387fdf7b887c22e08d381d669f9b3074aab8d
-- Update thread safety messages for entities 3562f80fddbdab826cd11f1ec72d7041af08bec7
-- Document all the entity fields 5e30710c6cf6465df3aeb684332f94dfe73c67d9 2e11068d4b2d84525983c6ca95b709171acd844b 1efa49956cf1a7a469e79bf228a5eb050858121c c3217428da1be9bf120e3af3c02b58f212667d3c c548f3fde30f3dd7a1924870e0c119295e1da703 dd854697f534c3d0e6cd06086379f9f53617a69e
-- Add copyright headers 88085e49eba59c21e07a812a75fe432ab061c22a
+- Fix API usage examples
+- Clarify use cases of the interfaces
+- Add package-info docs for base packages
+- Update thread safety messages for entities
+- Document all the entity fields
+- Add copyright headers
 
 ### Known Issues
 
@@ -208,14 +210,17 @@ only select properties to be fetched are passed on to the PowerShell query at ru
 ### Breaking Changes
 
 - Reversed from multi-module project to single module. The module that contained examples have been shifted to a new repository.
-- Base package has been renamed from `org.ferrumx` to `io.github.eggy03.ferrumx.windows` 6a669fa6f6aaa1c60ff655ebf1f7b3a764cfe5bf
-- Maven `group id` changed from `io.github.egg-03` to `io.github.eggy03`. The artifact id has been changed from `ferrumx-core` to `ferrumx-windows` 2aa116415fc6a25f40efed73d2f23822a2469c1f
-- `MapperUtil` has been moved from the `Utility` package to the `Mapper` package. 50dd942899e1c17aba1e710d0a9b166b5e7d23f7
-- All service classes now implement either a `CommonServiceInterface<T>` or an `OptionalCommonServiceInterface<T>`. Accordingly, all service methods have been renamed to either `get()` or `get(Powershell powershell)`, defined in the interface contract. 046d405175e6d412d96d04274adca691d1580e75
+- Base package has been renamed from `org.ferrumx` to `io.github.eggy03.ferrumx.windows`
+- Maven `group id` changed from `io.github.egg-03` to `io.github.eggy03`. The artifact id has been changed from
+  `ferrumx-core` to `ferrumx-windows`
+- `MapperUtil` has been moved from the `Utility` package to the `Mapper` package.
+- All service classes now implement either a `CommonServiceInterface<T>` or an `OptionalCommonServiceInterface<T>`.
+  Accordingly, all service methods have been renamed to either `get()` or `get(Powershell powershell)`, defined in the
+  interface contract.
 
 ### Dependency Updates
 
-Updated dependencies: f92436ae4e560008879e21e00ec81fd5dc7228ad
+Updated dependencies:
 - lombok: 1.18.38 -> 1.18.42
 - org.jetbrains:annotations: 13.0 -> 26.0.2
 - junit-jupiter-engine: 5.13.4 -> 6.0.0
@@ -241,15 +246,15 @@ Updated plugins:
 ### Bug Fixes
 
 - Fixed typo in the `@SerializedName` annotation for the `smbiosPresent`
-  field that caused the serialized values to return null 20e6acf10a6618fcb6df70abda13b929a9f73fa2
+  field that caused the serialized values to return null
 
 ### Breaking Changes
 
 - Deprecated the `getProcessor()` method of the `ProcessorService` class as it only returns a single processor
 and fails in case of systems with multiple CPUs. It is now encouraged to use the `getProcessors()` method instead,
-which returns a list of processors 85dae961c30cc88f4a905777086b2b45e1d8eb27
+  which returns a list of processors
 
-- Entity classes now have a builder pattern 70ea51d92d4c7dee0b6481762e29ac238b09bbed
+- Entity classes now have a builder pattern
 
 ### Documentation
 
@@ -261,7 +266,7 @@ which returns a list of processors 85dae961c30cc88f4a905777086b2b45e1d8eb27
 
 ### Bug Fixes
 
-- Fix lombok scope configuration 59a495df3462f5f50ca3e00d9c49139075f61174
+- Fix lombok scope configuration
 
 ---
 
@@ -344,7 +349,7 @@ or if a PowerShell session fails to load.
 
 ### Non-Breaking Changes
 
-- Removed custom `tinylog.properties` 8060684eee2dcbbef25b206e9626da472774f67d
+- Removed custom `tinylog.properties`
 - This will be replaced by SLF-4J API in the future
 
 ---
@@ -357,7 +362,7 @@ or if a PowerShell session fails to load.
 
 ### Breaking Changes
 
-- Associated classes have been moved to a separate package with its custom formatter 64a0fe8acab298b4f5bf98be16cb1ecebb715352.
+- Associated classes have been moved to a separate package with its custom formatter.
 This has caused the following imports to change:
 
 ```java
@@ -407,7 +412,10 @@ to
 
 ### Breaking Changes
 
-- *Deprecate the custom ErrorLog:* Up till version 1.2.4, all PowerShell errors were automatically logged in a text file. Starting from v1.3.0, this behavior has been replaced with a custom exception called ShellException that gets thrown in case of any PowerShell errors. All the Win32 classes now rethrow this exception. The developer needs to catch this exception and either rethrow it or handle it accordingly.
+- *Deprecate the custom ErrorLog:* Up till version 1.2.4, all PowerShell errors were automatically
+  logged in a text file. Starting from v1.3.0, this behavior has been replaced with a custom exception
+  called ShellException that gets thrown in case of any PowerShell errors. All the Win32 classes now
+  rethrow this exception. The developer needs to catch this exception and either rethrow it or handle it accordingly.
 
 ---
 
@@ -496,9 +504,9 @@ The Win32 Relation Classes still have their own formatter.
 
 ### Bug Fixes
 
-- Removed () from the class name literal [980c1a36e42d5f1be9f31c82926c45bcbc44f1e4]
-- Fixed an error in naming a property in `Win32_Printer` which caused the property's value to be not displayed [1bf322074981bb695cbb96abe0cbefed29ab9153]
-- Fixed HWID generation functions [dce061f23799fcc8877786bce3da5a07ff5d6129]
+- Removed () from the class name literal
+- Fixed an error in naming a property in `Win32_Printer` which caused the property's value to be not displayed
+- Fixed HWID generation functions
 They will now be generated based on the following nomenclature: Username/DeviceName/CPU/CPUID/MotherboardName/RAM-COUNT/STORAGE-COUNT
 
 ### Non-Breaking Changes
