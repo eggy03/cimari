@@ -10,7 +10,7 @@ import io.github.eggy03.ferrumx.windows.entity.network.MsftDnsClientServerAddres
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetAdapter;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetIpAddress;
-import io.github.eggy03.ferrumx.windows.utility.ReflectionUtility;
+import io.github.eggy03.ferrumx.windows.query.utility.QueryUtility;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +66,7 @@ public enum StandardCimv2 {
     @NotNull
     private static <T> String generateQuery(@NonNull String prefix, @NonNull Class<T> wmiEntity) {
         return prefix +
-                " | Select-Object -Property " + ReflectionUtility.getFromSerializedNames(wmiEntity) +
+                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiEntity) +
                 " | ConvertTo-Json";
 
     }

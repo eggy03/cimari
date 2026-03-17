@@ -28,7 +28,7 @@ import io.github.eggy03.ferrumx.windows.entity.system.Win32OperatingSystem;
 import io.github.eggy03.ferrumx.windows.entity.system.Win32PnPEntity;
 import io.github.eggy03.ferrumx.windows.entity.system.Win32Process;
 import io.github.eggy03.ferrumx.windows.entity.user.Win32UserAccount;
-import io.github.eggy03.ferrumx.windows.utility.ReflectionUtility;
+import io.github.eggy03.ferrumx.windows.query.utility.QueryUtility;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -255,7 +255,7 @@ public enum Cimv2 {
     @NotNull
     private static <T> String generateQuery(@NonNull String wmiClassName, @NonNull Class<T> equivalentEntity) {
         return "Get-CimInstance -ClassName " + wmiClassName +
-                " | Select-Object -Property " + ReflectionUtility.getFromSerializedNames(equivalentEntity) +
+                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(equivalentEntity) +
                 " | ConvertTo-Json";
 
     }

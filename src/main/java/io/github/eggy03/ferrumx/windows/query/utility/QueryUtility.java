@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  * See the LICENSE file in the project root for more information.
  */
-package io.github.eggy03.ferrumx.windows.utility;
+package io.github.eggy03.ferrumx.windows.query.utility;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.NonNull;
@@ -18,10 +18,10 @@ import java.util.Arrays;
  * <b>For internal use only</b>
  *
  * @author Sayan Bhattacharjee (Alias: Egg-03/Eggy)
- * @since 3.0.0
+ * @since 4.1.0
  */
 @UtilityClass
-public class ReflectionUtility {
+public class QueryUtility {
 
     /**
      * Retrieves all {@link SerializedName} values declared on the fields of the specified class
@@ -39,7 +39,7 @@ public class ReflectionUtility {
      * {@link SerializedName} annotation or the field name if the annotation is absent
      */
     @NotNull
-    public static <T> String getFromSerializedNames(@NonNull Class<T> tClass) {
+    public static <T> String getPropertiesFromSerializedNameAnnotation(@NonNull Class<T> tClass) {
 
         StringBuilder properties = new StringBuilder();
 
