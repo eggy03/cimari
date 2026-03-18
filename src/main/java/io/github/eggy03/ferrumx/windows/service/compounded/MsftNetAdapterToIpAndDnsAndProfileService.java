@@ -8,6 +8,7 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.ferrumx.windows.entity.compounded.MsftNetAdapterToIpAndDnsAndProfile;
+import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.MsftNetAdapterToIpAndDnsAndProfileMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.service.network.MsftDnsClientServerAddressService;
@@ -22,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -101,10 +104,15 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get() {
-        try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
+
+        try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath())) {
+
+            PowerShellResponse response = shell.executeScript(scriptBuffer);
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
         }
     }
 
@@ -119,9 +127,16 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
+
+        try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath())) {
+
+            PowerShellResponse response = powerShell.executeScript(scriptBuffer);
+            log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
+            return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
+        }
     }
 
     /**

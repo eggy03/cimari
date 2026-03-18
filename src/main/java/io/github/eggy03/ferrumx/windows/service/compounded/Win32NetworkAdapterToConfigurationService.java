@@ -8,6 +8,7 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.ferrumx.windows.entity.compounded.Win32NetworkAdapterToConfiguration;
+import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.Win32NetworkAdapterToConfigurationMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.service.network.Win32NetworkAdapterConfigurationService;
@@ -21,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -99,10 +102,15 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get() {
-        try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath()));
+
+        try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath())) {
+
+            PowerShellResponse response = shell.executeScript(scriptBuffer);
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
         }
     }
 
@@ -117,9 +125,16 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath()));
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
+
+        try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath())) {
+
+            PowerShellResponse response = powerShell.executeScript(scriptBuffer);
+            log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
+            return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
+        }
     }
 
     /**

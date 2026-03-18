@@ -8,6 +8,7 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.ferrumx.windows.entity.compounded.HardwareId;
+import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.HardwareIdMapper;
 import io.github.eggy03.ferrumx.windows.service.OptionalCommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.shell.script.ScriptEnum;
@@ -17,6 +18,8 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -92,10 +95,15 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      */
     @Override
     public @NotNull Optional<HardwareId> get() {
-        try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.HWID.getScriptPath()));
+
+        try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.HWID.getScriptPath())) {
+
+            PowerShellResponse response = shell.executeScript(scriptBuffer);
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
         }
     }
 
@@ -110,9 +118,17 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      */
     @Override
     public @NotNull Optional<HardwareId> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.HWID.getScriptPath()));
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
+
+        try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.HWID.getScriptPath())) {
+
+            PowerShellResponse response = powerShell.executeScript(scriptBuffer);
+            log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
+            return new HardwareIdMapper().mapToObject(response.getCommandOutput(), HardwareId.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
+        }
+
     }
 
     /**
