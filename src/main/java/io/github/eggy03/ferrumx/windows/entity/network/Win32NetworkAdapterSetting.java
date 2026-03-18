@@ -8,6 +8,7 @@ package io.github.eggy03.ferrumx.windows.entity.network;
 import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import io.github.eggy03.ferrumx.windows.query.Cimv2;
 import lombok.Builder;
 import lombok.Value;
@@ -68,6 +69,7 @@ import org.jetbrains.annotations.Nullable;
 @Value
 @Builder(toBuilder = true)
 @Immutable
+@WmiClass(className = "Win32_NetworkAdapterSetting")
 public class Win32NetworkAdapterSetting {
 
     /**

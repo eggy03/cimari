@@ -1,12 +1,32 @@
 package unit.utility;
 
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
+import io.github.eggy03.ferrumx.windows.exception.AnnotationNotFoundException;
 import io.github.eggy03.ferrumx.windows.query.utility.QueryUtility;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QueryUtilityTest {
+
+    @Test
+    void getWmiClassNameFromWmiClassAnnotation_success() {
+        String expectedString = "testClass";
+        String actualString = QueryUtility.getClassNameFromWmiClassAnnotation(MockWmiAnnotatedClass.class);
+
+        assertThat(expectedString).isEqualTo(actualString);
+    }
+
+    @Test
+    void getWmiClassNameFromWmiClassAnnotation_nonAnnotatedClass_throwsException() {
+
+        assertThrows(
+                AnnotationNotFoundException.class,
+                () -> QueryUtility.getClassNameFromWmiClassAnnotation(MockNonWmiAnnotatedClass.class)
+        );
+    }
 
     @Test
     void getPropertiesFromSerializedNameAnnotation_withAnnotatedFields_success() {
@@ -72,5 +92,16 @@ class QueryUtilityTest {
 
         @SerializedName("field_four")
         String fieldFour;
+    }
+
+    @SuppressWarnings("unused")
+    @WmiClass(className = "testClass")
+    static class MockWmiAnnotatedClass {
+
+    }
+
+    @SuppressWarnings("unused")
+    static class MockNonWmiAnnotatedClass {
+
     }
 }

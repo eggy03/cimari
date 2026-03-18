@@ -8,6 +8,7 @@ package io.github.eggy03.ferrumx.windows.entity.memory;
 import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,7 @@ import java.math.BigInteger;
 @Value
 @Builder(toBuilder = true)
 @Immutable
+@WmiClass(className = "Win32_PhysicalMemory")
 public class Win32PhysicalMemory {
 
     /**

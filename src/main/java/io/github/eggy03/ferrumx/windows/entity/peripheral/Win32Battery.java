@@ -8,6 +8,7 @@ package io.github.eggy03.ferrumx.windows.entity.peripheral;
 import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +50,7 @@ import java.util.List;
 @Value
 @Builder(toBuilder = true)
 @Immutable
+@WmiClass(className = "Win32_Battery")
 public class Win32Battery {
 
     /**

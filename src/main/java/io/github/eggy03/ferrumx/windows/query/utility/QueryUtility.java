@@ -6,6 +6,8 @@
 package io.github.eggy03.ferrumx.windows.query.utility;
 
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
+import io.github.eggy03.ferrumx.windows.exception.AnnotationNotFoundException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +26,26 @@ import java.util.Arrays;
 public class QueryUtility {
 
     /**
+     * <p>
+     * Retrieves a {@link WmiClass} value declared on the specified class, at class level.
+     * </p>
+     *
+     * @param tClass the class having the annotation
+     * @param <T>    the type of the class
+     * @return the annotation value
+     * @throws AnnotationNotFoundException if the class to be inspected does not have the {@link WmiClass} annotation
+     */
+    @NotNull
+    public static <T> String getClassNameFromWmiClassAnnotation(@NonNull Class<T> tClass) {
+        WmiClass wmiClass = tClass.getAnnotation(WmiClass.class);
+
+        if (wmiClass == null)
+            throw new AnnotationNotFoundException("Missing @WmiClass annotation on: " + tClass.getName());
+
+        return wmiClass.className();
+    }
+
+    /**
      * Retrieves all {@link SerializedName} values declared on the fields of the specified class
      * and returns them as a comma-separated string.
      *
@@ -35,7 +57,7 @@ public class QueryUtility {
      *
      * @param tClass the class whose fields should be inspected
      * @param <T>    the type of the class
-     * @return a comma-separated string containing either the value of each
+     * @return a comma-separated string containing either the className of each
      * {@link SerializedName} annotation or the field name if the annotation is absent
      */
     @NotNull

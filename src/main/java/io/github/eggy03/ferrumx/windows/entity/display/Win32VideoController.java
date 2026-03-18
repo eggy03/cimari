@@ -8,6 +8,7 @@ package io.github.eggy03.ferrumx.windows.entity.display;
 import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +49,7 @@ import org.jetbrains.annotations.Nullable;
 @Value
 @Builder(toBuilder = true)
 @Immutable
+@WmiClass(className = "Win32_VideoController")
 public class Win32VideoController {
 
     /**
