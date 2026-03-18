@@ -61,6 +61,7 @@ public class ScriptUtility {
      * @param scriptPath the absolute classpath location of the script (e.g. {@code "/script.ps1"})
      * @return the complete script contents as a {@link String}
      * @throws ResourceNotFoundException if the script resource cannot be found
+     * @throws ResourceOperationException when I/O operations on the resource fail
      */
     @NotNull
     public static String loadScript(@NonNull String scriptPath) {
