@@ -1,4 +1,4 @@
-package unit.utility;
+package unit.shell;
 
 import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
