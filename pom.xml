@@ -276,6 +276,8 @@
                 <configuration>
                     <excludes>
                         <exclude>io/github/eggy03/ferrumx/windows/entity/**/*</exclude>
+                        <exclude>io/github/eggy03/ferrumx/windows/annotation/**/*</exclude>
+                        <exclude>io/github/eggy03/ferrumx/windows/exception/**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
