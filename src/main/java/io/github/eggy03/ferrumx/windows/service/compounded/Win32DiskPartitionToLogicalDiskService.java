@@ -17,7 +17,7 @@ import io.github.eggy03.ferrumx.windows.service.storage.Win32DiskPartitionServic
 import io.github.eggy03.ferrumx.windows.service.storage.Win32LogicalDiskService;
 import io.github.eggy03.ferrumx.windows.service.storage.Win32LogicalDiskToPartitionService;
 import io.github.eggy03.ferrumx.windows.shell.script.ScriptEnum;
-import io.github.eggy03.ferrumx.windows.shell.script.ScriptLoader;
+import io.github.eggy03.ferrumx.windows.shell.script.ScriptUtility;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -105,7 +105,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new Win32DiskPartitionToLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskPartitionToLogicalDisk.class);
         }
@@ -122,7 +122,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
      */
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32DiskPartitionToLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskPartitionToLogicalDisk.class);
     }
@@ -144,7 +144,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get(long timeout) {
 
-        String command = ScriptLoader.loadScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath());
+        String command = ScriptUtility.loadScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath());
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32DiskPartitionToLogicalDiskMapper().mapToList(response, Win32DiskPartitionToLogicalDisk.class);

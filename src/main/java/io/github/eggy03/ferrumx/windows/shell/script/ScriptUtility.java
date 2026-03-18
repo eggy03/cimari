@@ -5,14 +5,15 @@
  */
 package io.github.eggy03.ferrumx.windows.shell.script;
 
+import io.github.eggy03.ferrumx.windows.exception.ResourceNotFoundException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 /**
  * <p>
@@ -26,7 +27,7 @@ import java.util.Objects;
  * @since 4.1.0
  */
 @UtilityClass
-public class ScriptLoader {
+public class ScriptUtility {
 
     /**
      * Loads a PowerShell script from the classpath and wraps it in a {@link BufferedReader}.
@@ -35,16 +36,18 @@ public class ScriptLoader {
      *
      * @param scriptPath the absolute classpath location of the script (e.g. {@code "/script.ps1"})
      * @return a {@link BufferedReader} for the requested script
-     * @throws NullPointerException if the script resource cannot be found
+     * @throws ResourceNotFoundException if the script resource cannot be found
      */
     @NotNull
     public static BufferedReader loadAsBufferedReader(@NonNull String scriptPath) {
-        return new BufferedReader(
-                new InputStreamReader( // TODO throw ResourceNotFoundException in case of null returns
-                        Objects.requireNonNull(ScriptLoader.class.getResourceAsStream(scriptPath))
-                        , StandardCharsets.UTF_8
-                )
-        );
+
+        InputStream resource = ScriptUtility.class.getResourceAsStream(scriptPath);
+        if (resource == null)
+            throw new ResourceNotFoundException("Script was not found in: " + scriptPath);
+
+        InputStreamReader resourceStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
+
+        return new BufferedReader(resourceStreamReader);
     }
 
     /**
@@ -55,20 +58,20 @@ public class ScriptLoader {
      *
      * @param scriptPath the absolute classpath location of the script (e.g. {@code "/script.ps1"})
      * @return the complete script contents as a {@link String}
-     * @throws NullPointerException if the script resource cannot be found
+     * @throws ResourceNotFoundException if the script resource cannot be found
      */
     @NotNull
     public static String loadScript(@NonNull String scriptPath) {
 
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader( // TODO throw ResourceNotFoundException in case of null returns
-                        Objects.requireNonNull(ScriptLoader.class.getResourceAsStream(scriptPath))
-                )
-        );
+        InputStream resource = ScriptUtility.class.getResourceAsStream(scriptPath);
+        if (resource == null)
+            throw new ResourceNotFoundException("Script was not found in: " + scriptPath);
+
+        InputStreamReader resourceStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
+        BufferedReader resourceBuffer = new BufferedReader(resourceStreamReader);
 
         StringBuilder script = new StringBuilder();
-        reader.lines().forEach(line -> script.append(line).append(System.lineSeparator()));
+        resourceBuffer.lines().forEach(line -> script.append(line).append(System.lineSeparator()));
         return script.toString();
     }
-
 }

@@ -14,7 +14,7 @@ import io.github.eggy03.ferrumx.windows.service.processor.Win32AssociatedProcess
 import io.github.eggy03.ferrumx.windows.service.processor.Win32CacheMemoryService;
 import io.github.eggy03.ferrumx.windows.service.processor.Win32ProcessorService;
 import io.github.eggy03.ferrumx.windows.shell.script.ScriptEnum;
-import io.github.eggy03.ferrumx.windows.shell.script.ScriptLoader;
+import io.github.eggy03.ferrumx.windows.shell.script.ScriptUtility;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -99,7 +99,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
     @Override
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new Win32ProcessorToCacheMemoryMapper().mapToList(response.getCommandOutput(), Win32ProcessorToCacheMemory.class);
         }
@@ -116,7 +116,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      */
     @Override
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32ProcessorToCacheMemoryMapper().mapToList(response.getCommandOutput(), Win32ProcessorToCacheMemory.class);
     }
@@ -138,7 +138,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
     @Override
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
 
-        String command = ScriptLoader.loadScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath());
+        String command = ScriptUtility.loadScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath());
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32ProcessorToCacheMemoryMapper().mapToList(response, Win32ProcessorToCacheMemory.class);

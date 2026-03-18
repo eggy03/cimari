@@ -15,7 +15,7 @@ import io.github.eggy03.ferrumx.windows.service.network.MsftNetAdapterService;
 import io.github.eggy03.ferrumx.windows.service.network.MsftNetConnectionProfileService;
 import io.github.eggy03.ferrumx.windows.service.network.MsftNetIpAddressService;
 import io.github.eggy03.ferrumx.windows.shell.script.ScriptEnum;
-import io.github.eggy03.ferrumx.windows.shell.script.ScriptLoader;
+import io.github.eggy03.ferrumx.windows.shell.script.ScriptUtility;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -102,7 +102,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get() {
         try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
+            PowerShellResponse response = shell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
         }
@@ -119,7 +119,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(ScriptLoader.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
+        PowerShellResponse response = powerShell.executeScript(ScriptUtility.loadAsBufferedReader(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath()));
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response.getCommandOutput(), MsftNetAdapterToIpAndDnsAndProfile.class);
     }
@@ -141,7 +141,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
 
-        String script = ScriptLoader.loadScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath());
+        String script = ScriptUtility.loadScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response, MsftNetAdapterToIpAndDnsAndProfile.class);
