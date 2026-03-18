@@ -3,7 +3,7 @@ package unit.utility;
 import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import io.github.eggy03.ferrumx.windows.exception.AnnotationNotFoundException;
-import io.github.eggy03.ferrumx.windows.query.utility.QueryUtility;
+import io.github.eggy03.ferrumx.windows.shell.query.QueryUtility;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

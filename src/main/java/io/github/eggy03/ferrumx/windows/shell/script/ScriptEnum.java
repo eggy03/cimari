@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  * See the LICENSE file in the project root for more information.
  */
-package io.github.eggy03.ferrumx.windows.script;
+package io.github.eggy03.ferrumx.windows.shell.script;
 
 import io.github.eggy03.ferrumx.windows.entity.compounded.HardwareId;
 import io.github.eggy03.ferrumx.windows.entity.compounded.MsftNetAdapterToIpAndDnsAndProfile;

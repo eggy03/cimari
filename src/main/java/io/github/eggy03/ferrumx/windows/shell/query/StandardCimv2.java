@@ -3,14 +3,13 @@
  * Licensed under the MIT License.
  * See the LICENSE file in the project root for more information.
  */
-package io.github.eggy03.ferrumx.windows.query;
+package io.github.eggy03.ferrumx.windows.shell.query;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetAdapter;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetIpAddress;
-import io.github.eggy03.ferrumx.windows.query.utility.QueryUtility;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

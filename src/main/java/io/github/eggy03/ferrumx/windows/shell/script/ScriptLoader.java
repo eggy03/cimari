@@ -1,4 +1,9 @@
-package io.github.eggy03.ferrumx.windows.script;
+/*
+ * © 2026 The ferrumx-windows contributors
+ * Licensed under the MIT License.
+ * See the LICENSE file in the project root for more information.
+ */
+package io.github.eggy03.ferrumx.windows.shell.script;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -22,7 +27,6 @@ import java.util.Objects;
  */
 @UtilityClass
 public class ScriptLoader {
-
 
     /**
      * Loads a PowerShell script from the classpath and wraps it in a {@link BufferedReader}.

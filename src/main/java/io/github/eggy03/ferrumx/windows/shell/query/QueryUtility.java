@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  * See the LICENSE file in the project root for more information.
  */
-package io.github.eggy03.ferrumx.windows.query.utility;
+package io.github.eggy03.ferrumx.windows.shell.query;
 
 import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
