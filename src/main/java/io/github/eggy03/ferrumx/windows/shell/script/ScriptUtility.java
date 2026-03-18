@@ -6,11 +6,13 @@
 package io.github.eggy03.ferrumx.windows.shell.script;
 
 import io.github.eggy03.ferrumx.windows.exception.ResourceNotFoundException;
+import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -68,10 +70,15 @@ public class ScriptUtility {
             throw new ResourceNotFoundException("Script was not found in: " + scriptPath);
 
         InputStreamReader resourceStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
-        BufferedReader resourceBuffer = new BufferedReader(resourceStreamReader);
+        // wrapping buffered reader on try-with-resources is enough since it will also close the other chained readers
+        try (BufferedReader resourceBuffer = new BufferedReader(resourceStreamReader)) {
 
-        StringBuilder script = new StringBuilder();
-        resourceBuffer.lines().forEach(line -> script.append(line).append(System.lineSeparator()));
-        return script.toString();
+            StringBuilder script = new StringBuilder();
+            resourceBuffer.lines().forEach(line -> script.append(line).append(System.lineSeparator()));
+            return script.toString();
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to read script: " + scriptPath, e);
+        }
     }
 }
