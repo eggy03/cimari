@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 
 /**
  * <p>
@@ -75,7 +76,14 @@ public class ScriptUtility {
         try (BufferedReader resourceBuffer = new BufferedReader(resourceStreamReader)) {
 
             StringBuilder script = new StringBuilder();
-            resourceBuffer.lines().forEach(line -> script.append(line).append(System.lineSeparator()));
+
+            Iterator<String> iterator = resourceBuffer.lines().iterator();
+            while (iterator.hasNext()) {
+                script.append(iterator.next());
+                if (iterator.hasNext())
+                    script.append(System.lineSeparator());
+            }
+
             return script.toString();
 
         } catch (IOException e) {
