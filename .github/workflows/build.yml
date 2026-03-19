@@ -75,4 +75,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run:
-          mvn -B verify -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=eggy03_ferrumx-windows -Dsonar.coverage.exclusions=**/entity/**,**/constant/**
+          mvn -B verify -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=eggy03_ferrumx-windows -Dsonar.coverage.exclusions=**/annotation/**,**/entity/**,**/exception/**,**/shell**
