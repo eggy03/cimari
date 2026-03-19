@@ -37,7 +37,7 @@ public class ScriptUtility {
      *
      * <p>The script is read using UTF-8 encoding.</p>
      *
-     * @param scriptPath the absolute classpath location of the script (e.g. {@code "/script.ps1"})
+     * @param scriptPath the location of the script resource (e.g. {@code "/script.ps1"})
      * @return a {@link BufferedReader} for the requested script
      * @throws ResourceNotFoundException if the script resource cannot be found
      */
@@ -56,11 +56,14 @@ public class ScriptUtility {
     /**
      * Loads a PowerShell script from the classpath and returns its full contents as a {@link String}.
      *
-     * <p>Each line of the script is preserved and separated using
-     * {@link System#lineSeparator()}.</p>
+     * <p>
+     *     Lines are read using {@link BufferedReader#lines()}, meaning original line
+     *     terminators are not preserved. The resulting content is normalized such that
+     *     lines are joined using {@link System#lineSeparator()}.
+     * </p>
      *
-     * @param scriptPath the absolute classpath location of the script (e.g. {@code "/script.ps1"})
-     * @return the complete script contents as a {@link String}
+     * @param scriptPath the location of the script resource (e.g. {@code "/script.ps1"})
+     * @return the normalized script contents as a {@link String}
      * @throws ResourceNotFoundException if the script resource cannot be found
      * @throws ResourceOperationException when I/O operations on the resource fail
      */
