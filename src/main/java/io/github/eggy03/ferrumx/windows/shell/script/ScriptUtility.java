@@ -57,14 +57,14 @@ public class ScriptUtility {
      * Loads a PowerShell script from the classpath and returns its full contents as a {@link String}.
      *
      * <p>
-     *     Lines are read using {@link BufferedReader#lines()}, meaning original line
-     *     terminators are not preserved. The resulting content is normalized such that
-     *     lines are joined using {@link System#lineSeparator()}.
+     * Lines are read using {@link BufferedReader#lines()}, meaning original line
+     * terminators are not preserved. The resulting content is normalized such that
+     * lines are joined using {@link System#lineSeparator()}.
      * </p>
      *
      * @param scriptPath the location of the script resource (e.g. {@code "/script.ps1"})
      * @return the normalized script contents as a {@link String}
-     * @throws ResourceNotFoundException if the script resource cannot be found
+     * @throws ResourceNotFoundException  if the script resource cannot be found
      * @throws ResourceOperationException when I/O operations on the resource fail
      */
     @NotNull

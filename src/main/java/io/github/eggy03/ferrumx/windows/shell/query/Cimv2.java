@@ -91,7 +91,7 @@ public enum Cimv2 {
      */
     WIN32_ASSOCIATED_PROCESSOR_MEMORY(
             "Get-CimInstance Win32_AssociatedProcessorMemory " +
-            "| ForEach-Object { [PSCustomObject]@{ CacheMemoryDeviceID = $_.Antecedent.DeviceID; ProcessorDeviceID = $_.Dependent.DeviceID } } " +
+                    "| ForEach-Object { [PSCustomObject]@{ CacheMemoryDeviceID = $_.Antecedent.DeviceID; ProcessorDeviceID = $_.Dependent.DeviceID } } " +
                     "| ConvertTo-Json"
     ),
 
@@ -144,7 +144,7 @@ public enum Cimv2 {
      */
     WIN32_NETWORK_ADAPTER_SETTING(
             "Get-CimInstance Win32_NetworkAdapterSetting " +
-            "| ForEach-Object { [PSCustomObject]@{ NetworkAdapterDeviceID = $_.Element.DeviceID; NetworkAdapterConfigurationIndex = $_.Setting.Index } } " +
+                    "| ForEach-Object { [PSCustomObject]@{ NetworkAdapterDeviceID = $_.Element.DeviceID; NetworkAdapterConfigurationIndex = $_.Setting.Index } } " +
                     "| ConvertTo-Json"
     ),
 
@@ -183,7 +183,7 @@ public enum Cimv2 {
      */
     WIN32_DISK_DRIVE_TO_DISK_PARTITION(
             "Get-CimInstance Win32_DiskDriveToDiskPartition " +
-            "| ForEach-Object { [PSCustomObject]@{ DiskDriveDeviceID = $_.Antecedent.DeviceID; DiskPartitionDeviceID = $_.Dependent.DeviceID } } " +
+                    "| ForEach-Object { [PSCustomObject]@{ DiskDriveDeviceID = $_.Antecedent.DeviceID; DiskPartitionDeviceID = $_.Dependent.DeviceID } } " +
                     "| ConvertTo-Json"
     ),
 
@@ -194,7 +194,7 @@ public enum Cimv2 {
      */
     WIN32_LOGICAL_DISK_TO_PARTITION(
             "Get-CimInstance Win32_LogicalDiskToPartition " +
-            "| ForEach-Object { [PSCustomObject]@{ DiskPartitionDeviceID = $_.Antecedent.DeviceID; LogicalDiskDeviceID = $_.Dependent.DeviceID } } " +
+                    "| ForEach-Object { [PSCustomObject]@{ DiskPartitionDeviceID = $_.Antecedent.DeviceID; LogicalDiskDeviceID = $_.Dependent.DeviceID } } " +
                     "| ConvertTo-Json"
     ),
 

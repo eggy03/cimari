@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+
 /**
  * Enum representing the predefined WMI (CIM) queries for the classes available in the {@code root/StandardCimv2} namespace.
  * <p>
