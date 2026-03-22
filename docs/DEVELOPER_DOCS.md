@@ -194,10 +194,8 @@ As of v4.1.0, this package includes:
 - `Win32_AssociatedProcessorMemory`
 
 ```java
-
 @Value
 @Builder(toBuilder = true)
-@Immutable
 @WmiClass(className = "Win32_Processor")
 public class Win32Processor {
 
@@ -225,4 +223,67 @@ public class Win32Processor {
 }
 ```
 
-Let's talk about the annotations first.
+What we have here is an annotation heavy entity class that's designed based on the properties we want to map.
+
+Let's talk about the annotations and their purpose:
+
+- `@Value` is from Lombok, and it makes the class shallowly immutable.
+
+All fields are made private and final, and Lombok generates an all-arguments constructor along with getters.
+This prevents modification at the reference level.
+However, if your class contains fields which are a part of the Collections, such as List, Map, Set,
+`@Value` would make their references final but the actual Collections may still be immutable depending on the
+implementation.
+In our implementation, the collections stay mutable.
+
+- `@Builder` is from Lombok, and it provides a builder pattern for the entity.
+
+While the mapping layer typically deserializes PowerShell output directly into the entity (without using the builder),
+the builder is included to simplify manual object creation—particularly in testing and custom workflows.
+
+Without a builder, creating an instance with nullable fields would require:
+
+```text
+new Win32Processor(null, null, null);
+```
+
+This approach quickly becomes impractical as the number of fields increases.
+
+Using the builder, the same can be expressed more clearly and flexibly:
+
+```text
+Win32Processor.builder().build();
+```
+
+Additionally, only the required fields can be set while leaving others unset:
+
+```text
+Win32Processor.builder()
+    .name("AMD Ryzen 5 5600G")
+    .build();
+```
+
+Note that `toBuilder()` creates a new instance of the builder class with the current values from the original object
+but does not recursively clone or deep copy mutable fields such as collections or other objects.
+
+The shallow copy means that if fields in the original object point to mutable objects, changes to these objects via
+the builder will reflect on the original instance.
+
+- `@WmiClass` is a custom annotation, and it serves the following purposes:
+
+1) It holds information about the actual WMI class name.
+2) The annotation allows us to get the class name during dynamic construction of queries during runtime.
+
+- `@SerializedName` is from GSON and it serves the following purposes:
+
+1) It holds information about the actual WMI property name that the field corresponds to. Due to different naming
+   conventions, we need to explicitly tell GSON that a property with the given name must be mapped to the given field.
+2) The annotation allows us to get the property name during dynamic construction of queries during runtime.
+
+- `@Nullable` and `@NotNull` are from JetBrains Annotations, and they're strictly used to tell users and static analysis
+  tools about the nullity of the given fields. It is always safe to assume that all fields for a given entity may be
+  null
+  at some point or for different systems.
+
+We also have a custom `toString()` implementation that returns a pretty printed JSON formatted String value of the
+objects of the class.
