@@ -36,7 +36,7 @@ import java.util.List;
  * <p>
  * {@link Win32Baseboard} contains the details of the motherboard this port belongs to.
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-portconnector">Win32_PortConnector Documentation</a>
  * @since 3.0.0
  */

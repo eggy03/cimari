@@ -64,7 +64,7 @@ import java.util.List;
  * of the classes and their associations with each other.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32DiskDrive
  * @see Win32DiskPartition
  * @see Win32LogicalDisk

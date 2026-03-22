@@ -44,7 +44,7 @@ import java.util.List;
  * <p>
  * See {@link Win32NetworkAdapter} for the corresponding adapter entity
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapterconfiguration">Win32_NetworkAdapterConfiguration Documentation</a>
  * @since 3.0.0
  */

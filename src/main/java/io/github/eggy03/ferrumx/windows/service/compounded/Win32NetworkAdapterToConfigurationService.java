@@ -80,7 +80,7 @@ import java.util.List;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32NetworkAdapterService
  * @see Win32NetworkAdapterConfigurationService
  * @see Win32NetworkAdapterSettingService

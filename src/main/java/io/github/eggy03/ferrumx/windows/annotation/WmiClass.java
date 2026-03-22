@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  * }
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 4.1.0
  */
 @Retention(RetentionPolicy.RUNTIME)

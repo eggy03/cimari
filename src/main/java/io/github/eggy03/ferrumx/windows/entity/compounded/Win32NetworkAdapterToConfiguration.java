@@ -42,7 +42,7 @@ import java.util.List;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32NetworkAdapter
  * @see Win32NetworkAdapterConfiguration
  * @see Win32NetworkAdapterSetting

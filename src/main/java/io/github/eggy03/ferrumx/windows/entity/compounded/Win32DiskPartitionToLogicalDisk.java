@@ -47,7 +47,7 @@ import java.util.List;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32DiskPartition
  * @see Win32LogicalDisk
  * @see Win32LogicalDiskToPartition

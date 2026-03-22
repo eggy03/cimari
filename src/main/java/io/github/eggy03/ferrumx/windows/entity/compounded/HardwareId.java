@@ -75,7 +75,7 @@ import org.jetbrains.annotations.Nullable;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 3.0.0
  */
 @Value

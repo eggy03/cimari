@@ -43,7 +43,7 @@ import java.util.List;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32Processor
  * @see Win32CacheMemory
  * @since 3.0.0

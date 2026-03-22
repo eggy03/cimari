@@ -15,7 +15,7 @@
  * Not all classes may represent a WMI or CIM class
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 2.0.0
  */
 package io.github.eggy03.ferrumx.windows.entity;

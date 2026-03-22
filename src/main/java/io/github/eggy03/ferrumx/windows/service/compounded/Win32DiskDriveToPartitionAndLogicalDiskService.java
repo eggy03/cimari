@@ -82,7 +82,7 @@ import java.util.List;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32DiskPartitionToLogicalDiskService
  * @see Win32DiskDriveService
  * @see Win32DiskPartitionService

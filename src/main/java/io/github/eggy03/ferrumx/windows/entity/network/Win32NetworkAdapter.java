@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * {@link Win32NetworkAdapterConfiguration} contains related network configuration details.
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapter">Win32_NetworkAdapter Documentation</a>
  * @since 3.0.0
  */

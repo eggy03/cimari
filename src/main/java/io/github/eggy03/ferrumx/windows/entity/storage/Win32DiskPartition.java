@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * <p>See {@link Win32DiskDrive} for information about physical disks.</p>
  * <p>See {@link Win32LogicalDisk} for information about the logical volumes on a physical disk.</p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskpartition">Win32_DiskPartition Documentation</a>
  * @since 3.0.0
  */

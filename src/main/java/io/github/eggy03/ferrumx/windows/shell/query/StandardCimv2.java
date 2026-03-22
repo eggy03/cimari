@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  * corresponding Java objects.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 4.1.0
  */
 @RequiredArgsConstructor

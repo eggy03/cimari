@@ -27,7 +27,7 @@ import java.util.Optional;
  * </p>
  *
  * @param <S> the entity type returned by the service implementation
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 3.0.0
  */
 public interface CommonMappingInterface<S> {

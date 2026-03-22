@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32UserAccount
  * @since 2.0.0
  */

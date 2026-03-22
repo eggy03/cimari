@@ -26,7 +26,7 @@ import java.util.Iterator;
  * <b>For Internal Use Only</b>
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 4.1.0
  */
 @UtilityClass
