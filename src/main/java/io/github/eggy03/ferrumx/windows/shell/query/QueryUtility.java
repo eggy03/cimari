@@ -19,7 +19,6 @@ import java.util.Arrays;
  * <p>
  * <b>For internal use only</b>
  *
- * @author Sayan Bhattacharjee (Alias: Egg-03/Eggy)
  * @since 4.1.0
  */
 @UtilityClass

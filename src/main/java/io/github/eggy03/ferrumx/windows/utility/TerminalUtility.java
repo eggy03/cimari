@@ -25,7 +25,6 @@ import java.time.Duration;
  * <p>
  * <b>Mostly for internal use </b>
  *
- * @author Sayan Bhattacharjee (Alias: Egg-03/Eggy)
  * @since 3.1.0
  */
 @UtilityClass
