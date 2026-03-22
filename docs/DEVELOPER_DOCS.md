@@ -1,10 +1,12 @@
-This documentation outlines the principal architecture of the library and aims to provide the viewers
-with an understanding of how the internal components work together.
+This documentation outlines the principal architecture of the library
+and provides an overview of how its internal components work together.
+
+_Last Updated: March 22, 2026_
 
 > [!NOTE]
 > This documentation reflects the workings of v4.1.0 of the library. Older or newer versions may have altered structure,
-> behavior or implementation.
-> I will try to update this documentation frequently to reflect the latest changes.
+> behavior, or implementation.
+> This documentation may be updated periodically to reflect the latest changes.
 
 # Project Structure
 
@@ -44,7 +46,7 @@ Some of the secondary goals of the API can be described as:
 1) Handle scenarios when PowerShell cannot be launched or throws an error during query runs
 2) Handle scenarios where queries return incomplete or unexpected results
 3) Safely manage null, empty, or malformed results
-4) Handle mutability of mapped entity classes and collections
+4) Address mutability concerns of mapped entity classes and collections
 
 # Working
 
@@ -144,7 +146,7 @@ Executing this query produces output similar to:
 }
 ```
 
-Since this executed every time a caller wants to fetch Win32_Processor information, we will store this query in an enum.
+Since this query is executed every time a caller requests Win32_Processor information, we store it in an enum.
 
 Our enum will reside in the `io.github.eggy.ferrumx.windows.shell.query*` package.
 
@@ -184,7 +186,7 @@ We will also use `Lombok` to reduce boilerplate code.
 
 Based on the fields we want, we will now design our entity class.
 
-All our entity classes can be found in the `io.github.eggy.ferrumx.windows.entity.*` package.
+All entity classes can be found in the `io.github.eggy.ferrumx.windows.entity.*` package.
 For processor-related mappings, a dedicated subpackage `entity.processor` is used.
 
 As of v4.1.0, this package includes:
@@ -227,19 +229,30 @@ What we have here is an annotation heavy entity class that's designed based on t
 
 Let's talk about the annotations and their purpose:
 
-- `@Value` is from Lombok, and it makes the class shallowly immutable.
+`@Value` is from Lombok, and it makes the class shallowly immutable.
 
-All fields are made private and final, and Lombok generates an all-arguments constructor along with getters.
-This prevents modification at the reference level.
-However, if your class contains fields which are a part of the Collections, such as List, Map, Set,
-`@Value` would make their references final but the actual Collections may still be immutable depending on the
-implementation.
-In our implementation, the collections stay mutable.
+- Marks the class as shallowly immutable
+- Generates:
+  - private final fields
+  - all-arguments constructor
+  - getters
 
-- `@Builder` is from Lombok, and it provides a builder pattern for the entity.
+This ensures that field references cannot be reassigned after construction.
 
-While the mapping layer typically deserializes PowerShell output directly into the entity (without using the builder),
-the builder is included to simplify manual object creation—particularly in testing and custom workflows.
+However, this does not guarantee deep immutability:
+
+- If a field is a collection (List, Map, etc.), the reference is immutable
+- But, the underlying collection may still be mutable depending on how it is constructed
+
+In our implementation, collection fields (if present) remain mutable unless explicitly wrapped.
+
+`@Builder` is from Lombok, and it provides a builder pattern for the entity.
+
+Although the mapping layer typically deserializes JSON directly into the entity (bypassing the builder),
+the builder is useful for:
+
+- creating partial objects in tests
+- creating modified objects in workflows from the source object
 
 Without a builder, creating an instance with nullable fields would require:
 
@@ -269,21 +282,21 @@ but does not recursively clone or deep copy mutable fields such as collections o
 The shallow copy means that if fields in the original object point to mutable objects, changes to these objects via
 the builder will reflect on the original instance.
 
-- `@WmiClass` is a custom annotation, and it serves the following purposes:
+`@WmiClass` is a custom annotation, and it serves the following purposes:
 
-1) It holds information about the actual WMI class name.
-2) The annotation allows us to get the class name during dynamic construction of queries during runtime.
+- It holds information about the actual WMI class name.
+- The annotation allows us to get the class name during dynamic construction of queries during runtime.
 
-- `@SerializedName` is from GSON and it serves the following purposes:
+`@SerializedName` is from GSON and it serves the following purposes:
 
-1) It holds information about the actual WMI property name that the field corresponds to. Due to different naming
-   conventions, we need to explicitly tell GSON that a property with the given name must be mapped to the given field.
-2) The annotation allows us to get the property name during dynamic construction of queries during runtime.
+- It holds information about the actual WMI property name that the field corresponds to. Due to different naming
+  conventions, we need to explicitly tell GSON that a property with the given name must be mapped to the given field.
 
-- `@Nullable` and `@NotNull` are from JetBrains Annotations, and they're strictly used to tell users and static analysis
-  tools about the nullity of the given fields. It is always safe to assume that all fields for a given entity may be
-  null
-  at some point or for different systems.
+- The annotation allows us to get the property name during dynamic construction of queries during runtime.
+
+`@Nullable` and `@NotNull` are from JetBrains Annotations, and they're strictly used to tell users and static analysis
+tools about the nullity of the given fields. It is always safe to assume that all fields for a given entity may be
+null at some point or for different systems.
 
 We also have a custom `toString()` implementation that returns a pretty printed JSON formatted String value of the
 objects of the class.
@@ -322,7 +335,200 @@ from our `Win32Processor` class during runtime.
 `@WmiClass(className = "Win32_Processor")` and `@SerializedName("...")` provides all the data required to fetch the
 class name and the properties to be queried, respectively.
 
-We just need to pass `Win32Processor.class` as an argument and the utility will scan the class.
+We just need to pass `Win32Processor.class` as an argument and the utility will inspect the class.
 The utility resides in the `io.github.eggy.ferrumx.windows.shell.query*` package.
 
 We have also used Lombok to remove some constructor and getter boilerplate.
+
+### Designing the Mapper
+
+The mappers are responsible for deserializing the JSON output from PowerShell into typed entities.
+
+All entity mappers reside in the `io.github.eggy.ferrumx.windows.mapping*` package.
+We have an interface called `CommonMappingInterface` with default methods which are usually enough to deserialize any
+JSON into typed entities. We achieve this via Google GSON.
+
+The following pseudocode shows the interface with the default methods.
+For full definition and implementation, check out `io.github.eggy.ferrumx.windows.mapping.CommonMappingInterface`.
+
+```java
+// simplified representation
+public interface CommonMappingInterface<S> {
+
+  @NotNull
+  Gson GSON = new Gson();
+
+  @NotNull
+  @Unmodifiable
+  default List<S> mapToList(@NonNull String json, @NonNull Class<S> objectClass) {
+        /*
+         if JSON starts with "[" it means it's an array, and therefore we will serialize it into a List of type S
+         However, there might be cases wherein, you expect an array of objects but get a single object instead.
+         For example, WMI lists CPUs as an array of objects but in cases where there is only 1 CPU, it may
+         either return as an array of single object or just the object, which will then start with { key = value, key2=value2}.
+         
+         In the latter case, we will wrap it in a singleton list.
+         
+         In any case, the returned List of objects is unmodifiable.
+         Note that the returned List is unmodifiable,
+         but the contained objects may still be mutable depending on their implementation.
+        */
+  }
+
+  @NotNull
+  default Optional<S> mapToObject(@NonNull String json, @NonNull Class<S> objectClass) {
+    // You can use this method if you are 100% sure that the JSON will always serialize into a single object
+    // One such example is Win32_ComputerSystem. It's documentation states that it always returns a single object.
+  }
+
+  // Refer to the actual implementation for details on null handling and edge-case behavior.
+}
+```
+
+Till now, the mappers for all the entities have used the default implementation of the interface.
+We will define our mapper by creating an empty class that implements the interface.
+
+```java
+public class Win32ProcessorMapper implements CommonMappingInterface<Win32Processor> {
+  // usually not needed, but you can write your custom implementations here
+  // otherwise, the default methods from the interface are sufficient
+}
+```
+
+This mapper will reside in the `mapping.processor` sub-package and can be simply called
+via: `new Win32ProcessorMapper().mapToList(...) or mapToObject(...)`.
+
+### Designing the Service
+
+Service classes are responsible for orchestrating the full workflow of:
+
+- executing PowerShell queries
+- retrieving output
+- mapping results into entities
+
+All service classes reside in the `io.github.eggy.ferrumx.windows.service*` package.
+
+At a minimum, a service method should:
+
+1) Initialize or receive a PowerShell session
+2) Generate and Execute the required query
+3) Retrieve the output
+4) Delegate deserialization to the mapper
+5) Return the mapped result to the caller
+
+Service classes may also:
+
+1) Manage the lifecycle of PowerShell sessions when not provided by the caller
+2) Handle failures in session creation or execution
+3) Handle malformed, empty, or unexpected outputs (usually handled by the mappers)
+4) Clearly document concurrency characteristics (e.g., whether a session is reusable across threads)
+
+Let's take a look at the two interfaces that all the service classes implement.
+
+```java
+public interface CommonServiceInterface<S> {
+
+  List<S> get();
+
+  List<S> get(PowerShell powerShell);
+
+  List<S> get(long timeout);
+}
+```
+
+```java
+public interface OptionalCommonServiceInterface<S> {
+
+  Optional<S> get();
+
+  Optional<S> get(PowerShell powerShell);
+
+  Optional<S> get(long timeout);
+}
+```
+
+Unlike `CommonMappingInterface`, these two interfaces do not have default methods and the classes that
+implement these interfaces must override these methods to have their own definitions.
+
+Let's create a `service.processor` subpackage and provide a concrete definition for `Win32Processor`.
+
+```java
+
+public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
+
+  @Override
+  public @NotNull @Unmodifiable List<Win32Processor> get() {
+    PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_PROCESSOR.getQuery());
+    return new Win32ProcessorMapper().mapToList(response.getCommandOutput(), Win32Processor.class);
+  }
+
+  @Override
+  public @NotNull @Unmodifiable List<Win32Processor> get(@NonNull PowerShell powerShell) {
+    PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_PROCESSOR.getQuery());
+    return new Win32ProcessorMapper().mapToList(response.getCommandOutput(), Win32Processor.class);
+  }
+
+  @Override
+  public @NotNull @Unmodifiable List<Win32Processor> get(long timeout) {
+    String command = Cimv2.WIN32_PROCESSOR.getQuery();
+    String response = TerminalUtility.executeCommand(command, timeout);
+    return new Win32ProcessorMapper().mapToList(response, Win32Processor.class);
+  }
+}
+```
+
+`get()`
+
+- Uses an auto-managed PowerShell session
+- Delegates execution to the underlying library
+
+`get(PowerShell)`
+
+- Uses a caller-provided session
+- Allows reuse across multiple calls
+- Gives the caller full lifecycle control
+
+`get(long timeout)`
+
+- Uses an alternative execution mechanism via `TerminalUtility`
+- Throws an exception if the timeout is exceeded.
+- Supports concurrent execution scenarios unlike `jPowerShell` (see Javadocs for the Win32ProcessorService
+  implementation to know more)
+- Does not rely on the `jPowerShell` library
+
+`TerminalUtility` is found in the `io.github.eggy03.ferrumx.windows.utility` package
+
+### Writing Tests
+
+Unit tests for the library can be found under the `src/test` directory. Check them out to see what cases are handled
+and suggest improvements or write your own tests.
+
+### Putting Everything Together
+
+With the service layer in place, we can finally call our service class.
+
+The following example retrieves processor information using an isolated PowerShell execution with a timeout of 15
+seconds.
+
+```java
+import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
+import io.github.eggy03.ferrumx.windows.service.processor.Win32ProcessorService;
+
+import java.util.List;
+
+@SuppressWarnings("all")
+public class Win32ProcessorExample {
+
+  public static void main(String[] args) {
+    List<Win32Processor> cpuList = new Win32ProcessorService().get(15);
+    cpuList.forEach(System.out::println);
+  }
+}
+```
+
+# References
+
+- [Javadocs](https://eggy03.github.io/ferrumx-windows-documentation/)
+- [Examples](https://github.com/eggy03/ferrumx-windows-examples)
+- [Microsoft Docs for Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor)
+- [Additional Helpful Docs from `powershell.one`](https://powershell.one/wmi/root/cimv2)
