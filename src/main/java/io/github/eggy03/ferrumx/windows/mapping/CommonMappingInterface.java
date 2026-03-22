@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,12 +62,18 @@ public interface CommonMappingInterface<S> {
     @Unmodifiable
     default List<S> mapToList(@NonNull String json, @NonNull Class<S> objectClass) {
 
-        if (json.startsWith("[")) {
+        if (json.trim().startsWith("[")) {
             Type listType = TypeToken.getParameterized(List.class, objectClass).getType();
-            // this returns null iff JSON is null or empty.
-            // Former is annotation checked and the latter gets checked in the else block
+            // this returns null iff JSON is null or the string is empty.
+            // Former is annotation checked and empty strings will always go to the else block
+            // If we rely solely on GSON's documentation, there is no need to verify the nullity of the resulting list.
+            // However, this behavior may change in the future, so a defensive null check is included.
             List<S> result = GSON.fromJson(json, listType);
-            return Collections.unmodifiableList(result); // therefore, no need to check for null in return line
+            return result != null ? Collections.unmodifiableList(new ArrayList<>(result)) : Collections.emptyList();
+            // we could've returned Collections.unmodifiableList(result) instead
+            // but unmodifiableList(...) is just a read-only wrapper around the original list
+            // so without defensive copying, any future modifications to the original list would be reflected
+            // in the returned result.
         } else {
             S singleObject = GSON.fromJson(json, objectClass);
             return singleObject != null ? Collections.singletonList(singleObject) : Collections.emptyList();
