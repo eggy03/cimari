@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.processor;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
 import lombok.Builder;
@@ -22,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * and represent an association between {@code Win32_Processor} and {@code Win32_CacheMemory}.
  * </p>
  * <p>Links {@link Win32Processor} with {@link Win32CacheMemory} via their device IDs</p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <p>This class has the following two fields:</p>
  * <ul>
  *     <li>{@code cacheMemoryDeviceId} - contains the {@code deviceId} field of {@link Win32CacheMemory}</li>
@@ -66,7 +64,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_AssociatedProcessorMemory")
 public class Win32AssociatedProcessorMemory {
 

@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.compounded;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskDrive;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskDriveToDiskPartition;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskPartition;
@@ -27,9 +27,6 @@ import java.util.List;
  * <p>
  * Each instance represents a single physical {@code DiskDrive} identified by {@link #deviceId},
  * and maintains a one-to-many mapping with its corresponding {@code DiskPartitions} and {@code LogicalDisks}.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage example</h2>
@@ -78,7 +75,7 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 public class Win32DiskDriveToPartitionAndLogicalDisk {
 
     /**

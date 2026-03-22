@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.memory;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
@@ -20,9 +20,6 @@ import java.math.BigInteger;
  * Immutable representation of a RAM module on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_PhysicalMemory} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage example</h2>
@@ -45,7 +42,7 @@ import java.math.BigInteger;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_PhysicalMemory")
 public class Win32PhysicalMemory {
 

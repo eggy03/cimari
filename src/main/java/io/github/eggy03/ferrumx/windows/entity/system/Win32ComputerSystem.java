@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.system;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import io.github.eggy03.ferrumx.windows.entity.memory.Win32PhysicalMemory;
 import lombok.AccessLevel;
@@ -24,9 +24,6 @@ import java.util.List;
  * Immutable representation of a computer system running Windows.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_ComputerSystem} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -53,7 +50,7 @@ import java.util.List;
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_ComputerSystem")
 public class Win32ComputerSystem {
 

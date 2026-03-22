@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.storage;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,9 +22,6 @@ import java.math.BigInteger;
  * Immutable representation of a <b>Partition</b> in a <b>Physical</b> disk on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_DiskPartition} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -61,7 +58,7 @@ import java.math.BigInteger;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_DiskPartition")
 public class Win32DiskPartition {
 

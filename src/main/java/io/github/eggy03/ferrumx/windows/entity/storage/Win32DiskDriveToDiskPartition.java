@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.storage;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
 import lombok.Builder;
@@ -22,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * and represent an association between {@code Win32_DiskDrive} and {@code Win32_DiskPartition}.
  * </p>
  * <p>Associates {@link Win32DiskDrive} with {@link Win32DiskPartition} via their device IDs</p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <p>This class has the following two fields:</p>
  * <ul>
  *     <li>{@code diskDriveDeviceId} - contains the {@code deviceId} field of {@link Win32DiskDrive}</li>
@@ -66,7 +64,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_DiskDriveToDiskPartition")
 public class Win32DiskDriveToDiskPartition {
 

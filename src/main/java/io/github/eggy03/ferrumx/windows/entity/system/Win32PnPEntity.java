@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.system;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,9 +23,6 @@ import java.util.List;
  * <p>
  * Fields correspond to properties retrieved from the WMI {@code Win32_PnPEntity} class.
  * Instances of this class represent entries as they would appear in the Windows Device Manager.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -52,7 +49,7 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_PnPEntity")
 public class Win32PnPEntity {
 

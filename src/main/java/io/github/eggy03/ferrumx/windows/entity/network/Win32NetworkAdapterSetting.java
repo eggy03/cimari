@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.network;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
 import lombok.Builder;
@@ -22,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * and represent an association between {@code Win32_NetworkAdapter} and {@code Win32_NetworkAdapterConfiguration}.
  * </p>
  * <p>Links {@link Win32NetworkAdapter} with {@link Win32NetworkAdapterConfiguration} via their device IDs and indexes respectively</p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <p>This class has the following two fields:</p>
  * <ul>
  *     <li>{@code networkAdapterDeviceId} - contains the value of the {@code deviceId} field of {@link Win32NetworkAdapter}</li>
@@ -68,7 +66,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_NetworkAdapterSetting")
 public class Win32NetworkAdapterSetting {
 

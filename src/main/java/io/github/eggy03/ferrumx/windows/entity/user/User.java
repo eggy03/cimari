@@ -5,8 +5,8 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.user;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
+import io.github.eggy03.ferrumx.windows.annotation.DeepImmutable;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Fields capture basic user information such as username, home directory, and user directory.
  * </p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <h2>Usage examples</h2>
  * <pre>{@code
  * // Build a new User
@@ -43,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@DeepImmutable
 public class User {
 
     /**

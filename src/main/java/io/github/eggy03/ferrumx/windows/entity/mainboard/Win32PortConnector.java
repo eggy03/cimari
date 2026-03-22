@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.mainboard;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
@@ -20,9 +20,6 @@ import java.util.List;
  * Immutable representation of a motherboard port on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_PortConnector} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage example</h2>
@@ -46,7 +43,7 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 @WmiClass(className = "Win32_PortConnector")
 public class Win32PortConnector {
 
