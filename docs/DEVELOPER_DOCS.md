@@ -196,32 +196,42 @@ As of v4.1.0, this package includes:
 - `Win32_AssociatedProcessorMemory`
 
 ```java
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
+import lombok.Builder;
+import lombok.Value;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 @Value
 @Builder(toBuilder = true)
+@ShallowImmutable
 @WmiClass(className = "Win32_Processor")
 public class Win32Processor {
 
-    @SerializedName("Name")
-    @Nullable
-    String name;
+  @SerializedName("Name")
+  @Nullable
+  String name;
 
-    @SerializedName("NumberOfCores")
-    @Nullable
-    Integer numberOfCores;
+  @SerializedName("NumberOfCores")
+  @Nullable
+  Integer numberOfCores;
 
-    @SerializedName("Manufacturer")
-    @Nullable
-    String manufacturer;
+  @SerializedName("Manufacturer")
+  @Nullable
+  String manufacturer;
 
-    @Override
-    @NotNull
-    public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
-    }
+  @Override
+  @NotNull
+  public String toString() {
+    return new GsonBuilder()
+            .serializeNulls()
+            .setPrettyPrinting()
+            .create()
+            .toJson(this);
+  }
 }
 ```
 
@@ -281,6 +291,12 @@ but does not recursively clone or deep copy mutable fields such as collections o
 
 The shallow copy means that if fields in the original object point to mutable objects, changes to these objects via
 the builder will reflect on the original instance.
+
+`@ShallowImmutable` is a custom annotation, and it lets the callers know that:
+
+- All fields are final and cannot be reassigned
+- Objects referenced by the fields may be mutable and can be modified externally
+- The class is not inherently thread-safe
 
 `@WmiClass` is a custom annotation, and it serves the following purposes:
 
