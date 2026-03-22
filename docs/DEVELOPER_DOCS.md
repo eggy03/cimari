@@ -287,3 +287,42 @@ the builder will reflect on the original instance.
 
 We also have a custom `toString()` implementation that returns a pretty printed JSON formatted String value of the
 objects of the class.
+
+### Dynamically Generating Queries
+
+We will now refactor our [Cimv2](#designing-the-query) enum such that it can dynamically fetch the class name
+and the properties to be queried.
+
+Take a look at the following refactor:
+
+```java
+
+@RequiredArgsConstructor
+@Getter
+public enum Cimv2 {
+
+    WIN32_PROCESSOR(generateQuery(Win32Processor.class));
+
+    @NonNull
+    private final String query;
+
+    @NotNull
+    private static <T> String generateQuery(@NonNull Class<T> wmiClass) {
+        return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClassAnnotation(wmiClass) +
+                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
+                " | ConvertTo-Json";
+
+    }
+}
+```
+
+We have introduced a Utility Class called `QueryUtility` which uses reflection to get the class name and properties
+from our `Win32Processor` class during runtime.
+
+`@WmiClass(className = "Win32_Processor")` and `@SerializedName("...")` provides all the data required to fetch the
+class name and the properties to be queried, respectively.
+
+We just need to pass `Win32Processor.class` as an argument and the utility will scan the class.
+The utility resides in the `io.github.eggy.ferrumx.windows.shell.query*` package.
+
+We have also used Lombok to remove some constructor and getter boilerplate.
