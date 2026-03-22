@@ -26,9 +26,6 @@ import java.util.List;
  * and maps the resulting JSON into an immutable list of {@link Win32PhysicalMemory} objects.
  * </p>
  *
- * <h2>Thread safety</h2>
- * Methods of class are not thread safe.
- *
  * <h2>Usage examples</h2>
  * <pre>{@code
  * // Convenience API (creates its own short-lived session)
