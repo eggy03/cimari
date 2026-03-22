@@ -100,7 +100,6 @@ public interface CommonMappingInterface<S> {
      * @since 3.0.0
      */
     @NotNull
-    @Unmodifiable
     default Optional<S> mapToObject(@NonNull String json, @NonNull Class<S> objectClass) {
         // this returns null iff JSON is null or empty.
         // Former is annotation checked while the latter is taken care of by Optional
