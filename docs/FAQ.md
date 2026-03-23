@@ -1,20 +1,20 @@
 ### **Q: What version of Windows is required to use this library?**
 
-FerrumX-Windows has been tested on **Windows 10, and Windows 11**.
+I have officially tested the API on **Windows 10, and Windows 11**.
 Older OSes (7SP1 and 8.1) may work if **PowerShell 5.1** can be installed with Windows Management Framework 5.1.
 
 ---
 
 ### **Q: Does this library work on Linux or macOS?**
 
-Not yet. Information gathered by this library comes from WMI classes.
-Cross-platform support is planned but not yet implemented.
+Not yet. You can check out [dmidecode4j for Linux](https://github.com/eggy03/dmidecode4j),
+until I finally figure out how to provide cross-platform compatibility.
 
 ---
 
 ### **Q: What Java versions are supported?**
 
-**Java 8 and newer**.
+Java 8 and newer
 
 ---
 
@@ -35,7 +35,7 @@ As of now, NONE of the queries or scripts require any sort of admin privileges.
 ### **Q: Why are calls slow or delayed sometimes?**
 
 Each function call causes a PowerShell session to spawn, which adds overhead. Re-using the session for batched queries
-greatly improves performance after the initial startup. You can keep a session (or multiple ones) open
+greatly improves performance after the initial startup. You can keep a session open
 for as long as you want to but don't forget to close them before exiting your program. There are also auto-managed
 sessions
 that save you the headache of managing your own sessions but they immediately close the session after each call (
@@ -48,6 +48,14 @@ intended behavior).
 Create your own PowerShell session and use it like the example below
 
 ```java
+import com.profesorfalken.jpowershell.PowerShell;
+import io.github.eggy03.ferrumx.windows.entity.processor.Win32CacheMemory;
+import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
+import io.github.eggy03.ferrumx.windows.service.processor.Win32CacheMemoryService;
+import io.github.eggy03.ferrumx.windows.service.processor.Win32ProcessorService;
+
+import java.util.List;
+
 public class ReusableSessionExample {
     static void main(String[] args) {
         try (PowerShell session = PowerShell.openSession()) {
@@ -92,10 +100,9 @@ You can:
 ### **Q: How stable is the library?**
 
 The API of this library has evolved greatly over the course of two years. Each major version saw huge changes in the
-syntax of its API and as of v3, the library is stable enough to be used in production environments. That being said,
-there
-is no guarantee about the syntax evolvement of the API in the near future, which might introduce a lot of breaking
-changes.
+syntax of its API and as of v3 and above, the library is stable enough to be used in production environments.
+That being said, there is no guarantee about the syntax evolvement of the API in the near future, which might introduce
+a lot of breaking changes.
 
 ---
 
@@ -103,7 +110,7 @@ changes.
 
 You can contribute via one of the following methods :)
 
-- Contribute to the project's wiki (it's sparse)
+- Contribute to the project's [documentation](/docs)
 - Contribute to the [examples repository](https://github.com/eggy03/ferrumx-windows-examples)
 - Test the library in your system and submit suggestions and bugs by opening
   an [issue](https://github.com/eggy03/ferrumx-windows/issues)
@@ -124,4 +131,4 @@ In contrast, `ferrumx-windows` uses WMI via PowerShell. I do intend to provide c
 in the future.
 
 My version of JNA based implementation is called [PineTree,](https://github.com/eggy03/PineTree) but it is in very early
-stages of development and uses WMI via COM API
+stages of development and uses WMI via COM API.
