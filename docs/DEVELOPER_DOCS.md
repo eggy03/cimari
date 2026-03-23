@@ -1,7 +1,7 @@
 This documentation outlines the principal architecture of the library
 and provides an overview of how its internal components work together.
 
-_Last Updated: March 22, 2026_
+_Last Updated: March 23, 2026_
 
 > [!NOTE]
 > This documentation reflects the workings of v4.1.0 of the library. Older or newer versions may have altered structure,
@@ -325,23 +325,25 @@ and the properties to be queried.
 Take a look at the following refactor:
 
 ```java
+import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
+import io.github.eggy03.ferrumx.windows.shell.query.QueryUtility;
 
 @RequiredArgsConstructor
 @Getter
 public enum Cimv2 {
 
-    WIN32_PROCESSOR(generateQuery(Win32Processor.class));
+  WIN32_PROCESSOR(generateQuery(Win32Processor.class));
 
-    @NonNull
-    private final String query;
+  @NonNull
+  private final String query;
 
-    @NotNull
-    private static <T> String generateQuery(@NonNull Class<T> wmiClass) {
-        return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClassAnnotation(wmiClass) +
-                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
-                " | ConvertTo-Json";
+  @NotNull
+  private static <T> String generateQuery(@NonNull Class<T> wmiClass) {
+    return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClassAnnotation(wmiClass) +
+            " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
+            " | ConvertTo-Json";
 
-    }
+  }
 }
 ```
 
@@ -368,6 +370,11 @@ The following pseudocode shows the interface with the default methods.
 For full definition and implementation, check out `io.github.eggy.ferrumx.windows.mapping.CommonMappingInterface`.
 
 ```java
+import com.google.gson.Gson;
+
+import java.util.List;
+import java.util.Optional;
+
 // simplified representation
 public interface CommonMappingInterface<S> {
 
@@ -405,6 +412,9 @@ Till now, the mappers for all the entities have used the default implementation 
 We will define our mapper by creating an empty class that implements the interface.
 
 ```java
+import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
+import io.github.eggy03.ferrumx.windows.mapping.CommonMappingInterface;
+
 public class Win32ProcessorMapper implements CommonMappingInterface<Win32Processor> {
   // usually not needed, but you can write your custom implementations here
   // otherwise, the default methods from the interface are sufficient
@@ -442,6 +452,10 @@ Service classes may also:
 Let's take a look at the two interfaces that all the service classes implement.
 
 ```java
+import com.profesorfalken.jpowershell.PowerShell;
+
+import java.util.List;
+
 public interface CommonServiceInterface<S> {
 
   List<S> get();
@@ -453,6 +467,10 @@ public interface CommonServiceInterface<S> {
 ```
 
 ```java
+import com.profesorfalken.jpowershell.PowerShell;
+
+import java.util.Optional;
+
 public interface OptionalCommonServiceInterface<S> {
 
   Optional<S> get();
@@ -469,22 +487,37 @@ implement these interfaces must override these methods to have their own definit
 Let's create a `service.processor` subpackage and provide a concrete definition for `Win32Processor`.
 
 ```java
+import com.profesorfalken.jpowershell.PowerShell;
+import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
+import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
+import io.github.eggy03.ferrumx.windows.mapping.processor.Win32ProcessorMapper;
+import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
+import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
 
 public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
 
   @Override
+  @UsesJPowerShell
   public @NotNull @Unmodifiable List<Win32Processor> get() {
     PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_PROCESSOR.getQuery());
     return new Win32ProcessorMapper().mapToList(response.getCommandOutput(), Win32Processor.class);
   }
 
   @Override
+  @UsesJPowerShell
   public @NotNull @Unmodifiable List<Win32Processor> get(@NonNull PowerShell powerShell) {
     PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_PROCESSOR.getQuery());
     return new Win32ProcessorMapper().mapToList(response.getCommandOutput(), Win32Processor.class);
   }
 
   @Override
+  @IsolatedPowerShell
   public @NotNull @Unmodifiable List<Win32Processor> get(long timeout) {
     String command = Cimv2.WIN32_PROCESSOR.getQuery();
     String response = TerminalUtility.executeCommand(command, timeout);
@@ -496,21 +529,23 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
 `get()`
 
 - Uses an auto-managed PowerShell session
-- Delegates execution to the underlying library
+- Session is scoped within the current method call and cannot be re-used
+- Annotated with `@UsesJPowerShell`, indicating that it relies on the `jPowerShell` library
+  and that its current implementation is not suitable for concurrent usage
 
 `get(PowerShell)`
 
 - Uses a caller-provided session
-- Allows reuse across multiple calls
-- Gives the caller full lifecycle control
+- Session scope is controlled by the caller, which gives them full lifecycle control, allowing re-use
+- Annotated with `@UsesJPowerShell`, indicating that it relies on the `jPowerShell` library
+  and that its current implementation is not suitable for concurrent usage
 
 `get(long timeout)`
 
-- Uses an alternative execution mechanism via `TerminalUtility`
-- Throws an exception if the timeout is exceeded.
-- Supports concurrent execution scenarios unlike `jPowerShell` (see Javadocs for the Win32ProcessorService
-  implementation to know more)
-- Does not rely on the `jPowerShell` library
+- Uses an alternative auto-managed PowerShell session via `TerminalUtility` and does not require `jPowerShell`
+- Session is scoped within the current method call and cannot be re-used
+- Annotated with @IsolatedPowerShell, indicating that it does not rely on the `jPowerShell` library
+  and that its current implementation is suitable for concurrent usage
 
 `TerminalUtility` is found in the `io.github.eggy03.ferrumx.windows.utility` package
 
