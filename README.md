@@ -3,6 +3,17 @@
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/ferrumx-windows?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/ferrumx-windows)
 ![Minimum JDK Version](https://img.shields.io/badge/Minimum%20JDK%20Version-8-blue?style=for-the-badge)
 
+# Table Of Contents
+
+- [About](#about)
+- [Cross Platform Support](#cross-platform-support)
+- [Supported Operating Systems](#supported-operating-systems)
+- [CI Stats](#ci-stats)
+- [Download](#download)
+- [Documentation](#documentation)
+- [Usage](#usage)
+- [License](#license)
+
 # About
 FerrumX-Windows is a free PowerShell based Hardware and Network Information library for Java.
 It contacts some [Computer System Hardware Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/computer-system-hardware-classes)
