@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
  * </p>
  *
  * @since 4.1.0
+ * @see ShallowImmutable
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
