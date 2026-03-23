@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.compounded.Win32DiskDriveToPartitionAndLogicalDisk;
 import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.Win32DiskDriveToPartitionAndLogicalDiskMapper;
@@ -105,6 +107,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get() {
 
         try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScriptPath())) {
@@ -128,6 +131,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(@NonNull PowerShell powerShell) {
 
         try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScriptPath())) {
@@ -156,6 +160,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {
 
         String script = ScriptUtility.loadScript(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScriptPath());

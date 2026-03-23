@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.mainboard;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.mainboard.Win32Bios;
 import io.github.eggy03.ferrumx.windows.mapping.mainboard.Win32BiosMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -91,6 +93,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32Bios> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_BIOS.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -107,6 +110,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32Bios> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_BIOS.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -128,6 +132,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32Bios> get(long timeout) {
         String command = Cimv2.WIN32_BIOS.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

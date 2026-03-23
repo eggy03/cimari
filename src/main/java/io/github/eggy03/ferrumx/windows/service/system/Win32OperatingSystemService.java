@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.system;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.system.Win32OperatingSystem;
 import io.github.eggy03.ferrumx.windows.mapping.system.Win32OperatingSystemMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -91,6 +93,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32OperatingSystem> get() {
 
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_OPERATING_SYSTEM.getQuery());
@@ -107,6 +110,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32OperatingSystem> get(@NonNull PowerShell powerShell) {
 
         PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_OPERATING_SYSTEM.getQuery());
@@ -129,6 +133,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32OperatingSystem> get(long timeout) {
         String command = Cimv2.WIN32_OPERATING_SYSTEM.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

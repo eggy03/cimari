@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.system;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.system.Win32Process;
 import io.github.eggy03.ferrumx.windows.mapping.system.Win32ProcessMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -91,6 +93,7 @@ public class Win32ProcessService implements CommonServiceInterface<Win32Process>
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32Process> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_PROCESS.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -106,6 +109,7 @@ public class Win32ProcessService implements CommonServiceInterface<Win32Process>
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32Process> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_PROCESS.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -127,6 +131,7 @@ public class Win32ProcessService implements CommonServiceInterface<Win32Process>
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32Process> get(long timeout) {
         String command = Cimv2.WIN32_PROCESS.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

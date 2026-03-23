@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.compounded.Win32ProcessorToCacheMemory;
 import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.Win32ProcessorToCacheMemoryMapper;
@@ -100,6 +102,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get() {
 
         try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath())) {
@@ -123,6 +126,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(@NonNull PowerShell powerShell) {
 
         try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath())) {
@@ -151,6 +155,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
 
         String command = ScriptUtility.loadScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath());

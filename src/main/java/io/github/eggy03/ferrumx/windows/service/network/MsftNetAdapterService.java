@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.network;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetAdapter;
 import io.github.eggy03.ferrumx.windows.mapping.network.MsftNetAdapterMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -91,6 +93,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<MsftNetAdapter> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2.MSFT_NET_ADAPTER.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -106,6 +109,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<MsftNetAdapter> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(StandardCimv2.MSFT_NET_ADAPTER.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -127,6 +131,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<MsftNetAdapter> get(long timeout) {
         String command = StandardCimv2.MSFT_NET_ADAPTER.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

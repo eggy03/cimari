@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.network;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.network.Win32NetworkAdapter;
 import io.github.eggy03.ferrumx.windows.mapping.network.Win32NetworkAdapterMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -91,6 +93,7 @@ public class Win32NetworkAdapterService implements CommonServiceInterface<Win32N
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32NetworkAdapter> get() {
 
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_NETWORK_ADAPTER.getQuery());
@@ -107,6 +110,7 @@ public class Win32NetworkAdapterService implements CommonServiceInterface<Win32N
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32NetworkAdapter> get(@NonNull PowerShell powerShell) {
 
         PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_NETWORK_ADAPTER.getQuery());
@@ -129,6 +133,7 @@ public class Win32NetworkAdapterService implements CommonServiceInterface<Win32N
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32NetworkAdapter> get(long timeout) {
         String command = Cimv2.WIN32_NETWORK_ADAPTER.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

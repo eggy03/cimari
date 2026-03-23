@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.peripheral;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.peripheral.Win32SoundDevice;
 import io.github.eggy03.ferrumx.windows.mapping.peripheral.Win32SoundDeviceMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -90,6 +92,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32SoundDevice> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_SOUND_DEVICE.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -106,6 +109,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_SOUND_DEVICE.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -127,6 +131,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(long timeout) {
         String command = Cimv2.WIN32_SOUND_DEVICE.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

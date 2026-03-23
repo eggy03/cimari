@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.storage;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskDrive;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskDriveToDiskPartition;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskPartition;
@@ -93,6 +95,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_DISK_DRIVE_TO_DISK_PARTITION.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -110,6 +113,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_DISK_DRIVE_TO_DISK_PARTITION.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -132,6 +136,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get(long timeout) {
         String command = Cimv2.WIN32_DISK_DRIVE_TO_DISK_PARTITION.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

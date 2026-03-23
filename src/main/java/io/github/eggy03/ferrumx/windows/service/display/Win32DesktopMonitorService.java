@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.display;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.display.Win32DesktopMonitor;
 import io.github.eggy03.ferrumx.windows.mapping.display.Win32DesktopMonitorMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -90,6 +92,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get() {
 
         PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_DESKTOP_MONITOR.getQuery());
@@ -107,6 +110,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get(@NonNull PowerShell powerShell) {
 
         PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_DESKTOP_MONITOR.getQuery());
@@ -129,6 +133,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get(long timeout) {
 
         String command = Cimv2.WIN32_DESKTOP_MONITOR.getQuery();

@@ -7,6 +7,8 @@ package io.github.eggy03.ferrumx.windows.service.network;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.ferrumx.windows.mapping.network.MsftDnsClientServerAddressMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
@@ -91,6 +93,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get() {
         PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
@@ -107,6 +110,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(@NonNull PowerShell powerShell) {
         PowerShellResponse response = powerShell.executeCommand(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
@@ -128,6 +132,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(long timeout) {
         String command = StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
