@@ -3,12 +3,6 @@
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/ferrumx-windows?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/ferrumx-windows)
 ![Minimum JDK Version](https://img.shields.io/badge/Minimum%20JDK%20Version-8-blue?style=for-the-badge)
 
-[![Javadocs](https://img.shields.io/badge/Docs-Javadocs-orange?style=for-the-badge)](https://eggy03.github.io/ferrumx-windows-documentation/)
-[![Examples](https://img.shields.io/badge/Docs-Examples-orange?style=for-the-badge)](https://github.com/eggy03/ferrumx-windows-examples)
-[![Migration Guide](https://img.shields.io/badge/Wiki-Migration%20Guide-white?style=for-the-badge)](https://github.com/eggy03/ferrumx-windows/wiki/Migration-Guides)
-[![FAQ](https://img.shields.io/badge/Wiki-FAQ-white?style=for-the-badge)](https://github.com/eggy03/ferrumx-windows/wiki/FAQ)
-
-
 # About
 FerrumX-Windows is a free PowerShell based Hardware and Network Information library for Java.
 It contacts some [Computer System Hardware Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/computer-system-hardware-classes)
@@ -67,10 +61,12 @@ For other build ecosystems, check out the [Maven Central Repository](https://cen
 > easier, should you step into the library code during the debugging process of your project.
 
 # Documentation
-- [Javadocs](https://eggy03.github.io/ferrumx-windows-documentation/) - class level docs
-- [Wiki](https://github.com/eggy03/ferrumx-windows/wiki) - contains migration guides, info about breaking changes
-and explanation of the internal working of the library
-- [Examples](https://github.com/eggy03/ferrumx-windows-examples) - contains usage examples
+
+- [Javadocs](https://eggy03.github.io/ferrumx-windows-documentation/)
+- [Developer Docs](/docs/DEVELOPER_DOCS.md)
+- [Migration Guide](/docs/MIGRATION.md)
+- [Examples](https://github.com/eggy03/ferrumx-windows-examples)
+- [FAQ](/docs/FAQ.md)
 
 # Usage
 > [!IMPORTANT]
