@@ -15,15 +15,11 @@ It contacts some [Computer System Hardware Classes](https://learn.microsoft.com/
 and [Operating System Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/operating-system-classes) of Windows Management Instrumentation (WMI) through PowerShell
 to fetch details about your hardware and OS.
 
-# Supported Versions
-- 4.x.x - Actively Developed
-- 3.x.x - No longer actively maintained
-- 2.x.x - No longer actively maintained
-- 1.x.x - No longer actively maintained
-
 # Cross-Platform Support
-Work on cross-platform compatibility is currently in active planning stage.
-Check out [dmidecode4j](https://github.com/eggy03/dmidecode4j) for Linux if you are familiar with this API
+
+Work on cross-platform compatibility is currently undecided.
+However, you can try [dmidecode4j](https://github.com/eggy03/dmidecode4j) for Linux,
+if you are familiar with the contract of this API.
 
 # Supported Operating Systems
 - Windows: `7SP1¹`, `8.1¹`, `10²` and `11²`
