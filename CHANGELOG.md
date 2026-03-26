@@ -19,7 +19,7 @@ The following headings may be used while categorizing the list of changes made i
 - Documentation
 - Known Issues
 
-## [4.1.0] - March 24, 2026
+## [4.1.0] - March 26, 2026
 
 This release focuses on bug fixes, internal structure refactoring, and documentation improvements.
 All changes are non-breaking in nature.
@@ -49,6 +49,8 @@ All changes are non-breaking in nature.
   and `ReflectionUtiliy.java to QueryUtility.java`,
   which has also been relocated from the `*utility` package to `shell.query` along with the related enums and utilities.
 
+- `QueryUtility#getPropertiesFromSerializedNameAnnotation(...)` now sorts the `@SerializedName` annotation values
+  alphabetically.
 - Removed `_SCRIPT` suffix from constants in `ScriptEnum.java`.
 - Removed `_QUERY` suffix from constants in `Cimv2Enum.java`. and `StandardCimv2Enum.java`.
 - Improved immutability in `CommonMappingInterface#mapToList()` via defensive copying.
@@ -60,6 +62,8 @@ All changes are non-breaking in nature.
 - Renamed `ReflectionUtilityTest.java` to `ScriptUtilityTest.java` and added more test cases.
 - Added a full set of unit tests for `QueryUtility.java`, in `QueryUtilityTest.java`.
 - Restrict `TerminalUtilityTest` to be run on Windows OSes only.
+- Added `Cimv2EnumTest` and `StandardCimv2EnumTest`. These two tests validate the correctness of the
+  runtime queries generated
 
 ### Documentation
 
