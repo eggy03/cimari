@@ -15,9 +15,12 @@
 - [License](#license)
 
 # About
+
 FerrumX-Windows is a free PowerShell based Hardware and Network Information library for Java.
-It contacts some [Computer System Hardware Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/computer-system-hardware-classes)
-and [Operating System Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/operating-system-classes) of Windows Management Instrumentation (WMI) through PowerShell
+It queries
+some [Computer System Hardware Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/computer-system-hardware-classes)
+and [Operating System Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/operating-system-classes) of
+Windows Management Instrumentation (WMI) through PowerShell
 to fetch details about your hardware and OS.
 
 # Cross-Platform Support
@@ -27,15 +30,18 @@ However, you can try [dmidecode4j](https://github.com/eggy03/dmidecode4j) for Li
 if you are familiar with the contract of this API.
 
 # Supported Operating Systems
+
 - Windows: `7SP1¹`, `8.1¹`, `10²` and `11²`
 - PowerShell: `5.1 and above`
 
 ¹For `Windows 8.1` and `7SP1`you can install
-[Windows Management Framework 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616) to upgrade to PowerShell 5.1
+[Windows Management Framework 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616) to upgrade to
+PowerShell 5.1
 
 ²Support status is unknown for Windows 10 and 11 editions on ARM devices
 
 # CI Stats
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eggy03/ferrumx-windows/.github%2Fworkflows%2Fbuild.yml)
 ![Commits to main since latest release](https://img.shields.io/github/commits-since/eggy03/ferrumx-windows/latest)
@@ -47,10 +53,13 @@ if you are familiar with the contract of this API.
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=coverage)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
 
 # Download
+
 > **Minimum Supported Java Version:** 8
 
 Maven:
+
 ```xml
+
 <dependency>
     <groupId>io.github.eggy03</groupId>
     <artifactId>ferrumx-windows</artifactId>
@@ -59,16 +68,18 @@ Maven:
 ```
 
 Gradle:
+
 ```gradle
 implementation group: 'io.github.eggy03', name: 'ferrumx-windows', version: 'VERSION'
 ```
-> Replace `VERSION` with the latest version available in maven central
 
-For other build ecosystems, check out the [Maven Central Repository](https://central.sonatype.com/artifact/io.github.eggy03/ferrumx-windows/overview)
+Replace `VERSION` with the latest version available
+in [central](https://central.sonatype.com/artifact/io.github.eggy03/ferrumx-windows)
 
 > [!NOTE]
 > The `sources.jar` published with this library includes de-lomboked code which should prevent the IDEs from complaining
-> about source mismatch between the decompiled class files and the downloaded sources. It should also make your debugging
+> about source mismatch between the decompiled class files and the downloaded sources. It should also make your
+> debugging
 > easier, should you step into the library code during the debugging process of your project.
 
 # Documentation
@@ -80,6 +91,7 @@ For other build ecosystems, check out the [Maven Central Repository](https://cen
 - [FAQ](/docs/FAQ.md)
 
 # Usage
+
 > [!IMPORTANT]
 > More usage examples can be found [here](https://github.com/eggy03/ferrumx-windows-examples).
 
@@ -87,14 +99,14 @@ For other build ecosystems, check out the [Maven Central Repository](https://cen
 public class ProcessorExample {
 
     static void main(String[] args) {
-        
+
         List<Win32Processor> processorList = new Win32ProcessorService().get();
 
         List<Win32Processor> processorListTwo = new Win32ProcessorService().get(15L); // time after which the session will auto close
-        
+
         // you can also create and manage your own re-usable PowerShell session
         // good for cases where you need to fetch results for multiple queries
-        try(PowerShell session = PowerShell.openSession()) {
+        try (PowerShell session = PowerShell.openSession()) {
             List<Win32Processor> processorListThree = new Win32ProcessorService().get(session);
             processorListThree.forEach(processor -> log.info(processor.toString()));
         }
@@ -106,5 +118,7 @@ public class ProcessorExample {
     }
 }
 ```
+
 # License
+
 This project is licensed under the [MIT License](/LICENSE).
