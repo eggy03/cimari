@@ -5,10 +5,11 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.network;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
+import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * and represent an association between {@code Win32_NetworkAdapter} and {@code Win32_NetworkAdapterConfiguration}.
  * </p>
  * <p>Links {@link Win32NetworkAdapter} with {@link Win32NetworkAdapterConfiguration} via their device IDs and indexes respectively</p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <p>This class has the following two fields:</p>
  * <ul>
  *     <li>{@code networkAdapterDeviceId} - contains the value of the {@code deviceId} field of {@link Win32NetworkAdapter}</li>
@@ -38,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
  * </p>
  * <p>
  *     To simplify data mapping, the PowerShell query defined in
- *     {@link Cimv2Namespace#WIN32_NETWORK_ADAPTER_SETTING_QUERY} constructs a custom {@code PSObject}
+ *     {@link Cimv2#WIN32_NETWORK_ADAPTER_SETTING} constructs a custom {@code PSObject}
  *     that maps {@code Element.DeviceID} to {@code networkAdapterDeviceId} and {@code Setting.Index} to {@code networkAdapterConfigurationIndex}
  *     and the resulting JSON returned is deserialized into this entity class.
  * </p>
@@ -61,13 +60,14 @@ import org.jetbrains.annotations.Nullable;
  * <p>See {@link Win32NetworkAdapter} for adapter info.</p>
  * <p>See {@link Win32NetworkAdapterConfiguration} for related adapter config info.</p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadaptersetting">Win32_NetworkAdapterSetting Documentation</a>
  * @since 3.0.0
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "Win32_NetworkAdapterSetting")
 public class Win32NetworkAdapterSetting {
 
     /**

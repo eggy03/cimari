@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.network;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,6 @@ import java.util.List;
  * Together, with {@link MsftNetIpAddress}, this class aims to be
  * a replacement for {@link Win32NetworkAdapterConfiguration}
  * </p>
- * <p>Instances of this class are thread-safe.</p>
  *
  * <h2>Usage example</h2>
  * <pre>{@code
@@ -45,13 +45,14 @@ import java.util.List;
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/dnsclientcimprov/msft-dnsclientserveraddress">MSFT_DNSClientServerAddress Documentation</a>
  * @since 3.0.0
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "MSFT_DNSClientServerAddress")
 public class MsftDnsClientServerAddress {
 
     /**

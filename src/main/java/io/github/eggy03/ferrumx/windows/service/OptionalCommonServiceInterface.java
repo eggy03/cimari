@@ -20,7 +20,7 @@ import java.util.Optional;
  * </p>
  *
  * @param <S> the entity type returned by the service implementation
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see CommonServiceInterface
  * @since 2.2.0
  */

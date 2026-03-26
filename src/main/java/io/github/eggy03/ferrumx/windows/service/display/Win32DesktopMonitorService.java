@@ -7,10 +7,12 @@ package io.github.eggy03.ferrumx.windows.service.display;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.Cimv2Namespace;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.display.Win32DesktopMonitor;
 import io.github.eggy03.ferrumx.windows.mapping.display.Win32DesktopMonitorMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
+import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ import java.util.List;
 /**
  * Service class for fetching monitor information from the system.
  * <p>
- * This class executes the {@link Cimv2Namespace#WIN32_DESKTOP_MONITOR_QUERY} PowerShell command
+ * This class executes the {@link Cimv2#WIN32_DESKTOP_MONITOR} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link Win32DesktopMonitor} objects.
  * </p>
  *
@@ -73,7 +75,7 @@ import java.util.List;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 3.0.0
  */
 @Slf4j
@@ -90,9 +92,10 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get() {
 
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2Namespace.WIN32_DESKTOP_MONITOR_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_DESKTOP_MONITOR.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new Win32DesktopMonitorMapper().mapToList(response.getCommandOutput(), Win32DesktopMonitor.class);
     }
@@ -107,9 +110,10 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get(@NonNull PowerShell powerShell) {
 
-        PowerShellResponse response = powerShell.executeCommand(Cimv2Namespace.WIN32_DESKTOP_MONITOR_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_DESKTOP_MONITOR.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new Win32DesktopMonitorMapper().mapToList(response.getCommandOutput(), Win32DesktopMonitor.class);
     }
@@ -129,9 +133,10 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get(long timeout) {
 
-        String command = Cimv2Namespace.WIN32_DESKTOP_MONITOR_QUERY.getQuery();
+        String command = Cimv2.WIN32_DESKTOP_MONITOR.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32DesktopMonitorMapper().mapToList(response, Win32DesktopMonitor.class);

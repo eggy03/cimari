@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.mainboard;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +20,6 @@ import org.jetbrains.annotations.Nullable;
  * Immutable representation of a BIOS entity on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_BIOS} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage example</h2>
@@ -37,14 +35,15 @@ import org.jetbrains.annotations.Nullable;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-bios">Win32_BIOS</a>
  * @since 3.0.0
  */
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "Win32_BIOS")
 public class Win32Bios {
 
     /**

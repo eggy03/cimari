@@ -10,9 +10,9 @@ import io.github.eggy03.ferrumx.windows.mapping.CommonMappingInterface;
 
 /**
  * Provides a type-safe implementation of {@link CommonMappingInterface}
- * and maps JSON strings from Powershell objects or lists of {@link Win32DiskPartitionToLogicalDisk}
+ * and maps JSON strings from PowerShell objects or lists of {@link Win32DiskPartitionToLogicalDisk}
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 3.0.0
  */
 public class Win32DiskPartitionToLogicalDiskMapper implements CommonMappingInterface<Win32DiskPartitionToLogicalDisk> {

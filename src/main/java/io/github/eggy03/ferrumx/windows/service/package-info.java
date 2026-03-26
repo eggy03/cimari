@@ -9,12 +9,11 @@
  * </p>
  * <p>Service classes in this package typically:</p>
  * <ul>
- *   <li>Query the PowerShell using the query constants from the {@link io.github.eggy03.ferrumx.windows.constant} package</li>
+ *   <li>Query the PowerShell using the pre-defined queries from the {@link io.github.eggy03.ferrumx.windows.shell} package</li>
  *   <li>Map the result using mappers defined in the {@link io.github.eggy03.ferrumx.windows.mapping} package</li>
  *   <li>Into instances of entity classes defined in the {@link io.github.eggy03.ferrumx.windows.entity} package</li>
  * </ul>
  *
- * @author Egg-03
  * @since 2.0.0
  */
 package io.github.eggy03.ferrumx.windows.service;

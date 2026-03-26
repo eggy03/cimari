@@ -3,6 +3,8 @@ package unit.utility;
 import io.github.eggy03.ferrumx.windows.exception.TerminalExecutionException;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * WARNING: This test will require a valid Windows system to pass because it spawns actual PowerShell sessions
  */
+@EnabledOnOs(OS.WINDOWS)
 class TerminalUtilityTest {
 
     private static final long TIMEOUT = 15L;

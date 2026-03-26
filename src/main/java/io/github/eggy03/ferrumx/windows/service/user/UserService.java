@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * System.out.println(currentUser);
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 2.0.0
  */
 

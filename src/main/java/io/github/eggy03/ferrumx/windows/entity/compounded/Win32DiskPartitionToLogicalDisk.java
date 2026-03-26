@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.compounded;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskDrive;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32DiskPartition;
 import io.github.eggy03.ferrumx.windows.entity.storage.Win32LogicalDisk;
@@ -26,9 +26,7 @@ import java.util.List;
  * Each instance represents a single disk partition identified by {@link #partitionId},
  * and maintains a one-to-many mapping with its corresponding logical disks.
  * </p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <p>
  * This class is purely a convenience class designed to eliminate the need for using
  * {@link Win32LogicalDiskToPartition} when
@@ -49,7 +47,7 @@ import java.util.List;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32DiskPartition
  * @see Win32LogicalDisk
  * @see Win32LogicalDiskToPartition
@@ -58,7 +56,7 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 public class Win32DiskPartitionToLogicalDisk {
 
     /**

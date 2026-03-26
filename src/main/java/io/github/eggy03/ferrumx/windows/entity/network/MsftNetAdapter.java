@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.network;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
  * inside {@link MsftNetIpAddress}, {@link MsftDnsClientServerAddress} and {@link MsftNetConnectionProfile}
  * and all of them are directly linked via the {@code interfaceIndex} field.
  * </p>
- * <p>Instances of this class are thread-safe.</p>
  *
  * <h2>Usage example</h2>
  * <pre>{@code
@@ -53,13 +53,14 @@ import org.jetbrains.annotations.Nullable;
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  * <p>See {@link MsftDnsClientServerAddress}, for configuration information regarding the DNS servers of a network adapter.</p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/netadaptercimprov/msft-netadapter">MSFT_NetAdapter Documentation</a>
  * @since 3.0.0
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "MSFT_NetAdapter")
 public class MsftNetAdapter {
 
     /**

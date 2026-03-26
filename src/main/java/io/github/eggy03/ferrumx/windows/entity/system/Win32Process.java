@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.system;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +20,6 @@ import java.math.BigInteger;
  * Immutable representation of a process in a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_Process} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -40,14 +38,14 @@ import java.math.BigInteger;
  *
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-process">Win32_Process Documentation</a>
  * @since 3.0.0
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
-
+@ShallowImmutable
+@WmiClass(className = "Win32_Process")
 public class Win32Process {
 
     /**

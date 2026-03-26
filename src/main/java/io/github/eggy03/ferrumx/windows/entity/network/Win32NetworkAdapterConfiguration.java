@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.network;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +22,6 @@ import java.util.List;
  * Immutable representation of a network adapter configuration on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_NetworkAdapterConfiguration} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -46,14 +44,15 @@ import java.util.List;
  * <p>
  * See {@link Win32NetworkAdapter} for the corresponding adapter entity
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapterconfiguration">Win32_NetworkAdapterConfiguration Documentation</a>
  * @since 3.0.0
  */
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "Win32_NetworkAdapterConfiguration")
 public class Win32NetworkAdapterConfiguration {
 
     /**

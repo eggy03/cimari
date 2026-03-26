@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.peripheral;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +22,6 @@ import java.util.List;
  * Immutable representation of a Printing device on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_Printer} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage example</h2>
@@ -43,13 +41,14 @@ import java.util.List;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-printer">Win32_Printer Documentation</a>
  * @since 3.0.0
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "Win32_Printer")
 public class Win32Printer {
 
     /**

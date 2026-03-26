@@ -7,8 +7,10 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.PowerShellScript;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.compounded.Win32DiskDriveToPartitionAndLogicalDisk;
+import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.Win32DiskDriveToPartitionAndLogicalDiskMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.service.storage.Win32DiskDriveService;
@@ -16,18 +18,22 @@ import io.github.eggy03.ferrumx.windows.service.storage.Win32DiskDriveToDiskPart
 import io.github.eggy03.ferrumx.windows.service.storage.Win32DiskPartitionService;
 import io.github.eggy03.ferrumx.windows.service.storage.Win32LogicalDiskService;
 import io.github.eggy03.ferrumx.windows.service.storage.Win32LogicalDiskToPartitionService;
+import io.github.eggy03.ferrumx.windows.shell.script.ScriptEnum;
+import io.github.eggy03.ferrumx.windows.shell.script.ScriptUtility;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Service class for fetching physical disk and related partition and logical disk data from the system.
  * <p>
- * This class executes the {@link PowerShellScript#WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK_SCRIPT} PowerShell command
+ * This class executes the {@link ScriptEnum#WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link Win32DiskDriveToPartitionAndLogicalDisk} objects.
  * </p>
  *
@@ -78,7 +84,7 @@ import java.util.List;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32DiskPartitionToLogicalDiskService
  * @see Win32DiskDriveService
  * @see Win32DiskPartitionService
@@ -101,11 +107,17 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get() {
-        try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK_SCRIPT.getScriptPath()));
+
+        try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScriptPath())) {
+
+            PowerShellResponse response = shell.executeScript(scriptBuffer);
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskDriveToPartitionAndLogicalDisk.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
         }
     }
 
@@ -119,10 +131,18 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK_SCRIPT.getScriptPath()));
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskDriveToPartitionAndLogicalDisk.class);
+
+        try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScriptPath())) {
+
+            PowerShellResponse response = powerShell.executeScript(scriptBuffer);
+            log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
+            return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(response.getCommandOutput(), Win32DiskDriveToPartitionAndLogicalDisk.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
+        }
     }
 
     /**
@@ -140,9 +160,10 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {
 
-        String script = PowerShellScript.getScript(PowerShellScript.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK_SCRIPT.getScriptPath());
+        String script = ScriptUtility.loadScript(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScriptPath());
         String response = TerminalUtility.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(response, Win32DiskDriveToPartitionAndLogicalDisk.class);

@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.compounded;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.entity.processor.Win32AssociatedProcessorMemory;
 import io.github.eggy03.ferrumx.windows.entity.processor.Win32CacheMemory;
 import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
@@ -26,9 +26,7 @@ import java.util.List;
  * and maintains a one-to-many mapping with its corresponding cache memory objects
  * (such as L1, L2, and L3 caches).
  * </p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <p>
  * This class is purely a convenience class designed to eliminate the
  * need for using {@link Win32AssociatedProcessorMemory} when fetching a
@@ -45,7 +43,7 @@ import java.util.List;
  *     .build();
  * }</pre>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32Processor
  * @see Win32CacheMemory
  * @since 3.0.0
@@ -53,7 +51,7 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 public class Win32ProcessorToCacheMemory {
 
     /**

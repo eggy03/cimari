@@ -3,7 +3,7 @@
 Thank you for taking the time to contribute :)
 
 There are many ways to contribute to `ferrumx-windows` and each of them are encouraged and valued.
-Before contributing, please make sure you read the relevant docs and wiki and check out the existing issues and examples
+Before contributing, please make sure you read the relevant docs and check out the existing issues and examples
 as it would help both you and the maintainers to keep the experience smooth.
 
 ## Table of Contents
@@ -12,7 +12,6 @@ as it would help both you and the maintainers to keep the experience smooth.
 - [Types of Contributions](#Types-Of-Contribution)
 - [How to Contribute](#How-To-Contribute)
 
-
 ## Pre-requisites
 
 Before contributing, please make sure you have checked out the following:
@@ -20,7 +19,7 @@ Before contributing, please make sure you have checked out the following:
 - [Project Readme](/README.md)
 - [Code of Conduct](/CODE_OF_CONDUCT.md)
 - [Javadocs](https://eggy03.github.io/ferrumx-windows-documentation/)
-- [Wiki](https://github.com/eggy03/ferrumx-windows/wiki)
+- [Other Docs](/docs)
 - [Examples](https://github.com/eggy03/ferrumx-windows-examples)
 - [Existing Issues](https://github.com/eggy03/ferrumx-windows/issues)
 
@@ -37,18 +36,20 @@ Before contributing, please make sure you have checked out the following:
 
 ### Contributing to the Documentation
 
-You can always help contributing to the documentation by suggesting changes in the javadocs by either checking out the
-hosted javadoc page or reading the ones in the source code itself. To suggest a change, create an issue
+You can always help contributing to the documentation by suggesting changes in the Javadocs by either checking out the
+hosted Javadoc page or reading the ones in the source code itself. To suggest a change, create an issue
 using the `suggestions` template.
 
-The current wiki is sparse, and you can always help improve it by adding more explanations or making the existing
+The current [documentation](/docs) is sparse, and you can always help improve it by adding more explanations or making
+the existing
 ones easier to understand and or less verbose. To suggest a change, create an issue
 using the `suggestions` template.
 
 ### Contributing to the Examples
 
-The [ferrumx-windows-examples repository](https://github.com/eggy03/ferrumx-windows-examples) 
-could always use more examples and or cleaner, easier versions of examples than what is already there. You can either create a PR with your additions/changes
+The [ferrumx-windows-examples repository](https://github.com/eggy03/ferrumx-windows-examples)
+could always use more examples and or cleaner, easier versions of examples than what is already there. You can either
+create a PR with your additions/changes
 or suggest changes by raising an issue either here or in the example repository.
 
 ### Submitting an Issue (Questions / Bug Reports / Suggestions / Feature Requests)
@@ -57,7 +58,8 @@ If you have a question, or want to suggest changes or a feature or report bugs, 
 an issue using one of the given templates. Before raising an issue, make sure you have checked the
 existing ones and read the docs.
 
-For questions and or suggestions, you can also post your message in [Discussions](https://github.com/eggy03/ferrumx-windows/discussions)
+For questions and or suggestions, you can also post your message
+in [Discussions](https://github.com/eggy03/ferrumx-windows/discussions)
 
 ### Testing the library on different hardware
 
@@ -72,11 +74,11 @@ If you find an anomaly, you can report your findings by raising an issue on this
 
 Vulnerabilities should be reported in accordance with the [Security Policy](/SECURITY.md)
 
-
 ### Contributing to the code
 
-Before contributing to the code, please make sure you have checked the existing open and closed [Pull Requests](https://github.com/eggy03/ferrumx-windows/pulls)
-and are familiar with the docs, wiki and examples
+Before contributing to the code, please make sure you have checked the existing open and
+closed [Pull Requests](https://github.com/eggy03/ferrumx-windows/pulls)
+and are familiar with the docs and examples
 
 #### Getting Started
 
@@ -90,7 +92,9 @@ The steps below will remain the same for GUI editions as well.
 #### Fork the Project
 
 1. Fork the project on GitHub by clicking the "Fork" button in the top right corner of the project page.
-2. Clone your fork to your local machine and set up a [triangle workflow](https://github.com/forwards/first-contributions/blob/master/additional-material/git_workflow_scenarios/keeping-your-fork-synced-with-this-repository.md) with these commands:
+2. Clone your fork to your local machine and set up
+   a [triangle workflow](https://github.com/forwards/first-contributions/blob/master/additional-material/git_workflow_scenarios/keeping-your-fork-synced-with-this-repository.md)
+   with these commands:
 
 ```shell
 git clone https://github.com/yourusername/ferrumx-windows.git
@@ -132,7 +136,6 @@ mvn clean test
 Write your feature or bug-fix. You may ask for help from any of the current project maintainer(s).
 Run tests frequently to ensure your code does not fail the existing tests.
 
-
 #### Update Changelog
 
 The Changelog lets users know what's changed.
@@ -142,7 +145,6 @@ Follow the format of other entries, including your name and a link to your GitHu
 ` - Fixed skipping serialization of null fields - [#123](https://github.com/eggy03/ferrumx-windows/pulls)[@contributor](https://github.com/contributor).`
 
 You can guess your pull request number as the next available number after issues and pull requests on the project.
-
 
 #### Commit Changes
 
@@ -175,12 +177,14 @@ git push origin bugfix-branch
 2. Click the 'Pull Request' button and complete the form.
 3. Pull requests are usually reviewed within a few days.
 
-If code review requests changes (which often happens), simply `git push` the changes to your repository on the same branch,
+If code review requests changes (which often happens), simply `git push` the changes to your repository on the same
+branch,
 and the pull request will be updated automatically.
 
 #### Rebase
 
-If you've been working on your change for a while and other commits have been made to the project, rebase with `upstream/main`:
+If you've been working on your change for a while and other commits have been made to the project, rebase with
+`upstream/main`:
 
 ```shell
 git fetch upstream
@@ -189,9 +193,11 @@ git push origin bugfix-branch
 ```
 
 #### Update Changelog Again
+
 If you didn't guess the PR number right, update [CHANGELOG](/CHANGELOG.md) with the correct pull request number.
 
-You can either amend your previous commit and force push the changes or create a new commit. The maintainers can squash them later.
+You can either amend your previous commit and force push the changes or create a new commit. The maintainers can squash
+them later.
 
 ```shell
 git commit --amend
@@ -201,7 +207,8 @@ git push origin bugfix-branch -f
 #### Check on Your Pull Request
 
 After a few minutes, return to your pull request and see if it passed the CI tests.
-Everything should look green. If not, read the failed test logs to identify issues, fix them, and commit as described above.
+Everything should look green. If not, read the failed test logs to identify issues, fix them, and commit as described
+above.
 If the review succeeds, your changes will be merged.
 
 Thank you for your contribution :)

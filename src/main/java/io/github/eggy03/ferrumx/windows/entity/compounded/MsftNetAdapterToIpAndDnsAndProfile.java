@@ -5,9 +5,9 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.compounded;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetAdapter;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetConnectionProfile;
@@ -29,9 +29,7 @@ import java.util.List;
  * {@code IpAddress}, {@code DnsClientServerAddress},
  * and {@code ConnectionProfile} entities.
  * </p>
- * <p>
- * Instances of this class are thread-safe.
- * </p>
+ *
  * <h2>Usage example</h2>
  * <pre>{@code
  * MsftNetAdapterToIpAndDnsAndProfile adapterInfo = MsftNetAdapterToIpAndDnsAndProfile.builder()
@@ -53,7 +51,7 @@ import java.util.List;
  * {@code Win32_NetworkAdapter} is deprecated by Microsoft in favor of the MSFT classes.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see MsftNetAdapter
  * @see MsftNetIpAddress
  * @see MsftDnsClientServerAddress
@@ -63,7 +61,7 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
 public class MsftNetAdapterToIpAndDnsAndProfile {
 
     /**

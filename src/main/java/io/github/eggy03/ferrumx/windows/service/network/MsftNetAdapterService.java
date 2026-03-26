@@ -7,10 +7,12 @@ package io.github.eggy03.ferrumx.windows.service.network;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.namespace.StandardCimv2Namespace;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.network.MsftNetAdapter;
 import io.github.eggy03.ferrumx.windows.mapping.network.MsftNetAdapterMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
+import io.github.eggy03.ferrumx.windows.shell.query.StandardCimv2;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ import java.util.List;
 /**
  * Service class for fetching network adapter information from the system.
  * <p>
- * This class executes the {@link StandardCimv2Namespace#MSFT_NET_ADAPTER_QUERY} PowerShell command
+ * This class executes the {@link StandardCimv2#MSFT_NET_ADAPTER} PowerShell command
  * and maps the resulting JSON into an immutable list of {@link MsftNetAdapter} objects.
  * </p>
  *
@@ -74,7 +76,7 @@ import java.util.List;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 3.0.0
  */
 @Slf4j
@@ -91,8 +93,9 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<MsftNetAdapter> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2Namespace.MSFT_NET_ADAPTER_QUERY.getQuery());
+        PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2.MSFT_NET_ADAPTER.getQuery());
         log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
         return new MsftNetAdapterMapper().mapToList(response.getCommandOutput(), MsftNetAdapter.class);
     }
@@ -106,8 +109,9 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<MsftNetAdapter> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(StandardCimv2Namespace.MSFT_NET_ADAPTER_QUERY.getQuery());
+        PowerShellResponse response = powerShell.executeCommand(StandardCimv2.MSFT_NET_ADAPTER.getQuery());
         log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
         return new MsftNetAdapterMapper().mapToList(response.getCommandOutput(), MsftNetAdapter.class);
     }
@@ -127,8 +131,9 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<MsftNetAdapter> get(long timeout) {
-        String command = StandardCimv2Namespace.MSFT_NET_ADAPTER_QUERY.getQuery();
+        String command = StandardCimv2.MSFT_NET_ADAPTER.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new MsftNetAdapterMapper().mapToList(response, MsftNetAdapter.class);

@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.network;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
  * Fields correspond to properties retrieved from the {@code MSFT_NetConnectionProfile} class in the
  * {@code root/StandardCimv2} namespace.
  * </p>
- * <p>Instances of this class are thread-safe.</p>
  *
  * <h2>Usage example</h2>
  * <pre>{@code
@@ -40,13 +40,14 @@ import org.jetbrains.annotations.Nullable;
  * <p>See {@link MsftDnsClientServerAddress}, for information regarding the connected DNS servers of a network adapter.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://wutils.com/wmi/root/standardcimv2/msft_netconnectionprofile/">MSFT_NetConnectionProfile Documentation</a>
  * @since 3.0.0
  */
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "MSFT_NetConnectionProfile")
 public class MsftNetConnectionProfile {
 
     /**

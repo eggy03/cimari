@@ -10,15 +10,12 @@
  * represent deserialized the output of scripts which query and join several classes to return a custom object
  * in JSON format
  * </p>
- * <p>
- * All entities are designed to be immutable and thread-safe, allowing them
- * to be safely shared or cached across threads.
- * </p>
+ *
  * <p>
  * Not all classes may represent a WMI or CIM class
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @since 2.0.0
  */
 package io.github.eggy03.ferrumx.windows.entity;

@@ -14,9 +14,68 @@ The following headings may be used while categorizing the list of changes made i
 - Bug Fixes
 - Non-Breaking Changes
 - Breaking Changes
+- Test Changes
 - Dependency Updates
 - Documentation
 - Known Issues
+
+## [4.1.0] - March 26, 2026
+
+This release focuses on bug fixes, internal structure refactoring, and documentation improvements.
+All changes are non-breaking in nature.
+
+### Bug Fixes
+
+- Fixed an issue where an extra newline was appended when reading PowerShell scripts line-by-line in
+  ScriptUtility#loadScript(...).
+- Properly auto-close resources in compound entity service calls that load PowerShell scripts via buffered readers.
+
+### Non-Breaking Changes
+
+- Renamed the `*.constant` package to `io.github.eggy03.ferrumx.windows.shell`.
+- Introduced a dedicated `annotation` package for all custom annotations.
+
+- Extracted script-loading logic from `PowerShellScript.java` into: `ScriptEnum.java` and `ScriptUtility.java`.
+  Both are now located under the `shell.script` package.
+
+- Refactored query loading from an enum-based approach (previously combining `PowerShellCmdlets.java` and hardcoded
+  queries)
+  into a dedicated utility by introducing a dynamic, annotation-driven system where `@WmiClass` and GSON’s
+  `@SerializedName`
+  annotations in entity classes are processed by `QueryUtility.java` to build queries at runtime.
+  Generated queries are now stored in `Cimv2.java` and `StandardCimv2.java`.
+  These classes have been renamed from `Cimv2Namespace.java to Cimv2.java`,
+  `StandardCimv2Namespace.java to StandardCimv2.java`,
+  and `ReflectionUtiliy.java to QueryUtility.java`,
+  which has also been relocated from the `*utility` package to `shell.query` along with the related enums and utilities.
+
+- `QueryUtility#getPropertiesFromSerializedNameAnnotation(...)` now sorts the `@SerializedName` annotation values
+  alphabetically.
+- Removed `_SCRIPT` suffix from constants in `ScriptEnum.java`.
+- Removed `_QUERY` suffix from constants in `Cimv2Enum.java`. and `StandardCimv2Enum.java`.
+- Improved immutability in `CommonMappingInterface#mapToList()` via defensive copying.
+- Removed `@Unmodifiable` annotation from `CommonMappingInterface#mapToObject`.
+- Added 3 new exceptions `AnnotationNotFoundException`, `ResourceNotFoundException`, `ResourceOperationException`
+
+### Test Changes
+
+- Renamed `ReflectionUtilityTest.java` to `ScriptUtilityTest.java` and added more test cases.
+- Added a full set of unit tests for `QueryUtility.java`, in `QueryUtilityTest.java`.
+- Restrict `TerminalUtilityTest` to be run on Windows OSes only.
+- Added `Cimv2EnumTest` and `StandardCimv2EnumTest`. These two tests validate the correctness of the
+  runtime queries generated
+
+### Documentation
+
+- Update Javadocs to reflect the changes introduced in this version.
+- Add Javadocs for `exception` and `annotation` package classes.
+- Add `FAQ.md`, `MIGRATION.md`, `DEVELOPER_DOCS.md` and `FUTURE_PLANS.md` to `docs` folder.
+- Add new annotations `@ShallowImmutable` and `@DeepImmutable` which document the immutability of the entity classes.
+- Add new annotations `@UsesJPowerShell` and `@IsolatedPowerShell` which document the concurrency support status of the
+  service classes.
+- Remove `@author` tags from Javadocs.
+- Remove immutability and thread safety guarantees from entity class Javadocs, since they are not deep immutable.
+- Remove supported versions header from `README.md`
 
 ## [4.0.2] - March 18, 2026
 
@@ -377,18 +436,18 @@ have been removed which will slowly be re-added with the upcoming pre-view relea
 
 ```java
     import com.ferrumx.system.hardware.Win32_AssociatedProcessorMemory;
-    import com.ferrumx.system.networking.Win32_NetworkAdapterSetting;
-    import com.ferrumx.system.operating_system.Win32_DiskDriveToDiskPartition;
-    import com.ferrumx.system.operating_system.Win32_LogicalDiskToPartition;
+import com.ferrumx.system.networking.Win32_NetworkAdapterSetting;
+import com.ferrumx.system.operating_system.Win32_DiskDriveToDiskPartition;
+import com.ferrumx.system.operating_system.Win32_LogicalDiskToPartition;
 ```
 
 to
 
 ```java
     import com.ferrumx.system.associatedclasses.Win32_AssociatedProcessorMemory;
-    import com.ferrumx.system.associatedclasses.Win32_NetworkAdapterSetting;
-    import com.ferrumx.system.associatedclasses.Win32_DiskDriveToDiskPartition;
-    import com.ferrumx.system.associatedclasses.Win32_LogicalDiskToPartition;
+import com.ferrumx.system.associatedclasses.Win32_NetworkAdapterSetting;
+import com.ferrumx.system.associatedclasses.Win32_DiskDriveToDiskPartition;
+import com.ferrumx.system.associatedclasses.Win32_LogicalDiskToPartition;
 ```
 
 ---

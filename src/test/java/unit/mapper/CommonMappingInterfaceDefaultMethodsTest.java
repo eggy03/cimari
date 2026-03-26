@@ -13,6 +13,8 @@ import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
 import io.github.eggy03.ferrumx.windows.mapping.CommonMappingInterface;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.Optional;
@@ -75,6 +77,7 @@ class CommonMappingInterfaceDefaultMethodsTest {
         assertFalse(processorObject.isPresent());
     }
 
+    @Test
     void testMapToObject_nullParameters_throwsException() {
         assertThrows(NullPointerException.class, () -> mapper.mapToObject(null, Win32Processor.class));
         assertThrows(NullPointerException.class, () -> mapper.mapToObject("", null));
@@ -105,10 +108,12 @@ class CommonMappingInterfaceDefaultMethodsTest {
         assertEquals("CPU1", processors.get(1).getDeviceId());
         assertEquals("Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz", processors.get(1).getName());
 
+        // test immutability
+        assertThrows(UnsupportedOperationException.class, () -> processors.add(null));
     }
 
     @Test
-    void testMapToList_whenSingleObject_success() {
+    void testMapToList_whenSingleObject_returnsSingletonList() {
 
         JsonObject processorObject = new JsonObject();
         processorObject.addProperty("DeviceID", "CPU0");
@@ -138,11 +143,21 @@ class CommonMappingInterfaceDefaultMethodsTest {
         assertNull(processors.get(0).getDeviceId());
     }
 
-    @Test
-    void testMapToList_emptyJson_emptyList() {
-        String json = "";
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   ", "null"})
+    void testMapToList_emptyOrWhiteSpaceOrLiteralNullStringJson_emptyList(String json) {
         List<Win32Processor> processorList = mapper.mapToList(json, Win32Processor.class);
         assertTrue(processorList.isEmpty());
+
+    }
+
+    @Test
+    void testMapToList_nullArrayString_returnsListWithNullElement() {
+        String json = "[null]";
+        List<Win32Processor> processorList = mapper.mapToList(json, Win32Processor.class);
+
+        assertEquals(1, processorList.size());
+        assertNull(processorList.get(0));
     }
 
     @Test

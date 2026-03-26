@@ -7,25 +7,31 @@ package io.github.eggy03.ferrumx.windows.service.compounded;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.constant.PowerShellScript;
+import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
+import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
 import io.github.eggy03.ferrumx.windows.entity.compounded.Win32NetworkAdapterToConfiguration;
+import io.github.eggy03.ferrumx.windows.exception.ResourceOperationException;
 import io.github.eggy03.ferrumx.windows.mapping.compounded.Win32NetworkAdapterToConfigurationMapper;
 import io.github.eggy03.ferrumx.windows.service.CommonServiceInterface;
 import io.github.eggy03.ferrumx.windows.service.network.Win32NetworkAdapterConfigurationService;
 import io.github.eggy03.ferrumx.windows.service.network.Win32NetworkAdapterService;
 import io.github.eggy03.ferrumx.windows.service.network.Win32NetworkAdapterSettingService;
+import io.github.eggy03.ferrumx.windows.shell.script.ScriptEnum;
+import io.github.eggy03.ferrumx.windows.shell.script.ScriptUtility;
 import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Service class for fetching network adapter and related configuration information from the system.
  * <p>
- * This class executes the {@link PowerShellScript#WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT} script
+ * This class executes the {@link ScriptEnum#WIN32_NETWORK_ADAPTER_TO_CONFIGURATION} script
  * and maps the resulting JSON into an immutable list of {@link Win32NetworkAdapterToConfiguration} objects.
  * </p>
  *
@@ -76,7 +82,7 @@ import java.util.List;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see Win32NetworkAdapterService
  * @see Win32NetworkAdapterConfigurationService
  * @see Win32NetworkAdapterSettingService
@@ -97,11 +103,17 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get() {
-        try (PowerShell shell = PowerShell.openSession()) {
-            PowerShellResponse response = shell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath()));
+
+        try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath())) {
+
+            PowerShellResponse response = shell.executeScript(scriptBuffer);
             log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
             return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
         }
     }
 
@@ -115,10 +127,18 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * @since 3.0.0
      */
     @Override
+    @UsesJPowerShell
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeScript(PowerShellScript.getScriptAsBufferedReader(PowerShellScript.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath()));
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
+
+        try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath())) {
+
+            PowerShellResponse response = powerShell.executeScript(scriptBuffer);
+            log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
+            return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
+
+        } catch (IOException e) {
+            throw new ResourceOperationException("Failed to execute script", e);
+        }
     }
 
     /**
@@ -136,9 +156,10 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * @since 3.1.0
      */
     @Override
+    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(long timeout) {
 
-        String command = PowerShellScript.getScript(PowerShellScript.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION_SCRIPT.getScriptPath());
+        String command = ScriptUtility.loadScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath());
         String response = TerminalUtility.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32NetworkAdapterToConfigurationMapper().mapToList(response, Win32NetworkAdapterToConfiguration.class);

@@ -5,9 +5,10 @@
  */
 package io.github.eggy03.ferrumx.windows.entity.processor;
 
-import com.google.errorprone.annotations.Immutable;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
+import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +18,6 @@ import org.jetbrains.annotations.Nullable;
  * Immutable representation of a processor cache (e.g., L1, L2, L3) on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_CacheMemory} WMI class.
- * </p>
- * <p>
- * Instances of this class are thread-safe.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -41,14 +39,15 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * See {@link Win32Processor} for related CPU information.
  *
- * @author Sayan Bhattacharjee (Egg-03/Eggy)
+ *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-cachememory">Win32_CacheMemory Documentation</a>
  * @since 3.0.0
  */
 
 @Value
 @Builder(toBuilder = true)
-@Immutable
+@ShallowImmutable
+@WmiClass(className = "Win32_CacheMemory")
 public class Win32CacheMemory {
 
     /**
