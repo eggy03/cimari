@@ -1,4 +1,4 @@
-package unit.shell;
+package unit.shell.query;
 
 import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
@@ -31,7 +31,7 @@ class QueryUtilityTest {
     @Test
     void getPropertiesFromSerializedNameAnnotation_withAnnotatedFields_success() {
 
-        String expectedString = "field_one, field_two, field_three";
+        String expectedString = "field_one, field_three, field_two";
         String actualString = QueryUtility.getPropertiesFromSerializedNameAnnotation(MockWithAnnotatedFields.class);
 
         assertThat(expectedString).isEqualTo(actualString);
@@ -40,7 +40,7 @@ class QueryUtilityTest {
     @Test
     void getPropertiesFromSerializedNameAnnotation_withoutAnnotatedFields_success() {
 
-        String expectedString = "fieldOne, fieldTwo, fieldThree";
+        String expectedString = "fieldOne, fieldThree, fieldTwo";
         String actualString = QueryUtility.getPropertiesFromSerializedNameAnnotation(MockWithoutAnnotatedFields.class);
 
         assertThat(expectedString).isEqualTo(actualString);

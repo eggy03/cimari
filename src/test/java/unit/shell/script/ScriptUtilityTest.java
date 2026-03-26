@@ -1,4 +1,4 @@
-package unit.shell;
+package unit.shell.script;
 
 import io.github.eggy03.ferrumx.windows.exception.ResourceNotFoundException;
 import io.github.eggy03.ferrumx.windows.shell.script.ScriptUtility;

@@ -13,6 +13,7 @@ import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * A utility class that provides helper methods that use Java reflection
@@ -56,8 +57,8 @@ public class QueryUtility {
      *
      * @param tClass the class whose fields should be inspected
      * @param <T>    the type of the class
-     * @return a comma-separated string containing either the className of each
-     * {@link SerializedName} annotation or the field name if the annotation is absent
+     * @return a comma-separated string containing either the "Value" of each
+     * {@link SerializedName} annotation or the field name if the annotation is absent, in alphabetical order
      */
     @NotNull
     public static <T> String getPropertiesFromSerializedNameAnnotation(@NonNull Class<T> tClass) {
@@ -65,12 +66,13 @@ public class QueryUtility {
         StringBuilder properties = new StringBuilder();
 
         Arrays.stream(tClass.getDeclaredFields())
-                .sequential()
-                .filter(field -> !field.isSynthetic()) // filter out synthetic fields since jacoco creates $jacocoData field during tests which fails the assertions. This behavior is not observed in scenarios where code coverage is not run
-                .forEach(field -> {
+                .filter(field -> !field.isSynthetic()) // filter out synthetic fields since JaCoCo creates $jacocoData field during tests which fails the assertions. This behavior is not observed in scenarios where code coverage is not run
+                .map(field -> {
                     SerializedName property = field.getAnnotation(SerializedName.class);
-                    properties.append(property != null ? property.value() : field.getName()).append(", ");
-                });
+                    return property != null ? property.value() : field.getName();
+                })
+                .sorted()
+                .forEach(property -> properties.append(property).append(", "));
 
         // remove trailing ", "
         if (properties.length() > 0) {
