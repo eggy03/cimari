@@ -16,12 +16,18 @@
 
 # About
 
-FerrumX-Windows is a free PowerShell based Hardware and Network Information library for Java.
-It queries
-some [Computer System Hardware Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/computer-system-hardware-classes)
-and [Operating System Classes](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/operating-system-classes) of
-Windows Management Instrumentation (WMI) through PowerShell
-to fetch details about your hardware and OS.
+FerrumX-Windows is a wrapper around a few [Win32 Provider](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-provider) classes
+and select [MSFT](https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/netadaptercimprov/msft-netadapter) classes.
+
+These classes inherit from the [CIM Classes](https://learn.microsoft.com/en-us/windows/win32/wmisdk/cimclas),
+which is based on the [DTMF CIM 2.x Schema](https://dmtf.org/standards/cim/schemas)
+
+Written entirely in Java, the wrapper's primary job is to query the PowerShell for these classes and deserialize the output into typed entities.
+Each entity, to which the output is deserialized, represents a loose mapping of an equivalent Win32 Provider or a MSFT class.
+For example, the [Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor) 
+provider class has an equivalent `Win32Processor.java` entity which is composed of only the read-only properties of the provider class.
+
+For all the provider and MSFT classes, only their read-only properties are accessed. No accessible methods have been implemented so far.
 
 # Cross-Platform Support
 
