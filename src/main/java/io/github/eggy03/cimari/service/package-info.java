@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2026 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
 /**
  * Contains classes responsible for executing PowerShell queries and retrieving their output.
  * <p>
