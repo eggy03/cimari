@@ -1,7 +1,7 @@
 /*
- * © 2024–2025 The ferrumx-windows contributors
- * Licensed under the MIT License.
- * See the LICENSE file in the project root for more information.
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
  */
 package io.github.eggy03.cimari.service.network;
 

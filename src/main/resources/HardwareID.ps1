@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+# SPDX-FileCopyrightText: 2026 Cimari contributors
+
 $bios = Get-CimInstance Win32_BIOS | Select-Object -Property SMBIOSBIOSVersion, SMBIOSMajorVersion, SMBIOSMinorVersion, SystemBiosMajorVersion, SystemBiosMinorVersion
 $baseboard = Get-CimInstance Win32_BaseBoard | Select-Object -Property Manufacturer, Model, OtherIdentifyingInfo, PartNumber, SerialNumber, SKU, Version, Product
 $processorIds = Get-CimInstance Win32_Processor | Select-Object -ExpandProperty ProcessorID

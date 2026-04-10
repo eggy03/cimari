@@ -1,7 +1,7 @@
 /*
- * © 2024–2025 Sayan Bhattacharjee (Alias: Egg-03/Eggy)
- * Licensed under the MIT License.
- * See the LICENSE file in the project root for more information.
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
  */
 package unit.service.peripheral;
 

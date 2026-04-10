@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+# SPDX-FileCopyrightText: 2026 Cimari contributors
+
 $adapters = Get-CimInstance Win32_NetworkAdapter
 
 $result = foreach ($adapter in $adapters)

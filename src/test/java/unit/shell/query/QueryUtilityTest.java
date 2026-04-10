@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2026 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
 package unit.shell.query;
 
 import com.google.gson.annotations.SerializedName;

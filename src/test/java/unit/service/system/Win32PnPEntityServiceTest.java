@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
 package unit.service.system;
 
 import com.google.gson.Gson;

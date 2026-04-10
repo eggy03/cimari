@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2026 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
 package io.github.eggy03.cimari.annotation;
 
 import java.lang.annotation.ElementType;
