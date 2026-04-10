@@ -1,8 +1,8 @@
-# Contributing to ferrumx-windows
+# Contributing to cimari
 
 Thank you for taking the time to contribute :)
 
-There are many ways to contribute to `ferrumx-windows` and each of them are encouraged and valued.
+There are many ways to contribute to `cimari` and each of them are encouraged and valued.
 Before contributing, please make sure you read the relevant docs and check out the existing issues and examples
 as it would help both you and the maintainers to keep the experience smooth.
 
@@ -18,10 +18,10 @@ Before contributing, please make sure you have checked out the following:
 
 - [Project Readme](/README.md)
 - [Code of Conduct](/CODE_OF_CONDUCT.md)
-- [Javadocs](https://eggy03.github.io/ferrumx-windows-documentation/)
+- [Javadocs]()
 - [Other Docs](/docs)
-- [Examples](https://github.com/eggy03/ferrumx-windows-examples)
-- [Existing Issues](https://github.com/eggy03/ferrumx-windows/issues)
+- [Examples]()
+- [Existing Issues](https://github.com/eggy03/cimari/issues)
 
 ## Types Of Contribution
 
@@ -47,7 +47,7 @@ using the `suggestions` template.
 
 ### Contributing to the Examples
 
-The [ferrumx-windows-examples repository](https://github.com/eggy03/ferrumx-windows-examples)
+The [cimari-examples repository]()
 could always use more examples and or cleaner, easier versions of examples than what is already there. You can either
 create a PR with your additions/changes
 or suggest changes by raising an issue either here or in the example repository.
@@ -59,7 +59,7 @@ an issue using one of the given templates. Before raising an issue, make sure yo
 existing ones and read the docs.
 
 For questions and or suggestions, you can also post your message
-in [Discussions](https://github.com/eggy03/ferrumx-windows/discussions)
+in [Discussions](https://github.com/eggy03/cimari/discussions)
 
 ### Testing the library on different hardware
 
@@ -77,7 +77,7 @@ Vulnerabilities should be reported in accordance with the [Security Policy](/SEC
 ### Contributing to the code
 
 Before contributing to the code, please make sure you have checked the existing open and
-closed [Pull Requests](https://github.com/eggy03/ferrumx-windows/pulls)
+closed [Pull Requests](https://github.com/eggy03/cimari/pulls)
 and are familiar with the docs and examples
 
 #### Getting Started
@@ -97,9 +97,9 @@ The steps below will remain the same for GUI editions as well.
    with these commands:
 
 ```shell
-git clone https://github.com/yourusername/ferrumx-windows.git
-cd ferrumx-windows
-git remote add upstream https://github.com/eggy03/ferrumx-windows.git
+git clone https://github.com/yourusername/cimari.git
+cd cimari
+git remote add upstream https://github.com/eggy03/cimari.git
 ```
 
 #### Create a Branch
@@ -142,7 +142,7 @@ The Changelog lets users know what's changed.
 Edit [CHANGELOG](/CHANGELOG.md) to include your contribution under Next Release.
 Follow the format of other entries, including your name and a link to your GitHub account:
 
-` - Fixed skipping serialization of null fields - [#123](https://github.com/eggy03/ferrumx-windows/pulls)[@contributor](https://github.com/contributor).`
+` - Fixed skipping serialization of null fields - [#123](https://github.com/eggy03/cimari/pulls)[@contributor](https://github.com/contributor).`
 
 You can guess your pull request number as the next available number after issues and pull requests on the project.
 
@@ -173,7 +173,7 @@ git push origin bugfix-branch
 
 #### Open a Pull Request (PR)
 
-1. Go to https://github.com/yourusername/ferrumx-windows and select your feature branch.
+1. Go to https://github.com/yourusername/cimari and select your feature branch.
 2. Click the 'Pull Request' button and complete the form.
 3. Pull requests are usually reviewed within a few days.
 
