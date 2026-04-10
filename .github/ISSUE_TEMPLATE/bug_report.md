@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 If you have run into an exception, provide the stacktrace here
 
 ## PowerShell Output
-If your logging is enabled at `trace` level, ferrumx-windows should print the whole json data supplied by the PowerShell for the particular service called. You can paste it here.
+If your logging is enabled at `trace` level, cimari should print the whole json data supplied by the PowerShell for the particular service called. You can paste it here.
 
 ## Windows and PowerShell Version
 
