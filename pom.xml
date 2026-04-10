@@ -3,26 +3,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.eggy03</groupId>
-    <artifactId>ferrumx-windows</artifactId>
-    <version>4.1.0</version>
+    <artifactId>cimari</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.release>8</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <project.name>ferrumx-windows</project.name>
-        <project.description>A lightweight Hardware and Network Info wrapper in JAVA</project.description>
-        <project.url>https://github.com/eggy03/ferrumx-windows</project.url>
+        <project.name>cimari</project.name>
+        <project.description>A wrapper around a few Win32 Provider and MSFT classes, that deserializes read-only SMBIOS output into type-safe entities.</project.description>
+        <project.url>https://github.com/eggy03/cimari</project.url>
 
         <project.license.name>The MIT License</project.license.name>
-        <project.license.url>https://raw.githubusercontent.com/eggy03/ferrumx-windows/refs/heads/main/LICENSE</project.license.url>
+        <project.license.url>https://raw.githubusercontent.com/eggy03/cimari/refs/heads/main/LICENSE</project.license.url>
 
         <project.developer.id>Egg-03</project.developer.id>
         <project.developer.name>Sayan Bhattacharjee</project.developer.name>
         <project.developer.email>egg03@duck.com</project.developer.email>
 
-        <project.scm.url>https://github.com/eggy03/ferrumx-windows.git</project.scm.url>
-        <project.scm.dev>scm:git:ssh://git@github.com:eggy03/ferrumx-windows.git</project.scm.dev>
+        <project.scm.url>https://github.com/eggy03/cimari.git</project.scm.url>
+        <project.scm.dev>scm:git:ssh://git@github.com:eggy03/cimari.git</project.scm.dev>
 
         <sonar.organization>eggy03</sonar.organization>
 
@@ -275,9 +275,9 @@
                 <version>${jacoco.maven.plugin.version}</version>
                 <configuration>
                     <excludes>
-                        <exclude>io/github/eggy03/ferrumx/windows/entity/**/*</exclude>
-                        <exclude>io/github/eggy03/ferrumx/windows/annotation/**/*</exclude>
-                        <exclude>io/github/eggy03/ferrumx/windows/exception/**/*</exclude>
+                        <exclude>io/github/eggy03/cimari/entity/**/*</exclude>
+                        <exclude>io/github/eggy03/cimari/annotation/**/*</exclude>
+                        <exclude>io/github/eggy03/cimari/exception/**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
