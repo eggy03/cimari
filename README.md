@@ -125,7 +125,6 @@ in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 - [Developer Docs](/docs/DEVELOPER_DOCS.md)
 - [Migration Guide](/docs/MIGRATION.md)
 - [Examples]()
-- [FAQ](/docs/FAQ.md)
 
 # Usage
 
