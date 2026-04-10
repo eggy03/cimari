@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32PhysicalMemory> {
@@ -90,7 +90,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
      *
      * @return an immutable list of {@link Win32PhysicalMemory} objects representing the system's RAM.
      * Returns an empty list if no memory modules are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -107,7 +107,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32PhysicalMemory} objects representing the system's RAM.
      * Returns an empty list if no memory modules are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -130,7 +130,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32PhysicalMemory} objects representing the system's RAM.
      * Returns an empty list if no memory modules are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

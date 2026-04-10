@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  *
  *
  * @see Win32UserAccount
- * @since 2.0.0
+ * @since 1.0.0
  */
 
 @Value

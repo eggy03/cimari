@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class MsftDnsClientServerAddressService implements CommonServiceInterface<MsftDnsClientServerAddress> {
@@ -90,7 +90,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      *
      * @return an immutable list of {@link MsftDnsClientServerAddress} objects representing the DNS configs.
      * Returns an empty list if no configs are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -107,7 +107,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link MsftDnsClientServerAddress} objects representing the DNS configs.
      * Returns an empty list if no configs are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -129,7 +129,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      *                command to complete before terminating the process
      * @return an immutable list of {@link MsftDnsClientServerAddress} objects representing the DNS configs.
      * Returns an empty list if no configs are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

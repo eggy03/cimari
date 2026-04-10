@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class MsftNetConnectionProfileService implements CommonServiceInterface<MsftNetConnectionProfile> {
@@ -90,7 +90,7 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
      *
      * @return an immutable list of {@link MsftNetConnectionProfile} objects representing the connection profiles.
      * Returns an empty list if no profiles are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -107,7 +107,7 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link MsftNetConnectionProfile} objects representing the connection profiles.
      * Returns an empty list if no profiles are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -129,7 +129,7 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
      *                command to complete before terminating the process
      * @return an immutable list of {@link MsftNetConnectionProfile} objects representing the connection profiles.
      * Returns an empty list if no profiles are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

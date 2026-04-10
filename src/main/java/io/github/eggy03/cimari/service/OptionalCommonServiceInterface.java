@@ -22,7 +22,7 @@ import java.util.Optional;
  * @param <S> the entity type returned by the service implementation
  *
  * @see CommonServiceInterface
- * @since 2.2.0
+ * @since 1.0.0
  */
 public interface OptionalCommonServiceInterface<S> {
 
@@ -33,7 +33,7 @@ public interface OptionalCommonServiceInterface<S> {
      * or the default methods of {@link CommonMappingInterface}
      *
      * @return an {@link Optional} entity of type {@code <S>} defined by the caller
-     * @since 2.2.0
+     * @since 1.0.0
      */
     Optional<S> get();
 
@@ -45,7 +45,7 @@ public interface OptionalCommonServiceInterface<S> {
      *
      * @param powerShell the caller-managed PowerShell session passed to the method
      * @return an {@link Optional} entity of type {@code <S>} defined by the caller
-     * @since 2.2.0
+     * @since 1.0.0
      */
     Optional<S> get(PowerShell powerShell);
 
@@ -57,7 +57,7 @@ public interface OptionalCommonServiceInterface<S> {
      *
      * @param timeout the maximum time (in seconds) to wait for the PowerShell command to complete before terminating the process
      * @return an {@link Optional} entity of type {@code <S>} defined by the caller
-     * @since 3.1.0
+     * @since 1.0.0
      */
     Optional<S> get(long timeout);
 }

@@ -87,7 +87,7 @@ import java.util.List;
  * @see Win32NetworkAdapterConfigurationService
  * @see Win32NetworkAdapterSettingService
  * @see MsftNetAdapterToIpAndDnsAndProfileService
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32NetworkAdapterToConfigurationService implements CommonServiceInterface<Win32NetworkAdapterToConfiguration> {
@@ -100,7 +100,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      *
      * @return an immutable list of {@link Win32NetworkAdapterToConfiguration} objects representing connected network adapter and related configuration.
      * Returns an empty list if no network adapter and related configuration are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -124,7 +124,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32NetworkAdapterToConfiguration} objects representing connected network adapter and related configuration.
      * Returns an empty list if no network adapter and related configuration are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -153,7 +153,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32NetworkAdapterToConfiguration} objects representing connected network adapter and related configuration.
      * Returns an empty list if no network adapter and related configuration are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

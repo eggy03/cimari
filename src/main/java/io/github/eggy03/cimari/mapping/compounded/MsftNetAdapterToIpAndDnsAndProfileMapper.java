@@ -12,8 +12,7 @@ import io.github.eggy03.cimari.mapping.CommonMappingInterface;
  * Provides a type-safe implementation of {@link CommonMappingInterface}
  * and maps JSON strings from PowerShell objects or lists of {@link MsftNetAdapterToIpAndDnsAndProfile}
  *
- *
- * @since 3.0.0
+ * @since 1.0.0
  */
 public class MsftNetAdapterToIpAndDnsAndProfileMapper implements CommonMappingInterface<MsftNetAdapterToIpAndDnsAndProfile> {
 }

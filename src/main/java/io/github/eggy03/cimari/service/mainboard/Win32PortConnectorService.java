@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32PortConnectorService implements CommonServiceInterface<Win32PortConnector> {
@@ -90,7 +90,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
      *
      * @return an immutable list of {@link Win32PortConnector} objects representing the system's mainboard ports.
      * Returns an empty list if no ports are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -108,7 +108,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32PortConnector} objects representing the system's mainboard ports.
      * Returns an empty list if no ports are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -131,7 +131,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32PortConnector} objects representing the system's mainboard ports.
      * Returns an empty list if no ports are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

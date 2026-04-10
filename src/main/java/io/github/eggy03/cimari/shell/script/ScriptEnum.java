@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
  * Enum representing the location for some predefined PowerShell scripts
  *
  *
- * @since 4.1.0
+ * @since 1.0.0
  */
 @RequiredArgsConstructor
 @Getter
@@ -27,31 +27,37 @@ public enum ScriptEnum {
 
     /**
      * Script that returns a JSON which can be deserialized into {@link MsftNetAdapterToIpAndDnsAndProfile}
+     * @since 1.0.0
      */
     MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE("/MsftNetAdapterToIpAndDnsAndProfile.ps1"),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32NetworkAdapterToConfiguration}
+     * @since 1.0.0
      */
     WIN32_NETWORK_ADAPTER_TO_CONFIGURATION("/Win32NetworkAdapterToConfiguration.ps1"),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32DiskDriveToPartitionAndLogicalDisk}
+     * @since 1.0.0
      */
     WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL("/Win32DiskDriveToPartitionAndLogicalDisk.ps1"),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32DiskPartitionToLogicalDisk}
+     * @since 1.0.0
      */
     WIN32_DISK_PARTITION_TO_LOGICAL("/Win32DiskPartitionToLogicalDisk.ps1"),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32ProcessorToCacheMemory}
+     * @since 1.0.0
      */
     WIN32_PROCESSOR_TO_CACHE_MEMORY("/Win32ProcessorToCacheMemory.ps1"),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link HardwareId}
+     * @since 1.0.0
      */
     HWID("/HardwareID.ps1");
 

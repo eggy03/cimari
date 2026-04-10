@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32BaseboardService implements CommonServiceInterface<Win32Baseboard> {
@@ -90,7 +90,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
      *
      * @return an immutable list of {@link Win32Baseboard} objects representing the system motherboards.
      * Returns an empty list if no motherboard entries are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -107,7 +107,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32Baseboard} objects representing the system motherboards.
      * Returns an empty list if no motherboard entries are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -129,7 +129,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32Baseboard} objects representing the system motherboards.
      * Returns an empty list if no motherboard entries are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

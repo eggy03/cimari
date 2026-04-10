@@ -55,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/netadaptercimprov/msft-netadapter">MSFT_NetAdapter Documentation</a>
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Value
 @Builder(toBuilder = true)

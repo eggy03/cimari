@@ -19,7 +19,7 @@ import java.util.Arrays;
  * <p>
  * <b>For internal use only</b>
  *
- * @since 4.1.0
+ * @since 1.0.0
  */
 @UtilityClass
 public class QueryUtility {
@@ -33,6 +33,7 @@ public class QueryUtility {
      * @param <T>    the type of the class
      * @return the annotation value
      * @throws AnnotationNotFoundException if the class to be inspected does not have the {@link WmiClass} annotation
+     * @since 1.0.0
      */
     @NotNull
     public static <T> String getClassNameFromWmiClassAnnotation(@NonNull Class<T> tClass) {
@@ -58,6 +59,7 @@ public class QueryUtility {
      * @param <T>    the type of the class
      * @return a comma-separated string containing either the "Value" of each
      * {@link SerializedName} annotation or the field name if the annotation is absent, in alphabetical order
+     * @since 1.0.0
      */
     @NotNull
     public static <T> String getPropertiesFromSerializedNameAnnotation(@NonNull Class<T> tClass) {

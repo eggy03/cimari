@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
  *     This annotation is for documentation purposes only and does not enforce or verify immutability.
  * </p>
  *
- * @since 4.1.0
+ * @since 1.0.0
  * @see DeepImmutable
  */
 @Retention(RetentionPolicy.CLASS)

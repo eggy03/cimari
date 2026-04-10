@@ -76,7 +76,7 @@ import java.util.Optional;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
@@ -89,7 +89,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      *
      * @return an {@link Optional} of {@link Win32ComputerSystem} representing
      * the computer system. Returns {@link Optional#empty()} if no system information is detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -107,7 +107,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an {@link Optional} of {@link Win32ComputerSystem} representing
      * the computer system. Returns {@link Optional#empty()} if no  information is detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -131,7 +131,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      * @return an {@link Optional} of {@link Win32ComputerSystem} representing
      * the HWID. Returns {@link Optional#empty()} if no information
      * is detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

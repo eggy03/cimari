@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
@@ -90,7 +90,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
      *
      * @return an immutable list of {@link Win32Processor} objects representing the CPU(s).
      * Returns an empty list if no processors are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -106,7 +106,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32Processor} objects representing the CPU(s).
      * Returns an empty list if no processors are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -128,7 +128,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32Processor} objects representing the CPU(s).
      * Returns an empty list if no processors are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

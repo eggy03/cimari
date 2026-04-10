@@ -89,7 +89,7 @@ import java.util.List;
  * @see MsftDnsClientServerAddressService
  * @see MsftNetConnectionProfileService
  * @see Win32NetworkAdapterToConfigurationService
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceInterface<MsftNetAdapterToIpAndDnsAndProfile> {
@@ -102,7 +102,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      *
      * @return an immutable list of {@link MsftNetAdapterToIpAndDnsAndProfile} objects representing
      * connected adapters with their configs. Returns an empty list if no data is found.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -126,7 +126,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link MsftNetAdapterToIpAndDnsAndProfile} objects representing connected adapters
      * and their configs. Returns an empty list if no data is found.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -155,7 +155,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      *                command to complete before terminating the process
      * @return an immutable list of {@link MsftNetAdapterToIpAndDnsAndProfile} objects representing connected adapters
      * and their configs. Returns an empty list if no data is found.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

@@ -92,7 +92,7 @@ import java.util.List;
  * @see Win32LogicalDiskService
  * @see Win32DiskDriveToDiskPartitionService
  * @see Win32LogicalDiskToPartitionService
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInterface<Win32DiskPartitionToLogicalDisk> {
@@ -105,7 +105,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
      *
      * @return an immutable list of {@link Win32DiskPartitionToLogicalDisk} objects representing connected physical disk and related logical disks.
      * Returns an empty list if no data is found.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -129,7 +129,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32DiskPartitionToLogicalDisk} objects representing connected physical disk and related logical disks.
      * Returns an empty list if no data is found.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -159,7 +159,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32DiskPartitionToLogicalDisk} objects representing connected physical disk and related logical disks.
      * Returns an empty list if no data is found.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

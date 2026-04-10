@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
  *
  *
  * @see <a href="https://wutils.com/wmi/root/standardcimv2/msft_netconnectionprofile/">MSFT_NetConnectionProfile Documentation</a>
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Value
 @Builder(toBuilder = true)

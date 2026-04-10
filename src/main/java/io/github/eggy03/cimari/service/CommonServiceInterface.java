@@ -22,7 +22,7 @@ import java.util.List;
  * @param <S> the entity type returned by the service implementation
  *
  * @see OptionalCommonServiceInterface
- * @since 2.2.0
+ * @since 1.0.0
  */
 public interface CommonServiceInterface<S> {
 
@@ -33,7 +33,7 @@ public interface CommonServiceInterface<S> {
      * the default methods of {@link CommonMappingInterface}
      *
      * @return a {@link List} of entities of type {@code <S>} defined by the caller
-     * @since 2.2.0
+     * @since 1.0.0
      */
     List<S> get();
 
@@ -45,7 +45,7 @@ public interface CommonServiceInterface<S> {
      *
      * @param powerShell the caller-managed PowerShell session passed to the method
      * @return a {@link List} of entities of type {@code <S>} defined by the caller
-     * @since 2.2.0
+     * @since 1.0.0
      */
     List<S> get(PowerShell powerShell);
 
@@ -57,7 +57,7 @@ public interface CommonServiceInterface<S> {
      *
      * @param timeout the maximum time (in seconds) to wait for the PowerShell command to complete before terminating the process
      * @return a {@link List} of entities of type {@code <S>} defined by the caller
-     * @since 3.1.0
+     * @since 1.0.0
      */
     List<S> get(long timeout);
 }

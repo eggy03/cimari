@@ -79,7 +79,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterface<Win32DiskDriveToDiskPartition> {
@@ -92,7 +92,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      *
      * @return an immutable list of {@link Win32DiskDriveToDiskPartition} objects representing the association between
      * a {@link Win32DiskDrive} and it's {@link Win32DiskPartition}. Returns an empty list if none are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -110,7 +110,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      *
      * @return an immutable list of {@link Win32DiskDriveToDiskPartition} objects representing the association between
      * a {@link Win32DiskDrive} and it's {@link Win32DiskPartition}. Returns an empty list if none are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -133,7 +133,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * @return an immutable list of {@link Win32DiskDriveToDiskPartition} objects representing the association between
      * a {@link Win32DiskDrive} and it's {@link Win32DiskPartition}.
      * Returns an empty list if none are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

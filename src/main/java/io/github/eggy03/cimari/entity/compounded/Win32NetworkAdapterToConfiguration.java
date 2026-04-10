@@ -46,7 +46,7 @@ import java.util.List;
  * @see Win32NetworkAdapter
  * @see Win32NetworkAdapterConfiguration
  * @see Win32NetworkAdapterSetting
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 @Value

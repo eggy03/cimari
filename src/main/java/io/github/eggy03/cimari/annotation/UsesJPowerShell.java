@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  * </p>
  *
  * @see IsolatedPowerShell
- * @since 4.1.0
+ * @since 1.0.0
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)

@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
  *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor">Win32_Processor Documentation</a>
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 @Value

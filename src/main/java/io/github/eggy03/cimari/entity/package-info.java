@@ -21,6 +21,6 @@
  * </p>
  *
  *
- * @since 2.0.0
+ * @since 1.0.0
  */
 package io.github.eggy03.cimari.entity;

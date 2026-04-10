@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32LogicalDiskService implements CommonServiceInterface<Win32LogicalDisk> {
@@ -90,7 +90,7 @@ public class Win32LogicalDiskService implements CommonServiceInterface<Win32Logi
      *
      * @return an immutable list of {@link Win32LogicalDisk} objects representing the logical volumes.
      * Returns an empty list if no volumes are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -106,7 +106,7 @@ public class Win32LogicalDiskService implements CommonServiceInterface<Win32Logi
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32LogicalDisk} objects representing the logical volumes.
      * Returns an empty list if no volumes are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -128,7 +128,7 @@ public class Win32LogicalDiskService implements CommonServiceInterface<Win32Logi
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32LogicalDisk} objects representing the logical volumes.
      * Returns an empty list if no volumes are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

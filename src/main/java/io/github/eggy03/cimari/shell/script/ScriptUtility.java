@@ -27,7 +27,7 @@ import java.util.Iterator;
  * </p>
  *
  *
- * @since 4.1.0
+ * @since 1.0.0
  */
 @UtilityClass
 public class ScriptUtility {
@@ -40,6 +40,7 @@ public class ScriptUtility {
      * @param scriptPath the location of the script resource (e.g. {@code "/script.ps1"})
      * @return a {@link BufferedReader} for the requested script
      * @throws ResourceNotFoundException if the script resource cannot be found
+     * @since 1.0.0
      */
     @NotNull
     public static BufferedReader loadAsBufferedReader(@NonNull String scriptPath) {
@@ -66,6 +67,7 @@ public class ScriptUtility {
      * @return the normalized script contents as a {@link String}
      * @throws ResourceNotFoundException  if the script resource cannot be found
      * @throws ResourceOperationException when I/O operations on the resource fail
+     * @since 1.0.0
      */
     @NotNull
     public static String loadScript(@NonNull String scriptPath) {
@@ -75,7 +77,7 @@ public class ScriptUtility {
             throw new ResourceNotFoundException("Script was not found in: " + scriptPath);
 
         InputStreamReader resourceStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
-        // wrapping buffered reader on try-with-resources is enough since it will also close the other chained readers
+        // wrapping buffered reader on try-with-resources is enough since it will also close the enclosing chained readers
         try (BufferedReader resourceBuffer = new BufferedReader(resourceStreamReader)) {
 
             StringBuilder script = new StringBuilder();

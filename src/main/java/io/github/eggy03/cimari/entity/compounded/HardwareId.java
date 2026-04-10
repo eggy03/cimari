@@ -76,7 +76,7 @@ import org.jetbrains.annotations.Nullable;
  * }</pre>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Value
 @Builder(toBuilder = true)

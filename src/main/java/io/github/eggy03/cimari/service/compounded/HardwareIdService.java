@@ -79,8 +79,7 @@ import java.util.Optional;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class HardwareIdService implements OptionalCommonServiceInterface<HardwareId> {
@@ -93,7 +92,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      *
      * @return an {@link Optional} of {@link HardwareId} representing
      * the HWID. Returns {@link Optional#empty()} if no information is detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -117,7 +116,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an {@link Optional} of {@link HardwareId} representing
      * the HWID. Returns {@link Optional#empty()} if no information is detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -148,7 +147,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      * @return an {@link Optional} of {@link HardwareId} representing
      * the HWID. Returns {@link Optional#empty()} if no information
      * is detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

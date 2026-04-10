@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdapter> {
@@ -90,7 +90,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      *
      * @return an immutable list of {@link MsftNetAdapter} objects representing the system's network adapters.
      * Returns an empty list if no adapters are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -106,7 +106,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link MsftNetAdapter} objects representing the system's network adapters.
      * Returns an empty list if no adapters are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -128,7 +128,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      *                command to complete before terminating the process
      * @return an immutable list of {@link MsftNetAdapter} objects representing the system's network adapters.
      * Returns an empty list if no adapters are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

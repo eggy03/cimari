@@ -19,6 +19,6 @@
  *   <li>Into instances of entity classes defined in the {@link io.github.eggy03.cimari.entity} package</li>
  * </ul>
  *
- * @since 2.0.0
+ * @since 1.0.0
  */
 package io.github.eggy03.cimari.service;

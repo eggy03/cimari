@@ -86,7 +86,7 @@ import java.util.List;
  * @see Win32AssociatedProcessorMemoryService
  * @see Win32ProcessorService
  * @see Win32CacheMemoryService
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32ProcessorToCacheMemoryService implements CommonServiceInterface<Win32ProcessorToCacheMemory> {
@@ -99,7 +99,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      *
      * @return an immutable list of {@link Win32ProcessorToCacheMemory} objects.
      * Returns an empty list if no processors and related cache information are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -123,7 +123,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32ProcessorToCacheMemory} objects
      * Returns an empty list if no processors and related cache information are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -152,7 +152,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32ProcessorToCacheMemory} objects
      * Returns an empty list if no processors and related cache information are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

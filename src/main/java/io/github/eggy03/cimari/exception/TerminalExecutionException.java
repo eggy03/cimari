@@ -11,7 +11,7 @@ import lombok.experimental.StandardException;
 /**
  * A generic wrapper of all exceptions occurring from {@link TerminalUtility}
  *
- * @since 3.1.0
+ * @since 1.0.0
  */
 @StandardException
 public class TerminalExecutionException extends RuntimeException {

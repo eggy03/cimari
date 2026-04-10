@@ -76,7 +76,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32DesktopMonitorService implements CommonServiceInterface<Win32DesktopMonitor> {
@@ -89,7 +89,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      *
      * @return an immutable list of {@link Win32DesktopMonitor} objects representing connected monitors.
      * Returns an empty list if no monitors are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -107,7 +107,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32DesktopMonitor} objects representing connected monitors.
      * Returns an empty list if no monitors are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -130,7 +130,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32DesktopMonitor} objects representing connected monitors.
      * Returns an empty list if no monitors are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

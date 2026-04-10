@@ -28,7 +28,7 @@ import java.util.Optional;
  *
  * @param <S> the entity type returned by the service implementation
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 public interface CommonMappingInterface<S> {
 
@@ -56,7 +56,7 @@ public interface CommonMappingInterface<S> {
      * If null values are disallowed, a {@link NullPointerException} may be thrown.
      * @throws NullPointerException if the JSON string or the objectClass is null
      * @throws JsonSyntaxException  if the JSON is malformed
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @NotNull
     @Unmodifiable
@@ -97,7 +97,7 @@ public interface CommonMappingInterface<S> {
      * a {@link NullPointerException} may be thrown.
      * @throws JsonSyntaxException  if the JSON is malformed
      * @throws NullPointerException if the JSON string or the objectClass is null
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @NotNull
     default Optional<S> mapToObject(@NonNull String json, @NonNull Class<S> objectClass) {

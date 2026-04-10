@@ -78,8 +78,7 @@ import java.util.List;
  * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
  * </p>
  *
- *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32NetworkAdapterSettingService implements CommonServiceInterface<Win32NetworkAdapterSetting> {
@@ -92,7 +91,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
      *
      * @return an immutable list of {@link Win32NetworkAdapterSetting} objects representing the association between
      * a {@link Win32NetworkAdapter} and it's {@link Win32NetworkAdapterConfiguration}. Returns an empty list if none are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -110,7 +109,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
      *
      * @return an immutable list of {@link Win32NetworkAdapterSetting} objects representing the association between
      * a {@link Win32NetworkAdapter} and it's {@link Win32NetworkAdapterConfiguration}. Returns an empty list if none are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -133,7 +132,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
      * @return an immutable list of {@link Win32NetworkAdapterSetting} objects representing the association between
      * a {@link Win32NetworkAdapter} and it's {@link Win32NetworkAdapterConfiguration}.
      * Returns an empty list if none are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

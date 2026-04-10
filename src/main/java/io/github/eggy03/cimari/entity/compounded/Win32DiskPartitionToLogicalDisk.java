@@ -51,7 +51,7 @@ import java.util.List;
  * @see Win32DiskPartition
  * @see Win32LogicalDisk
  * @see Win32LogicalDiskToPartition
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 @Value

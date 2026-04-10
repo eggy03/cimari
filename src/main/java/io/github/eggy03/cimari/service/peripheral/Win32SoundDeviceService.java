@@ -76,7 +76,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32SoundDeviceService implements CommonServiceInterface<Win32SoundDevice> {
@@ -89,7 +89,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      *
      * @return an immutable list of {@link Win32SoundDevice} objects representing the system's sound devices.
      * If no sound devices are present, returns an empty list.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -106,7 +106,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32SoundDevice} objects representing the system's sound devices.
      * If no sound devices are present, returns an empty list.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -128,7 +128,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32SoundDevice} objects representing the system's sound devices.
      * If no sound devices are present, returns an empty list.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

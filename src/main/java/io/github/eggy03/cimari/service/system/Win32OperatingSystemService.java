@@ -77,7 +77,7 @@ import java.util.List;
  * </p>
  *
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class Win32OperatingSystemService implements CommonServiceInterface<Win32OperatingSystem> {
@@ -90,7 +90,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      *
      * @return an immutable list of {@link Win32OperatingSystem} objects representing the system's operating systems.
      * Returns an empty list if none are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -107,7 +107,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      * @param powerShell an existing PowerShell session managed by the caller
      * @return an immutable list of {@link Win32OperatingSystem} objects representing the system's operating systems.
      * Returns an empty list if none are detected.
-     * @since 3.0.0
+     * @since 1.0.0
      */
     @Override
     @UsesJPowerShell
@@ -130,7 +130,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      *                command to complete before terminating the process
      * @return an immutable list of {@link Win32OperatingSystem} objects representing the system's operating systems.
      * Returns an empty list if none are detected.
-     * @since 3.1.0
+     * @since 1.0.0
      */
     @Override
     @IsolatedPowerShell

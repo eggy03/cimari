@@ -25,7 +25,7 @@ import java.time.Duration;
  * <p>
  * <b>Mostly for internal use </b>
  *
- * @since 3.1.0
+ * @since 1.0.0
  */
 @UtilityClass
 @Slf4j
@@ -40,6 +40,7 @@ public class TerminalUtility {
      * @return The result of the command executed
      * @throws TerminalExecutionException When the process is killed pre-maturely upon reaching the timeout or when the command yields an error
      * @throws IllegalArgumentException   If the provided timeout is in the negative
+     * @since 1.0.0
      */
     public static @NotNull String executeCommand(@NonNull String command, long timeoutSeconds) {
 
