@@ -1,7 +1,7 @@
 package unit.shell.script;
 
-import io.github.eggy03.ferrumx.windows.exception.ResourceNotFoundException;
-import io.github.eggy03.ferrumx.windows.shell.script.ScriptUtility;
+import io.github.eggy03.cimari.exception.ResourceNotFoundException;
+import io.github.eggy03.cimari.shell.script.ScriptUtility;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

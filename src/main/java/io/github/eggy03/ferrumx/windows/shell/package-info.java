@@ -1,5 +1,0 @@
-/**
- * Contains some PowerShell scripts and queries that are used by the {@link io.github.eggy03.ferrumx.windows.service}
- * classes to fetch queries and scripts for execution.
- */
-package io.github.eggy03.ferrumx.windows.shell;

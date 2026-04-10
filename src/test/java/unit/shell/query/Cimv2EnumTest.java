@@ -1,6 +1,6 @@
 package unit.shell.query;
 
-import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
+import io.github.eggy03.cimari.shell.query.Cimv2;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 

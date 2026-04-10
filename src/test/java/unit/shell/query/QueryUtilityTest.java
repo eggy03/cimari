@@ -1,9 +1,9 @@
 package unit.shell.query;
 
 import com.google.gson.annotations.SerializedName;
-import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
-import io.github.eggy03.ferrumx.windows.exception.AnnotationNotFoundException;
-import io.github.eggy03.ferrumx.windows.shell.query.QueryUtility;
+import io.github.eggy03.cimari.annotation.WmiClass;
+import io.github.eggy03.cimari.exception.AnnotationNotFoundException;
+import io.github.eggy03.cimari.shell.query.QueryUtility;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,7 +1,7 @@
 package unit.utility;
 
-import io.github.eggy03.ferrumx.windows.exception.TerminalExecutionException;
-import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
+import io.github.eggy03.cimari.exception.TerminalExecutionException;
+import io.github.eggy03.cimari.utility.TerminalUtility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
