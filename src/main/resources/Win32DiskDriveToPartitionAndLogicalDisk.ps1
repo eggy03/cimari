@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+# SPDX-FileCopyrightText: 2026 Cimari contributors
+
 $diskDrives = Get-CimInstance Win32_DiskDrive
 
 $result = foreach ($disk in $diskDrives)

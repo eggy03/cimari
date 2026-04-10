@@ -1,7 +1,7 @@
 /*
- * © 2024–2025 Sayan Bhattacharjee (Alias: Egg-03/Eggy)
- * Licensed under the MIT License.
- * See the LICENSE file in the project root for more information.
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
  */
 package unit.mapper;
 
@@ -9,8 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
-import io.github.eggy03.ferrumx.windows.mapping.CommonMappingInterface;
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.mapping.CommonMappingInterface;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

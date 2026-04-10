@@ -1,7 +1,7 @@
 /*
- * © 2024–2025 Sayan Bhattacharjee (Alias: Egg-03/Eggy)
- * Licensed under the MIT License.
- * See the LICENSE file in the project root for more information.
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
  */
 package unit.service.system;
 
@@ -13,9 +13,9 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.entity.system.Win32Environment;
-import io.github.eggy03.ferrumx.windows.service.system.Win32EnvironmentService;
-import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
+import io.github.eggy03.cimari.entity.system.Win32Environment;
+import io.github.eggy03.cimari.service.system.Win32EnvironmentService;
+import io.github.eggy03.cimari.utility.TerminalUtility;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,13 +1,14 @@
-[![Project Stats](https://img.shields.io/badge/OpenHub-ferrumx%20windows-yellow?style=for-the-badge)](https://openhub.net/p/ferrumx-windows)
-[![License](https://img.shields.io/github/license/eggy03/ferrumx-windows?style=for-the-badge&color=white)](https://github.com/eggy03/ferrumx-windows/blob/main/LICENSE)
-[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/ferrumx-windows?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/ferrumx-windows)
+[![Project Stats](https://img.shields.io/badge/OpenHub-cimari-yellow?style=for-the-badge)](https://openhub.net/p/cimari)
+[![License](https://img.shields.io/github/license/eggy03/cimari?style=for-the-badge&color=white)](https://github.com/eggy03/cimari/blob/main/LICENSE)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/cimari?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 ![Minimum JDK Version](https://img.shields.io/badge/Minimum%20JDK%20Version-8-blue?style=for-the-badge)
 
 # Table Of Contents
 
 - [About](#about)
+- [Introduction](#introduction)
 - [Cross Platform Support](#cross-platform-support)
-- [Supported Operating Systems](#supported-operating-systems)
+- [Supported Operating Systems](#supported-windows-versions)
 - [CI Stats](#ci-stats)
 - [Download](#download)
 - [Documentation](#documentation)
@@ -16,47 +17,83 @@
 
 # About
 
-FerrumX-Windows is a wrapper around a few [Win32 Provider](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-provider) classes
+Cimari is a fork of FerrumX-Windows 4.1.0, created to introduce fundamental changes to the entity classes, in
+an attempt to make them immutable.
+
+FerrumX-Windows relies on [Lombok](https://projectlombok.org/) for a lot of boilerplate code generation for
+its entity classes. While Lombok supports basic immutability, it has no support for nested immutability and without
+that, entity classes cannot be guaranteed to be thread-safe.
+
+The goal of this fork is to address the immutability issue by switching to [Immutables](https://immutables.github.io/),
+which supports immutability of nested objects and collections.
+
+In addition, Cimari removes the dependency on [jPowerShell](https://github.com/profesorfalken/jPowerShell) along with
+the service methods built around it.
+The full list of changes can be found in [Migration Guide](/docs/MIGRATION.md) and [Changelog](/CHANGELOG.md).
+
+I will continue maintaining FerrumX-Windows separately for as long as I can. However, all new features may not be ported
+to it.
+
+# Introduction
+
+Cimari is a wrapper around a
+few [CIMWin32 WMI Provider](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-provider) classes
 and select [MSFT](https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/netadaptercimprov/msft-netadapter) classes.
 
-These classes inherit from the [CIM Classes](https://learn.microsoft.com/en-us/windows/win32/wmisdk/cimclas),
-which is based on the [DTMF CIM 2.x Schema](https://dmtf.org/standards/cim/schemas)
+Note that these aforementioned classes are a part
+of [Windows Management Instrumentation](https://en.wikipedia.org/wiki/Windows_Management_Instrumentation),
+which is Microsoft's implementation of the [DMTF CIM Schema](https://www.dmtf.org/standards/cim),
+for retrieving [SMBIOS Information](https://www.dmtf.org/standards/smbios).
+Both CIM and SMBIOS standards are defined by Distributed Management Task Force.
 
-Written entirely in Java, the wrapper's primary job is to query the PowerShell for these classes and deserialize the output into typed entities.
-Each entity, to which the output is deserialized, represents a loose mapping of an equivalent Win32 Provider or a MSFT class.
-For example, the [Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor) 
-provider class has an equivalent `Win32Processor.java` entity which is composed of only the read-only properties of the provider class.
+Written entirely in Java, the wrapper's primary job is to query the PowerShell for these classes and deserialize
+provided [SMBIOS](https://www.dmtf.org/standards/smbios) output into typed entities.
+Each entity, to which the output is deserialized, represents a loose mapping of an equivalent `Win32 Provider` or an
+`MSFT`
+class.
+For example, the [Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor)
+provider class has an equivalent `Win32Processor.java` entity which is composed of only the read-only properties of the
+provider class.
 
-For all the provider and MSFT classes, only their read-only properties are accessed. No accessible methods have been implemented so far.
+For all the classes, only their read-only properties are accessed.
+No methods to mutate properties have been implemented so far.
 
 # Cross-Platform Support
 
-Work on cross-platform compatibility is currently undecided.
-However, you can try [dmidecode4j](https://github.com/eggy03/dmidecode4j) for Linux,
-if you are familiar with the contract of this API.
+Cimari heavily relies on WMI, which is Microsoft's implementation of CIM for Windows.
+This means, only Windows Operating Systems are supported.
 
-# Supported Operating Systems
+There are a few implementations of the CIM Schema that support a variety of Operating Systems:
+
+- [OpenLMI from RedHat](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-openlmi)
+- [SBLIM Small Footprint CIM Broker](https://github.com/zaneb/sblim-sfcb)
+- [OpenPegasus](https://collaboration.opengroup.org/pegasus/)
+- [Open Management Infrastructure from Microsoft](https://github.com/microsoft/omi)
+
+Unfortunately, most of them have been deprecated or abandoned and were never widely adopted. Therefore, cross-platform
+compatibility is mostly unplanned for now.
+
+However, you can try out [dmidecode4j](https://github.com/eggy03/dmidecode4j) for Linux. It is a wrapper around
+the popular utility [dmidecode](https://man.archlinux.org/man/dmidecode.8.en) for UNIX operating systems,
+which provides human-readable [SMBIOS](https://www.dmtf.org/standards/smbios) data.
+While it does not strictly follow the WMI CIM Schema, you will find it to be similar to FerrumX-Windows and Cimari, if
+you are familiar with either of the APIs.
+
+# Supported Windows Versions
 
 - Windows: `7SP1¹`, `8.1¹`, `10²` and `11²`
 - PowerShell: `5.1 and above`
 
 ¹For `Windows 8.1` and `7SP1`you can install
 [Windows Management Framework 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616) to upgrade to
-PowerShell 5.1
+PowerShell 5.1.
+See [WMF availability across Windows Systems](https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/wmf-overview?view=powershell-7.5#wmf-availability-across-windows-operating-systems)
 
-²Support status is unknown for Windows 10 and 11 editions on ARM devices
+²This library is not tested on ARM versions of Windows 10 and 11 editions.
 
 # CI Stats
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eggy03/ferrumx-windows/.github%2Fworkflows%2Fbuild.yml)
-![Commits to main since latest release](https://img.shields.io/github/commits-since/eggy03/ferrumx-windows/latest)
-
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=eggy03_ferrumx-windows&metric=coverage)](https://sonarcloud.io/summary/new_code?id=eggy03_ferrumx-windows)
+// TODO
 
 # Download
 
@@ -68,7 +105,7 @@ Maven:
 
 <dependency>
     <groupId>io.github.eggy03</groupId>
-    <artifactId>ferrumx-windows</artifactId>
+    <artifactId>cimari</artifactId>
     <version>VERSION</version>
 </dependency>
 ```
@@ -76,51 +113,39 @@ Maven:
 Gradle:
 
 ```gradle
-implementation group: 'io.github.eggy03', name: 'ferrumx-windows', version: 'VERSION'
+implementation group: 'io.github.eggy03', name: 'cimari', version: 'VERSION'
 ```
 
 Replace `VERSION` with the latest version available
-in [central](https://central.sonatype.com/artifact/io.github.eggy03/ferrumx-windows)
-
-> [!NOTE]
-> The `sources.jar` published with this library includes de-lomboked code which should prevent the IDEs from complaining
-> about source mismatch between the decompiled class files and the downloaded sources. It should also make your
-> debugging
-> easier, should you step into the library code during the debugging process of your project.
+in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 
 # Documentation
 
-- [Javadocs](https://eggy03.github.io/ferrumx-windows-documentation/)
+- [Javadocs]()
 - [Developer Docs](/docs/DEVELOPER_DOCS.md)
 - [Migration Guide](/docs/MIGRATION.md)
-- [Examples](https://github.com/eggy03/ferrumx-windows-examples)
-- [FAQ](/docs/FAQ.md)
+- [Examples]()
 
 # Usage
 
 > [!IMPORTANT]
-> More usage examples can be found [here](https://github.com/eggy03/ferrumx-windows-examples).
+> More usage examples can be found [here]().
 
 ```java
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+
 public class ProcessorExample {
 
     static void main(String[] args) {
 
-        List<Win32Processor> processorList = new Win32ProcessorService().get();
-
-        List<Win32Processor> processorListTwo = new Win32ProcessorService().get(15L); // time after which the session will auto close
-
-        // you can also create and manage your own re-usable PowerShell session
-        // good for cases where you need to fetch results for multiple queries
-        try (PowerShell session = PowerShell.openSession()) {
-            List<Win32Processor> processorListThree = new Win32ProcessorService().get(session);
-            processorListThree.forEach(processor -> log.info(processor.toString()));
-        }
+        List<Win32Processor> processorList = new Win32ProcessorService().get(15L); // time after which the session will auto close
 
         // individual fields are accessible via getter methods
-        log.info("Processor Name: {}", processorList.get(0).getName());
-        log.info("Processor Manufacturer: {}", processorList.get(0).getManufacturer());
-        log.info("Processor Max Clock Speed: {} MHz", processorList.get(0).getMaxClockSpeed());
+        Win32Processor processor = processorList.getFirst();
+
+        log.info("Processor Name: {}", processor.name());
+        log.info("Processor Manufacturer: {}", processor.manufacturer());
+        log.info("Processor Max Clock Speed: {} MHz", processor.maxClockSpeed());
     }
 }
 ```

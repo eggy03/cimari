@@ -2,20 +2,13 @@
 
 ## Supported Versions
 
-FerrumX-Windows is maintained by a single contributor. Only the versions listed below continue to receive security-related fixes.
-Due to immutability of library releases, any change to the library will result in a version numbers being incremented and only the latest released version will be supported.
+Cimari is maintained by a single contributor. Only the versions listed below continue to receive security-related fixes.
+Due to immutability of library releases, any change to the library will result in a version numbers being incremented
+and only the latest released version will be supported.
 
-| Version | Supported     |
-|---------|---------------|
-| 4.x.x   | Supported     |
-| 3.x.x   | Not Supported |
-| 2.x.x   | Not Supported |
-| 1.x.x   | Not Supported |
-| < 1.x   | Not Supported |
-
-> Pre-3.x versions contain known architectural limitations and are not recommended for production use.
-
----
+| Version | Supported |
+|---------|-----------|
+| 1.x.x   | Supported |
 
 ## Reporting a Vulnerability
 
@@ -25,7 +18,7 @@ If you discover a vulnerability, please disclose it responsibly using the steps 
 
 You can report vulnerabilities **privately** using GitHub Security Advisories:
 
-**https://github.com/eggy03/ferrumx-windows/security/advisories/new**
+**https://github.com/eggy03/cimari/security/advisories/new**
 
 If that is not possible, you may email:
 
@@ -48,8 +41,8 @@ To help diagnose and fix the issue, include:
 
 ### 3. What to Expect
 
-- **Acknowledgement:** within 72 hours
-- **Status updates:** every 3–7 days until resolution
+- **Acknowledgement:** within 72 hours, may be longer for emails
+- **Status updates:** every 3–7 days until resolution, maybe longer if I'm unavailable
 - **Fix timelines:**
     - Critical: as soon as possible
     - Medium: next patch/minor release
@@ -74,37 +67,37 @@ To protect users:
 
 Security issues involving:
 
-- Improper handling of PowerShell/WMI output
-- Injection vulnerabilities in command execution
+- Improper handling of PowerShell/WMI output by Cimari
+- Injection vulnerabilities in command during execution
 - Unsafe parsing or deserialization
 - Sensitive data leakage
 - Potential RCE or privilege escalation via library APIs
 - Dependency-related security issues
 
+List is non-exhaustive and may get updated frequently
+
 ### Out of Scope
 
-These are **not** considered vulnerabilities within FerrumX-Windows:
-
-- Bugs in PowerShell or WMI themselves
-- Issues caused by corrupted WMI repositories
+- Vulnerabilities in PowerShell or WMI themselves
+- Vulnerabilities caused by corrupted or modified WMI repositories
 - Misconfigured user environments
-- Problems requiring administrator access to exploit
-- Incorrect or missing hardware fields returned by WMI
-- Performance delays related to PowerShell startup
-- Issues on unsupported OS or PowerShell versions
+- Vulnerabilities on unsupported OS or PowerShell versions
+
+List is non-exhaustive and may get updated frequently
 
 ---
 
 ## Security Philosophy
 
-FerrumX-Windows interacts with PowerShell and WMI, which inherently access system-level information. To minimize risk:
+Cimari interacts retrieves SMBIOS information via PowerShell.
+To minimize risk of vulnerabilities:
 
-- All operations are read-only
-- No administrator privileges required
-- No external network communication
-- No personal data collection
-- Full transparency in reporting and patching
+- No provision is there for users to provide custom PowerShell commands or scripts in pre-defined service functions.
+- No administrator privileges are required to execute any of the pre-defined scripts or commands
+- No external network communication is required
+- Logs collected do not leave the system
+- Full transparency in vulnerability reporting and patching
 
 ---
 
-If you are unsure whether something qualifies as a vulnerability, you may open a GitHub Discussion for clarification.
+If you are unsure whether something qualifies as a vulnerability, you may e-mail me at: eggzerothree@proton.me.

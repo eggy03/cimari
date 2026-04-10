@@ -1,0 +1,26 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2026 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
+/**
+ * Contains immutable representations of Windows WMI and CIM classes.
+ * <p>
+ * Most classes in this package directly maps to a corresponding WMI or CIM class
+ * (e.g., {@code Win32_DesktopMonitor}, {@code Win32_Processor}, {@code MSFT_NetAdapter}).
+ * PowerShell query results are deserialized into instances of these entity classes.
+ * </p>
+ * <p>
+ * Some classes, notably the classes in the {@link io.github.eggy03.cimari.entity.compounded} subpackage
+ * represent deserialized the output of scripts which query and join several classes to return a custom object
+ * in JSON format
+ * </p>
+ *
+ * <p>
+ * Not all classes may represent a WMI or CIM class
+ * </p>
+ *
+ *
+ * @since 1.0.0
+ */
+package io.github.eggy03.cimari.entity;
