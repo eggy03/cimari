@@ -34,7 +34,6 @@ import java.util.Optional;
 @Slf4j
 public class HardwareIdService implements OptionalCommonServiceInterface<HardwareId> {
 
-
     /**
      * Retrieves an {@link Optional} containing the HWID information
      * using an isolated PowerShell process with a configurable timeout.

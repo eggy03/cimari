@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 /**
  * Enum representing the location for some predefined PowerShell scripts
  *
- *
  * @since 1.0.0
  */
 @RequiredArgsConstructor
