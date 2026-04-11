@@ -5,7 +5,6 @@
  */
 package io.github.eggy03.cimari.shell.query;
 
-import com.profesorfalken.jpowershell.PowerShell;
 import io.github.eggy03.cimari.entity.display.Win32DesktopMonitor;
 import io.github.eggy03.cimari.entity.display.Win32VideoController;
 import io.github.eggy03.cimari.entity.mainboard.Win32Baseboard;
@@ -37,11 +36,8 @@ import org.jetbrains.annotations.NotNull;
  * Enum representing the predefined WMI (CIM) queries for the classes available in the {@code root/cimv2} namespace.
  * <p>
  * Each constant holds a PowerShell query that queries a specific class in the namespace
- * and returns the result in JSON format. These queries are typically executed
- * using {@link PowerShell} and mapped to
- * corresponding Java objects.
+ * and returns the result in JSON format.
  * </p>
- *
  *
  * @since 1.0.0
  */

@@ -5,8 +5,6 @@
  */
 package io.github.eggy03.cimari.service.storage;
 
-import com.profesorfalken.jpowershell.PowerShell;
-import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.mapping.storage.Win32DiskDriveMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
@@ -27,52 +25,9 @@ import java.util.List;
  *
  * <h2>Usage examples</h2>
  * <pre>{@code
- * // Convenience API (creates its own short-lived session)
- * Win32DiskDriveService service = new Win32DiskDriveService();
- * List<Win32DiskDrive> drives = service.get();
- *
- * // API with re-usable session (caller manages session lifecycle)
- * try (PowerShell session = PowerShell.openSession()) {
- *     Win32DiskDriveService service = new Win32DiskDriveService();
- *     List<Win32DiskDrive> drives = service.get(session);
- * }
- *
- * // API with execution timeout (auto-created session is terminated if the timeout is exceeded)
  * Win32DiskDriveService service = new Win32DiskDriveService();
  * List<Win32DiskDrive> drives = service.get(10);
  * }</pre>
- *
- * <h2>Execution models and concurrency</h2>
- * <p>
- * This service supports multiple PowerShell execution strategies:
- * </p>
- *
- * <ul>
- *   <li>
- *     <b>jPowerShell-based execution</b> via {@link #get()} and
- *     {@link #get(PowerShell)}:
- *     <br>
- *     These methods rely on {@code jPowerShell} sessions. Due to internal
- *     global configuration of {@code jPowerShell}, the PowerShell sessions
- *     launched by it is <b>not safe to use concurrently across multiple
- *     threads or executors</b>. Running these methods in parallel may result
- *     in runtime exceptions.
- *   </li>
- *
- *   <li>
- *     <b>Isolated PowerShell execution</b> via {@link #get(long timeout)}:
- *     <br>
- *     This method doesn't rely on {@code jPowerShell} and instead, launches a
- *     standalone PowerShell process per invocation using
- *     {@link TerminalUtility}. Each call is fully isolated and
- *     <b>safe to use in multithreaded and executor-based environments</b>.
- *   </li>
- * </ul>
- *
- * <p>
- * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
- * </p>
- *
  *
  * @since 1.0.0
  */
@@ -94,7 +49,6 @@ public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDr
      * @since 1.0.0
      */
     @Override
-    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32DiskDrive> get(long timeout) {
         String command = Cimv2.WIN32_DISK_DRIVE.getQuery();
         String response = TerminalUtility.executeCommand(command, timeout);

@@ -5,8 +5,6 @@
  */
 package io.github.eggy03.cimari.service.compounded;
 
-import com.profesorfalken.jpowershell.PowerShell;
-import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
 import io.github.eggy03.cimari.entity.compounded.Win32DiskDriveToPartitionAndLogicalDisk;
 import io.github.eggy03.cimari.entity.compounded.Win32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.mapping.compounded.Win32DiskPartitionToLogicalDiskMapper;
@@ -34,51 +32,9 @@ import java.util.List;
  *
  * <h2>Usage examples</h2>
  * <pre>{@code
- * // Convenience API (creates its own short-lived session)
- * Win32DiskPartitionToLogicalDiskService service = new Win32DiskPartitionToLogicalDiskService();
- * List<Win32DiskPartitionToLogicalDisk> disks = service.get();
- *
- * // API with re-usable session (caller manages session lifecycle)
- * try (PowerShell session = PowerShell.openSession()) {
- *     List<Win32DiskPartitionToLogicalDisk> disks = service.get(session);
- * }
- *
- * // API with execution timeout (auto-created session is terminated if the timeout is exceeded)
  * Win32DiskPartitionToLogicalDiskService service = new Win32DiskPartitionToLogicalDiskService();
  * List<Win32DiskPartitionToLogicalDisk> disks = service.get(10);
  * }</pre>
- *
- * <h2>Execution models and concurrency</h2>
- * <p>
- * This service supports multiple PowerShell execution strategies:
- * </p>
- *
- * <ul>
- *   <li>
- *     <b>jPowerShell-based execution</b> via {@link #get()} and
- *     {@link #get(PowerShell)}:
- *     <br>
- *     These methods rely on {@code jPowerShell} sessions. Due to internal
- *     global configuration of {@code jPowerShell}, the PowerShell sessions
- *     launched by it is <b>not safe to use concurrently across multiple
- *     threads or executors</b>. Running these methods in parallel may result
- *     in runtime exceptions.
- *   </li>
- *
- *   <li>
- *     <b>Isolated PowerShell execution</b> via {@link #get(long timeout)}:
- *     <br>
- *     This method doesn't rely on {@code jPowerShell} and instead, launches a
- *     standalone PowerShell process per invocation using
- *     {@link TerminalUtility}. Each call is fully isolated and
- *     <b>safe to use in multithreaded and executor-based environments</b>.
- *   </li>
- * </ul>
- *
- * <p>
- * For concurrent or executor-based workloads, prefer {@link #get(long timeout)}.
- * </p>
- *
  *
  * @see Win32DiskDriveToPartitionAndLogicalDisk
  * @see Win32DiskDriveService
@@ -106,7 +62,6 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
      * @since 1.0.0
      */
     @Override
-    @IsolatedPowerShell
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get(long timeout) {
 
         String command = ScriptUtility.loadScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL.getScriptPath());

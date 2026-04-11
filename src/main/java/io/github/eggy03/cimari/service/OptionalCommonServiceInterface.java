@@ -5,7 +5,6 @@
  */
 package io.github.eggy03.cimari.service;
 
-import com.profesorfalken.jpowershell.PowerShell;
 import io.github.eggy03.cimari.mapping.CommonMappingInterface;
 import io.github.eggy03.cimari.utility.TerminalUtility;
 
@@ -27,8 +26,8 @@ import java.util.Optional;
 public interface OptionalCommonServiceInterface<S> {
 
     /**
-     * Implementations of this method are expected to skip {@link PowerShell} entirely and rely on
-     * {@link TerminalUtility} instead for PowerShell session management
+     * Implementations of this method are expected to rely on
+     * {@link TerminalUtility} to launch a PowerShell session, execute commands
      * and then map the results to the expected entity types using a custom implementation
      * or the default methods of {@link CommonMappingInterface}
      *
