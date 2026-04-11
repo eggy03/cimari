@@ -4,13 +4,12 @@
  * SPDX-FileCopyrightText: 2026 Cimari contributors
  */
 /**
- * Contains classes responsible for deserializing PowerShell JSON output
- * to entity classes defined in the entity package.
+ * Contains classes responsible for deserializing JSON output into typed entities
  *
  * <p>Mapping classes in this package are typically:</p>
  * <ul>
  *   <li>Utilized by classes in the {@link io.github.eggy03.cimari.service} package</li>
- *   <li>where they map the resulting JSON output from PowerShell</li>
+ *   <li>where they map the resulting service output</li>
  *   <li>into instances of entity classes defined in the {@link io.github.eggy03.cimari.entity} package</li>
  * </ul>
  * <p>

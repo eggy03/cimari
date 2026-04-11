@@ -10,7 +10,7 @@ import io.github.eggy03.cimari.mapping.CommonMappingInterface;
 
 /**
  * Provides a type-safe implementation of {@link CommonMappingInterface}
- * and maps JSON strings from PowerShell to objects or lists of {@link Win32Processor}
+ * and maps the received JSON strings to objects or lists of {@link Win32Processor}
  *
  * @since 1.0.0
  */
