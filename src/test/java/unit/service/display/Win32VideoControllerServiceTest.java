@@ -11,8 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.entity.display.Win32VideoController;
 import io.github.eggy03.cimari.service.display.Win32VideoControllerService;
 import io.github.eggy03.cimari.utility.TerminalUtility;
@@ -29,12 +27,9 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 class Win32VideoControllerServiceTest {
 
@@ -125,91 +120,6 @@ class Win32VideoControllerServiceTest {
     @BeforeEach
     void setUp() {
         service = new Win32VideoControllerService();
-    }
-
-    @Test
-    void test_get_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (MockedStatic<PowerShell> mockedPowershell = mockStatic(PowerShell.class)) {
-            mockedPowershell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32VideoController> videoControllers = service.get();
-            assertEquals(2, videoControllers.size());
-
-            assertThat(videoControllers.get(0)).usingRecursiveComparison().isEqualTo(expectedGpu1);
-            assertThat(videoControllers.get(1)).usingRecursiveComparison().isEqualTo(expectedGpu2);
-        }
-    }
-
-    @Test
-    void test_get_emptyJson_returnsEmptyList() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (MockedStatic<PowerShell> mockedPowerShell = mockStatic(PowerShell.class)) {
-            mockedPowerShell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32VideoController> controllers = service.get();
-            assertTrue(controllers.isEmpty());
-        }
-    }
-
-    @Test
-    void test_get_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("not valid json");
-
-        try (MockedStatic<PowerShell> mockedPowerShell = mockStatic(PowerShell.class)) {
-            mockedPowerShell.when(() -> PowerShell.executeSingleCommand(anyString()))
-                    .thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get());
-        }
-    }
-
-    @Test
-    void test_getWithSession_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32VideoController> videoControllers = service.get(mockShell);
-            assertEquals(2, videoControllers.size());
-
-            assertThat(videoControllers.get(0)).usingRecursiveComparison().isEqualTo(expectedGpu1);
-            assertThat(videoControllers.get(1)).usingRecursiveComparison().isEqualTo(expectedGpu2);
-        }
-    }
-
-    @Test
-    void test_getWithSession_emptyJson_returnsEmptyList() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32VideoController> videoControllers = service.get(mockShell);
-            assertTrue(videoControllers.isEmpty());
-        }
-    }
-
-    @Test
-    void test_getWithSession_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("not valid json");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get(mockShell));
-        }
     }
 
     @Test

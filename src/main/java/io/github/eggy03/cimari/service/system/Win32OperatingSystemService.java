@@ -6,15 +6,12 @@
 package io.github.eggy03.cimari.service.system;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.system.Win32OperatingSystem;
 import io.github.eggy03.cimari.mapping.system.Win32OperatingSystemMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -81,42 +78,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32OperatingSystemService implements CommonServiceInterface<Win32OperatingSystem> {
-
-    /**
-     * Retrieves an immutable list of operating systems present on the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32OperatingSystem} objects representing the system's operating systems.
-     * Returns an empty list if none are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32OperatingSystem> get() {
-
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_OPERATING_SYSTEM.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32OperatingSystemMapper().mapToList(response.getCommandOutput(), Win32OperatingSystem.class);
-    }
-
-    /**
-     * Retrieves an immutable list of operating systems using the caller's {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link Win32OperatingSystem} objects representing the system's operating systems.
-     * Returns an empty list if none are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32OperatingSystem> get(@NonNull PowerShell powerShell) {
-
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_OPERATING_SYSTEM.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32OperatingSystemMapper().mapToList(response.getCommandOutput(), Win32OperatingSystem.class);
-    }
 
     /**
      * Retrieves an immutable list of operating systems installed in the system

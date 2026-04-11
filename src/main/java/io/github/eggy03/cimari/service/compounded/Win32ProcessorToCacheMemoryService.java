@@ -6,11 +6,8 @@
 package io.github.eggy03.cimari.service.compounded;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.compounded.Win32ProcessorToCacheMemory;
-import io.github.eggy03.cimari.exception.ResourceOperationException;
 import io.github.eggy03.cimari.mapping.compounded.Win32ProcessorToCacheMemoryMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.service.processor.Win32AssociatedProcessorMemoryService;
@@ -19,13 +16,10 @@ import io.github.eggy03.cimari.service.processor.Win32ProcessorService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.shell.script.ScriptUtility;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -90,55 +84,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32ProcessorToCacheMemoryService implements CommonServiceInterface<Win32ProcessorToCacheMemory> {
-
-    /**
-     * Retrieves an immutable list of processors and related cache information connected to the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32ProcessorToCacheMemory} objects.
-     * Returns an empty list if no processors and related cache information are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get() {
-
-        try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath())) {
-
-            PowerShellResponse response = shell.executeScript(scriptBuffer);
-            log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-            return new Win32ProcessorToCacheMemoryMapper().mapToList(response.getCommandOutput(), Win32ProcessorToCacheMemory.class);
-
-        } catch (IOException e) {
-            throw new ResourceOperationException("Failed to execute script", e);
-        }
-    }
-
-    /**
-     * Retrieves an immutable list of processors and related cache information connected to the system using the caller's
-     * {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link Win32ProcessorToCacheMemory} objects
-     * Returns an empty list if no processors and related cache information are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(@NonNull PowerShell powerShell) {
-
-        try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath())) {
-
-            PowerShellResponse response = powerShell.executeScript(scriptBuffer);
-            log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-            return new Win32ProcessorToCacheMemoryMapper().mapToList(response.getCommandOutput(), Win32ProcessorToCacheMemory.class);
-
-        } catch (IOException e) {
-            throw new ResourceOperationException("Failed to execute script", e);
-        }
-    }
 
     /**
      * Retrieves an immutable list of processors and related cache information connected to the system

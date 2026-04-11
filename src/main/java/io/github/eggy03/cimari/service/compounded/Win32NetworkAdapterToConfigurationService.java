@@ -6,11 +6,8 @@
 package io.github.eggy03.cimari.service.compounded;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.compounded.Win32NetworkAdapterToConfiguration;
-import io.github.eggy03.cimari.exception.ResourceOperationException;
 import io.github.eggy03.cimari.mapping.compounded.Win32NetworkAdapterToConfigurationMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.service.network.Win32NetworkAdapterConfigurationService;
@@ -19,13 +16,10 @@ import io.github.eggy03.cimari.service.network.Win32NetworkAdapterSettingService
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.shell.script.ScriptUtility;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -91,55 +85,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32NetworkAdapterToConfigurationService implements CommonServiceInterface<Win32NetworkAdapterToConfiguration> {
-
-    /**
-     * Retrieves an immutable list of network adapters and related configuration connected in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32NetworkAdapterToConfiguration} objects representing connected network adapter and related configuration.
-     * Returns an empty list if no network adapter and related configuration are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get() {
-
-        try (PowerShell shell = PowerShell.openSession(); BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath())) {
-
-            PowerShellResponse response = shell.executeScript(scriptBuffer);
-            log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-            return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
-
-        } catch (IOException e) {
-            throw new ResourceOperationException("Failed to execute script", e);
-        }
-    }
-
-    /**
-     * Retrieves an immutable list of network adapters and related configuration connected in the system using the caller's
-     * {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link Win32NetworkAdapterToConfiguration} objects representing connected network adapter and related configuration.
-     * Returns an empty list if no network adapter and related configuration are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(@NonNull PowerShell powerShell) {
-
-        try (BufferedReader scriptBuffer = ScriptUtility.loadAsBufferedReader(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath())) {
-
-            PowerShellResponse response = powerShell.executeScript(scriptBuffer);
-            log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-            return new Win32NetworkAdapterToConfigurationMapper().mapToList(response.getCommandOutput(), Win32NetworkAdapterToConfiguration.class);
-
-        } catch (IOException e) {
-            throw new ResourceOperationException("Failed to execute script", e);
-        }
-    }
 
     /**
      * Retrieves an immutable list of network adapters and related configuration connected in the system

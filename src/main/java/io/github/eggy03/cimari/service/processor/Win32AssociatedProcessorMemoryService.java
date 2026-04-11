@@ -6,9 +6,7 @@
 package io.github.eggy03.cimari.service.processor;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.processor.Win32AssociatedProcessorMemory;
 import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
@@ -16,7 +14,6 @@ import io.github.eggy03.cimari.mapping.processor.Win32AssociatedProcessorMemoryM
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -83,42 +80,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32AssociatedProcessorMemoryService implements CommonServiceInterface<Win32AssociatedProcessorMemory> {
-
-    /**
-     * Retrieves an immutable list of {@link Win32AssociatedProcessorMemory} entities present in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32AssociatedProcessorMemory} objects representing the association between
-     * a {@link Win32Processor} and it's {@link Win32CacheMemory}. Returns an empty list if none are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32AssociatedProcessorMemory> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_ASSOCIATED_PROCESSOR_MEMORY.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32AssociatedProcessorMemoryMapper().mapToList(response.getCommandOutput(), Win32AssociatedProcessorMemory.class);
-    }
-
-    /**
-     * Retrieves an immutable list of {@link Win32AssociatedProcessorMemory} entities using the caller's {@link PowerShell} session.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32AssociatedProcessorMemory} objects representing the association between
-     * a {@link Win32Processor} and it's {@link Win32CacheMemory}. Returns an empty list if none are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32AssociatedProcessorMemory> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_ASSOCIATED_PROCESSOR_MEMORY.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32AssociatedProcessorMemoryMapper().mapToList(response.getCommandOutput(), Win32AssociatedProcessorMemory.class);
-    }
 
     /**
      * Retrieves an immutable list of {@link Win32AssociatedProcessorMemory} entities

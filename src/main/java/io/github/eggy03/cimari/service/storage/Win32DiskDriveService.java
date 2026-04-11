@@ -6,15 +6,12 @@
 package io.github.eggy03.cimari.service.storage;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.mapping.storage.Win32DiskDriveMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -81,42 +78,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDrive> {
-
-    /**
-     * Retrieves an immutable list of disk drives present in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32DiskDrive} objects representing the disk drives.
-     * Returns an empty list if no disk drives are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32DiskDrive> get() {
-
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_DISK_DRIVE.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32DiskDriveMapper().mapToList(response.getCommandOutput(), Win32DiskDrive.class);
-    }
-
-    /**
-     * Retrieves an immutable list of disk drives using the caller's {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link Win32DiskDrive} objects representing the disk drives.
-     * Returns an empty list if no disk drives are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32DiskDrive> get(@NonNull PowerShell powerShell) {
-
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_DISK_DRIVE.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32DiskDriveMapper().mapToList(response.getCommandOutput(), Win32DiskDrive.class);
-    }
 
     /**
      * Retrieves an immutable list of disk drives connected in the system.

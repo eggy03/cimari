@@ -26,28 +26,6 @@ import java.util.List;
  */
 public interface CommonServiceInterface<S> {
 
-    /**
-     * Implementations of this method are expected to query the PowerShell using methods
-     * that automatically handle the PowerShell process lifecycle
-     * and then map the results to the expected entity types using a custom implementation or
-     * the default methods of {@link CommonMappingInterface}
-     *
-     * @return a {@link List} of entities of type {@code <S>} defined by the caller
-     * @since 1.0.0
-     */
-    List<S> get();
-
-    /**
-     * Implementations of this method are expected to query the PowerShell using methods
-     * that delegate the responsibility of managing the PowerShell session to the caller
-     * and then map the results to the expected entity types using a custom implementation
-     * or the default methods of {@link CommonMappingInterface}
-     *
-     * @param powerShell the caller-managed PowerShell session passed to the method
-     * @return a {@link List} of entities of type {@code <S>} defined by the caller
-     * @since 1.0.0
-     */
-    List<S> get(PowerShell powerShell);
 
     /**
      * Implementations of this method are expected to skip {@link PowerShell} entirely and rely on

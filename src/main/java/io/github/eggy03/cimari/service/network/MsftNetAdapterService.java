@@ -6,15 +6,12 @@
 package io.github.eggy03.cimari.service.network;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
 import io.github.eggy03.cimari.mapping.network.MsftNetAdapterMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -81,40 +78,6 @@ import java.util.List;
  */
 @Slf4j
 public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdapter> {
-
-    /**
-     * Retrieves an immutable list of network adapters present in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link MsftNetAdapter} objects representing the system's network adapters.
-     * Returns an empty list if no adapters are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<MsftNetAdapter> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2.MSFT_NET_ADAPTER.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new MsftNetAdapterMapper().mapToList(response.getCommandOutput(), MsftNetAdapter.class);
-    }
-
-    /**
-     * Retrieves an immutable list of network adapters using the caller's {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link MsftNetAdapter} objects representing the system's network adapters.
-     * Returns an empty list if no adapters are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<MsftNetAdapter> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(StandardCimv2.MSFT_NET_ADAPTER.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new MsftNetAdapterMapper().mapToList(response.getCommandOutput(), MsftNetAdapter.class);
-    }
 
     /**
      * Retrieves an immutable list of network adapters connected to the system

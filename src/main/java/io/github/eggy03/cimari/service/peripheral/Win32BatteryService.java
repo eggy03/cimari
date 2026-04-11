@@ -6,15 +6,12 @@
 package io.github.eggy03.cimari.service.peripheral;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.peripheral.Win32Battery;
 import io.github.eggy03.cimari.mapping.peripheral.Win32BatteryMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -80,43 +77,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32BatteryService implements CommonServiceInterface<Win32Battery> {
-
-    /**
-     * Retrieves an immutable list of batteries present on the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32Battery} objects representing the system's batteries.
-     * If no batteries are present, returns an empty list.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32Battery> get() {
-
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_BATTERY.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32BatteryMapper().mapToList(response.getCommandOutput(), Win32Battery.class);
-    }
-
-    /**
-     * Retrieves an immutable list of batteries present on the system using the caller's
-     * {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link Win32Battery} objects representing the system's batteries.
-     * If no batteries are present, returns an empty list.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32Battery> get(@NonNull PowerShell powerShell) {
-
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_BATTERY.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32BatteryMapper().mapToList(response.getCommandOutput(), Win32Battery.class);
-    }
 
     /**
      * Retrieves an immutable list of batteries present on the system

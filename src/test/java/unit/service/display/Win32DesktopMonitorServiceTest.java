@@ -11,8 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.entity.display.Win32DesktopMonitor;
 import io.github.eggy03.cimari.service.display.Win32DesktopMonitorService;
 import io.github.eggy03.cimari.utility.TerminalUtility;
@@ -29,12 +27,9 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 class Win32DesktopMonitorServiceTest {
 
@@ -101,93 +96,6 @@ class Win32DesktopMonitorServiceTest {
     @BeforeEach
     void setUp() {
         service = new Win32DesktopMonitorService();
-    }
-
-    @Test
-    void test_get_success() {
-
-        PowerShellResponse mockedResponse = mock(PowerShellResponse.class);
-        when(mockedResponse.getCommandOutput()).thenReturn(json);
-
-        try (MockedStatic<PowerShell> powerShellMockedStatic = mockStatic(PowerShell.class)) {
-            powerShellMockedStatic.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockedResponse);
-
-            List<Win32DesktopMonitor> monitors = service.get();
-            assertEquals(2, monitors.size());
-
-            assertThat(monitors.get(0)).usingRecursiveComparison().isEqualTo(expectedMonitor1);
-            assertThat(monitors.get(1)).usingRecursiveComparison().isEqualTo(expectedMonitor2);
-        }
-    }
-
-    @Test
-    void test_get_empty() {
-
-        PowerShellResponse mockedResponse = mock(PowerShellResponse.class);
-        when(mockedResponse.getCommandOutput()).thenReturn("");
-
-        try (MockedStatic<PowerShell> powerShellMockedStatic = mockStatic(PowerShell.class)) {
-            powerShellMockedStatic.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockedResponse);
-
-            List<Win32DesktopMonitor> monitors = service.get();
-            assertTrue(monitors.isEmpty());
-        }
-    }
-
-    @Test
-    void test_get_malformedJson_throwsException() {
-
-        PowerShellResponse mockedResponse = mock(PowerShellResponse.class);
-        when(mockedResponse.getCommandOutput()).thenReturn("not a valid json");
-
-        try (MockedStatic<PowerShell> powerShellMockedStatic = mockStatic(PowerShell.class)) {
-            powerShellMockedStatic.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockedResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get());
-        }
-    }
-
-    @Test
-    void test_getWithSession_success() {
-
-        PowerShellResponse mockedResponse = mock(PowerShellResponse.class);
-        when(mockedResponse.getCommandOutput()).thenReturn(json);
-
-        try (PowerShell mockSession = mock(PowerShell.class)) {
-            when(mockSession.executeCommand(anyString())).thenReturn(mockedResponse);
-
-            List<Win32DesktopMonitor> monitors = service.get(mockSession);
-            assertEquals(2, monitors.size());
-
-            assertThat(monitors.get(0)).usingRecursiveComparison().isEqualTo(expectedMonitor1);
-            assertThat(monitors.get(1)).usingRecursiveComparison().isEqualTo(expectedMonitor2);
-        }
-    }
-
-    @Test
-    void test_getWithSession_empty() {
-
-        PowerShellResponse mockedResponse = mock(PowerShellResponse.class);
-        when(mockedResponse.getCommandOutput()).thenReturn("");
-
-        try (PowerShell mockSession = mock(PowerShell.class)) {
-            when(mockSession.executeCommand(anyString())).thenReturn(mockedResponse);
-
-            List<Win32DesktopMonitor> monitors = service.get(mockSession);
-            assertTrue(monitors.isEmpty());
-        }
-    }
-
-    @Test
-    void test_getWithSession_malformedJson_throwsException() {
-
-        PowerShellResponse mockedResponse = mock(PowerShellResponse.class);
-        when(mockedResponse.getCommandOutput()).thenReturn("not a valid json");
-
-        try (PowerShell mockSession = mock(PowerShell.class)) {
-            when(mockSession.executeCommand(anyString())).thenReturn(mockedResponse);
-            assertThrows(JsonSyntaxException.class, () -> service.get(mockSession));
-        }
     }
 
     @Test

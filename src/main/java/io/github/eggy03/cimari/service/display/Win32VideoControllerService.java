@@ -5,17 +5,13 @@
  */
 package io.github.eggy03.cimari.service.display;
 
-import com.google.gson.JsonSyntaxException;
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.display.Win32VideoController;
 import io.github.eggy03.cimari.mapping.display.Win32VideoControllerMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -82,45 +78,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32VideoControllerService implements CommonServiceInterface<Win32VideoController> {
-
-    /**
-     * Retrieves an immutable list of video controllers (GPUs) present in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32VideoController} objects representing the video controllers.
-     * Returns an empty list if none are detected.
-     * @throws JsonSyntaxException if there is an error executing the PowerShell command
-     *                             or parsing the output.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32VideoController> get() {
-
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_VIDEO_CONTROLLER.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32VideoControllerMapper().mapToList(response.getCommandOutput(), Win32VideoController.class);
-    }
-
-    /**
-     * Retrieves an immutable list of video controllers (GPUs) present in the system using the caller's
-     * {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link Win32VideoController} objects representing the video controllers.
-     * Returns an empty list if none are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32VideoController> get(@NonNull PowerShell powerShell) {
-
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_VIDEO_CONTROLLER.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32VideoControllerMapper().mapToList(response.getCommandOutput(), Win32VideoController.class);
-    }
 
     /**
      * Retrieves an immutable list of video controllers (GPUs) present in the system

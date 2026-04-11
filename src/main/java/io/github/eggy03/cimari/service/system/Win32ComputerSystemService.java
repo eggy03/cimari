@@ -6,15 +6,12 @@
 package io.github.eggy03.cimari.service.system;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.system.Win32ComputerSystem;
 import io.github.eggy03.cimari.mapping.system.Win32ComputerSystemMapper;
 import io.github.eggy03.cimari.service.OptionalCommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -80,43 +77,6 @@ import java.util.Optional;
  */
 @Slf4j
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
-
-    /**
-     * Retrieves an {@link Optional} containing the computer system information.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an {@link Optional} of {@link Win32ComputerSystem} representing
-     * the computer system. Returns {@link Optional#empty()} if no system information is detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull Optional<Win32ComputerSystem> get() {
-
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_COMPUTER_SYSTEM.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32ComputerSystemMapper().mapToObject(response.getCommandOutput(), Win32ComputerSystem.class);
-    }
-
-    /**
-     * Retrieves an {@link Optional} containing the computer system information
-     * using the caller's {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an {@link Optional} of {@link Win32ComputerSystem} representing
-     * the computer system. Returns {@link Optional#empty()} if no  information is detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull Optional<Win32ComputerSystem> get(@NonNull PowerShell powerShell) {
-
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_COMPUTER_SYSTEM.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32ComputerSystemMapper().mapToObject(response.getCommandOutput(), Win32ComputerSystem.class);
-    }
 
     /**
      * Retrieves an {@link Optional} containing the Computer System information

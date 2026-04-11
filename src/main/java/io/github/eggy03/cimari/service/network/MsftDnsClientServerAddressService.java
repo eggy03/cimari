@@ -6,15 +6,12 @@
 package io.github.eggy03.cimari.service.network;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.cimari.mapping.network.MsftDnsClientServerAddressMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -81,41 +78,6 @@ import java.util.List;
  */
 @Slf4j
 public class MsftDnsClientServerAddressService implements CommonServiceInterface<MsftDnsClientServerAddress> {
-
-    /**
-     * Retrieves an immutable list of DNS Server and Client configuration for all network adapters present in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link MsftDnsClientServerAddress} objects representing the DNS configs.
-     * Returns an empty list if no configs are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new MsftDnsClientServerAddressMapper().mapToList(response.getCommandOutput(), MsftDnsClientServerAddress.class);
-    }
-
-    /**
-     * Retrieves an immutable list of DNS Server and Client configuration for all network adapters
-     * present in the system using the caller's {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link MsftDnsClientServerAddress} objects representing the DNS configs.
-     * Returns an empty list if no configs are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new MsftDnsClientServerAddressMapper().mapToList(response.getCommandOutput(), MsftDnsClientServerAddress.class);
-    }
 
     /**
      * Retrieves an immutable list of DNS Server and Client configuration for all network adapters present in the system

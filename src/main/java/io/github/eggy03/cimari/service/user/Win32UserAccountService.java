@@ -6,15 +6,12 @@
 package io.github.eggy03.cimari.service.user;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.user.Win32UserAccount;
 import io.github.eggy03.cimari.mapping.user.Win32UserAccountMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -81,40 +78,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32UserAccountService implements CommonServiceInterface<Win32UserAccount> {
-
-    /**
-     * Retrieves an immutable list of user accounts present in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32UserAccount} objects representing the user accounts.
-     * Returns an empty list if no user accounts are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32UserAccount> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_USER_ACCOUNT.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32UserAccountMapper().mapToList(response.getCommandOutput(), Win32UserAccount.class);
-    }
-
-    /**
-     * Retrieves an immutable list of user accounts using the caller's {@link PowerShell} session.
-     *
-     * @param powerShell an existing PowerShell session managed by the caller
-     * @return an immutable list of {@link Win32UserAccount} objects representing the user accounts.
-     * Returns an empty list if no user accounts are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32UserAccount> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_USER_ACCOUNT.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32UserAccountMapper().mapToList(response.getCommandOutput(), Win32UserAccount.class);
-    }
 
     /**
      * Retrieves an immutable list of user accounts

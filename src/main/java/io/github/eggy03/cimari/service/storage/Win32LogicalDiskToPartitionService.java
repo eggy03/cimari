@@ -6,9 +6,7 @@
 package io.github.eggy03.cimari.service.storage;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.annotation.IsolatedPowerShell;
-import io.github.eggy03.cimari.annotation.UsesJPowerShell;
 import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
@@ -16,7 +14,6 @@ import io.github.eggy03.cimari.mapping.storage.Win32LogicalDiskToPartitionMapper
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -83,42 +80,6 @@ import java.util.List;
  */
 @Slf4j
 public class Win32LogicalDiskToPartitionService implements CommonServiceInterface<Win32LogicalDiskToPartition> {
-
-    /**
-     * Retrieves an immutable list of {@link Win32LogicalDiskToPartition} entities present in the system.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32LogicalDiskToPartition} objects representing the association between
-     * a {@link Win32DiskPartition} and a {@link Win32LogicalDisk}. Returns an empty list if none are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32LogicalDiskToPartition> get() {
-        PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION.getQuery());
-        log.trace("PowerShell response for auto-managed session :\n{}", response.getCommandOutput());
-        return new Win32LogicalDiskToPartitionMapper().mapToList(response.getCommandOutput(), Win32LogicalDiskToPartition.class);
-    }
-
-    /**
-     * Retrieves an immutable list of {@link Win32LogicalDiskToPartition} entities using the caller's {@link PowerShell} session.
-     * <p>
-     * Each invocation creates and uses a short-lived PowerShell session internally.
-     * </p>
-     *
-     * @return an immutable list of {@link Win32LogicalDiskToPartition} objects representing the association between
-     * a {@link Win32DiskPartition} and a {@link Win32LogicalDisk}. Returns an empty list if none are detected.
-     * @since 1.0.0
-     */
-    @Override
-    @UsesJPowerShell
-    public @NotNull @Unmodifiable List<Win32LogicalDiskToPartition> get(@NonNull PowerShell powerShell) {
-        PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION.getQuery());
-        log.trace("PowerShell response for self-managed session :\n{}", response.getCommandOutput());
-        return new Win32LogicalDiskToPartitionMapper().mapToList(response.getCommandOutput(), Win32LogicalDiskToPartition.class);
-    }
 
     /**
      * Retrieves an immutable list of {@link Win32LogicalDiskToPartition} entities
