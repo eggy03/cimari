@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Enum representing the predefined WMI (CIM) queries for the classes available in the {@code root/cimv2} namespace.
+ * Enum representing the predefined WMI Win32 Class queries for the classes available in the {@code root/cimv2} namespace.
  * <p>
  * Each constant holds a PowerShell query that queries a specific class in the namespace
  * and returns the result in JSON format.
