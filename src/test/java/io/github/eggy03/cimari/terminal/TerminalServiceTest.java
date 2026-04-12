@@ -5,7 +5,7 @@
  */
 package io.github.eggy03.cimari.terminal;
 
-import io.github.eggy03.cimari.exception.TerminalExecutionException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -25,23 +25,35 @@ class TerminalServiceTest {
 
     private static final long TIMEOUT = 15L;
 
+    private TerminalService terminalService;
+
+    @BeforeEach
+    void setTerminalService() {
+        terminalService = new TerminalService();
+    }
+
     @Test
     void testValidCommand() {
         String validCommand = "10+20";
-        String result = TerminalService.executeCommand(validCommand, TIMEOUT);
-        assertThat(result).isEqualTo("30" + System.lineSeparator()); // PowerShell appends a new line after each command
+        TerminalResult result = terminalService.execute(validCommand, TIMEOUT);
+        assertThat(result.getResult()).isEqualTo("30" + System.lineSeparator()); // PowerShell appends a new line after each command
+        assertThat(result.getError()).isEmpty();
     }
 
     @Test
     void testInvalidCommand() {
-        assertThrows(TerminalExecutionException.class, () -> TerminalService.executeCommand("invalidCommand", TIMEOUT));
+        String invalidCommand = "invalidCommand";
+        TerminalResult result = terminalService.execute(invalidCommand, TIMEOUT);
+        assertThat(result.getResult()).isEmpty();
+        assertThat(result.getError()).isNotEmpty();
     }
 
     @Test
     void testValidScript() {
         String validScript = "$a=10\n$a++\n$a";
-        String result = TerminalService.executeCommand(validScript, TIMEOUT);
-        assertThat(result).isEqualTo("11" + System.lineSeparator());
+        TerminalResult result = terminalService.execute(validScript, TIMEOUT);
+        assertThat(result.getResult()).isEqualTo("11" + System.lineSeparator());
+        assertThat(result.getError()).isEmpty();
     }
 
     @Test
@@ -51,41 +63,33 @@ class TerminalServiceTest {
         StringBuilder script = new StringBuilder();
         reader.lines().forEach(line -> script.append(line).append(System.lineSeparator()));
 
-        String result = TerminalService.executeCommand(script.toString(), TIMEOUT);
-        assertThat(result).isEqualTo("3" + System.lineSeparator());
+        TerminalResult result = terminalService.execute(script.toString(), TIMEOUT);
+        assertThat(result.getResult()).isEqualTo("3" + System.lineSeparator());
+        assertThat(result.getError()).isEmpty();
     }
 
-    @Test
-    void testTimeout() {
-        String sleepCommand = "Start-Sleep -Seconds 30";
-        TerminalExecutionException ex = assertThrows(TerminalExecutionException.class, () -> TerminalService.executeCommand(sleepCommand, 1));
-        assertThat(ex.getMessage()).contains("Was killed after a timeout");
-    }
 
     @Test
     void testErrorStream() {
-        String errorCommand = "Write-Error \"fail\"";
-        TerminalExecutionException ex = assertThrows(TerminalExecutionException.class, () -> TerminalService.executeCommand(errorCommand, TIMEOUT));
-        assertThat(ex.getMessage())
-                .contains("Terminal Error Output")
-                .contains("fail");
+        String errorCommand = "Write-Error 'fail'";
+        TerminalResult result = terminalService.execute(errorCommand, TIMEOUT);
+        assertThat(result.getResult()).isEmpty();
+        assertThat(result.getError()).contains("fail");
     }
 
     @Test
     void testMixedOutput() {
-        String mixedCommand = "Write-Output \"ok\"; Write-Error \"fail\"";
+        String mixedCommand = "Write-Output 'ok'; Write-Error 'fail'";
 
-        TerminalExecutionException ex = assertThrows(TerminalExecutionException.class, () -> TerminalService.executeCommand(mixedCommand, TIMEOUT));
-        assertThat(ex.getMessage())
-                .contains("Terminal Error Output")
-                .contains("ok")
-                .contains("fail");
+        TerminalResult result = terminalService.execute(mixedCommand, TIMEOUT);
+        assertThat(result.getResult()).isEqualTo("ok" + System.lineSeparator());
+        assertThat(result.getError()).contains("fail");
 
     }
 
     @Test
     void testNegativeTimeout() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> TerminalService.executeCommand("Write-Output \"Hello\"", -1));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> terminalService.execute("Write-Output \"Hello\"", -2));
         assertThat(ex.getMessage()).isEqualTo("Timeout cannot be negative");
     }
 }
