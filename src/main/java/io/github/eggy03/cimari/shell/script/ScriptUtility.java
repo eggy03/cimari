@@ -29,7 +29,7 @@ import java.util.Iterator;
  * @since 1.0.0
  */
 @UtilityClass
-public class ScriptUtility {
+class ScriptUtility {
 
     /**
      * Loads a PowerShell script from the classpath and wraps it in a {@link BufferedReader}.
@@ -42,7 +42,7 @@ public class ScriptUtility {
      * @since 1.0.0
      */
     @NotNull
-    public static BufferedReader loadAsBufferedReader(@NonNull String scriptPath) {
+    static BufferedReader loadAsBufferedReader(@NonNull String scriptPath) {
 
         InputStream resource = ScriptUtility.class.getResourceAsStream(scriptPath);
         if (resource == null)
@@ -69,7 +69,7 @@ public class ScriptUtility {
      * @since 1.0.0
      */
     @NotNull
-    public static String loadScript(@NonNull String scriptPath) {
+    static String loadScript(@NonNull String scriptPath) {
 
         InputStream resource = ScriptUtility.class.getResourceAsStream(scriptPath);
         if (resource == null)

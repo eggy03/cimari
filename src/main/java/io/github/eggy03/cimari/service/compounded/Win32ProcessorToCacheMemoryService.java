@@ -12,7 +12,6 @@ import io.github.eggy03.cimari.service.processor.Win32AssociatedProcessorMemoryS
 import io.github.eggy03.cimari.service.processor.Win32CacheMemoryService;
 import io.github.eggy03.cimari.service.processor.Win32ProcessorService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
-import io.github.eggy03.cimari.shell.script.ScriptUtility;
 import io.github.eggy03.cimari.terminal.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +57,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
     @Override
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
 
-        String command = ScriptUtility.loadScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScriptPath());
+        String command = ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScript();
         String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32ProcessorToCacheMemoryMapper().mapToList(response, Win32ProcessorToCacheMemory.class);

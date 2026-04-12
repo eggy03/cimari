@@ -14,7 +14,6 @@ import io.github.eggy03.cimari.service.storage.Win32DiskPartitionService;
 import io.github.eggy03.cimari.service.storage.Win32LogicalDiskService;
 import io.github.eggy03.cimari.service.storage.Win32LogicalDiskToPartitionService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
-import io.github.eggy03.cimari.shell.script.ScriptUtility;
 import io.github.eggy03.cimari.terminal.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +62,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
     @Override
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {
 
-        String script = ScriptUtility.loadScript(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScriptPath());
+        String script = ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL.getScript();
         String response = TerminalService.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(response, Win32DiskDriveToPartitionAndLogicalDisk.class);

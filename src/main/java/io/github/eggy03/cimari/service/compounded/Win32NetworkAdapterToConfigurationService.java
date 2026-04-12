@@ -12,7 +12,6 @@ import io.github.eggy03.cimari.service.network.Win32NetworkAdapterConfigurationS
 import io.github.eggy03.cimari.service.network.Win32NetworkAdapterService;
 import io.github.eggy03.cimari.service.network.Win32NetworkAdapterSettingService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
-import io.github.eggy03.cimari.shell.script.ScriptUtility;
 import io.github.eggy03.cimari.terminal.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +58,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(long timeout) {
 
-        String command = ScriptUtility.loadScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScriptPath());
+        String command = ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION.getScript();
         String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32NetworkAdapterToConfigurationMapper().mapToList(response, Win32NetworkAdapterToConfiguration.class);

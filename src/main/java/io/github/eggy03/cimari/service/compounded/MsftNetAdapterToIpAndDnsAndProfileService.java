@@ -13,7 +13,6 @@ import io.github.eggy03.cimari.service.network.MsftNetAdapterService;
 import io.github.eggy03.cimari.service.network.MsftNetConnectionProfileService;
 import io.github.eggy03.cimari.service.network.MsftNetIpAddressService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
-import io.github.eggy03.cimari.shell.script.ScriptUtility;
 import io.github.eggy03.cimari.terminal.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +61,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
 
-        String script = ScriptUtility.loadScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScriptPath());
+        String script = ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE.getScript();
         String response = TerminalService.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(response, MsftNetAdapterToIpAndDnsAndProfile.class);
