@@ -10,8 +10,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.entity.system.Win32ComputerSystem;
 import io.github.eggy03.cimari.service.system.Win32ComputerSystemService;
 import io.github.eggy03.cimari.utility.TerminalUtility;
@@ -29,14 +27,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 class Win32ComputerSystemServiceTest {
 
@@ -141,86 +136,6 @@ class Win32ComputerSystemServiceTest {
     @BeforeEach
     void setUp() {
         service = new Win32ComputerSystemService();
-    }
-
-    @Test
-    void test_get_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (MockedStatic<PowerShell> mockedPowershell = mockStatic(PowerShell.class)) {
-            mockedPowershell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            Optional<Win32ComputerSystem> system = service.get();
-            assertTrue(system.isPresent());
-            assertThat(system.get()).usingRecursiveComparison().isEqualTo(expectedComputerSystem);
-        }
-    }
-
-    @Test
-    void test_get_emptyJson_returnsEmpty() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (MockedStatic<PowerShell> mockedPowershell = mockStatic(PowerShell.class)) {
-            mockedPowershell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            Optional<Win32ComputerSystem> system = service.get();
-            assertFalse(system.isPresent());
-        }
-    }
-
-    @Test
-    void test_get_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("invalid json");
-
-        try (MockedStatic<PowerShell> mockedPowershell = mockStatic(PowerShell.class)) {
-            mockedPowershell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get());
-        }
-    }
-
-    @Test
-    void test_getWithSession_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            Optional<Win32ComputerSystem> system = service.get(mockShell);
-            assertTrue(system.isPresent());
-            assertThat(system.get()).usingRecursiveComparison().isEqualTo(expectedComputerSystem);
-        }
-    }
-
-    @Test
-    void test_getWithSession_emptyJson_returnsEmpty() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            Optional<Win32ComputerSystem> system = service.get(mockShell);
-            assertFalse(system.isPresent());
-        }
-    }
-
-    @Test
-    void test_getWithSession_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("invalid json");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get(mockShell));
-        }
     }
 
     @Test

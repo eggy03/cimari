@@ -11,8 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.entity.processor.Win32AssociatedProcessorMemory;
 import io.github.eggy03.cimari.service.processor.Win32AssociatedProcessorMemoryService;
 import io.github.eggy03.cimari.utility.TerminalUtility;
@@ -29,12 +27,9 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 class Win32AssociatedProcessorMemoryTest {
 
@@ -78,85 +73,6 @@ class Win32AssociatedProcessorMemoryTest {
     @BeforeEach
     void setApmService() {
         service = new Win32AssociatedProcessorMemoryService();
-    }
-
-    @Test
-    void test_get_success() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (MockedStatic<PowerShell> powerShellMock = mockStatic(PowerShell.class)) {
-            powerShellMock.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32AssociatedProcessorMemory> apmList = service.get();
-            assertEquals(2, apmList.size());
-
-            assertThat(apmList.get(0)).usingRecursiveComparison().isEqualTo(expectedAssoc1);
-            assertThat(apmList.get(1)).usingRecursiveComparison().isEqualTo(expectedAssoc2);
-        }
-
-    }
-
-    @Test
-    void test_get_emptyJson_emptyResult() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (MockedStatic<PowerShell> powerShellMockedStatic = mockStatic(PowerShell.class)) {
-            powerShellMockedStatic.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-            List<Win32AssociatedProcessorMemory> apmList = service.get();
-            assertTrue(apmList.isEmpty());
-        }
-    }
-
-    @Test
-    void test_get_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("invalid json");
-
-        try (MockedStatic<PowerShell> powerShellMockedStatic = mockStatic(PowerShell.class)) {
-            powerShellMockedStatic.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-            assertThrows(JsonSyntaxException.class, () -> service.get());
-        }
-    }
-
-    @Test
-    void test_getWithSession_success() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (PowerShell mockedShell = mock(PowerShell.class)) {
-            when(mockedShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32AssociatedProcessorMemory> apmList = service.get(mockedShell);
-            assertEquals(2, apmList.size());
-
-            assertThat(apmList.get(0)).usingRecursiveComparison().isEqualTo(expectedAssoc1);
-            assertThat(apmList.get(1)).usingRecursiveComparison().isEqualTo(expectedAssoc2);
-        }
-    }
-
-    @Test
-    void test_getWithSession_emptyJson_emptyResult() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-            List<Win32AssociatedProcessorMemory> apmList = service.get(mockShell);
-            assertTrue(apmList.isEmpty());
-        }
-    }
-
-    @Test
-    void test_getWithSession_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("malformed json");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-            assertThrows(JsonSyntaxException.class, () -> service.get(mockShell));
-        }
     }
 
     @Test

@@ -26,7 +26,6 @@ import java.util.Iterator;
  * <b>For Internal Use Only</b>
  * </p>
  *
- *
  * @since 1.0.0
  */
 @UtilityClass

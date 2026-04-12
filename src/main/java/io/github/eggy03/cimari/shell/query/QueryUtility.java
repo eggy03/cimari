@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 /**
- * A utility class that provides helper methods that use Java reflection
+ * A utility class that provides helper methods that use Java reflection for aiding in dynamic query construction
  * <p>
  * <b>For internal use only</b>
  *

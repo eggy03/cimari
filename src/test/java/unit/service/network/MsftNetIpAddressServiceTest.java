@@ -12,8 +12,6 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import io.github.eggy03.cimari.service.network.MsftNetIpAddressService;
 import io.github.eggy03.cimari.utility.TerminalUtility;
@@ -30,12 +28,9 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 class MsftNetIpAddressServiceTest {
 
@@ -128,94 +123,9 @@ class MsftNetIpAddressServiceTest {
         json = new GsonBuilder().serializeNulls().create().toJson(addresses);
     }
 
-
     @BeforeEach
     void setUp() {
         service = new MsftNetIpAddressService();
-    }
-
-    @Test
-    void test_get_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (MockedStatic<PowerShell> powerShellMock = mockStatic(PowerShell.class)) {
-            powerShellMock.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<MsftNetIpAddress> ip = service.get();
-            assertEquals(2, ip.size());
-
-            assertThat(ip.get(0)).usingRecursiveComparison().isEqualTo(expectedIPv4Address);
-            assertThat(ip.get(1)).usingRecursiveComparison().isEqualTo(expectedIPv6Address);
-        }
-    }
-
-    @Test
-    void test_get_empty() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (MockedStatic<PowerShell> powerShellMock = mockStatic(PowerShell.class)) {
-            powerShellMock.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<MsftNetIpAddress> ip = service.get();
-            assertTrue(ip.isEmpty());
-        }
-    }
-
-    @Test
-    void test_get_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("not a json");
-
-        try (MockedStatic<PowerShell> powerShellMock = mockStatic(PowerShell.class)) {
-            powerShellMock.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get());
-        }
-    }
-
-    @Test
-    void test_getWithSession_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<MsftNetIpAddress> ip = service.get(mockShell);
-            assertEquals(2, ip.size());
-
-            assertThat(ip.get(0)).usingRecursiveComparison().isEqualTo(expectedIPv4Address);
-            assertThat(ip.get(1)).usingRecursiveComparison().isEqualTo(expectedIPv6Address);
-        }
-    }
-
-    @Test
-    void test_getWithSession_empty() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<MsftNetIpAddress> ip = service.get(mockShell);
-            assertTrue(ip.isEmpty());
-        }
-    }
-
-    @Test
-    void test_getWithSession_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("not a json");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get(mockShell));
-        }
     }
 
     @Test

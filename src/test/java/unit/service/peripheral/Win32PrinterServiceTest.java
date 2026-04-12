@@ -12,8 +12,6 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.entity.peripheral.Win32Printer;
 import io.github.eggy03.cimari.service.peripheral.Win32PrinterService;
 import io.github.eggy03.cimari.utility.TerminalUtility;
@@ -31,12 +29,9 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 class Win32PrinterServiceTest {
 
@@ -140,90 +135,6 @@ class Win32PrinterServiceTest {
     @BeforeEach
     void setUp() {
         service = new Win32PrinterService();
-    }
-
-    @Test
-    void test_get_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (MockedStatic<PowerShell> powerShellMock = mockStatic(PowerShell.class)) {
-            powerShellMock.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32Printer> printers = service.get();
-            assertEquals(2, printers.size());
-
-            assertThat(printers.get(0)).usingRecursiveComparison().isEqualTo(expectedPrinter1);
-            assertThat(printers.get(1)).usingRecursiveComparison().isEqualTo(expectedPrinter2);
-        }
-    }
-
-    @Test
-    void test_get_empty() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (MockedStatic<PowerShell> powerShellMock = mockStatic(PowerShell.class)) {
-            powerShellMock.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32Printer> printers = service.get();
-            assertTrue(printers.isEmpty());
-        }
-    }
-
-    @Test
-    void test_get_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("not a json");
-
-        try (MockedStatic<PowerShell> powerShellMock = mockStatic(PowerShell.class)) {
-            powerShellMock.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get());
-        }
-    }
-
-    @Test
-    void test_getWithSession_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (PowerShell mockSession = mock(PowerShell.class)) {
-            when(mockSession.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32Printer> printers = service.get(mockSession);
-            assertEquals(2, printers.size());
-
-            assertThat(printers.get(0)).usingRecursiveComparison().isEqualTo(expectedPrinter1);
-            assertThat(printers.get(1)).usingRecursiveComparison().isEqualTo(expectedPrinter2);
-        }
-    }
-
-    @Test
-    void test_getWithSession_empty() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (PowerShell mockSession = mock(PowerShell.class)) {
-            when(mockSession.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32Printer> printers = service.get(mockSession);
-            assertTrue(printers.isEmpty());
-        }
-    }
-
-    @Test
-    void test_getWithSession_malformedJson_throwsException() {
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("not a json");
-
-        try (PowerShell mockSession = mock(PowerShell.class)) {
-            when(mockSession.executeCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get(mockSession));
-        }
     }
 
     @Test

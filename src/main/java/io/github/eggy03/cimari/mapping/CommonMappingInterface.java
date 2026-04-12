@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * A common mapping interface for mapping JSON strings to Java objects.
  * <p>
- * Provides default methods to convert JSON responses
+ * Provides default methods to deserialize JSON responses
  * into either a {@link List} of objects or a single {@link Optional} object.
  * The default methods in this interface use Gson for JSON deserialization.
  * </p>
@@ -36,7 +36,7 @@ public interface CommonMappingInterface<S> {
     Gson GSON = new Gson();
 
     /**
-     * Converts a JSON string into a list of objects of the specified type {@code <S>}.
+     * Deserializes a JSON string into a list of objects of the specified type {@code <S>}.
      * <p>
      * If the JSON represents a single object, it is returned as a singleton list.
      * If the JSON is null or empty, returns an empty list.
@@ -81,7 +81,7 @@ public interface CommonMappingInterface<S> {
     }
 
     /**
-     * Converts a JSON string into an {@link Optional} object of the specified type {@code <S>}.
+     * Deserializes a JSON string into an {@link Optional} object of the specified type {@code <S>}.
      * <p>
      * Useful for implementing the mappers classes which return exactly one instance
      * such as the {@code Win32_ComputerSystem} WMI class

@@ -11,8 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.service.processor.Win32CacheMemoryService;
 import io.github.eggy03.cimari.utility.TerminalUtility;
@@ -29,12 +27,9 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 class Win32CacheMemoryServiceTest {
 
@@ -143,96 +138,6 @@ class Win32CacheMemoryServiceTest {
     @BeforeEach
     void setUp() {
         service = new Win32CacheMemoryService();
-    }
-
-    @Test
-    void test_get_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (MockedStatic<PowerShell> mockedPowershell = mockStatic(PowerShell.class)) {
-            mockedPowershell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32CacheMemory> cache = service.get();
-            assertEquals(3, cache.size());
-
-            assertThat(cache.get(0)).usingRecursiveComparison().isEqualTo(expectedL1Cache);
-            assertThat(cache.get(1)).usingRecursiveComparison().isEqualTo(expectedL2Cache);
-            assertThat(cache.get(2)).usingRecursiveComparison().isEqualTo(expectedL3Cache);
-        }
-    }
-
-    @Test
-    void test_get_emptyJson_empty() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (MockedStatic<PowerShell> mockedPowershell = mockStatic(PowerShell.class)) {
-            mockedPowershell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32CacheMemory> cache = service.get();
-            assertTrue(cache.isEmpty());
-        }
-    }
-
-    @Test
-    void test_get_malformedJson_throwsException() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("invalid json");
-
-        try (MockedStatic<PowerShell> mockedPowershell = mockStatic(PowerShell.class)) {
-            mockedPowershell.when(() -> PowerShell.executeSingleCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get());
-        }
-    }
-
-    @Test
-    void test_getWithSession_success() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn(json);
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32CacheMemory> cache = service.get(mockShell);
-            assertEquals(3, cache.size());
-
-            assertThat(cache.get(0)).usingRecursiveComparison().isEqualTo(expectedL1Cache);
-            assertThat(cache.get(1)).usingRecursiveComparison().isEqualTo(expectedL2Cache);
-            assertThat(cache.get(2)).usingRecursiveComparison().isEqualTo(expectedL3Cache);
-        }
-    }
-
-    @Test
-    void test_getWithSession_emptyJson_empty() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            List<Win32CacheMemory> cache = service.get(mockShell);
-            assertTrue(cache.isEmpty());
-        }
-    }
-
-    @Test
-    void test_getWithSession_malformedJson_throwsException() {
-
-        PowerShellResponse mockResponse = mock(PowerShellResponse.class);
-        when(mockResponse.getCommandOutput()).thenReturn("invalid json");
-
-        try (PowerShell mockShell = mock(PowerShell.class)) {
-            when(mockShell.executeCommand(anyString())).thenReturn(mockResponse);
-
-            assertThrows(JsonSyntaxException.class, () -> service.get(mockShell));
-        }
     }
 
     @Test

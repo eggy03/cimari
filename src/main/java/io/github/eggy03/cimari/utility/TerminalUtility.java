@@ -21,10 +21,10 @@ import java.io.IOException;
 import java.time.Duration;
 
 /**
- * A utility class that provides an alternative way to launch a PowerShell session without {@code jPowerShell}
+ * A utility class that provides a way to launch a PowerShell session and execute scripts or commands in it
  * <p>
  * <b>Mostly for internal use </b>
- *
+ * </p>
  * @since 1.0.0
  */
 @UtilityClass
