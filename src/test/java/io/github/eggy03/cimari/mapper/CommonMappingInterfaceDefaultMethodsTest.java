@@ -1,0 +1,168 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
+package io.github.eggy03.cimari.mapper;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.mapping.CommonMappingInterface;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class CommonMappingInterfaceDefaultMethodsTest {
+
+    private static CommonMappingInterface<Win32Processor> mapper;
+
+    @BeforeAll
+    static void setProcessorCommonMappingInterface() {
+        mapper = new CommonMappingInterface<Win32Processor>() {
+        };
+    }
+
+    @Test
+    void testMapToObject_success() {
+
+        JsonObject processorObject = new JsonObject();
+        processorObject.addProperty("DeviceID", "CPU0");
+        processorObject.addProperty("Name", "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz");
+
+        String jsonProcessor = new Gson().toJson(processorObject);
+
+        Optional<Win32Processor> processor = mapper.mapToObject(jsonProcessor, Win32Processor.class);
+        assertTrue(processor.isPresent());
+        assertEquals("CPU0", processor.get().getDeviceId());
+        assertEquals("Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz", processor.get().getName());
+    }
+
+    @Test
+    void testMapToObject_invalidJson_throwsException() {
+
+        String json = "invalid json";
+        assertThrows(JsonSyntaxException.class, () -> mapper.mapToObject(json, Win32Processor.class));
+
+    }
+
+    @Test
+    void testMapToObject_validJson_jsonMismatchSchema_returnsObjectWithNullableFields() {
+
+        String json = "{}";
+        Optional<Win32Processor> processor = mapper.mapToObject(json, Win32Processor.class);
+
+        assertTrue(processor.isPresent());
+        assertNotNull(processor.get());
+        assertNull(processor.get().getDeviceId());
+    }
+
+    @Test
+    void testMapToObject_emptyJson_optionalNotPresent() {
+        String json = "";
+        Optional<Win32Processor> processorObject = mapper.mapToObject(json, Win32Processor.class);
+        assertFalse(processorObject.isPresent());
+    }
+
+    @Test
+    void testMapToObject_nullParameters_throwsException() {
+        assertThrows(NullPointerException.class, () -> mapper.mapToObject(null, Win32Processor.class));
+        assertThrows(NullPointerException.class, () -> mapper.mapToObject("", null));
+    }
+
+    @Test
+    void testMapToList_success() {
+
+        JsonArray processorArrayObject = new JsonArray();
+
+        JsonObject cpu0 = new JsonObject();
+        cpu0.addProperty("DeviceID", "CPU0");
+        cpu0.addProperty("Name", "Intel(R) Core(TM) i5-14700H CPU @ 2.30GHz");
+
+        JsonObject cpu1 = new JsonObject();
+        cpu1.addProperty("DeviceID", "CPU1");
+        cpu1.addProperty("Name", "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz");
+
+        processorArrayObject.add(cpu0);
+        processorArrayObject.add(cpu1);
+
+        String jsonArrayProcessor = new Gson().toJson(processorArrayObject);
+
+        List<Win32Processor> processors = mapper.mapToList(jsonArrayProcessor, Win32Processor.class);
+        assertEquals(2, processors.size());
+        assertEquals("CPU0", processors.get(0).getDeviceId());
+        assertEquals("Intel(R) Core(TM) i5-14700H CPU @ 2.30GHz", processors.get(0).getName());
+        assertEquals("CPU1", processors.get(1).getDeviceId());
+        assertEquals("Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz", processors.get(1).getName());
+
+        // test immutability
+        assertThrows(UnsupportedOperationException.class, () -> processors.add(null));
+    }
+
+    @Test
+    void testMapToList_whenSingleObject_returnsSingletonList() {
+
+        JsonObject processorObject = new JsonObject();
+        processorObject.addProperty("DeviceID", "CPU0");
+        processorObject.addProperty("Name", "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz");
+
+        String jsonProcessor = new Gson().toJson(processorObject);
+
+        List<Win32Processor> processors = mapper.mapToList(jsonProcessor, Win32Processor.class);
+        assertEquals(1, processors.size());
+        assertEquals("CPU0", processors.get(0).getDeviceId());
+        assertEquals("Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz", processors.get(0).getName());
+    }
+
+    @Test
+    void testMapToList_invalidJson_throwsException() {
+        String json = "invalid json";
+        assertThrows(JsonSyntaxException.class, () -> mapper.mapToList(json, Win32Processor.class));
+    }
+
+    @Test
+    void testMapToList_validJson_jsonMismatchSchema_returnsASingletonListWithNullFieldObject() {
+        String json = "[{}]";
+        List<Win32Processor> processors = mapper.mapToList(json, Win32Processor.class);
+
+        assertEquals(1, processors.size());
+        assertNotNull(processors.get(0));
+        assertNull(processors.get(0).getDeviceId());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   ", "null"})
+    void testMapToList_emptyOrWhiteSpaceOrLiteralNullStringJson_emptyList(String json) {
+        List<Win32Processor> processorList = mapper.mapToList(json, Win32Processor.class);
+        assertTrue(processorList.isEmpty());
+
+    }
+
+    @Test
+    void testMapToList_nullArrayString_returnsListWithNullElement() {
+        String json = "[null]";
+        List<Win32Processor> processorList = mapper.mapToList(json, Win32Processor.class);
+
+        assertEquals(1, processorList.size());
+        assertNull(processorList.get(0));
+    }
+
+    @Test
+    void testMapToList_nullParameters_throwsException() {
+        assertThrows(NullPointerException.class, () -> mapper.mapToList(null, Win32Processor.class));
+        assertThrows(NullPointerException.class, () -> mapper.mapToList("", null));
+    }
+}

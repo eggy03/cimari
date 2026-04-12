@@ -1,0 +1,180 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
+package io.github.eggy03.cimari.service.peripheral;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.SerializedName;
+import io.github.eggy03.cimari.entity.peripheral.Win32Battery;
+import io.github.eggy03.cimari.service.TerminalService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mockStatic;
+
+class Win32BatteryServiceTest {
+
+    private static Win32Battery expectedPrimaryBattery;
+    private static Win32Battery expectedSecondaryBattery;
+    private static String json;
+    private Win32BatteryService service;
+
+    @BeforeAll
+    static void setBatteries() {
+        expectedPrimaryBattery = Win32Battery.builder()
+                .deviceId("BAT0")
+                .caption("Primary Battery")
+                .description("Internal Lithium-Ion Battery")
+                .name("Battery #1")
+                .status("OK")
+                .powerManagementCapabilities(Arrays.asList(1, 2, 3))
+                .powerManagementSupported(true)
+                .batteryStatus(2)
+                .chemistry(6)
+                .designCapacity(50000)
+                .designVoltage(11000)
+                .estimatedChargeRemaining(87L)
+                .estimatedRunTime(120L)
+                .build();
+
+        expectedSecondaryBattery = Win32Battery.builder()
+                .deviceId("BAT1")
+                .caption("Backup Battery")
+                .description("External Lithium-Polymer Battery")
+                .name("Battery #2")
+                .status("Charging")
+                .powerManagementCapabilities(Arrays.asList(1, 2))
+                .powerManagementSupported(true)
+                .batteryStatus(6)
+                .chemistry(7)
+                .designCapacity(30000)
+                .designVoltage(7400)
+                .estimatedChargeRemaining(45L)
+                .estimatedRunTime(60L)
+                .build();
+    }
+
+    @BeforeAll
+    static void setupJson() {
+        JsonArray batteries = new JsonArray();
+
+        JsonObject bat0 = new JsonObject();
+        bat0.addProperty("DeviceID", "BAT0");
+        bat0.addProperty("Caption", "Primary Battery");
+        bat0.addProperty("Description", "Internal Lithium-Ion Battery");
+        bat0.addProperty("Name", "Battery #1");
+        bat0.addProperty("Status", "OK");
+        bat0.add("PowerManagementCapabilities", new Gson().toJsonTree(Arrays.asList(1, 2, 3)));
+        bat0.addProperty("PowerManagementSupported", true);
+        bat0.addProperty("BatteryStatus", 2);
+        bat0.addProperty("Chemistry", 6);
+        bat0.addProperty("DesignCapacity", 50000);
+        bat0.addProperty("DesignVoltage", 11000);
+        bat0.addProperty("EstimatedChargeRemaining", 87L);
+        bat0.addProperty("EstimatedRunTime", 120L);
+
+        JsonObject bat1 = new JsonObject();
+        bat1.addProperty("DeviceID", "BAT1");
+        bat1.addProperty("Caption", "Backup Battery");
+        bat1.addProperty("Description", "External Lithium-Polymer Battery");
+        bat1.addProperty("Name", "Battery #2");
+        bat1.addProperty("Status", "Charging");
+        bat1.add("PowerManagementCapabilities", new Gson().toJsonTree(Arrays.asList(1, 2)));
+        bat1.addProperty("PowerManagementSupported", true);
+        bat1.addProperty("BatteryStatus", 6);
+        bat1.addProperty("Chemistry", 7);
+        bat1.addProperty("DesignCapacity", 30000);
+        bat1.addProperty("DesignVoltage", 7400);
+        bat1.addProperty("EstimatedChargeRemaining", 45L);
+        bat1.addProperty("EstimatedRunTime", 60L);
+
+        batteries.add(bat0);
+        batteries.add(bat1);
+
+        json = new GsonBuilder().serializeNulls().create().toJson(batteries);
+    }
+
+
+    @BeforeEach
+    void setUp() {
+        service = new Win32BatteryService();
+    }
+
+    @Test
+    void test_getWithTimeout_success() {
+
+        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
+            mockedTerminal
+                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
+                    .thenReturn(json);
+
+            List<Win32Battery> batteries = service.get(5L);
+            assertEquals(2, batteries.size());
+
+            assertThat(batteries.get(0)).usingRecursiveComparison().isEqualTo(expectedPrimaryBattery);
+            assertThat(batteries.get(1)).usingRecursiveComparison().isEqualTo(expectedSecondaryBattery);
+        }
+    }
+
+    @Test
+    void test_getWithTimeout_invalidJson_throwsException() {
+
+        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
+            mockedTerminal
+                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
+                    .thenReturn("invalid json");
+
+            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+        }
+    }
+
+    /*
+     * This test ensures that the test JSON has keys matching all @SerializedName
+     * (or raw field names if not annotated) declared in the entity class.
+     *
+     * The test fails if:
+     * - any field is added or removed in the entity without updating the test JSON
+     * - any @SerializedName value changes without updating the test JSON
+     */
+    @Test
+    void test_entityFieldParity_withTestJson() {
+
+        // get the serialized name for each field, in a set
+        // store the field name in case no serialized names are found
+        Field[] declaredClassFields = Win32Battery.class.getDeclaredFields();
+        Set<String> serializedNames = new HashSet<>();
+
+        for (Field field : declaredClassFields) {
+            SerializedName s = field.getAnnotation(SerializedName.class);
+            serializedNames.add(s != null ? s.value() : field.getName());
+        }
+
+        // Extract JSON keys from the static test JSON
+        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
+                .get(0).getAsJsonObject().keySet();
+
+        // Validate equality of keys vs serialized names
+        assertThat(serializedNames)
+                .as("Entity fields and JSON keys must match exactly")
+                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+    }
+}
