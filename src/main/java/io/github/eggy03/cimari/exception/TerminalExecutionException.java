@@ -5,7 +5,7 @@
  */
 package io.github.eggy03.cimari.exception;
 
-import io.github.eggy03.cimari.service.TerminalService;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import lombok.experimental.StandardException;
 
 /**

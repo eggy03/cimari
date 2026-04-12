@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service;
 
 import io.github.eggy03.cimari.mapping.CommonMappingInterface;
+import io.github.eggy03.cimari.terminal.TerminalService;
 
 import java.util.List;
 

@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.mainboard.Win32Baseboard;
-import io.github.eggy03.cimari.service.TerminalService;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -8,9 +8,9 @@ package io.github.eggy03.cimari.service.compounded;
 import io.github.eggy03.cimari.entity.compounded.HardwareId;
 import io.github.eggy03.cimari.mapping.compounded.HardwareIdMapper;
 import io.github.eggy03.cimari.service.OptionalCommonServiceInterface;
-import io.github.eggy03.cimari.service.TerminalService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.shell.script.ScriptUtility;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 

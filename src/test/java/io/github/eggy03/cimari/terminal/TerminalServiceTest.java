@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 The ferrumx-windows contributors
  * SPDX-FileCopyrightText: 2026 Cimari contributors
  */
-package io.github.eggy03.cimari.service;
+package io.github.eggy03.cimari.terminal;
 
 import io.github.eggy03.cimari.exception.TerminalExecutionException;
 import org.junit.jupiter.api.Test;
