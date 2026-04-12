@@ -6,7 +6,7 @@
 package unit.utility;
 
 import io.github.eggy03.cimari.exception.TerminalExecutionException;
-import io.github.eggy03.cimari.utility.TerminalService;
+import io.github.eggy03.cimari.service.TerminalService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;

@@ -9,6 +9,7 @@ import io.github.eggy03.cimari.entity.compounded.Win32DiskDriveToPartitionAndLog
 import io.github.eggy03.cimari.entity.compounded.Win32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.mapping.compounded.Win32DiskPartitionToLogicalDiskMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
+import io.github.eggy03.cimari.service.TerminalService;
 import io.github.eggy03.cimari.service.storage.Win32DiskDriveService;
 import io.github.eggy03.cimari.service.storage.Win32DiskDriveToDiskPartitionService;
 import io.github.eggy03.cimari.service.storage.Win32DiskPartitionService;
@@ -16,7 +17,6 @@ import io.github.eggy03.cimari.service.storage.Win32LogicalDiskService;
 import io.github.eggy03.cimari.service.storage.Win32LogicalDiskToPartitionService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.shell.script.ScriptUtility;
-import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

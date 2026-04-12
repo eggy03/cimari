@@ -8,8 +8,8 @@ package io.github.eggy03.cimari.service.system;
 import io.github.eggy03.cimari.entity.system.Win32ComputerSystem;
 import io.github.eggy03.cimari.mapping.system.Win32ComputerSystemMapper;
 import io.github.eggy03.cimari.service.OptionalCommonServiceInterface;
+import io.github.eggy03.cimari.service.TerminalService;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
