@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.mainboard.Win32Bios;
 import io.github.eggy03.cimari.mapping.mainboard.Win32BiosMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
     @Override
     public @NotNull @Unmodifiable List<Win32Bios> get(long timeout) {
         String command = Cimv2.WIN32_BIOS.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32BiosMapper().mapToList(response, Win32Bios.class);
     }

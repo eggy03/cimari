@@ -5,11 +5,11 @@
  */
 package io.github.eggy03.cimari.exception;
 
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.experimental.StandardException;
 
 /**
- * A generic wrapper of all exceptions occurring from {@link TerminalUtility}
+ * A generic wrapper of all exceptions occurring from {@link TerminalService}
  *
  * @since 1.0.0
  */

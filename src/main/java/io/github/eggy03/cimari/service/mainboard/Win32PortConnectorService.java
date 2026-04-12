@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.mainboard.Win32PortConnector;
 import io.github.eggy03.cimari.mapping.mainboard.Win32PortConnectorMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
     @Override
     public @NotNull @Unmodifiable List<Win32PortConnector> get(long timeout) {
         String command = Cimv2.WIN32_PORT_CONNECTOR.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32PortConnectorMapper().mapToList(response, Win32PortConnector.class);
     }

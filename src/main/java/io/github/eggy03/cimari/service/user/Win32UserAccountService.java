@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.user.Win32UserAccount;
 import io.github.eggy03.cimari.mapping.user.Win32UserAccountMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
     @Override
     public @NotNull @Unmodifiable List<Win32UserAccount> get(long timeout) {
         String command = Cimv2.WIN32_USER_ACCOUNT.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32UserAccountMapper().mapToList(response, Win32UserAccount.class);
     }

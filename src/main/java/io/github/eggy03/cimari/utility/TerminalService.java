@@ -29,7 +29,7 @@ import java.time.Duration;
  */
 @UtilityClass
 @Slf4j
-public class TerminalUtility {
+public class TerminalService {
 
 
     /**

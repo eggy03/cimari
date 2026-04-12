@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.display.Win32VideoController;
 import io.github.eggy03.cimari.mapping.display.Win32VideoControllerMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
     @Override
     public @NotNull @Unmodifiable List<Win32VideoController> get(long timeout) {
         String command = Cimv2.WIN32_VIDEO_CONTROLLER.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32VideoControllerMapper().mapToList(response, Win32VideoController.class);
     }

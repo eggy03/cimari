@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.mainboard.Win32Baseboard;
 import io.github.eggy03.cimari.mapping.mainboard.Win32BaseboardMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -52,7 +52,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
     @Override
     public @NotNull @Unmodifiable List<Win32Baseboard> get(long timeout) {
         String command = Cimv2.WIN32_BASEBOARD.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32BaseboardMapper().mapToList(response, Win32Baseboard.class);
     }

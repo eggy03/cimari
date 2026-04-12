@@ -11,7 +11,7 @@ import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterSetting;
 import io.github.eggy03.cimari.mapping.network.Win32NetworkAdapterSettingMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -54,7 +54,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterSetting> get(long timeout) {
         String command = Cimv2.WIN32_NETWORK_ADAPTER_SETTING.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32NetworkAdapterSettingMapper().mapToList(response, Win32NetworkAdapterSetting.class);
     }

@@ -13,7 +13,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
 import io.github.eggy03.cimari.service.network.MsftNetAdapterService;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -169,9 +169,9 @@ class MsftNetAdapterServiceTest {
     @Test
     void test_getWithTimeout_success() {
 
-        try (MockedStatic<TerminalUtility> mockedTerminal = mockStatic(TerminalUtility.class)) {
+        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
             mockedTerminal
-                    .when(() -> TerminalUtility.executeCommand(anyString(), anyLong()))
+                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
                     .thenReturn(json);
 
             List<MsftNetAdapter> adapters = service.get(5L);
@@ -185,9 +185,9 @@ class MsftNetAdapterServiceTest {
     @Test
     void test_getWithTimeout_invalidJson_throwsException() {
 
-        try (MockedStatic<TerminalUtility> mockedTerminal = mockStatic(TerminalUtility.class)) {
+        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
             mockedTerminal
-                    .when(() -> TerminalUtility.executeCommand(anyString(), anyLong()))
+                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
                     .thenReturn("invalid json");
 
             assertThrows(JsonSyntaxException.class, () -> service.get(5L));

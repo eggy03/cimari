@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
 import io.github.eggy03.cimari.mapping.network.MsftNetAdapterMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapter> get(long timeout) {
         String command = StandardCimv2.MSFT_NET_ADAPTER.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new MsftNetAdapterMapper().mapToList(response, MsftNetAdapter.class);
     }

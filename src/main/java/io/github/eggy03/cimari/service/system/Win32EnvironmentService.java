@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.system.Win32Environment;
 import io.github.eggy03.cimari.mapping.system.Win32EnvironmentMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32EnvironmentService implements CommonServiceInterface<Win32Envi
     @Override
     public @NotNull @Unmodifiable List<Win32Environment> get(long timeout) {
         String command = Cimv2.WIN32_ENVIRONMENT.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32EnvironmentMapper().mapToList(response, Win32Environment.class);
     }

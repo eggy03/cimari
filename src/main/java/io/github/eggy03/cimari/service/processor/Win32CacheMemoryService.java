@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.mapping.processor.Win32CacheMemoryMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32CacheMemoryService implements CommonServiceInterface<Win32Cach
     @Override
     public @NotNull @Unmodifiable List<Win32CacheMemory> get(long timeout) {
         String command = Cimv2.WIN32_CACHE_MEMORY.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32CacheMemoryMapper().mapToList(response, Win32CacheMemory.class);
     }

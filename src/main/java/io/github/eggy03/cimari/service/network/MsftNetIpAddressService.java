@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import io.github.eggy03.cimari.mapping.network.MsftNetIpAddressMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
     @Override
     public @NotNull @Unmodifiable List<MsftNetIpAddress> get(long timeout) {
         String command = StandardCimv2.MSFT_NET_IP_ADDRESS.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new MsftNetIpAddressMapper().mapToList(response, MsftNetIpAddress.class);
     }

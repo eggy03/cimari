@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.display.Win32DesktopMonitor;
 import io.github.eggy03.cimari.mapping.display.Win32DesktopMonitorMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -52,7 +52,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get(long timeout) {
 
         String command = Cimv2.WIN32_DESKTOP_MONITOR.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32DesktopMonitorMapper().mapToList(response, Win32DesktopMonitor.class);
     }

@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.peripheral.Win32SoundDevice;
 import io.github.eggy03.cimari.mapping.peripheral.Win32SoundDeviceMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
     @Override
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(long timeout) {
         String command = Cimv2.WIN32_SOUND_DEVICE.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32SoundDeviceMapper().mapToList(response, Win32SoundDevice.class);
     }

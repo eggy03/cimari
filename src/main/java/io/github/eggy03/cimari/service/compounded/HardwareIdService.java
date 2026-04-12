@@ -10,7 +10,7 @@ import io.github.eggy03.cimari.mapping.compounded.HardwareIdMapper;
 import io.github.eggy03.cimari.service.OptionalCommonServiceInterface;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.shell.script.ScriptUtility;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +53,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
     public @NotNull Optional<HardwareId> get(long timeout) {
 
         String script = ScriptUtility.loadScript(ScriptEnum.HWID.getScriptPath());
-        String response = TerminalUtility.executeCommand(script, timeout);
+        String response = TerminalService.executeCommand(script, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new HardwareIdMapper().mapToObject(response, HardwareId.class);
     }

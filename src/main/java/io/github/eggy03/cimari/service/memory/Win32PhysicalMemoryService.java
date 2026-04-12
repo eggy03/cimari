@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.entity.memory.Win32PhysicalMemory;
 import io.github.eggy03.cimari.mapping.memory.Win32PhysicalMemoryMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.utility.TerminalService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +51,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
     @Override
     public @NotNull @Unmodifiable List<Win32PhysicalMemory> get(long timeout) {
         String command = Cimv2.WIN32_PHYSICAL_MEMORY.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
+        String response = TerminalService.executeCommand(command, timeout);
         log.trace("PowerShell response for the apache terminal session: \n{}", response);
         return new Win32PhysicalMemoryMapper().mapToList(response, Win32PhysicalMemory.class);
     }
