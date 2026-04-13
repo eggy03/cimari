@@ -9,8 +9,8 @@ import io.github.eggy03.cimari.entity.system.Win32ComputerSystem;
 import io.github.eggy03.cimari.mapping.system.Win32ComputerSystemMapper;
 import io.github.eggy03.cimari.service.OptionalCommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ import java.util.Optional;
  * Service class for fetching the computer system information running Windows.
  * <p>
  * This class executes the {@link Cimv2#WIN32_COMPUTER_SYSTEM} PowerShell command
- * and maps the resulting JSON into an {@link Optional} {@link Win32ComputerSystem} object.
+ * and maps the resulting output into an {@link Optional} {@link Win32ComputerSystem} object.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -30,18 +30,16 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
 
     /**
-     * Retrieves an {@link Optional} containing the Computer System information
-     * using an isolated PowerShell process with a configurable timeout.
+     * Retrieves an {@link Optional} of {@link Win32ComputerSystem}
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
      * @return an {@link Optional} of {@link Win32ComputerSystem} representing
      * the HWID. Returns {@link Optional#empty()} if no information
@@ -50,9 +48,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      */
     @Override
     public @NotNull Optional<Win32ComputerSystem> get(long timeout) {
-        String command = Cimv2.WIN32_COMPUTER_SYSTEM.getQuery();
-        String response = TerminalService.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32ComputerSystemMapper().mapToObject(response, Win32ComputerSystem.class);
+        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_COMPUTER_SYSTEM, timeout);
+        return new Win32ComputerSystemMapper().mapToObject(result.getResult(), Win32ComputerSystem.class);
     }
 }

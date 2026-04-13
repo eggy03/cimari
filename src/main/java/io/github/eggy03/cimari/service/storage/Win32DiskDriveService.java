@@ -9,18 +9,19 @@ import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.mapping.storage.Win32DiskDriveMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Service class for fetching information about disk drives.
  * <p>
  * This class executes the {@link Cimv2#WIN32_DISK_DRIVE} PowerShell command
- * and maps the resulting JSON into an immutable list of {@link Win32DiskDrive} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link Win32DiskDrive} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -31,28 +32,24 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDrive> {
 
     /**
-     * Retrieves an immutable list of disk drives connected in the system.
-     * using an isolated PowerShell process with a configurable timeout.
+     * Retrieves an unmodifiable {@link List} of {@link Win32DiskDrive} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link Win32DiskDrive} objects representing the disk drives.
-     * Returns an empty list if no disk drives are detected.
+     * @return an unmodifiable {@link List} of {@link Win32DiskDrive} objects representing the disk drives.
+     * Returns a {@link Collections#emptyList()} if no disk drives are detected.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<Win32DiskDrive> get(long timeout) {
-        String command = Cimv2.WIN32_DISK_DRIVE.getQuery();
-        String response = TerminalService.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32DiskDriveMapper().mapToList(response, Win32DiskDrive.class);
+        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_DISK_DRIVE, timeout);
+        return new Win32DiskDriveMapper().mapToList(result.getResult(), Win32DiskDrive.class);
     }
 }

@@ -12,18 +12,19 @@ import io.github.eggy03.cimari.service.processor.Win32AssociatedProcessorMemoryS
 import io.github.eggy03.cimari.service.processor.Win32CacheMemoryService;
 import io.github.eggy03.cimari.service.processor.Win32ProcessorService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Service class for fetching processor and related cache information from the system.
  * <p>
  * This class executes the {@link ScriptEnum#WIN32_PROCESSOR_TO_CACHE_MEMORY} script
- * and maps the resulting JSON into an immutable list of {@link Win32ProcessorToCacheMemory} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link Win32ProcessorToCacheMemory} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -37,29 +38,24 @@ import java.util.List;
  * @see Win32CacheMemoryService
  * @since 1.0.0
  */
-@Slf4j
 public class Win32ProcessorToCacheMemoryService implements CommonServiceInterface<Win32ProcessorToCacheMemory> {
 
     /**
-     * Retrieves an immutable list of processors and related cache information
-     * using an isolated PowerShell process with a configurable timeout.
+     * Retrieves an unmodifiable {@link List} of {@link Win32ProcessorToCacheMemory} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link Win32ProcessorToCacheMemory} objects
-     * Returns an empty list if no processors and related cache information are detected.
+     * @return an unmodifiable {@link List} of {@link Win32ProcessorToCacheMemory} objects
+     * Returns a {@link Collections#emptyList()} if no processors and related cache information are detected.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
-
-        String command = ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY.getScript();
-        String response = TerminalService.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32ProcessorToCacheMemoryMapper().mapToList(response, Win32ProcessorToCacheMemory.class);
+        TerminalResult result = new TerminalService().executeScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY, timeout);
+        return new Win32ProcessorToCacheMemoryMapper().mapToList(result.getResult(), Win32ProcessorToCacheMemory.class);
     }
 }
