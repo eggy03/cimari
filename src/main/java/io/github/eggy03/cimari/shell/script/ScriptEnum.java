@@ -42,13 +42,13 @@ public enum ScriptEnum {
      * Script that returns a JSON which can be deserialized into {@link Win32DiskDriveToPartitionAndLogicalDisk}
      * @since 1.0.0
      */
-    WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL(loadScript("/Win32DiskDriveToPartitionAndLogicalDisk.ps1")),
+    WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK(loadScript("/Win32DiskDriveToPartitionAndLogicalDisk.ps1")),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32DiskPartitionToLogicalDisk}
      * @since 1.0.0
      */
-    WIN32_DISK_PARTITION_TO_LOGICAL(loadScript("/Win32DiskPartitionToLogicalDisk.ps1")),
+    WIN32_DISK_PARTITION_TO_LOGICAL_DISK(loadScript("/Win32DiskPartitionToLogicalDisk.ps1")),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32ProcessorToCacheMemory}
