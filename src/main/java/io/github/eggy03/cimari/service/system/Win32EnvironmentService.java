@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching information about environment variables in a Windows System.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32EnvironmentService implements CommonServiceInterface<Win32Environment> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32EnvironmentService} object.
+     */
+    public Win32EnvironmentService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32EnvironmentService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32EnvironmentService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+    
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32Environment} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32EnvironmentService implements CommonServiceInterface<Win32Envi
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Environment> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_ENVIRONMENT, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_ENVIRONMENT, timeout);
         return new Win32EnvironmentMapper().mapToList(result.getResult(), Win32Environment.class);
     }
 }

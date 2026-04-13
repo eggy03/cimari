@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching operating system information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32OperatingSystemService implements CommonServiceInterface<Win32OperatingSystem> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32OperatingSystemService} object.
+     */
+    public Win32OperatingSystemService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32OperatingSystemService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32OperatingSystemService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+    
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32OperatingSystem}
      * <p>
@@ -49,7 +72,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      */
     @Override
     public @NotNull @Unmodifiable List<Win32OperatingSystem> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_OPERATING_SYSTEM, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_OPERATING_SYSTEM, timeout);
         return new Win32OperatingSystemMapper().mapToList(result.getResult(), Win32OperatingSystem.class);
     }
 }

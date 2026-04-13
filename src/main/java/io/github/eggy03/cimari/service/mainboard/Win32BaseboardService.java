@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching mainboard/motherboard information from the system.
@@ -34,6 +35,27 @@ import java.util.List;
  */
 public class Win32BaseboardService implements CommonServiceInterface<Win32Baseboard> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32BaseboardService} object.
+     */
+    public Win32BaseboardService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32BaseboardService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32BaseboardService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
 
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32Baseboard} objects
@@ -50,7 +72,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Baseboard> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_BASEBOARD, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_BASEBOARD, timeout);
         return new Win32BaseboardMapper().mapToList(result.getResult(), Win32Baseboard.class);
     }
 }

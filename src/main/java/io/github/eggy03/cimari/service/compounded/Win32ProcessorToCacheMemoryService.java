@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching processor and related cache information from the system.
@@ -40,6 +41,28 @@ import java.util.List;
  */
 public class Win32ProcessorToCacheMemoryService implements CommonServiceInterface<Win32ProcessorToCacheMemory> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32ProcessorToCacheMemoryService} object.
+     */
+    public Win32ProcessorToCacheMemoryService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32ProcessorToCacheMemoryService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32ProcessorToCacheMemoryService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32ProcessorToCacheMemory} objects
      * <p>
@@ -55,7 +78,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      */
     @Override
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
-        TerminalResult result = new TerminalService().executeScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY, timeout);
+        TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY, timeout);
         return new Win32ProcessorToCacheMemoryMapper().mapToList(result.getResult(), Win32ProcessorToCacheMemory.class);
     }
 }

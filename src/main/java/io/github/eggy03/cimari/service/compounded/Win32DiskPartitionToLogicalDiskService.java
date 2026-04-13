@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching physical disk and related logical disk information from the system.
@@ -46,6 +47,28 @@ import java.util.List;
  */
 public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInterface<Win32DiskPartitionToLogicalDisk> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32DiskPartitionToLogicalDiskService} object.
+     */
+    public Win32DiskPartitionToLogicalDiskService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32DiskPartitionToLogicalDiskService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32DiskPartitionToLogicalDiskService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32DiskPartitionToLogicalDisk} objects
      * <p>
@@ -61,7 +84,7 @@ public class Win32DiskPartitionToLogicalDiskService implements CommonServiceInte
      */
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartitionToLogicalDisk> get(long timeout) {
-        TerminalResult result = new TerminalService().executeScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL_DISK, timeout);
+        TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL_DISK, timeout);
         return new Win32DiskPartitionToLogicalDiskMapper().mapToList(result.getResult(), Win32DiskPartitionToLogicalDisk.class);
     }
 }

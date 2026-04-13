@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching the association between a Processor, and it's Cache information from the system.
@@ -36,6 +37,28 @@ import java.util.List;
  */
 public class Win32AssociatedProcessorMemoryService implements CommonServiceInterface<Win32AssociatedProcessorMemory> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32AssociatedProcessorMemoryService} object.
+     */
+    public Win32AssociatedProcessorMemoryService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32AssociatedProcessorMemoryService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32AssociatedProcessorMemoryService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32AssociatedProcessorMemory} objects
      * <p>
@@ -52,7 +75,7 @@ public class Win32AssociatedProcessorMemoryService implements CommonServiceInter
      */
     @Override
     public @NotNull @Unmodifiable List<Win32AssociatedProcessorMemory> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_ASSOCIATED_PROCESSOR_MEMORY, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_ASSOCIATED_PROCESSOR_MEMORY, timeout);
         return new Win32AssociatedProcessorMemoryMapper().mapToList(result.getResult(), Win32AssociatedProcessorMemory.class);
     }
 }

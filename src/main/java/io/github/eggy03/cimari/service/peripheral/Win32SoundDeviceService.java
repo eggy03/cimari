@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching sound device information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32SoundDeviceService implements CommonServiceInterface<Win32SoundDevice> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32SoundDeviceService} object.
+     */
+    public Win32SoundDeviceService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32SoundDeviceService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32SoundDeviceService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32SoundDevice} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      */
     @Override
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_SOUND_DEVICE, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_SOUND_DEVICE, timeout);
         return new Win32SoundDeviceMapper().mapToList(result.getResult(), Win32SoundDevice.class);
     }
 }

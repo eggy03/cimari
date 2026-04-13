@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching the connection profile for a network adapter.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class MsftNetConnectionProfileService implements CommonServiceInterface<MsftNetConnectionProfile> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link MsftNetConnectionProfileService} object.
+     */
+    public MsftNetConnectionProfileService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  MsftNetConnectionProfileService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    MsftNetConnectionProfileService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link MsftNetConnectionProfile} objects
      * <p>
@@ -49,7 +72,7 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetConnectionProfile> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(StandardCimv2.MSFT_NET_CONNECTION_PROFILE, timeout);
+        TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_CONNECTION_PROFILE, timeout);
         return new MsftNetConnectionProfileMapper().mapToList(result.getResult(), MsftNetConnectionProfile.class);
     }
 }

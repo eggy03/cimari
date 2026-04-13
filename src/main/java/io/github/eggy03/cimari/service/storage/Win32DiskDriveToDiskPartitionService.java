@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching the association between a {@link Win32DiskDrive}, and {@link Win32DiskPartition} from the system.
@@ -36,6 +37,28 @@ import java.util.List;
  */
 public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterface<Win32DiskDriveToDiskPartition> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32DiskDriveToDiskPartitionService} object.
+     */
+    public Win32DiskDriveToDiskPartitionService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32DiskDriveToDiskPartitionService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32DiskDriveToDiskPartitionService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32DiskDriveToDiskPartition} objects
      * <p>
@@ -52,7 +75,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      */
     @Override
     public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_DISK_DRIVE_TO_DISK_PARTITION, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_DISK_DRIVE_TO_DISK_PARTITION, timeout);
         return new Win32DiskDriveToDiskPartitionMapper().mapToList(result.getResult(), Win32DiskDriveToDiskPartition.class);
     }
 }

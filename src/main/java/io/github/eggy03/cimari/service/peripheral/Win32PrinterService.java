@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching printer information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32PrinterService implements CommonServiceInterface<Win32Printer> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32PrinterService} object.
+     */
+    public Win32PrinterService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32PrinterService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32PrinterService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32Printer} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Printer> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_PRINTER, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PRINTER, timeout);
         return new Win32PrinterMapper().mapToList(result.getResult(), Win32Printer.class);
     }
 }

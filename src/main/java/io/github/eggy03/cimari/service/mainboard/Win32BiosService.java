@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching BIOS information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32BiosService} object.
+     */
+    public Win32BiosService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32BiosService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32BiosService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32Bios} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Bios> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_BIOS, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_BIOS, timeout);
         return new Win32BiosMapper().mapToList(result.getResult(), Win32Bios.class);
     }
 }

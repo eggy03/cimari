@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching operating system information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEntity> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32PnPEntityService} object.
+     */
+    public Win32PnPEntityService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32PnPEntityService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32PnPEntityService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+    
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32PnPEntity}
      * <p>
@@ -49,7 +72,7 @@ public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEnt
      */
     @Override
     public @NotNull @Unmodifiable List<Win32PnPEntity> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_PNP_ENTITY, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PNP_ENTITY, timeout);
         return new Win32PnPEntityMapper().mapToList(result.getResult(), Win32PnPEntity.class);
     }
 }

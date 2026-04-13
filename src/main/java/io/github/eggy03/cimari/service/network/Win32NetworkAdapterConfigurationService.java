@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching network adapter configuration information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32NetworkAdapterConfigurationService implements CommonServiceInterface<Win32NetworkAdapterConfiguration> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32NetworkAdapterConfigurationService} object.
+     */
+    public Win32NetworkAdapterConfigurationService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32NetworkAdapterConfigurationService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32NetworkAdapterConfigurationService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32NetworkAdapterConfiguration} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32NetworkAdapterConfigurationService implements CommonServiceInt
      */
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterConfiguration> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_CONFIGURATION, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_CONFIGURATION, timeout);
         return new Win32NetworkAdapterConfigurationMapper().mapToList(result.getResult(), Win32NetworkAdapterConfiguration.class);
     }
 

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching CPU information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32ProcessorService} object.
+     */
+    public Win32ProcessorService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32ProcessorService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32ProcessorService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} {@link Win32Processor} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Processor> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_PROCESSOR, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PROCESSOR, timeout);
         return new Win32ProcessorMapper().mapToList(result.getResult(), Win32Processor.class);
     }
 }

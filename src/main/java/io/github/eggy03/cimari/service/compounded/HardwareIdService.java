@@ -13,6 +13,7 @@ import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,6 +33,28 @@ import java.util.Optional;
  */
 public class HardwareIdService implements OptionalCommonServiceInterface<HardwareId> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link HardwareIdService} object.
+     */
+    public HardwareIdService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  HardwareIdService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    HardwareIdService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an {@link Optional} of {@link HardwareId}
      * <p>
@@ -48,7 +71,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      */
     @Override
     public @NotNull Optional<HardwareId> get(long timeout) {
-        TerminalResult result = new TerminalService().executeScript(ScriptEnum.HWID, timeout);
+        TerminalResult result = terminalService.executeScript(ScriptEnum.HWID, timeout);
         return new HardwareIdMapper().mapToObject(result.getResult(), HardwareId.class);
     }
 }

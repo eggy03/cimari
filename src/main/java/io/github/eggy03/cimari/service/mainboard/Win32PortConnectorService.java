@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching mainboard port information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32PortConnectorService implements CommonServiceInterface<Win32PortConnector> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32PortConnectorService} object.
+     */
+    public Win32PortConnectorService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32PortConnectorService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32PortConnectorService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32PortConnector} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
      */
     @Override
     public @NotNull @Unmodifiable List<Win32PortConnector> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_PORT_CONNECTOR, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PORT_CONNECTOR, timeout);
         return new Win32PortConnectorMapper().mapToList(result.getResult(), Win32PortConnector.class);
     }
 }

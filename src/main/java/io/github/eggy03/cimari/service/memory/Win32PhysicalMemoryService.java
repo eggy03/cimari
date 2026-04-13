@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching information about physical memory modules (RAM) in the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32PhysicalMemory> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32PhysicalMemoryService} object.
+     */
+    public Win32PhysicalMemoryService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32PhysicalMemoryService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32PhysicalMemoryService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32PhysicalMemory} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
      */
     @Override
     public @NotNull @Unmodifiable List<Win32PhysicalMemory> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_PHYSICAL_MEMORY, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PHYSICAL_MEMORY, timeout);
         return new Win32PhysicalMemoryMapper().mapToList(result.getResult(), Win32PhysicalMemory.class);
     }
 

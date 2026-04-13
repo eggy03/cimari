@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching the IPv4 and IPv6 configs for a network adapter.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIpAddress> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link MsftNetIpAddressService} object.
+     */
+    public MsftNetIpAddressService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  MsftNetIpAddressService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    MsftNetIpAddressService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link MsftNetIpAddress} objects
      * <p>
@@ -49,7 +72,7 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetIpAddress> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(StandardCimv2.MSFT_NET_IP_ADDRESS, timeout);
+        TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_IP_ADDRESS, timeout);
         return new MsftNetIpAddressMapper().mapToList(result.getResult(), MsftNetIpAddress.class);
     }
 }

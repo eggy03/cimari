@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching processor cache information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32CacheMemoryService implements CommonServiceInterface<Win32CacheMemory> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32CacheMemoryService} object.
+     */
+    public Win32CacheMemoryService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32CacheMemoryService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32CacheMemoryService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32CacheMemory} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32CacheMemoryService implements CommonServiceInterface<Win32Cach
      */
     @Override
     public @NotNull @Unmodifiable List<Win32CacheMemory> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_CACHE_MEMORY, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_CACHE_MEMORY, timeout);
         return new Win32CacheMemoryMapper().mapToList(result.getResult(), Win32CacheMemory.class);
     }
 }

@@ -13,6 +13,7 @@ import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,6 +33,28 @@ import java.util.Optional;
  */
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32ComputerSystemService} object.
+     */
+    public Win32ComputerSystemService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32ComputerSystemService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32ComputerSystemService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+    
     /**
      * Retrieves an {@link Optional} of {@link Win32ComputerSystem}
      * <p>
@@ -48,7 +71,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      */
     @Override
     public @NotNull Optional<Win32ComputerSystem> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_COMPUTER_SYSTEM, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_COMPUTER_SYSTEM, timeout);
         return new Win32ComputerSystemMapper().mapToObject(result.getResult(), Win32ComputerSystem.class);
     }
 }

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching DNS Client and Server information for a network adapter.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class MsftDnsClientServerAddressService implements CommonServiceInterface<MsftDnsClientServerAddress> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link MsftDnsClientServerAddressService} object.
+     */
+    public MsftDnsClientServerAddressService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  MsftDnsClientServerAddressService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    MsftDnsClientServerAddressService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link MsftDnsClientServerAddress} objects
      * <p>
@@ -49,7 +72,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      */
     @Override
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS, timeout);
+        TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS, timeout);
         return new MsftDnsClientServerAddressMapper().mapToList(result.getResult(), MsftDnsClientServerAddress.class);
     }
 }

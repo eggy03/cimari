@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching network adapter information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdapter> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link MsftNetAdapterService} object.
+     */
+    public MsftNetAdapterService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  MsftNetAdapterService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    MsftNetAdapterService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link MsftNetAdapter} objects
      * <p>
@@ -49,7 +72,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapter> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(StandardCimv2.MSFT_NET_ADAPTER, timeout);
+        TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_ADAPTER, timeout);
         return new MsftNetAdapterMapper().mapToList(result.getResult(), MsftNetAdapter.class);
     }
 }

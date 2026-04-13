@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching the association between a Network Adapter, and it's Configuration from the system.
@@ -36,6 +37,28 @@ import java.util.List;
  */
 public class Win32NetworkAdapterSettingService implements CommonServiceInterface<Win32NetworkAdapterSetting> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32NetworkAdapterSettingService} object.
+     */
+    public Win32NetworkAdapterSettingService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32NetworkAdapterSettingService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32NetworkAdapterSettingService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32NetworkAdapterSetting} objects
      * <p>
@@ -52,7 +75,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
      */
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterSetting> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_SETTING, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_SETTING, timeout);
         return new Win32NetworkAdapterSettingMapper().mapToList(result.getResult(), Win32NetworkAdapterSetting.class);
     }
 }

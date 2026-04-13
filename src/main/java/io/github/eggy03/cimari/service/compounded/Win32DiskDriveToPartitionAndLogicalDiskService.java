@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching physical disk and related partition and logical disk data from the system.
@@ -45,6 +46,28 @@ import java.util.List;
  */
 public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonServiceInterface<Win32DiskDriveToPartitionAndLogicalDisk> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32DiskDriveToPartitionAndLogicalDiskService} object.
+     */
+    public Win32DiskDriveToPartitionAndLogicalDiskService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32DiskDriveToPartitionAndLogicalDiskService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32DiskDriveToPartitionAndLogicalDiskService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32DiskDriveToPartitionAndLogicalDisk} objects
      * <p>
@@ -60,7 +83,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      */
     @Override
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {
-        TerminalResult result = new TerminalService().executeScript(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK, timeout);
+        TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK, timeout);
         return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(result.getResult(), Win32DiskDriveToPartitionAndLogicalDisk.class);
     }
 }

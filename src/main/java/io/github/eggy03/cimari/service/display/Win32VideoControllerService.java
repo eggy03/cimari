@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching video controller (GPU) information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32VideoControllerService implements CommonServiceInterface<Win32VideoController> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32VideoControllerService} object.
+     */
+    public Win32VideoControllerService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32VideoControllerService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32VideoControllerService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32VideoController} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      */
     @Override
     public @NotNull @Unmodifiable List<Win32VideoController> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_VIDEO_CONTROLLER, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_VIDEO_CONTROLLER, timeout);
         return new Win32VideoControllerMapper().mapToList(result.getResult(), Win32VideoController.class);
     }
 }

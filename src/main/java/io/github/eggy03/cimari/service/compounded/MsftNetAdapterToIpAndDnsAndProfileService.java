@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching net adapter, ip, dns and profile configuration information from the system.
@@ -43,6 +44,28 @@ import java.util.List;
  */
 public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceInterface<MsftNetAdapterToIpAndDnsAndProfile> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link MsftNetAdapterToIpAndDnsAndProfileService} object.
+     */
+    public MsftNetAdapterToIpAndDnsAndProfileService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  MsftNetAdapterToIpAndDnsAndProfileService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    MsftNetAdapterToIpAndDnsAndProfileService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link MsftNetAdapterToIpAndDnsAndProfile} objects
      * <p>
@@ -58,7 +81,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
-        TerminalResult result = new TerminalService().executeScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE, timeout);
+        TerminalResult result = terminalService.executeScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE, timeout);
         return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(result.getResult(), MsftNetAdapterToIpAndDnsAndProfile.class);
     }
 }

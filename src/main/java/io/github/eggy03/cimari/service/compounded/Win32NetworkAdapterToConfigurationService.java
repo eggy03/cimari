@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching network adapter and related configuration information from the system.
@@ -41,6 +42,28 @@ import java.util.List;
  */
 public class Win32NetworkAdapterToConfigurationService implements CommonServiceInterface<Win32NetworkAdapterToConfiguration> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32NetworkAdapterToConfigurationService} object.
+     */
+    public Win32NetworkAdapterToConfigurationService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32NetworkAdapterToConfigurationService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32NetworkAdapterToConfigurationService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32NetworkAdapterToConfiguration} objects
      * <p>
@@ -56,7 +79,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      */
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(long timeout) {
-        TerminalResult result = new TerminalService().executeScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION, timeout);
+        TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION, timeout);
         return new Win32NetworkAdapterToConfigurationMapper().mapToList(result.getResult(), Win32NetworkAdapterToConfiguration.class);
     }
 }

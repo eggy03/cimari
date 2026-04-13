@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching battery information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32BatteryService implements CommonServiceInterface<Win32Battery> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32BatteryService} object.
+     */
+    public Win32BatteryService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link  Win32BatteryService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32BatteryService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32Battery} objects
      * <p>
@@ -49,7 +72,7 @@ public class Win32BatteryService implements CommonServiceInterface<Win32Battery>
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Battery> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_BATTERY, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_BATTERY, timeout);
         return new Win32BatteryMapper().mapToList(result.getResult(), Win32Battery.class);
     }
 }

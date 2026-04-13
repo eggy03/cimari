@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching process information from the system.
@@ -34,6 +35,28 @@ import java.util.List;
  */
 public class Win32ProcessService implements CommonServiceInterface<Win32Process> {
 
+    private final TerminalService terminalService;
+
+    /**
+     * Creates a {@link Win32ProcessService} object.
+     */
+    public Win32ProcessService() {
+        this(new TerminalService());
+    }
+
+    /**
+     * Creates a {@link Win32ProcessService} with the provided {@link TerminalService}.
+     * <p>
+     * This constructor is package private and is primarily intended for testing
+     * </p>
+     *
+     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
+     * @throws NullPointerException if {@code terminalService} is {@code null}
+     */
+    Win32ProcessService(TerminalService terminalService) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    }
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32Process}
      * <p>
@@ -49,7 +72,7 @@ public class Win32ProcessService implements CommonServiceInterface<Win32Process>
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Process> get(long timeout) {
-        TerminalResult result = new TerminalService().executeQuery(Cimv2.WIN32_PROCESS, timeout);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PROCESS, timeout);
         return new Win32ProcessMapper().mapToList(result.getResult(), Win32Process.class);
     }
 }
