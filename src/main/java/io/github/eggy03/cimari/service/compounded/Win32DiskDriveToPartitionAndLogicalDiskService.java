@@ -47,25 +47,27 @@ import java.util.Objects;
 public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonServiceInterface<Win32DiskDriveToPartitionAndLogicalDisk> {
 
     private final TerminalService terminalService;
+    private final Win32DiskDriveToPartitionAndLogicalDiskMapper mapper;
 
     /**
-     * Creates a {@link Win32DiskDriveToPartitionAndLogicalDiskService} object.
+     * Creates {@link Win32DiskDriveToPartitionAndLogicalDiskService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32DiskDriveToPartitionAndLogicalDiskService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32DiskDriveToPartitionAndLogicalDiskMapper());
     }
 
     /**
-     * Creates a {@link  Win32DiskDriveToPartitionAndLogicalDiskService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32DiskDriveToPartitionAndLogicalDiskService(TerminalService terminalService) {
+    Win32DiskDriveToPartitionAndLogicalDiskService(TerminalService terminalService, Win32DiskDriveToPartitionAndLogicalDiskMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -84,6 +86,6 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
     @Override
     public @NotNull @Unmodifiable List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK, timeout);
-        return new Win32DiskDriveToPartitionAndLogicalDiskMapper().mapToList(result.getResult(), Win32DiskDriveToPartitionAndLogicalDisk.class);
+        return mapper.mapToList(result.getResult(), Win32DiskDriveToPartitionAndLogicalDisk.class);
     }
 }

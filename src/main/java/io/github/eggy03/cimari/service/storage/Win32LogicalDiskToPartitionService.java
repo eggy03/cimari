@@ -38,25 +38,27 @@ import java.util.Objects;
 public class Win32LogicalDiskToPartitionService implements CommonServiceInterface<Win32LogicalDiskToPartition> {
 
     private final TerminalService terminalService;
+    private final Win32LogicalDiskToPartitionMapper mapper;
 
     /**
-     * Creates a {@link Win32LogicalDiskToPartitionService} object.
+     * Creates {@link Win32LogicalDiskToPartitionService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32LogicalDiskToPartitionService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32LogicalDiskToPartitionMapper());
     }
 
     /**
-     * Creates a {@link  Win32LogicalDiskToPartitionService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32LogicalDiskToPartitionService(TerminalService terminalService) {
+    Win32LogicalDiskToPartitionService(TerminalService terminalService, Win32LogicalDiskToPartitionMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -76,6 +78,6 @@ public class Win32LogicalDiskToPartitionService implements CommonServiceInterfac
     @Override
     public @NotNull @Unmodifiable List<Win32LogicalDiskToPartition> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION, timeout);
-        return new Win32LogicalDiskToPartitionMapper().mapToList(result.getResult(), Win32LogicalDiskToPartition.class);
+        return mapper.mapToList(result.getResult(), Win32LogicalDiskToPartition.class);
     }
 }

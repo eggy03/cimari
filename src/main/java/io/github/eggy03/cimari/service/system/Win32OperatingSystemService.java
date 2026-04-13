@@ -36,27 +36,29 @@ import java.util.Objects;
 public class Win32OperatingSystemService implements CommonServiceInterface<Win32OperatingSystem> {
 
     private final TerminalService terminalService;
+    private final Win32OperatingSystemMapper mapper;
 
     /**
-     * Creates a {@link Win32OperatingSystemService} object.
+     * Creates {@link Win32OperatingSystemService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32OperatingSystemService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32OperatingSystemMapper());
     }
 
     /**
-     * Creates a {@link  Win32OperatingSystemService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32OperatingSystemService(TerminalService terminalService) {
+    Win32OperatingSystemService(TerminalService terminalService, Win32OperatingSystemMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
-    
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32OperatingSystem}
      * <p>
@@ -73,6 +75,6 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
     @Override
     public @NotNull @Unmodifiable List<Win32OperatingSystem> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_OPERATING_SYSTEM, timeout);
-        return new Win32OperatingSystemMapper().mapToList(result.getResult(), Win32OperatingSystem.class);
+        return mapper.mapToList(result.getResult(), Win32OperatingSystem.class);
     }
 }

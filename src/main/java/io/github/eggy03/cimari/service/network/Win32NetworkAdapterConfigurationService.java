@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32NetworkAdapterConfigurationService implements CommonServiceInterface<Win32NetworkAdapterConfiguration> {
 
     private final TerminalService terminalService;
+    private final Win32NetworkAdapterConfigurationMapper mapper;
 
     /**
-     * Creates a {@link Win32NetworkAdapterConfigurationService} object.
+     * Creates {@link Win32NetworkAdapterConfigurationService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32NetworkAdapterConfigurationService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32NetworkAdapterConfigurationMapper());
     }
 
     /**
-     * Creates a {@link  Win32NetworkAdapterConfigurationService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32NetworkAdapterConfigurationService(TerminalService terminalService) {
+    Win32NetworkAdapterConfigurationService(TerminalService terminalService, Win32NetworkAdapterConfigurationMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,7 +75,7 @@ public class Win32NetworkAdapterConfigurationService implements CommonServiceInt
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterConfiguration> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_CONFIGURATION, timeout);
-        return new Win32NetworkAdapterConfigurationMapper().mapToList(result.getResult(), Win32NetworkAdapterConfiguration.class);
+        return mapper.mapToList(result.getResult(), Win32NetworkAdapterConfiguration.class);
     }
 
 }

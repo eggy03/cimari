@@ -36,25 +36,27 @@ import java.util.Objects;
 public class MsftDnsClientServerAddressService implements CommonServiceInterface<MsftDnsClientServerAddress> {
 
     private final TerminalService terminalService;
+    private final MsftDnsClientServerAddressMapper mapper;
 
     /**
-     * Creates a {@link MsftDnsClientServerAddressService} object.
+     * Creates {@link MsftDnsClientServerAddressService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public MsftDnsClientServerAddressService() {
-        this(new TerminalService());
+        this(new TerminalService(), new MsftDnsClientServerAddressMapper());
     }
 
     /**
-     * Creates a {@link  MsftDnsClientServerAddressService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    MsftDnsClientServerAddressService(TerminalService terminalService) {
+    MsftDnsClientServerAddressService(TerminalService terminalService, MsftDnsClientServerAddressMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
     @Override
     public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS, timeout);
-        return new MsftDnsClientServerAddressMapper().mapToList(result.getResult(), MsftDnsClientServerAddress.class);
+        return mapper.mapToList(result.getResult(), MsftDnsClientServerAddress.class);
     }
 }

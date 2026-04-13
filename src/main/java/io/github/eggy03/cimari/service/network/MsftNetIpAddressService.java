@@ -36,25 +36,27 @@ import java.util.Objects;
 public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIpAddress> {
 
     private final TerminalService terminalService;
+    private final MsftNetIpAddressMapper mapper;
 
     /**
-     * Creates a {@link MsftNetIpAddressService} object.
+     * Creates {@link MsftNetIpAddressService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public MsftNetIpAddressService() {
-        this(new TerminalService());
+        this(new TerminalService(), new MsftNetIpAddressMapper());
     }
 
     /**
-     * Creates a {@link  MsftNetIpAddressService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    MsftNetIpAddressService(TerminalService terminalService) {
+    MsftNetIpAddressService(TerminalService terminalService, MsftNetIpAddressMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
     @Override
     public @NotNull @Unmodifiable List<MsftNetIpAddress> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_IP_ADDRESS, timeout);
-        return new MsftNetIpAddressMapper().mapToList(result.getResult(), MsftNetIpAddress.class);
+        return mapper.mapToList(result.getResult(), MsftNetIpAddress.class);
     }
 }

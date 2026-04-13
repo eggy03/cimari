@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32VideoControllerService implements CommonServiceInterface<Win32VideoController> {
 
     private final TerminalService terminalService;
+    private final Win32VideoControllerMapper mapper;
 
     /**
-     * Creates a {@link Win32VideoControllerService} object.
+     * Creates {@link Win32VideoControllerService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32VideoControllerService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32VideoControllerMapper());
     }
 
     /**
-     * Creates a {@link  Win32VideoControllerService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32VideoControllerService(TerminalService terminalService) {
+    Win32VideoControllerService(TerminalService terminalService, Win32VideoControllerMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
     @Override
     public @NotNull @Unmodifiable List<Win32VideoController> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_VIDEO_CONTROLLER, timeout);
-        return new Win32VideoControllerMapper().mapToList(result.getResult(), Win32VideoController.class);
+        return mapper.mapToList(result.getResult(), Win32VideoController.class);
     }
 }

@@ -42,25 +42,27 @@ import java.util.Objects;
 public class Win32ProcessorToCacheMemoryService implements CommonServiceInterface<Win32ProcessorToCacheMemory> {
 
     private final TerminalService terminalService;
+    private final Win32ProcessorToCacheMemoryMapper mapper;
 
     /**
-     * Creates a {@link Win32ProcessorToCacheMemoryService} object.
+     * Creates {@link Win32ProcessorToCacheMemoryService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32ProcessorToCacheMemoryService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32ProcessorToCacheMemoryMapper());
     }
 
     /**
-     * Creates a {@link  Win32ProcessorToCacheMemoryService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32ProcessorToCacheMemoryService(TerminalService terminalService) {
+    Win32ProcessorToCacheMemoryService(TerminalService terminalService, Win32ProcessorToCacheMemoryMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -79,6 +81,6 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
     @Override
     public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY, timeout);
-        return new Win32ProcessorToCacheMemoryMapper().mapToList(result.getResult(), Win32ProcessorToCacheMemory.class);
+        return mapper.mapToList(result.getResult(), Win32ProcessorToCacheMemory.class);
     }
 }

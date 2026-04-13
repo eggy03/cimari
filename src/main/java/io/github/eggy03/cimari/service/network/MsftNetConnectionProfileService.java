@@ -36,25 +36,27 @@ import java.util.Objects;
 public class MsftNetConnectionProfileService implements CommonServiceInterface<MsftNetConnectionProfile> {
 
     private final TerminalService terminalService;
+    private final MsftNetConnectionProfileMapper mapper;
 
     /**
-     * Creates a {@link MsftNetConnectionProfileService} object.
+     * Creates {@link MsftNetConnectionProfileService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public MsftNetConnectionProfileService() {
-        this(new TerminalService());
+        this(new TerminalService(), new MsftNetConnectionProfileMapper());
     }
 
     /**
-     * Creates a {@link  MsftNetConnectionProfileService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    MsftNetConnectionProfileService(TerminalService terminalService) {
+    MsftNetConnectionProfileService(TerminalService terminalService, MsftNetConnectionProfileMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
     @Override
     public @NotNull @Unmodifiable List<MsftNetConnectionProfile> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_CONNECTION_PROFILE, timeout);
-        return new MsftNetConnectionProfileMapper().mapToList(result.getResult(), MsftNetConnectionProfile.class);
+        return mapper.mapToList(result.getResult(), MsftNetConnectionProfile.class);
     }
 }

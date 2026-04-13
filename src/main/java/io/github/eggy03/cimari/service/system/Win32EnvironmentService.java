@@ -36,27 +36,29 @@ import java.util.Objects;
 public class Win32EnvironmentService implements CommonServiceInterface<Win32Environment> {
 
     private final TerminalService terminalService;
+    private final Win32EnvironmentMapper mapper;
 
     /**
-     * Creates a {@link Win32EnvironmentService} object.
+     * Creates {@link Win32EnvironmentService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32EnvironmentService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32EnvironmentMapper());
     }
 
     /**
-     * Creates a {@link  Win32EnvironmentService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32EnvironmentService(TerminalService terminalService) {
+    Win32EnvironmentService(TerminalService terminalService, Win32EnvironmentMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
-    
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32Environment} objects
      * <p>
@@ -73,6 +75,6 @@ public class Win32EnvironmentService implements CommonServiceInterface<Win32Envi
     @Override
     public @NotNull @Unmodifiable List<Win32Environment> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_ENVIRONMENT, timeout);
-        return new Win32EnvironmentMapper().mapToList(result.getResult(), Win32Environment.class);
+        return mapper.mapToList(result.getResult(), Win32Environment.class);
     }
 }

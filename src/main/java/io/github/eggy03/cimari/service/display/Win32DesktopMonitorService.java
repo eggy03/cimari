@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32DesktopMonitorService implements CommonServiceInterface<Win32DesktopMonitor> {
 
     private final TerminalService terminalService;
+    private final Win32DesktopMonitorMapper mapper;
 
     /**
-     * Creates a {@link Win32DesktopMonitorService} object.
+     * Creates {@link Win32DesktopMonitorService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32DesktopMonitorService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32DesktopMonitorMapper());
     }
 
     /**
-     * Creates a {@link  Win32DesktopMonitorService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32DesktopMonitorService(TerminalService terminalService) {
+    Win32DesktopMonitorService(TerminalService terminalService, Win32DesktopMonitorMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
     @Override
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_DESKTOP_MONITOR, timeout);
-        return new Win32DesktopMonitorMapper().mapToList(result.getResult(), Win32DesktopMonitor.class);
+        return mapper.mapToList(result.getResult(), Win32DesktopMonitor.class);
     }
 }

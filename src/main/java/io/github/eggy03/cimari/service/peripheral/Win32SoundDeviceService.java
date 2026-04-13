@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32SoundDeviceService implements CommonServiceInterface<Win32SoundDevice> {
 
     private final TerminalService terminalService;
+    private final Win32SoundDeviceMapper mapper;
 
     /**
-     * Creates a {@link Win32SoundDeviceService} object.
+     * Creates {@link Win32SoundDeviceService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32SoundDeviceService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32SoundDeviceMapper());
     }
 
     /**
-     * Creates a {@link  Win32SoundDeviceService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32SoundDeviceService(TerminalService terminalService) {
+    Win32SoundDeviceService(TerminalService terminalService, Win32SoundDeviceMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
     @Override
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_SOUND_DEVICE, timeout);
-        return new Win32SoundDeviceMapper().mapToList(result.getResult(), Win32SoundDevice.class);
+        return mapper.mapToList(result.getResult(), Win32SoundDevice.class);
     }
 }

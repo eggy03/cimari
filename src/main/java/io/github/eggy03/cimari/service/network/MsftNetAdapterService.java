@@ -36,25 +36,27 @@ import java.util.Objects;
 public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdapter> {
 
     private final TerminalService terminalService;
+    private final MsftNetAdapterMapper mapper;
 
     /**
-     * Creates a {@link MsftNetAdapterService} object.
+     * Creates {@link MsftNetAdapterService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public MsftNetAdapterService() {
-        this(new TerminalService());
+        this(new TerminalService(), new MsftNetAdapterMapper());
     }
 
     /**
-     * Creates a {@link  MsftNetAdapterService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    MsftNetAdapterService(TerminalService terminalService) {
+    MsftNetAdapterService(TerminalService terminalService, MsftNetAdapterMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapter> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_ADAPTER, timeout);
-        return new MsftNetAdapterMapper().mapToList(result.getResult(), MsftNetAdapter.class);
+        return mapper.mapToList(result.getResult(), MsftNetAdapter.class);
     }
 }

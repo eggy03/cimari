@@ -45,25 +45,27 @@ import java.util.Objects;
 public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceInterface<MsftNetAdapterToIpAndDnsAndProfile> {
 
     private final TerminalService terminalService;
+    private final MsftNetAdapterToIpAndDnsAndProfileMapper mapper;
 
     /**
-     * Creates a {@link MsftNetAdapterToIpAndDnsAndProfileService} object.
+     * Creates {@link MsftNetAdapterToIpAndDnsAndProfileService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public MsftNetAdapterToIpAndDnsAndProfileService() {
-        this(new TerminalService());
+        this(new TerminalService(), new MsftNetAdapterToIpAndDnsAndProfileMapper());
     }
 
     /**
-     * Creates a {@link  MsftNetAdapterToIpAndDnsAndProfileService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    MsftNetAdapterToIpAndDnsAndProfileService(TerminalService terminalService) {
+    MsftNetAdapterToIpAndDnsAndProfileService(TerminalService terminalService, MsftNetAdapterToIpAndDnsAndProfileMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -82,6 +84,6 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE, timeout);
-        return new MsftNetAdapterToIpAndDnsAndProfileMapper().mapToList(result.getResult(), MsftNetAdapterToIpAndDnsAndProfile.class);
+        return mapper.mapToList(result.getResult(), MsftNetAdapterToIpAndDnsAndProfile.class);
     }
 }

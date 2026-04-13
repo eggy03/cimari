@@ -36,27 +36,29 @@ import java.util.Objects;
 public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEntity> {
 
     private final TerminalService terminalService;
+    private final Win32PnPEntityMapper mapper;
 
     /**
-     * Creates a {@link Win32PnPEntityService} object.
+     * Creates {@link Win32PnPEntityService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32PnPEntityService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32PnPEntityMapper());
     }
 
     /**
-     * Creates a {@link  Win32PnPEntityService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32PnPEntityService(TerminalService terminalService) {
+    Win32PnPEntityService(TerminalService terminalService, Win32PnPEntityMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
-    
+
     /**
      * Retrieves an unmodifiable {@link List} of {@link Win32PnPEntity}
      * <p>
@@ -73,6 +75,6 @@ public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEnt
     @Override
     public @NotNull @Unmodifiable List<Win32PnPEntity> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PNP_ENTITY, timeout);
-        return new Win32PnPEntityMapper().mapToList(result.getResult(), Win32PnPEntity.class);
+        return mapper.mapToList(result.getResult(), Win32PnPEntity.class);
     }
 }

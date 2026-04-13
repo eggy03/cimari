@@ -19,7 +19,6 @@ import java.util.List;
  * </p>
  *
  * @param <S> the entity type returned by the service implementation
- *
  * @see OptionalCommonServiceInterface
  * @since 1.0.0
  */

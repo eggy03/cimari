@@ -43,25 +43,27 @@ import java.util.Objects;
 public class Win32NetworkAdapterToConfigurationService implements CommonServiceInterface<Win32NetworkAdapterToConfiguration> {
 
     private final TerminalService terminalService;
+    private final Win32NetworkAdapterToConfigurationMapper mapper;
 
     /**
-     * Creates a {@link Win32NetworkAdapterToConfigurationService} object.
+     * Creates {@link Win32NetworkAdapterToConfigurationService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32NetworkAdapterToConfigurationService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32NetworkAdapterToConfigurationMapper());
     }
 
     /**
-     * Creates a {@link  Win32NetworkAdapterToConfigurationService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32NetworkAdapterToConfigurationService(TerminalService terminalService) {
+    Win32NetworkAdapterToConfigurationService(TerminalService terminalService, Win32NetworkAdapterToConfigurationMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -80,6 +82,6 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
     @Override
     public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION, timeout);
-        return new Win32NetworkAdapterToConfigurationMapper().mapToList(result.getResult(), Win32NetworkAdapterToConfiguration.class);
+        return mapper.mapToList(result.getResult(), Win32NetworkAdapterToConfiguration.class);
     }
 }

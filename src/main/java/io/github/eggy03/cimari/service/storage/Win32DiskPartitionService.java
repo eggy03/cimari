@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32DiskPartitionService implements CommonServiceInterface<Win32DiskPartition> {
 
     private final TerminalService terminalService;
+    private final Win32DiskPartitionMapper mapper;
 
     /**
-     * Creates a {@link Win32DiskPartitionService} object.
+     * Creates {@link Win32DiskPartitionService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32DiskPartitionService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32DiskPartitionMapper());
     }
 
     /**
-     * Creates a {@link  Win32DiskPartitionService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32DiskPartitionService(TerminalService terminalService) {
+    Win32DiskPartitionService(TerminalService terminalService, Win32DiskPartitionMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -72,7 +74,7 @@ public class Win32DiskPartitionService implements CommonServiceInterface<Win32Di
     @Override
     public @NotNull @Unmodifiable List<Win32DiskPartition> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_DISK_PARTITION, timeout);
-        return new Win32DiskPartitionMapper().mapToList(result.getResult(), Win32DiskPartition.class);
+        return mapper.mapToList(result.getResult(), Win32DiskPartition.class);
     }
 
 }

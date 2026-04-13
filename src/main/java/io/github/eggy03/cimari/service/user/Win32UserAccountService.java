@@ -36,25 +36,25 @@ import java.util.Objects;
 public class Win32UserAccountService implements CommonServiceInterface<Win32UserAccount> {
 
     private final TerminalService terminalService;
+    private final Win32UserAccountMapper mapper;
 
     /**
-     * Creates a {@link Win32UserAccountService} object.
+     * Creates {@link Win32UserAccountService} with default configuration
      */
     public Win32UserAccountService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32UserAccountMapper());
     }
 
     /**
-     * Creates a {@link  Win32UserAccountService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32UserAccountService(TerminalService terminalService) {
+    Win32UserAccountService(TerminalService terminalService, Win32UserAccountMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +73,6 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
     @Override
     public @NotNull @Unmodifiable List<Win32UserAccount> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_USER_ACCOUNT, timeout);
-        return new Win32UserAccountMapper().mapToList(result.getResult(), Win32UserAccount.class);
+        return mapper.mapToList(result.getResult(), Win32UserAccount.class);
     }
 }

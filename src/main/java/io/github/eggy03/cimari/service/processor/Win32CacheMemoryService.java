@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32CacheMemoryService implements CommonServiceInterface<Win32CacheMemory> {
 
     private final TerminalService terminalService;
+    private final Win32CacheMemoryMapper mapper;
 
     /**
-     * Creates a {@link Win32CacheMemoryService} object.
+     * Creates {@link Win32CacheMemoryService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32CacheMemoryService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32CacheMemoryMapper());
     }
 
     /**
-     * Creates a {@link  Win32CacheMemoryService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32CacheMemoryService(TerminalService terminalService) {
+    Win32CacheMemoryService(TerminalService terminalService, Win32CacheMemoryMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32CacheMemoryService implements CommonServiceInterface<Win32Cach
     @Override
     public @NotNull @Unmodifiable List<Win32CacheMemory> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_CACHE_MEMORY, timeout);
-        return new Win32CacheMemoryMapper().mapToList(result.getResult(), Win32CacheMemory.class);
+        return mapper.mapToList(result.getResult(), Win32CacheMemory.class);
     }
 }

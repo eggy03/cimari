@@ -34,25 +34,27 @@ import java.util.Optional;
 public class HardwareIdService implements OptionalCommonServiceInterface<HardwareId> {
 
     private final TerminalService terminalService;
+    private final HardwareIdMapper mapper;
 
     /**
-     * Creates a {@link HardwareIdService} object.
+     * Creates {@link HardwareIdService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public HardwareIdService() {
-        this(new TerminalService());
+        this(new TerminalService(), new HardwareIdMapper());
     }
 
     /**
-     * Creates a {@link  HardwareIdService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    HardwareIdService(TerminalService terminalService) {
+    HardwareIdService(TerminalService terminalService, HardwareIdMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -72,6 +74,6 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
     @Override
     public @NotNull Optional<HardwareId> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.HWID, timeout);
-        return new HardwareIdMapper().mapToObject(result.getResult(), HardwareId.class);
+        return mapper.mapToObject(result.getResult(), HardwareId.class);
     }
 }

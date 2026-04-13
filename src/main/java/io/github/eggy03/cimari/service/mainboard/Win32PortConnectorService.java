@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32PortConnectorService implements CommonServiceInterface<Win32PortConnector> {
 
     private final TerminalService terminalService;
+    private final Win32PortConnectorMapper mapper;
 
     /**
-     * Creates a {@link Win32PortConnectorService} object.
+     * Creates {@link Win32PortConnectorService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32PortConnectorService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32PortConnectorMapper());
     }
 
     /**
-     * Creates a {@link  Win32PortConnectorService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32PortConnectorService(TerminalService terminalService) {
+    Win32PortConnectorService(TerminalService terminalService, Win32PortConnectorMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
     @Override
     public @NotNull @Unmodifiable List<Win32PortConnector> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PORT_CONNECTOR, timeout);
-        return new Win32PortConnectorMapper().mapToList(result.getResult(), Win32PortConnector.class);
+        return mapper.mapToList(result.getResult(), Win32PortConnector.class);
     }
 }

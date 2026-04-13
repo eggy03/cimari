@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32ProcessService implements CommonServiceInterface<Win32Process> {
 
     private final TerminalService terminalService;
+    private final Win32ProcessMapper mapper;
 
     /**
-     * Creates a {@link Win32ProcessService} object.
+     * Creates {@link Win32ProcessService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32ProcessService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32ProcessMapper());
     }
 
     /**
-     * Creates a {@link Win32ProcessService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32ProcessService(TerminalService terminalService) {
+    Win32ProcessService(TerminalService terminalService, Win32ProcessMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32ProcessService implements CommonServiceInterface<Win32Process>
     @Override
     public @NotNull @Unmodifiable List<Win32Process> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PROCESS, timeout);
-        return new Win32ProcessMapper().mapToList(result.getResult(), Win32Process.class);
+        return mapper.mapToList(result.getResult(), Win32Process.class);
     }
 }

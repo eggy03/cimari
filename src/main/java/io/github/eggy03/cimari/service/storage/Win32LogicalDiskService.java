@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32LogicalDiskService implements CommonServiceInterface<Win32LogicalDisk> {
 
     private final TerminalService terminalService;
+    private final Win32LogicalDiskMapper mapper;
 
     /**
-     * Creates a {@link Win32LogicalDiskService} object.
+     * Creates {@link Win32LogicalDiskService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32LogicalDiskService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32LogicalDiskMapper());
     }
 
     /**
-     * Creates a {@link  Win32LogicalDiskService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32LogicalDiskService(TerminalService terminalService) {
+    Win32LogicalDiskService(TerminalService terminalService, Win32LogicalDiskMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32LogicalDiskService implements CommonServiceInterface<Win32Logi
     @Override
     public @NotNull @Unmodifiable List<Win32LogicalDisk> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_LOGICAL_DISK, timeout);
-        return new Win32LogicalDiskMapper().mapToList(result.getResult(), Win32LogicalDisk.class);
+        return mapper.mapToList(result.getResult(), Win32LogicalDisk.class);
     }
 }

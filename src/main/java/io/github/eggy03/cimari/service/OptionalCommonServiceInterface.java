@@ -19,7 +19,6 @@ import java.util.Optional;
  * </p>
  *
  * @param <S> the entity type returned by the service implementation
- *
  * @see CommonServiceInterface
  * @since 1.0.0
  */

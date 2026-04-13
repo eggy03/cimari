@@ -22,7 +22,9 @@ import java.util.Objects;
  * Service class for fetching mainboard/motherboard information from the system.
  * <p>
  * This class executes the {@link Cimv2#WIN32_BASEBOARD} PowerShell command
- * and maps the resulting output into a {@link Win32Baseboard} object.
+ * and maps the resulting output into a {@link Win32Baseboard} with default configuration.
+ *
+ * @since 1.0.0
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -30,31 +32,32 @@ import java.util.Objects;
  * Win32BaseboardService service = new Win32BaseboardService();
  * List<Win32Baseboard> mainboardList = service.get(10);
  * }</pre>
- *
  * @since 1.0.0
  */
 public class Win32BaseboardService implements CommonServiceInterface<Win32Baseboard> {
 
     private final TerminalService terminalService;
+    private final Win32BaseboardMapper mapper;
 
     /**
-     * Creates a {@link Win32BaseboardService} object.
+     * Creates {@link Win32BaseboardService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32BaseboardService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32BaseboardMapper());
     }
 
     /**
-     * Creates a {@link  Win32BaseboardService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32BaseboardService(TerminalService terminalService) {
+    Win32BaseboardService(TerminalService terminalService, Win32BaseboardMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +76,6 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
     @Override
     public @NotNull @Unmodifiable List<Win32Baseboard> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_BASEBOARD, timeout);
-        return new Win32BaseboardMapper().mapToList(result.getResult(), Win32Baseboard.class);
+        return mapper.mapToList(result.getResult(), Win32Baseboard.class);
     }
 }

@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
 
     private final TerminalService terminalService;
+    private final Win32BiosMapper mapper;
 
     /**
-     * Creates a {@link Win32BiosService} object.
+     * Creates {@link Win32BiosService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32BiosService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32BiosMapper());
     }
 
     /**
-     * Creates a {@link  Win32BiosService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32BiosService(TerminalService terminalService) {
+    Win32BiosService(TerminalService terminalService, Win32BiosMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
     @Override
     public @NotNull @Unmodifiable List<Win32Bios> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_BIOS, timeout);
-        return new Win32BiosMapper().mapToList(result.getResult(), Win32Bios.class);
+        return mapper.mapToList(result.getResult(), Win32Bios.class);
     }
 }

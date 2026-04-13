@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32PrinterService implements CommonServiceInterface<Win32Printer> {
 
     private final TerminalService terminalService;
+    private final Win32PrinterMapper mapper;
 
     /**
-     * Creates a {@link Win32PrinterService} object.
+     * Creates {@link Win32PrinterService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32PrinterService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32PrinterMapper());
     }
 
     /**
-     * Creates a {@link  Win32PrinterService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32PrinterService(TerminalService terminalService) {
+    Win32PrinterService(TerminalService terminalService, Win32PrinterMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
     @Override
     public @NotNull @Unmodifiable List<Win32Printer> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PRINTER, timeout);
-        return new Win32PrinterMapper().mapToList(result.getResult(), Win32Printer.class);
+        return mapper.mapToList(result.getResult(), Win32Printer.class);
     }
 }

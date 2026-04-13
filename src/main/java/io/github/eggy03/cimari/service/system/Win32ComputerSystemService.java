@@ -20,7 +20,9 @@ import java.util.Optional;
  * Service class for fetching the computer system information running Windows.
  * <p>
  * This class executes the {@link Cimv2#WIN32_COMPUTER_SYSTEM} PowerShell command
- * and maps the resulting output into an {@link Optional} {@link Win32ComputerSystem} object.
+ * and maps the resulting output into an {@link Optional} {@link Win32ComputerSystem} with default configuration.
+ *
+ * @since 1.0.0
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -28,33 +30,34 @@ import java.util.Optional;
  * Win32ComputerSystemService service = new Win32ComputerSystemService();
  * Optional<Win32ComputerSystem> system = service.get(10);
  * }</pre>
- *
  * @since 1.0.0
  */
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
 
     private final TerminalService terminalService;
+    private final Win32ComputerSystemMapper mapper;
 
     /**
-     * Creates a {@link Win32ComputerSystemService} object.
+     * Creates {@link Win32ComputerSystemService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32ComputerSystemService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32ComputerSystemMapper());
     }
 
     /**
-     * Creates a {@link  Win32ComputerSystemService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32ComputerSystemService(TerminalService terminalService) {
+    Win32ComputerSystemService(TerminalService terminalService, Win32ComputerSystemMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
-    
+
     /**
      * Retrieves an {@link Optional} of {@link Win32ComputerSystem}
      * <p>
@@ -72,6 +75,6 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
     @Override
     public @NotNull Optional<Win32ComputerSystem> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_COMPUTER_SYSTEM, timeout);
-        return new Win32ComputerSystemMapper().mapToObject(result.getResult(), Win32ComputerSystem.class);
+        return mapper.mapToObject(result.getResult(), Win32ComputerSystem.class);
     }
 }

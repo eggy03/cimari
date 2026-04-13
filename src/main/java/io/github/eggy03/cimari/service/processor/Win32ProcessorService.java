@@ -36,25 +36,27 @@ import java.util.Objects;
 public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
 
     private final TerminalService terminalService;
+    private final Win32ProcessorMapper mapper;
 
     /**
-     * Creates a {@link Win32ProcessorService} object.
+     * Creates {@link Win32ProcessorService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32ProcessorService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32ProcessorMapper());
     }
 
     /**
-     * Creates a {@link  Win32ProcessorService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32ProcessorService(TerminalService terminalService) {
+    Win32ProcessorService(TerminalService terminalService, Win32ProcessorMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -73,6 +75,6 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
     @Override
     public @NotNull @Unmodifiable List<Win32Processor> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PROCESSOR, timeout);
-        return new Win32ProcessorMapper().mapToList(result.getResult(), Win32Processor.class);
+        return mapper.mapToList(result.getResult(), Win32Processor.class);
     }
 }

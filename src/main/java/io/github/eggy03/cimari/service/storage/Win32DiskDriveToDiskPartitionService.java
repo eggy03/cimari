@@ -38,25 +38,27 @@ import java.util.Objects;
 public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterface<Win32DiskDriveToDiskPartition> {
 
     private final TerminalService terminalService;
+    private final Win32DiskDriveToDiskPartitionMapper mapper;
 
     /**
-     * Creates a {@link Win32DiskDriveToDiskPartitionService} object.
+     * Creates {@link Win32DiskDriveToDiskPartitionService} with default configuration.
+     *
+     * @since 1.0.0
      */
     public Win32DiskDriveToDiskPartitionService() {
-        this(new TerminalService());
+        this(new TerminalService(), new Win32DiskDriveToDiskPartitionMapper());
     }
 
     /**
-     * Creates a {@link  Win32DiskDriveToDiskPartitionService} with the provided {@link TerminalService}.
-     * <p>
-     * This constructor is package private and is primarily intended for testing
-     * </p>
+     * Package Private constructor with injectable dependencies
      *
-     * @param terminalService the {@link TerminalService} to use, must not be {@code null}
-     * @throws NullPointerException if {@code terminalService} is {@code null}
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
      */
-    Win32DiskDriveToDiskPartitionService(TerminalService terminalService) {
+    Win32DiskDriveToDiskPartitionService(TerminalService terminalService, Win32DiskDriveToDiskPartitionMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
     }
 
     /**
@@ -76,6 +78,6 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
     @Override
     public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_DISK_DRIVE_TO_DISK_PARTITION, timeout);
-        return new Win32DiskDriveToDiskPartitionMapper().mapToList(result.getResult(), Win32DiskDriveToDiskPartition.class);
+        return mapper.mapToList(result.getResult(), Win32DiskDriveToDiskPartition.class);
     }
 }
