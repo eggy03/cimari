@@ -9,7 +9,7 @@ import io.github.eggy03.cimari.terminal.TerminalService;
 import lombok.experimental.StandardException;
 
 /**
- * A generic wrapper of all exceptions occurring from {@link TerminalService}
+ * A generic wrapper for all IO exceptions occurring from {@link TerminalService}
  *
  * @since 1.0.0
  */
