@@ -27,10 +27,9 @@ import io.github.eggy03.cimari.entity.system.Win32OperatingSystem;
 import io.github.eggy03.cimari.entity.system.Win32PnPEntity;
 import io.github.eggy03.cimari.entity.system.Win32Process;
 import io.github.eggy03.cimari.entity.user.Win32UserAccount;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Enum representing the predefined WMI Win32 Class queries for the classes available in the {@code root/cimv2} namespace.
@@ -41,8 +40,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @since 1.0.0
  */
-@RequiredArgsConstructor
-@Getter
 public enum Cimv2 {
 
     /**
@@ -241,15 +238,23 @@ public enum Cimv2 {
      */
     WIN32_PNP_ENTITY(generateQuery(Win32PnPEntity.class));
 
-    @NonNull
     private final String query;
 
+    Cimv2(@NotNull String query) {
+        this.query = Objects.requireNonNull(query, "query cannot be null");
+    }
 
-    @NotNull
-    private static <T> String generateQuery(@NonNull Class<T> wmiClass) {
+    private static <T> @NotNull String generateQuery(@NotNull Class<T> wmiClass) {
+
+        Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
+
         return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClassAnnotation(wmiClass) +
                 " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
                 " | ConvertTo-Json";
 
+    }
+
+    public @NotNull String getQuery() {
+        return this.query;
     }
 }

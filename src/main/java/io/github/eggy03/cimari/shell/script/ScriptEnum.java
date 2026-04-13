@@ -11,9 +11,9 @@ import io.github.eggy03.cimari.entity.compounded.Win32DiskDriveToPartitionAndLog
 import io.github.eggy03.cimari.entity.compounded.Win32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.entity.compounded.Win32NetworkAdapterToConfiguration;
 import io.github.eggy03.cimari.entity.compounded.Win32ProcessorToCacheMemory;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import static io.github.eggy03.cimari.shell.script.ScriptUtility.loadScript;
 
@@ -22,8 +22,6 @@ import static io.github.eggy03.cimari.shell.script.ScriptUtility.loadScript;
  *
  * @since 1.0.0
  */
-@RequiredArgsConstructor
-@Getter
 public enum ScriptEnum {
 
     /**
@@ -62,6 +60,13 @@ public enum ScriptEnum {
      */
     HWID(loadScript("/HardwareID.ps1"));
 
-    @NonNull
     private final String script;
+
+    ScriptEnum(@NotNull String script) {
+        this.script = Objects.requireNonNull(script, "script cannot be null");
+    }
+
+    public @NotNull String getScript() {
+        return this.script;
+    }
 }
