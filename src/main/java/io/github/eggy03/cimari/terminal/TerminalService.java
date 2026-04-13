@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * A service class that provides a way to launch a PowerShell session and execute scripts or commands in it
@@ -32,39 +33,39 @@ import java.time.Duration;
 public class TerminalService {
 
     /**
-     * Launches a standalone PowerShell session, executes queries and returns the result
+     * Launches a standalone PowerShell session, executes {@link Cimv2} queries and returns the result
      *
      * @param queryEnum      The non-null enum value containing the loaded query which shall be executed
      * @param timeoutSeconds The non-null, positive value of time in seconds after which the session will be force stopped.
      * @return The result of the query executed, wrapped in {@link TerminalResult}
      */
-    public @NotNull TerminalResult executeQuery(Enum<?> queryEnum, long timeoutSeconds) {
-
-        if (queryEnum == null)
-            throw new NullPointerException("Query Enum cannot be null");
-
-        if (queryEnum instanceof Cimv2)
-            return execute(((Cimv2) queryEnum).getQuery(), timeoutSeconds);
-        else if (queryEnum instanceof StandardCimv2)
-            return execute(((StandardCimv2) queryEnum).getQuery(), timeoutSeconds);
-        else
-            throw new IllegalArgumentException("Enum is not an instance of " + Cimv2.class.getName() + " or " + StandardCimv2.class.getName());
+    public @NotNull TerminalResult executeQuery(@NotNull Cimv2 queryEnum, long timeoutSeconds) {
+        Objects.requireNonNull(queryEnum, "queryEnum cannot be null");
+        return execute(queryEnum.getQuery(), timeoutSeconds);
     }
 
     /**
-     * Launches a standalone PowerShell session, scripts and returns the result
+     * Launches a standalone PowerShell session, executes {@link StandardCimv2} queries and returns the result
+     *
+     * @param queryEnum      The non-null enum value containing the loaded query which shall be executed
+     * @param timeoutSeconds The non-null, positive value of time in seconds after which the session will be force stopped.
+     * @return The result of the query executed, wrapped in {@link TerminalResult}
+     */
+    public @NotNull TerminalResult executeQuery(@NotNull StandardCimv2 queryEnum, long timeoutSeconds) {
+        Objects.requireNonNull(queryEnum, "queryEnum cannot be null");
+        return execute(queryEnum.getQuery(), timeoutSeconds);
+    }
+
+    /**
+     * Launches a standalone PowerShell session, executes {@link ScriptEnum} scripts and returns the result
      *
      * @param scriptEnum     The non-null enum value containing the loaded query which shall be executed
      * @param timeoutSeconds The non-null, positive value of time in seconds after which the session will be force stopped.
      * @return The result of the script executed, wrapped in {@link TerminalResult}
      */
-    public @NotNull TerminalResult executeScript(ScriptEnum scriptEnum, long timeoutSeconds) {
-
-        if (scriptEnum == null)
-            throw new NullPointerException("Script Enum cannot be null");
-
+    public @NotNull TerminalResult executeScript(@NotNull ScriptEnum scriptEnum, long timeoutSeconds) {
+        Objects.requireNonNull(scriptEnum, "scriptEnum cannot be null");
         return execute(scriptEnum.getScript(), timeoutSeconds);
-
     }
 
     /**
@@ -76,10 +77,9 @@ public class TerminalService {
      * @throws IllegalArgumentException if timeout is in negative.
      * @since 1.0.0
      */
-    @NotNull TerminalResult execute(String command, long timeout) {
+    @NotNull TerminalResult execute(@NotNull String command, long timeout) {
 
-        if (command == null)
-            throw new NullPointerException("Query or Script to be executed cannot be null");
+        Objects.requireNonNull(command, "query or script to be executed cannot be null");
 
         if(timeout < 0)
             throw new IllegalArgumentException("Timeout cannot be negative");
