@@ -14,6 +14,6 @@ import lombok.experimental.StandardException;
  * @since 1.0.0
  */
 @StandardException
-public class TerminalExecutionException extends RuntimeException {
+public class TerminalIOException extends RuntimeException {
 
 }

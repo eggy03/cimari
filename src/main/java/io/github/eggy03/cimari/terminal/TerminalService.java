@@ -5,17 +5,20 @@
  */
 package io.github.eggy03.cimari.terminal;
 
+import io.github.eggy03.cimari.exception.TerminalIOException;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.Duration;
 
 /**
@@ -99,7 +102,8 @@ public class TerminalService {
             int exitCode = executor.execute(cmdLine);
             log.debug("\nPowerShell Execution - SUCCESS\nExit code: {}\nCommand: {}\nStdout: {}\nStderr: {}\n", exitCode, command, resultStream, errorStream);
             return new TerminalResult(resultStream.toString(), errorStream.toString());
-        } catch (Exception e) {
+        } catch (ExecuteException e) {
+
             boolean processKilled = watchdog.killedProcess();
             if (log.isDebugEnabled())
                 log.debug("\nPowerShell Execution - FAILURE\nProcess Killed: {}\nTimeout: {}\nCommand: {}\nStdout: {}\nStderr: {}\n", processKilled, timeout, command, resultStream, errorStream, e);
@@ -108,6 +112,8 @@ public class TerminalService {
 
             return new TerminalResult(resultStream.toString(), errorStream.toString());
 
+        } catch (IOException e) {
+            throw new TerminalIOException("An I/O Exception occurred while running PowerShell", e);
         }
     }
 }
