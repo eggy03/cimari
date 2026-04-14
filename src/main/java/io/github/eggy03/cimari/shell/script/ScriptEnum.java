@@ -11,55 +11,62 @@ import io.github.eggy03.cimari.entity.compounded.Win32DiskDriveToPartitionAndLog
 import io.github.eggy03.cimari.entity.compounded.Win32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.entity.compounded.Win32NetworkAdapterToConfiguration;
 import io.github.eggy03.cimari.entity.compounded.Win32ProcessorToCacheMemory;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+import static io.github.eggy03.cimari.shell.script.ScriptUtility.loadScript;
 
 /**
  * Enum representing the location for some predefined PowerShell scripts
  *
  * @since 1.0.0
  */
-@RequiredArgsConstructor
-@Getter
 public enum ScriptEnum {
 
     /**
      * Script that returns a JSON which can be deserialized into {@link MsftNetAdapterToIpAndDnsAndProfile}
      * @since 1.0.0
      */
-    MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE("/MsftNetAdapterToIpAndDnsAndProfile.ps1"),
+    MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE(loadScript("/MsftNetAdapterToIpAndDnsAndProfile.ps1")),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32NetworkAdapterToConfiguration}
      * @since 1.0.0
      */
-    WIN32_NETWORK_ADAPTER_TO_CONFIGURATION("/Win32NetworkAdapterToConfiguration.ps1"),
+    WIN32_NETWORK_ADAPTER_TO_CONFIGURATION(loadScript("/Win32NetworkAdapterToConfiguration.ps1")),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32DiskDriveToPartitionAndLogicalDisk}
      * @since 1.0.0
      */
-    WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL("/Win32DiskDriveToPartitionAndLogicalDisk.ps1"),
+    WIN32_DISK_DRIVE_TO_PARTITION_AND_LOGICAL_DISK(loadScript("/Win32DiskDriveToPartitionAndLogicalDisk.ps1")),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32DiskPartitionToLogicalDisk}
      * @since 1.0.0
      */
-    WIN32_DISK_PARTITION_TO_LOGICAL("/Win32DiskPartitionToLogicalDisk.ps1"),
+    WIN32_DISK_PARTITION_TO_LOGICAL_DISK(loadScript("/Win32DiskPartitionToLogicalDisk.ps1")),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link Win32ProcessorToCacheMemory}
      * @since 1.0.0
      */
-    WIN32_PROCESSOR_TO_CACHE_MEMORY("/Win32ProcessorToCacheMemory.ps1"),
+    WIN32_PROCESSOR_TO_CACHE_MEMORY(loadScript("/Win32ProcessorToCacheMemory.ps1")),
 
     /**
      * Script that returns a JSON which can be deserialized into {@link HardwareId}
      * @since 1.0.0
      */
-    HWID("/HardwareID.ps1");
+    HWID(loadScript("/HardwareID.ps1"));
 
-    @NonNull
-    private final String scriptPath;
+    private final String script;
+
+    ScriptEnum(@NotNull String script) {
+        this.script = Objects.requireNonNull(script, "script cannot be null");
+    }
+
+    public @NotNull String getScript() {
+        return this.script;
+    }
 }

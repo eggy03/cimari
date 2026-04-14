@@ -9,18 +9,18 @@ import io.github.eggy03.cimari.entity.compounded.HardwareId;
 import io.github.eggy03.cimari.mapping.compounded.HardwareIdMapper;
 import io.github.eggy03.cimari.service.OptionalCommonServiceInterface;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
-import io.github.eggy03.cimari.shell.script.ScriptUtility;
-import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.extern.slf4j.Slf4j;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
  * Service class for fetching the HWID information from a system running Windows.
  * <p>
  * This class executes the {@link ScriptEnum#HWID} PowerShell script
- * and maps the resulting JSON into an {@link Optional} {@link HardwareId} object.
+ * and maps the resulting output into an {@link Optional} of {@link HardwareId}.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -31,18 +31,40 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class HardwareIdService implements OptionalCommonServiceInterface<HardwareId> {
 
+    private final TerminalService terminalService;
+    private final HardwareIdMapper mapper;
+
     /**
-     * Retrieves an {@link Optional} containing the HWID information
-     * using an isolated PowerShell process with a configurable timeout.
+     * Creates {@link HardwareIdService} with default configuration.
+     *
+     * @since 1.0.0
+     */
+    public HardwareIdService() {
+        this(new TerminalService(), new HardwareIdMapper());
+    }
+
+    /**
+     * Package Private constructor with injectable dependencies
+     *
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
+     */
+    HardwareIdService(TerminalService terminalService, HardwareIdMapper mapper) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
+    }
+
+    /**
+     * Retrieves an {@link Optional} of {@link HardwareId}
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
      * @return an {@link Optional} of {@link HardwareId} representing
      * the HWID. Returns {@link Optional#empty()} if no information
@@ -51,10 +73,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      */
     @Override
     public @NotNull Optional<HardwareId> get(long timeout) {
-
-        String script = ScriptUtility.loadScript(ScriptEnum.HWID.getScriptPath());
-        String response = TerminalUtility.executeCommand(script, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new HardwareIdMapper().mapToObject(response, HardwareId.class);
+        TerminalResult result = terminalService.executeScript(ScriptEnum.HWID, timeout);
+        return mapper.mapToObject(result.getResult(), HardwareId.class);
     }
 }

@@ -9,18 +9,20 @@ import io.github.eggy03.cimari.entity.mainboard.Win32Bios;
 import io.github.eggy03.cimari.mapping.mainboard.Win32BiosMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.extern.slf4j.Slf4j;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching BIOS information from the system.
  * <p>
  * This class executes the {@link Cimv2#WIN32_BIOS} PowerShell command
- * and maps the resulting JSON into an immutable list of {@link Win32Bios} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link Win32Bios} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -31,28 +33,48 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
 
+    private final TerminalService terminalService;
+    private final Win32BiosMapper mapper;
+
     /**
-     * Retrieves an immutable list of BIOS entries present in the system
-     * using an isolated PowerShell process with a configurable timeout.
+     * Creates {@link Win32BiosService} with default configuration.
+     *
+     * @since 1.0.0
+     */
+    public Win32BiosService() {
+        this(new TerminalService(), new Win32BiosMapper());
+    }
+
+    /**
+     * Package Private constructor with injectable dependencies
+     *
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
+     */
+    Win32BiosService(TerminalService terminalService, Win32BiosMapper mapper) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
+    }
+
+    /**
+     * Retrieves an unmodifiable {@link List} of {@link Win32Bios} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link Win32Bios} objects representing the system BIOS.
-     * Returns an empty list if no BIOS entries are detected.
+     * @return an unmodifiable {@link List} of {@link Win32Bios} objects representing the system BIOS.
+     * Returns a {@link Collections#emptyList()} if no BIOS entries are detected.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Bios> get(long timeout) {
-        String command = Cimv2.WIN32_BIOS.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32BiosMapper().mapToList(response, Win32Bios.class);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_BIOS, timeout);
+        return mapper.mapToList(result.getResult(), Win32Bios.class);
     }
 }

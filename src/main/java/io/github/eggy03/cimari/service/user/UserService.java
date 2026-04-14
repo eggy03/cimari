@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
  * System.out.println(currentUser);
  * }</pre>
  *
- *
  * @since 1.0.0
  */
 

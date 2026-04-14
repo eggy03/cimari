@@ -11,18 +11,20 @@ import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
 import io.github.eggy03.cimari.mapping.storage.Win32LogicalDiskToPartitionMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.extern.slf4j.Slf4j;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching the association between a {@link Win32DiskPartition}, and {@link Win32LogicalDisk} from the system.
  * <p>
  * This class executes the {@link Cimv2#WIN32_LOGICAL_DISK_TO_PARTITION} PowerShell command
- * and maps the resulting JSON into an immutable list of {@link Win32LogicalDiskToPartition} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link Win32LogicalDiskToPartition} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -33,29 +35,49 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class Win32LogicalDiskToPartitionService implements CommonServiceInterface<Win32LogicalDiskToPartition> {
 
+    private final TerminalService terminalService;
+    private final Win32LogicalDiskToPartitionMapper mapper;
+
     /**
-     * Retrieves an immutable list of {@link Win32LogicalDiskToPartition} entities
-     * using an isolated PowerShell process with a configurable timeout.
+     * Creates {@link Win32LogicalDiskToPartitionService} with default configuration.
+     *
+     * @since 1.0.0
+     */
+    public Win32LogicalDiskToPartitionService() {
+        this(new TerminalService(), new Win32LogicalDiskToPartitionMapper());
+    }
+
+    /**
+     * Package Private constructor with injectable dependencies
+     *
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
+     */
+    Win32LogicalDiskToPartitionService(TerminalService terminalService, Win32LogicalDiskToPartitionMapper mapper) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
+    }
+
+    /**
+     * Retrieves an unmodifiable {@link List} of {@link Win32LogicalDiskToPartition} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link Win32LogicalDiskToPartition} objects representing the association between
+     * @return an unmodifiable {@link List} of {@link Win32LogicalDiskToPartition} objects representing the association between
      * a {@link Win32DiskPartition} and a {@link Win32LogicalDisk}.
-     * Returns an empty list if none are detected.
+     * Returns a {@link Collections#emptyList()} if none are detected.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<Win32LogicalDiskToPartition> get(long timeout) {
-        String command = Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32LogicalDiskToPartitionMapper().mapToList(response, Win32LogicalDiskToPartition.class);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION, timeout);
+        return mapper.mapToList(result.getResult(), Win32LogicalDiskToPartition.class);
     }
 }

@@ -9,18 +9,20 @@ import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.cimari.mapping.network.MsftNetConnectionProfileMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.extern.slf4j.Slf4j;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching the connection profile for a network adapter.
  * <p>
  * This class executes the {@link StandardCimv2#MSFT_NET_CONNECTION_PROFILE} PowerShell command
- * and maps the resulting JSON into an immutable list of {@link MsftNetConnectionProfile} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link MsftNetConnectionProfile} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -31,28 +33,48 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class MsftNetConnectionProfileService implements CommonServiceInterface<MsftNetConnectionProfile> {
 
+    private final TerminalService terminalService;
+    private final MsftNetConnectionProfileMapper mapper;
+
     /**
-     * Retrieves an immutable list of connection profiles for all network adapters connected to the system
-     * using an isolated PowerShell process with a configurable timeout.
+     * Creates {@link MsftNetConnectionProfileService} with default configuration.
+     *
+     * @since 1.0.0
+     */
+    public MsftNetConnectionProfileService() {
+        this(new TerminalService(), new MsftNetConnectionProfileMapper());
+    }
+
+    /**
+     * Package Private constructor with injectable dependencies
+     *
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
+     */
+    MsftNetConnectionProfileService(TerminalService terminalService, MsftNetConnectionProfileMapper mapper) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
+    }
+
+    /**
+     * Retrieves an unmodifiable {@link List} of {@link MsftNetConnectionProfile} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link MsftNetConnectionProfile} objects representing the connection profiles.
-     * Returns an empty list if no profiles are detected.
+     * @return an unmodifiable {@link List} of {@link MsftNetConnectionProfile} objects representing the connection profiles.
+     * Returns a {@link Collections#emptyList()} if no profiles are detected.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<MsftNetConnectionProfile> get(long timeout) {
-        String command = StandardCimv2.MSFT_NET_CONNECTION_PROFILE.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new MsftNetConnectionProfileMapper().mapToList(response, MsftNetConnectionProfile.class);
+        TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_CONNECTION_PROFILE, timeout);
+        return mapper.mapToList(result.getResult(), MsftNetConnectionProfile.class);
     }
 }

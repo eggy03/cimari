@@ -22,7 +22,7 @@ import java.util.Arrays;
  * @since 1.0.0
  */
 @UtilityClass
-public class QueryUtility {
+class QueryUtility {
 
     /**
      * <p>
@@ -36,7 +36,7 @@ public class QueryUtility {
      * @since 1.0.0
      */
     @NotNull
-    public static <T> String getClassNameFromWmiClassAnnotation(@NonNull Class<T> tClass) {
+    static <T> String getClassNameFromWmiClassAnnotation(@NonNull Class<T> tClass) {
         WmiClass wmiClass = tClass.getAnnotation(WmiClass.class);
 
         if (wmiClass == null)
@@ -62,7 +62,7 @@ public class QueryUtility {
      * @since 1.0.0
      */
     @NotNull
-    public static <T> String getPropertiesFromSerializedNameAnnotation(@NonNull Class<T> tClass) {
+    static <T> String getPropertiesFromSerializedNameAnnotation(@NonNull Class<T> tClass) {
 
         StringBuilder properties = new StringBuilder();
 

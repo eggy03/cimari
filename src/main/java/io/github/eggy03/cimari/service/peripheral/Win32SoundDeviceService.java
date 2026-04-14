@@ -9,18 +9,20 @@ import io.github.eggy03.cimari.entity.peripheral.Win32SoundDevice;
 import io.github.eggy03.cimari.mapping.peripheral.Win32SoundDeviceMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.extern.slf4j.Slf4j;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching sound device information from the system.
  * <p>
  * This class executes the {@link Cimv2#WIN32_SOUND_DEVICE} PowerShell command
- * and maps the resulting JSON into an immutable list of {@link Win32SoundDevice} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link Win32SoundDevice} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -31,28 +33,48 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class Win32SoundDeviceService implements CommonServiceInterface<Win32SoundDevice> {
 
+    private final TerminalService terminalService;
+    private final Win32SoundDeviceMapper mapper;
+
     /**
-     * Retrieves an immutable list of sound devices present on the system
-     * using an isolated PowerShell process with a configurable timeout.
+     * Creates {@link Win32SoundDeviceService} with default configuration.
+     *
+     * @since 1.0.0
+     */
+    public Win32SoundDeviceService() {
+        this(new TerminalService(), new Win32SoundDeviceMapper());
+    }
+
+    /**
+     * Package Private constructor with injectable dependencies
+     *
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
+     */
+    Win32SoundDeviceService(TerminalService terminalService, Win32SoundDeviceMapper mapper) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
+    }
+
+    /**
+     * Retrieves an unmodifiable {@link List} of {@link Win32SoundDevice} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link Win32SoundDevice} objects representing the system's sound devices.
-     * If no sound devices are present, returns an empty list.
+     * @return an unmodifiable {@link List} of {@link Win32SoundDevice} objects representing the system's sound devices.
+     * If no sound devices are present, returns a {@link Collections#emptyList()}.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<Win32SoundDevice> get(long timeout) {
-        String command = Cimv2.WIN32_SOUND_DEVICE.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32SoundDeviceMapper().mapToList(response, Win32SoundDevice.class);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_SOUND_DEVICE, timeout);
+        return mapper.mapToList(result.getResult(), Win32SoundDevice.class);
     }
 }

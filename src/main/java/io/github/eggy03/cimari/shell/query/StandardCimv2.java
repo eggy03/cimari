@@ -9,10 +9,10 @@ import io.github.eggy03.cimari.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
 import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Enum representing the predefined MSFT Class queries for the classes available in the {@code root/StandardCimv2} namespace.
@@ -23,8 +23,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @since 1.0.0
  */
-@RequiredArgsConstructor
-@Getter
 public enum StandardCimv2 {
 
     /**
@@ -56,14 +54,24 @@ public enum StandardCimv2 {
      */
     MSFT_NET_CONNECTION_PROFILE(generateQuery("Get-NetConnectionProfile", MsftNetConnectionProfile.class));
 
-    @NonNull
     private final String query;
 
+    StandardCimv2(@NotNull String query) {
+        this.query = Objects.requireNonNull(query, "query cannot be null");
+    }
+
     @NotNull
-    private static <T> String generateQuery(@NonNull String prefix, @NonNull Class<T> wmiEntity) {
+    private static <T> String generateQuery(@NonNull String prefix, @NonNull Class<T> wmiClass) {
+
+        Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
+
         return prefix +
-                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiEntity) +
+                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
                 " | ConvertTo-Json";
 
+    }
+
+    public @NotNull String getQuery() {
+        return this.query;
     }
 }

@@ -6,7 +6,7 @@
 package io.github.eggy03.cimari.service;
 
 import io.github.eggy03.cimari.mapping.CommonMappingInterface;
-import io.github.eggy03.cimari.utility.TerminalUtility;
+import io.github.eggy03.cimari.terminal.TerminalService;
 
 import java.util.Optional;
 
@@ -19,7 +19,6 @@ import java.util.Optional;
  * </p>
  *
  * @param <S> the entity type returned by the service implementation
- *
  * @see CommonServiceInterface
  * @since 1.0.0
  */
@@ -27,7 +26,7 @@ public interface OptionalCommonServiceInterface<S> {
 
     /**
      * Implementations of this method are expected to rely on
-     * {@link TerminalUtility} to launch a PowerShell session, execute commands
+     * {@link TerminalService} to launch a PowerShell session, execute commands
      * and then map the results to the expected entity types using a custom implementation
      * or the default methods of {@link CommonMappingInterface}
      *

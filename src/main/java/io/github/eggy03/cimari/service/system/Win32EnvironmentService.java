@@ -9,18 +9,20 @@ import io.github.eggy03.cimari.entity.system.Win32Environment;
 import io.github.eggy03.cimari.mapping.system.Win32EnvironmentMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.extern.slf4j.Slf4j;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching information about environment variables in a Windows System.
  * <p>
  * This class executes the {@link Cimv2#WIN32_ENVIRONMENT} PowerShell command
- * and maps the resulting JSON into an immutable list of {@link Win32Environment} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link Win32Environment} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -31,28 +33,48 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class Win32EnvironmentService implements CommonServiceInterface<Win32Environment> {
 
+    private final TerminalService terminalService;
+    private final Win32EnvironmentMapper mapper;
+
     /**
-     * Retrieves an immutable list of env variables
-     * using an isolated PowerShell process with a configurable timeout.
+     * Creates {@link Win32EnvironmentService} with default configuration.
+     *
+     * @since 1.0.0
+     */
+    public Win32EnvironmentService() {
+        this(new TerminalService(), new Win32EnvironmentMapper());
+    }
+
+    /**
+     * Package Private constructor with injectable dependencies
+     *
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
+     */
+    Win32EnvironmentService(TerminalService terminalService, Win32EnvironmentMapper mapper) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
+    }
+
+    /**
+     * Retrieves an unmodifiable {@link List} of {@link Win32Environment} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link Win32Environment} objects representing the env variables.
-     * Returns an empty list if no env variables are detected.
+     * @return an unmodifiable {@link List} of {@link Win32Environment} objects representing the env variables.
+     * Returns a {@link Collections#emptyList()} if no env variables are detected.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<Win32Environment> get(long timeout) {
-        String command = Cimv2.WIN32_ENVIRONMENT.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32EnvironmentMapper().mapToList(response, Win32Environment.class);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_ENVIRONMENT, timeout);
+        return mapper.mapToList(result.getResult(), Win32Environment.class);
     }
 }

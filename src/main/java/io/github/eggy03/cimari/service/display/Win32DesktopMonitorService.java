@@ -9,18 +9,20 @@ import io.github.eggy03.cimari.entity.display.Win32DesktopMonitor;
 import io.github.eggy03.cimari.mapping.display.Win32DesktopMonitorMapper;
 import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import io.github.eggy03.cimari.utility.TerminalUtility;
-import lombok.extern.slf4j.Slf4j;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for fetching monitor information from the system.
  * <p>
  * This class executes the {@link Cimv2#WIN32_DESKTOP_MONITOR} PowerShell command
- * and maps the resulting JSON into an immutable list of {@link Win32DesktopMonitor} objects.
+ * and maps the resulting output into an unmodifiable {@link List} of {@link Win32DesktopMonitor} objects.
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -31,29 +33,48 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@Slf4j
 public class Win32DesktopMonitorService implements CommonServiceInterface<Win32DesktopMonitor> {
 
+    private final TerminalService terminalService;
+    private final Win32DesktopMonitorMapper mapper;
+
     /**
-     * Retrieves an immutable list of monitors connected to the system
-     * using an isolated PowerShell process with a configurable timeout.
+     * Creates {@link Win32DesktopMonitorService} with default configuration.
+     *
+     * @since 1.0.0
+     */
+    public Win32DesktopMonitorService() {
+        this(new TerminalService(), new Win32DesktopMonitorMapper());
+    }
+
+    /**
+     * Package Private constructor with injectable dependencies
+     *
+     * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
+     * @param mapper          the mapper instance to use, must not be {@code null}
+     * @since 1.0.0
+     */
+    Win32DesktopMonitorService(TerminalService terminalService, Win32DesktopMonitorMapper mapper) {
+        this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+        this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
+    }
+
+    /**
+     * Retrieves an unmodifiable {@link List} of {@link Win32DesktopMonitor} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
      * </p>
      *
-     * @param timeout the maximum time (in seconds) to wait for the PowerShell
+     * @param timeout maximum time (in seconds) to wait for the PowerShell
      *                command to complete before terminating the process
-     * @return an immutable list of {@link Win32DesktopMonitor} objects representing connected monitors.
-     * Returns an empty list if no monitors are detected.
+     * @return an unmodifiable {@link List} of {@link Win32DesktopMonitor} objects representing connected monitors.
+     * Returns a {@link Collections#emptyList()} if no monitors are detected.
      * @since 1.0.0
      */
     @Override
     public @NotNull @Unmodifiable List<Win32DesktopMonitor> get(long timeout) {
-
-        String command = Cimv2.WIN32_DESKTOP_MONITOR.getQuery();
-        String response = TerminalUtility.executeCommand(command, timeout);
-        log.trace("PowerShell response for the apache terminal session: \n{}", response);
-        return new Win32DesktopMonitorMapper().mapToList(response, Win32DesktopMonitor.class);
+        TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_DESKTOP_MONITOR, timeout);
+        return mapper.mapToList(result.getResult(), Win32DesktopMonitor.class);
     }
 }
