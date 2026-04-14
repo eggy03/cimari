@@ -5,177 +5,131 @@
  */
 package io.github.eggy03.cimari.service.user;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.user.Win32UserAccount;
+import io.github.eggy03.cimari.mapping.user.Win32UserAccountMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32UserAccountTest {
 
-    private static Win32UserAccount expectedUser1;
-    private static Win32UserAccount expectedUser2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32UserAccount expectedUser1 = Win32UserAccount.builder()
+            .sid("S-1-5-21-1234567890-1001")
+            .sidType(1)
+            .accountType(512L)
+            .caption("User1")
+            .description("Local user account")
+            .domain("WORKGROUP")
+            .name("Egg-03")
+            .disabled(false)
+            .localAccount(true)
+            .lockout(false)
+            .passwordRequired(true)
+            .passwordExpires(false)
+            .passwordChangeable(true)
+            .status("OK")
+            .build();
+
+    private final Win32UserAccount expectedUser2 = Win32UserAccount.builder()
+            .sid("S-1-5-21-0987654321-1002")
+            .sidType(1)
+            .accountType(512L)
+            .caption("User2")
+            .description("Administrator account")
+            .domain("WORKGROUP")
+            .name("Admin")
+            .disabled(false)
+            .localAccount(true)
+            .lockout(false)
+            .passwordRequired(true)
+            .passwordExpires(true)
+            .passwordChangeable(true)
+            .status("OK")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32UserAccountMapper mapper;
+
+    @InjectMocks
     private Win32UserAccountService service;
 
-    @BeforeAll
-    static void setupUsers() {
-        expectedUser1 = Win32UserAccount.builder()
-                .sid("S-1-5-21-1234567890-1001")
-                .sidType(1)
-                .accountType(512L)
-                .caption("User1")
-                .description("Local user account")
-                .domain("WORKGROUP")
-                .name("Egg-03")
-                .disabled(false)
-                .localAccount(true)
-                .lockout(false)
-                .passwordRequired(true)
-                .passwordExpires(false)
-                .passwordChangeable(true)
-                .status("OK")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedUser2 = Win32UserAccount.builder()
-                .sid("S-1-5-21-0987654321-1002")
-                .sidType(1)
-                .accountType(512L)
-                .caption("User2")
-                .description("Administrator account")
-                .domain("WORKGROUP")
-                .name("Admin")
-                .disabled(false)
-                .localAccount(true)
-                .lockout(false)
-                .passwordRequired(true)
-                .passwordExpires(true)
-                .passwordChangeable(true)
-                .status("OK")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray users = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedUser1, expectedUser2));
 
-        JsonObject user1 = new JsonObject();
-        user1.addProperty("SID", "S-1-5-21-1234567890-1001");
-        user1.addProperty("SIDType", 1);
-        user1.addProperty("AccountType", 512L);
-        user1.addProperty("Caption", "User1");
-        user1.addProperty("Description", "Local user account");
-        user1.addProperty("Domain", "WORKGROUP");
-        user1.addProperty("Name", "Egg-03");
-        user1.addProperty("Disabled", false);
-        user1.addProperty("LocalAccount", true);
-        user1.addProperty("Lockout", false);
-        user1.addProperty("PasswordRequired", true);
-        user1.addProperty("PasswordExpires", false);
-        user1.addProperty("PasswordChangeable", true);
-        user1.addProperty("Status", "OK");
+        List<Win32UserAccount> response = service.get(5L);
+        assertThat(response).contains(expectedUser1, expectedUser2); // Service should return mapper result unchanged
 
-        JsonObject user2 = new JsonObject();
-        user2.addProperty("SID", "S-1-5-21-0987654321-1002");
-        user2.addProperty("SIDType", 1);
-        user2.addProperty("AccountType", 512L);
-        user2.addProperty("Caption", "User2");
-        user2.addProperty("Description", "Administrator account");
-        user2.addProperty("Domain", "WORKGROUP");
-        user2.addProperty("Name", "Admin");
-        user2.addProperty("Disabled", false);
-        user2.addProperty("LocalAccount", true);
-        user2.addProperty("Lockout", false);
-        user2.addProperty("PasswordRequired", true);
-        user2.addProperty("PasswordExpires", true);
-        user2.addProperty("PasswordChangeable", true);
-        user2.addProperty("Status", "OK");
-
-        users.add(user1);
-        users.add(user2);
-
-        json = new Gson().toJson(users);
-    }
-
-    @BeforeEach
-    void setService() {
-        service = new Win32UserAccountService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_USER_ACCOUNT, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32UserAccount.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32UserAccount> userList = service.get(5L);
-            assertEquals(2, userList.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(userList.get(0)).usingRecursiveComparison().isEqualTo(expectedUser1);
-            assertThat(userList.get(1)).usingRecursiveComparison().isEqualTo(expectedUser2);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_USER_ACCOUNT, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32UserAccount.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32UserAccount> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32UserAccount.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_USER_ACCOUNT, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32UserAccount.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

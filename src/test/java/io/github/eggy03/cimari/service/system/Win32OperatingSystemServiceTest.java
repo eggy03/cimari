@@ -5,157 +5,123 @@
  */
 package io.github.eggy03.cimari.service.system;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.system.Win32OperatingSystem;
+import io.github.eggy03.cimari.mapping.system.Win32OperatingSystemMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32OperatingSystemServiceTest {
 
-    private static Win32OperatingSystem expectedOs;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32OperatingSystem expectedOs = Win32OperatingSystem.builder()
+            .name("Microsoft Windows 11 Pro|C:\\WINDOWS|\\Device\\Harddisk0\\Partition4")
+            .caption("Microsoft Windows 11 Pro")
+            .installDate("20240101000000.000000+330")
+            .csName("DESKTOP-12345")
+            .lastBootUpTime("20241102123000.000000+330")
+            .localDateTime("20251103180000.000000+330")
+            .distributed(false)
+            .numberOfUsers(1)
+            .version("10.0.22631")
+            .bootDevice("\\Device\\HarddiskVolume3")
+            .buildNumber("22631")
+            .buildType("Multiprocessor Free")
+            .manufacturer("Microsoft Corporation")
+            .osArchitecture("64-bit")
+            .muiLanguages(Collections.singletonList("en-US"))
+            .portableOperatingSystem(false)
+            .primary(true)
+            .registeredUser("User")
+            .serialNumber("00330-80000-00000-AA123")
+            .servicePackMajorVersion(0)
+            .servicePackMinorVersion(0)
+            .systemDirectory("C:\\WINDOWS\\system32")
+            .systemDrive("C:")
+            .windowsDirectory("C:\\WINDOWS")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32OperatingSystemMapper mapper;
+
+    @InjectMocks
     private Win32OperatingSystemService service;
 
-    @BeforeAll
-    static void setupOperatingSystem() {
-        expectedOs = Win32OperatingSystem.builder()
-                .name("Microsoft Windows 11 Pro|C:\\WINDOWS|\\Device\\Harddisk0\\Partition4")
-                .caption("Microsoft Windows 11 Pro")
-                .installDate("20240101000000.000000+330")
-                .csName("DESKTOP-12345")
-                .lastBootUpTime("20241102123000.000000+330")
-                .localDateTime("20251103180000.000000+330")
-                .distributed(false)
-                .numberOfUsers(1)
-                .version("10.0.22631")
-                .bootDevice("\\Device\\HarddiskVolume3")
-                .buildNumber("22631")
-                .buildType("Multiprocessor Free")
-                .manufacturer("Microsoft Corporation")
-                .osArchitecture("64-bit")
-                .muiLanguages(Collections.singletonList("en-US"))
-                .portableOperatingSystem(false)
-                .primary(true)
-                .registeredUser("User")
-                .serialNumber("00330-80000-00000-AA123")
-                .servicePackMajorVersion(0)
-                .servicePackMinorVersion(0)
-                .systemDirectory("C:\\WINDOWS\\system32")
-                .systemDrive("C:")
-                .windowsDirectory("C:\\WINDOWS")
-                .build();
-    }
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-    @BeforeAll
-    static void setupJson() {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("Name", "Microsoft Windows 11 Pro|C:\\WINDOWS|\\Device\\Harddisk0\\Partition4");
-        obj.addProperty("Caption", "Microsoft Windows 11 Pro");
-        obj.addProperty("InstallDate", "20240101000000.000000+330");
-        obj.addProperty("CSName", "DESKTOP-12345");
-        obj.addProperty("LastBootUpTime", "20241102123000.000000+330");
-        obj.addProperty("LocalDateTime", "20251103180000.000000+330");
-        obj.addProperty("Distributed", false);
-        obj.addProperty("NumberOfUsers", 1);
-        obj.addProperty("Version", "10.0.22631");
-        obj.addProperty("BootDevice", "\\Device\\HarddiskVolume3");
-        obj.addProperty("BuildNumber", "22631");
-        obj.addProperty("BuildType", "Multiprocessor Free");
-        obj.addProperty("Manufacturer", "Microsoft Corporation");
-        obj.addProperty("OSArchitecture", "64-bit");
-        obj.add("MUILanguages", new Gson().toJsonTree(Collections.singletonList("en-US")));
-        obj.addProperty("PortableOperatingSystem", false);
-        obj.addProperty("Primary", true);
-        obj.addProperty("RegisteredUser", "User");
-        obj.addProperty("SerialNumber", "00330-80000-00000-AA123");
-        obj.addProperty("ServicePackMajorVersion", 0);
-        obj.addProperty("ServicePackMinorVersion", 0);
-        obj.addProperty("SystemDirectory", "C:\\WINDOWS\\system32");
-        obj.addProperty("SystemDrive", "C:");
-        obj.addProperty("WindowsDirectory", "C:\\WINDOWS");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-        json = new GsonBuilder().serializeNulls().create().toJson(obj);
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.singletonList(expectedOs));
 
+        List<Win32OperatingSystem> response = service.get(5L);
+        assertThat(response).contains(expectedOs); // Service should return mapper result unchanged
 
-    @BeforeEach
-    void setUp() {
-        service = new Win32OperatingSystemService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_OPERATING_SYSTEM, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32OperatingSystem.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32OperatingSystem> os = service.get(5L);
-            assertEquals(1, os.size());
-            assertThat(os.get(0)).usingRecursiveComparison().isEqualTo(expectedOs);
-        }
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
+
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_OPERATING_SYSTEM, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32OperatingSystem.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32OperatingSystem> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32OperatingSystem.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonObject.class).keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_OPERATING_SYSTEM, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32OperatingSystem.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

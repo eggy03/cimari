@@ -5,130 +5,106 @@
  */
 package io.github.eggy03.cimari.service.storage;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
+import io.github.eggy03.cimari.mapping.storage.Win32LogicalDiskToPartitionMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32LogicalDiskToPartitionServiceTest {
 
-    private static Win32LogicalDiskToPartition expectedSystemLogicalDiskPartition;
-    private static Win32LogicalDiskToPartition expectedDataLogicalDiskPartition;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32LogicalDiskToPartition expectedSystemLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
+            .diskPartitionDeviceId("Disk #0 Partition #1")
+            .logicalDiskDeviceId("C:")
+            .build();
+    private final Win32LogicalDiskToPartition expectedDataLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
+            .diskPartitionDeviceId("Disk #0 Partition #2")
+            .logicalDiskDeviceId("D:")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32LogicalDiskToPartitionMapper mapper;
+
+    @InjectMocks
     private Win32LogicalDiskToPartitionService service;
 
-    @BeforeAll
-    static void setLogicalDiskToPartition() {
-        expectedSystemLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
-                .diskPartitionDeviceId("Disk #0 Partition #1")
-                .logicalDiskDeviceId("C:")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedDataLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
-                .diskPartitionDeviceId("Disk #0 Partition #2")
-                .logicalDiskDeviceId("D:")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonObject sysPartJson = new JsonObject();
-        sysPartJson.addProperty("DiskPartitionDeviceID", "Disk #0 Partition #1");
-        sysPartJson.addProperty("LogicalDiskDeviceID", "C:");
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedDataLogicalDiskPartition, expectedSystemLogicalDiskPartition));
 
-        JsonObject dataPartJson = new JsonObject();
-        dataPartJson.addProperty("DiskPartitionDeviceID", "Disk #0 Partition #2");
-        dataPartJson.addProperty("LogicalDiskDeviceID", "D:");
+        List<Win32LogicalDiskToPartition> response = service.get(5L);
+        assertThat(response).contains(expectedDataLogicalDiskPartition, expectedSystemLogicalDiskPartition); // Service should return mapper result unchanged
 
-        JsonArray array = new JsonArray();
-        array.add(sysPartJson);
-        array.add(dataPartJson);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(array);
-    }
-
-
-    @BeforeEach
-    void setService() {
-        service = new Win32LogicalDiskToPartitionService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32LogicalDiskToPartition.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32LogicalDiskToPartition> associationList = service.get(5L);
-            assertEquals(2, associationList.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(associationList.get(0)).usingRecursiveComparison().isEqualTo(expectedSystemLogicalDiskPartition);
-            assertThat(associationList.get(1)).usingRecursiveComparison().isEqualTo(expectedDataLogicalDiskPartition);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32LogicalDiskToPartition.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32LogicalDiskToPartition> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32LogicalDiskToPartition.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_LOGICAL_DISK_TO_PARTITION, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32LogicalDiskToPartition.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

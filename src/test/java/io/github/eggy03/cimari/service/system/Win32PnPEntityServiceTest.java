@@ -5,160 +5,121 @@
  */
 package io.github.eggy03.cimari.service.system;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.system.Win32PnPEntity;
+import io.github.eggy03.cimari.mapping.system.Win32PnPEntityMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32PnPEntityServiceTest {
 
-    private static Win32PnPEntity expectedDevice1;
-    private static Win32PnPEntity expectedDevice2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32PnPEntity expectedDevice1 = Win32PnPEntity.builder()
+            .deviceId("USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2")
+            .pnpDeviceId("USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2")
+            .hardwareId(Collections.singletonList("USB\\VID_045E&PID_07A5&REV_0100"))
+            .compatibleId(Collections.singletonList("USB\\Class_03&SubClass_01&Prot_02"))
+            .name("USB Composite Device")
+            .description("Generic USB Composite Device")
+            .manufacturer("Microsoft")
+            .present(true)
+            .status("OK")
+            .build();
+
+    private final Win32PnPEntity expectedDevice2 = Win32PnPEntity.builder()
+            .deviceId("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008")
+            .pnpDeviceId("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008")
+            .hardwareId(Arrays.asList("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043", "PCI\\VEN_10DE&DEV_1C82"))
+            .compatibleId(Collections.singletonList("PCI\\CC_030000"))
+            .name("NVIDIA GeForce GTX 1050 Ti")
+            .description("Display Adapter")
+            .manufacturer("NVIDIA")
+            .present(true)
+            .status("OK")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32PnPEntityMapper mapper;
+
+    @InjectMocks
     private Win32PnPEntityService service;
 
-    @BeforeAll
-    static void setupPnPEntities() {
-        expectedDevice1 = Win32PnPEntity.builder()
-                .deviceId("USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2")
-                .pnpDeviceId("USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2")
-                .hardwareId(Collections.singletonList("USB\\VID_045E&PID_07A5&REV_0100"))
-                .compatibleId(Collections.singletonList("USB\\Class_03&SubClass_01&Prot_02"))
-                .name("USB ComppnpEntityite Device")
-                .description("Generic USB ComppnpEntityite Device")
-                .manufacturer("MicrpnpEntityoft")
-                .present(true)
-                .status("OK")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedDevice2 = Win32PnPEntity.builder()
-                .deviceId("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008")
-                .pnpDeviceId("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008")
-                .hardwareId(Arrays.asList("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043", "PCI\\VEN_10DE&DEV_1C82"))
-                .compatibleId(Collections.singletonList("PCI\\CC_030000"))
-                .name("NVIDIA GeForce GTX 1050 Ti")
-                .description("Display Adapter")
-                .manufacturer("NVIDIA")
-                .present(true)
-                .status("OK")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        Gson gson = new GsonBuilder().serializeNulls().create();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedDevice1, expectedDevice2));
 
-        JsonArray array = new JsonArray();
+        List<Win32PnPEntity> response = service.get(5L);
+        assertThat(response).contains(expectedDevice1, expectedDevice1); // Service should return mapper result unchanged
 
-        JsonObject obj1 = new JsonObject();
-        obj1.addProperty("DeviceID", "USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2");
-        obj1.addProperty("PNPDeviceID", "USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2");
-        obj1.add("HardwareID", gson.toJsonTree(Collections.singletonList("USB\\VID_045E&PID_07A5&REV_0100")));
-        obj1.add("CompatibleID", gson.toJsonTree(Collections.singletonList("USB\\Class_03&SubClass_01&Prot_02")));
-        obj1.addProperty("Name", "USB ComppnpEntityite Device");
-        obj1.addProperty("Description", "Generic USB ComppnpEntityite Device");
-        obj1.addProperty("Manufacturer", "MicrpnpEntityoft");
-        obj1.addProperty("Present", true);
-        obj1.addProperty("Status", "OK");
-
-        JsonObject obj2 = new JsonObject();
-        obj2.addProperty("DeviceID", "PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008");
-        obj2.addProperty("PNPDeviceID", "PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008");
-        obj2.add("HardwareID", gson.toJsonTree(Arrays.asList("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043", "PCI\\VEN_10DE&DEV_1C82")));
-        obj2.add("CompatibleID", gson.toJsonTree(Collections.singletonList("PCI\\CC_030000")));
-        obj2.addProperty("Name", "NVIDIA GeForce GTX 1050 Ti");
-        obj2.addProperty("Description", "Display Adapter");
-        obj2.addProperty("Manufacturer", "NVIDIA");
-        obj2.addProperty("Present", true);
-        obj2.addProperty("Status", "OK");
-
-        array.add(obj1);
-        array.add(obj2);
-
-        json = gson.toJson(array);
-    }
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32PnPEntityService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_PNP_ENTITY, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32PnPEntity.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32PnPEntity> pnpEntity = service.get(5L);
-            assertEquals(2, pnpEntity.size());
-            assertThat(pnpEntity.get(0)).usingRecursiveComparison().isEqualTo(expectedDevice1);
-            assertThat(pnpEntity.get(1)).usingRecursiveComparison().isEqualTo(expectedDevice2);
-        }
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
+
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_PNP_ENTITY, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32PnPEntity.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32PnPEntity> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32PnPEntity.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class).get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_PNP_ENTITY, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32PnPEntity.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

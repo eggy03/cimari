@@ -5,197 +5,137 @@
  */
 package io.github.eggy03.cimari.service.processor;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
+import io.github.eggy03.cimari.mapping.processor.Win32CacheMemoryMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32CacheMemoryServiceTest {
 
-    private static Win32CacheMemory expectedL1Cache;
-    private static Win32CacheMemory expectedL2Cache;
-    private static Win32CacheMemory expectedL3Cache;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32CacheMemory expectedL1Cache = Win32CacheMemory.builder()
+            .deviceId("CPU0_L1")
+            .purpose("Instruction")
+            .cacheType(3)
+            .level(3)
+            .installedSize(256L)
+            .associativity(5)
+            .location(0)
+            .errorCorrectType(5)
+            .availability(3)
+            .status("OK")
+            .statusInfo(3)
+            .build();
+    private final Win32CacheMemory expectedL2Cache = Win32CacheMemory.builder()
+            .deviceId("CPU0_L2")
+            .purpose("Unified")
+            .cacheType(5)
+            .level(4)
+            .installedSize(2048L)
+            .associativity(7)
+            .location(0)
+            .errorCorrectType(5)
+            .availability(3)
+            .status("OK")
+            .statusInfo(3)
+            .build();
+    private final Win32CacheMemory expectedL3Cache = Win32CacheMemory.builder()
+            .deviceId("CPU0_L3")
+            .purpose("Unified")
+            .cacheType(5)
+            .level(5)
+            .installedSize(16384L)
+            .associativity(8)
+            .location(0)
+            .errorCorrectType(5)
+            .availability(3)
+            .status("OK")
+            .statusInfo(3)
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32CacheMemoryMapper mapper;
+
+    @InjectMocks
     private Win32CacheMemoryService service;
 
-    @BeforeAll
-    static void setCaches() {
-        expectedL1Cache = Win32CacheMemory.builder()
-                .deviceId("CPU0_L1")
-                .purpose("Instruction")
-                .cacheType(3)
-                .level(3)
-                .installedSize(256L)
-                .associativity(5)
-                .location(0)
-                .errorCorrectType(5)
-                .availability(3)
-                .status("OK")
-                .statusInfo(3)
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedL2Cache = Win32CacheMemory.builder()
-                .deviceId("CPU0_L2")
-                .purpose("Unified")
-                .cacheType(5)
-                .level(4)
-                .installedSize(2048L)
-                .associativity(7)
-                .location(0)
-                .errorCorrectType(5)
-                .availability(3)
-                .status("OK")
-                .statusInfo(3)
-                .build();
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-        expectedL3Cache = Win32CacheMemory.builder()
-                .deviceId("CPU0_L3")
-                .purpose("Unified")
-                .cacheType(5)
-                .level(5)
-                .installedSize(16384L)
-                .associativity(8)
-                .location(0)
-                .errorCorrectType(5)
-                .availability(3)
-                .status("OK")
-                .statusInfo(3)
-                .build();
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedL1Cache, expectedL2Cache, expectedL3Cache));
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray caches = new JsonArray();
+        List<Win32CacheMemory> response = service.get(5L);
+        assertThat(response).contains(expectedL1Cache, expectedL2Cache, expectedL3Cache); // Service should return mapper result unchanged
 
-        JsonObject l1 = new JsonObject();
-        l1.addProperty("DeviceID", "CPU0_L1");
-        l1.addProperty("Purpose", "Instruction");
-        l1.addProperty("CacheType", 3);
-        l1.addProperty("Level", 3);
-        l1.addProperty("InstalledSize", 256);
-        l1.addProperty("Associativity", 5);
-        l1.addProperty("Location", 0);
-        l1.addProperty("ErrorCorrectType", 5);
-        l1.addProperty("Availability", 3);
-        l1.addProperty("Status", "OK");
-        l1.addProperty("StatusInfo", 3);
-
-        JsonObject l2 = new JsonObject();
-        l2.addProperty("DeviceID", "CPU0_L2");
-        l2.addProperty("Purpose", "Unified");
-        l2.addProperty("CacheType", 5);
-        l2.addProperty("Level", 4);
-        l2.addProperty("InstalledSize", 2048);
-        l2.addProperty("Associativity", 7);
-        l2.addProperty("Location", 0);
-        l2.addProperty("ErrorCorrectType", 5);
-        l2.addProperty("Availability", 3);
-        l2.addProperty("Status", "OK");
-        l2.addProperty("StatusInfo", 3);
-
-        JsonObject l3 = new JsonObject();
-        l3.addProperty("DeviceID", "CPU0_L3");
-        l3.addProperty("Purpose", "Unified");
-        l3.addProperty("CacheType", 5);
-        l3.addProperty("Level", 5);
-        l3.addProperty("InstalledSize", 16384);
-        l3.addProperty("Associativity", 8);
-        l3.addProperty("Location", 0);
-        l3.addProperty("ErrorCorrectType", 5);
-        l3.addProperty("Availability", 3);
-        l3.addProperty("Status", "OK");
-        l3.addProperty("StatusInfo", 3);
-
-        caches.add(l1);
-        caches.add(l2);
-        caches.add(l3);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(caches);
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32CacheMemoryService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_CACHE_MEMORY, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32CacheMemory.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32CacheMemory> cache = service.get(5L);
-            assertEquals(3, cache.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(cache.get(0)).usingRecursiveComparison().isEqualTo(expectedL1Cache);
-            assertThat(cache.get(1)).usingRecursiveComparison().isEqualTo(expectedL2Cache);
-            assertThat(cache.get(2)).usingRecursiveComparison().isEqualTo(expectedL3Cache);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_CACHE_MEMORY, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32CacheMemory.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32CacheMemory> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32CacheMemory.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_CACHE_MEMORY, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32CacheMemory.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

@@ -5,184 +5,132 @@
  */
 package io.github.eggy03.cimari.service.network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
+import io.github.eggy03.cimari.mapping.network.MsftNetIpAddressMapper;
+import io.github.eggy03.cimari.shell.query.StandardCimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class MsftNetIpAddressServiceTest {
 
-    private static MsftNetIpAddress expectedIPv4Address;
-    private static MsftNetIpAddress expectedIPv6Address;
-    private static String json;
+    static MsftNetIpAddress.Datetime lifetime = MsftNetIpAddress.Datetime.builder()
+            .days(9999L)
+            .hours(0L)
+            .minutes(0L)
+            .seconds(0L)
+            .build();
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+    private final MsftNetIpAddress expectedIPv4Address = MsftNetIpAddress.builder()
+            .interfaceIndex(1L)
+            .interfaceAlias("Ethernet")
+            .addressFamily(2L) // IPv4
+            .ipAddress("192.168.1.10")
+            .ipv4Address("192.168.1.10")
+            .ipv6Address(null)
+            .type(1)
+            .prefixOrigin(1L)
+            .suffixOrigin(2L)
+            .prefixLength(24L)
+            .preferredLifetime(lifetime)
+            .validLifeTime(lifetime)
+            .build();
+
+    private final MsftNetIpAddress expectedIPv6Address = MsftNetIpAddress.builder()
+            .interfaceIndex(2L)
+            .interfaceAlias("Wi-Fi")
+            .addressFamily(23L) // IPv6
+            .ipAddress("fe80::1a2b:3c4d:5e6f:7a8b")
+            .ipv4Address(null)
+            .ipv6Address("fe80::1a2b:3c4d:5e6f:7a8b")
+            .type(2)
+            .prefixOrigin(3L)
+            .suffixOrigin(3L)
+            .prefixLength(64L)
+            .preferredLifetime(lifetime)
+            .validLifeTime(lifetime)
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private MsftNetIpAddressMapper mapper;
+
+    @InjectMocks
     private MsftNetIpAddressService service;
 
-    @BeforeAll
-    static void setAddresses() {
-        MsftNetIpAddress.Datetime lifetime = MsftNetIpAddress.Datetime.builder()
-                .days(9999L)
-                .hours(0L)
-                .minutes(0L)
-                .seconds(0L)
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedIPv4Address = MsftNetIpAddress.builder()
-                .interfaceIndex(1L)
-                .interfaceAlias("Ethernet")
-                .addressFamily(2L) // IPv4
-                .ipAddress("192.168.1.10")
-                .ipv4Address("192.168.1.10")
-                .ipv6Address(null)
-                .type(1)
-                .prefixOrigin(1L)
-                .suffixOrigin(2L)
-                .prefixLength(24L)
-                .preferredLifetime(lifetime)
-                .validLifeTime(lifetime)
-                .build();
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-        expectedIPv6Address = MsftNetIpAddress.builder()
-                .interfaceIndex(2L)
-                .interfaceAlias("Wi-Fi")
-                .addressFamily(23L) // IPv6
-                .ipAddress("fe80::1a2b:3c4d:5e6f:7a8b")
-                .ipv4Address(null)
-                .ipv6Address("fe80::1a2b:3c4d:5e6f:7a8b")
-                .type(2)
-                .prefixOrigin(3L)
-                .suffixOrigin(3L)
-                .prefixLength(64L)
-                .preferredLifetime(lifetime)
-                .validLifeTime(lifetime)
-                .build();
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedIPv4Address, expectedIPv6Address));
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray addresses = new JsonArray();
+        List<MsftNetIpAddress> response = service.get(5L);
+        assertThat(response).contains(expectedIPv4Address, expectedIPv6Address); // Service should return mapper result unchanged
 
-        JsonObject ipv4 = new JsonObject();
-        ipv4.addProperty("InterfaceIndex", 1L);
-        ipv4.addProperty("InterfaceAlias", "Ethernet");
-        ipv4.addProperty("AddressFamily", 2L);
-        ipv4.addProperty("IPAddress", "192.168.1.10");
-        ipv4.addProperty("IPv4Address", "192.168.1.10");
-        ipv4.add("IPv6Address", JsonNull.INSTANCE);
-        ipv4.addProperty("Type", 1);
-        ipv4.addProperty("PrefixOrigin", 1L);
-        ipv4.addProperty("SuffixOrigin", 2L);
-        ipv4.addProperty("PrefixLength", 24L);
-
-        JsonObject lifetime = new JsonObject();
-        lifetime.addProperty("Days", 9999L);
-        lifetime.addProperty("Hours", 0L);
-        lifetime.addProperty("Minutes", 0L);
-        lifetime.addProperty("Seconds", 0L);
-        ipv4.add("PreferredLifetime", lifetime);
-        ipv4.add("ValidLifetime", lifetime);
-
-        JsonObject ipv6 = new JsonObject();
-        ipv6.addProperty("InterfaceIndex", 2L);
-        ipv6.addProperty("InterfaceAlias", "Wi-Fi");
-        ipv6.addProperty("AddressFamily", 23L);
-        ipv6.addProperty("IPAddress", "fe80::1a2b:3c4d:5e6f:7a8b");
-        ipv6.add("IPv4Address", JsonNull.INSTANCE);
-        ipv6.addProperty("IPv6Address", "fe80::1a2b:3c4d:5e6f:7a8b");
-        ipv6.addProperty("Type", 2);
-        ipv6.addProperty("PrefixOrigin", 3L);
-        ipv6.addProperty("SuffixOrigin", 3L);
-        ipv6.addProperty("PrefixLength", 64L);
-        ipv6.add("PreferredLifetime", lifetime);
-        ipv6.add("ValidLifetime", lifetime);
-
-        addresses.add(ipv4);
-        addresses.add(ipv6);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(addresses);
-    }
-
-    @BeforeEach
-    void setUp() {
-        service = new MsftNetIpAddressService();
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_IP_ADDRESS, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), MsftNetIpAddress.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<MsftNetIpAddress> ip = service.get(5L);
-            assertEquals(2, ip.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(ip.get(0)).usingRecursiveComparison().isEqualTo(expectedIPv4Address);
-            assertThat(ip.get(1)).usingRecursiveComparison().isEqualTo(expectedIPv6Address);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_IP_ADDRESS, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), MsftNetIpAddress.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<MsftNetIpAddress> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = MsftNetIpAddress.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_IP_ADDRESS, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), MsftNetIpAddress.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

@@ -5,144 +5,116 @@
  */
 package io.github.eggy03.cimari.service.mainboard;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.mainboard.Win32Baseboard;
+import io.github.eggy03.cimari.mapping.mainboard.Win32BaseboardMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32BaseboardServiceTest {
 
-    private static Win32Baseboard expectedBoard1;
-    private static Win32Baseboard expectedBoard2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32Baseboard expectedBoard1 =
+            Win32Baseboard.builder()
+                    .manufacturer("ASUS")
+                    .model("ROG STRIX Z790-E GAMING WIFI")
+                    .product("Z790-E")
+                    .serialNumber("ABC123456789")
+                    .version("Rev 1.xx")
+                    .build();
+
+    private final Win32Baseboard expectedBoard2 =
+            Win32Baseboard.builder()
+                    .manufacturer("MSI")
+                    .model("MAG B650 TOMAHAWK WIFI")
+                    .product("B650 TOMAHAWK")
+                    .serialNumber("XYZ987654321")
+                    .version("Rev 2.00")
+                    .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32BaseboardMapper mapper;
+
+    @InjectMocks
     private Win32BaseboardService service;
 
-    @BeforeAll
-    static void setBaseboards() {
-        expectedBoard1 = Win32Baseboard.builder()
-                .manufacturer("ASUS")
-                .model("ROG STRIX Z790-E GAMING WIFI")
-                .product("Z790-E")
-                .serialNumber("ABC123456789")
-                .version("Rev 1.xx")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedBoard2 = Win32Baseboard.builder()
-                .manufacturer("MSI")
-                .model("MAG B650 TOMAHAWK WIFI")
-                .product("B650 TOMAHAWK")
-                .serialNumber("XYZ987654321")
-                .version("Rev 2.00")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray boards = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedBoard1, expectedBoard2));
 
-        JsonObject board1 = new JsonObject();
-        board1.addProperty("Manufacturer", "ASUS");
-        board1.addProperty("Model", "ROG STRIX Z790-E GAMING WIFI");
-        board1.addProperty("Product", "Z790-E");
-        board1.addProperty("SerialNumber", "ABC123456789");
-        board1.addProperty("Version", "Rev 1.xx");
+        List<Win32Baseboard> response = service.get(5L);
+        assertThat(response).contains(expectedBoard1, expectedBoard2); // Service should return mapper result unchanged
 
-        JsonObject board2 = new JsonObject();
-        board2.addProperty("Manufacturer", "MSI");
-        board2.addProperty("Model", "MAG B650 TOMAHAWK WIFI");
-        board2.addProperty("Product", "B650 TOMAHAWK");
-        board2.addProperty("SerialNumber", "XYZ987654321");
-        board2.addProperty("Version", "Rev 2.00");
-
-        boards.add(board1);
-        boards.add(board2);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(boards);
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32BaseboardService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_BASEBOARD, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32Baseboard.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32Baseboard> baseboardList = service.get(5L);
-            assertEquals(2, baseboardList.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(baseboardList.get(0)).usingRecursiveComparison().isEqualTo(expectedBoard1);
-            assertThat(baseboardList.get(1)).usingRecursiveComparison().isEqualTo(expectedBoard2);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_BASEBOARD, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32Baseboard.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32Baseboard> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32Baseboard.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_BASEBOARD, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32Baseboard.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }
 

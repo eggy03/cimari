@@ -5,178 +5,132 @@
  */
 package io.github.eggy03.cimari.service.display;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.display.Win32VideoController;
+import io.github.eggy03.cimari.mapping.display.Win32VideoControllerMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32VideoControllerServiceTest {
 
-    private static Win32VideoController expectedGpu1;
-    private static Win32VideoController expectedGpu2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32VideoController expectedGpu1 = Win32VideoController.builder()
+            .deviceId("GPU1")
+            .name("NVIDIA GeForce RTX 4090")
+            .pnpDeviceId("PCI\\VEN_10DE&DEV_2684&SUBSYS_409010DE&REV_A1")
+            .currentBitsPerPixel(32)
+            .currentHorizontalResolution(3840)
+            .currentVerticalResolution(2160)
+            .currentRefreshRate(144)
+            .maxRefreshRate(240)
+            .minRefreshRate(60)
+            .adapterDacType("Integrated RAMDAC")
+            .adapterRam(24000000000L)
+            .driverDate("2024-09-12")
+            .driverVersion("552.22")
+            .videoProcessor("AD102")
+            .build();
+
+    private final Win32VideoController expectedGpu2 = Win32VideoController.builder()
+            .deviceId("GPU2")
+            .name("AMD Radeon RX 7900 XTX")
+            .pnpDeviceId("PCI\\VEN_1002&DEV_744C&SUBSYS_79001002&REV_C8")
+            .currentBitsPerPixel(32)
+            .currentHorizontalResolution(2560)
+            .currentVerticalResolution(1440)
+            .currentRefreshRate(165)
+            .maxRefreshRate(240)
+            .minRefreshRate(60)
+            .adapterDacType("Internal DAC")
+            .adapterRam(20000000000L)
+            .driverDate("2024-07-05")
+            .driverVersion("24.7.1")
+            .videoProcessor("Navi 31 XTX")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32VideoControllerMapper mapper;
+
+    @InjectMocks
     private Win32VideoControllerService service;
 
-    @BeforeAll
-    static void setGpus() {
-        expectedGpu1 = Win32VideoController.builder()
-                .deviceId("GPU1")
-                .name("NVIDIA GeForce RTX 4090")
-                .pnpDeviceId("PCI\\VEN_10DE&DEV_2684&SUBSYS_409010DE&REV_A1")
-                .currentBitsPerPixel(32)
-                .currentHorizontalResolution(3840)
-                .currentVerticalResolution(2160)
-                .currentRefreshRate(144)
-                .maxRefreshRate(240)
-                .minRefreshRate(60)
-                .adapterDacType("Integrated RAMDAC")
-                .adapterRam(24000000000L)
-                .driverDate("2024-09-12")
-                .driverVersion("552.22")
-                .videoProcessor("AD102")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedGpu2 = Win32VideoController.builder()
-                .deviceId("GPU2")
-                .name("AMD Radeon RX 7900 XTX")
-                .pnpDeviceId("PCI\\VEN_1002&DEV_744C&SUBSYS_79001002&REV_C8")
-                .currentBitsPerPixel(32)
-                .currentHorizontalResolution(2560)
-                .currentVerticalResolution(1440)
-                .currentRefreshRate(165)
-                .maxRefreshRate(240)
-                .minRefreshRate(60)
-                .adapterDacType("Internal DAC")
-                .adapterRam(20000000000L)
-                .driverDate("2024-07-05")
-                .driverVersion("24.7.1")
-                .videoProcessor("Navi 31 XTX")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray gpus = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedGpu1, expectedGpu2));
 
-        JsonObject gpu1 = new JsonObject();
-        gpu1.addProperty("DeviceID", "GPU1");
-        gpu1.addProperty("Name", "NVIDIA GeForce RTX 4090");
-        gpu1.addProperty("PNPDeviceID", "PCI\\VEN_10DE&DEV_2684&SUBSYS_409010DE&REV_A1");
-        gpu1.addProperty("CurrentBitsPerPixel", 32);
-        gpu1.addProperty("CurrentHorizontalResolution", 3840);
-        gpu1.addProperty("CurrentVerticalResolution", 2160);
-        gpu1.addProperty("CurrentRefreshRate", 144);
-        gpu1.addProperty("MaxRefreshRate", 240);
-        gpu1.addProperty("MinRefreshRate", 60);
-        gpu1.addProperty("AdapterDACType", "Integrated RAMDAC");
-        gpu1.addProperty("AdapterRAM", 24000000000L);
-        gpu1.addProperty("DriverDate", "2024-09-12");
-        gpu1.addProperty("DriverVersion", "552.22");
-        gpu1.addProperty("VideoProcessor", "AD102");
+        List<Win32VideoController> response = service.get(5L);
+        assertThat(response).contains(expectedGpu1, expectedGpu2); // Service should return mapper result unchanged
 
-        JsonObject gpu2 = new JsonObject();
-        gpu2.addProperty("DeviceID", "GPU2");
-        gpu2.addProperty("Name", "AMD Radeon RX 7900 XTX");
-        gpu2.addProperty("PNPDeviceID", "PCI\\VEN_1002&DEV_744C&SUBSYS_79001002&REV_C8");
-        gpu2.addProperty("CurrentBitsPerPixel", 32);
-        gpu2.addProperty("CurrentHorizontalResolution", 2560);
-        gpu2.addProperty("CurrentVerticalResolution", 1440);
-        gpu2.addProperty("CurrentRefreshRate", 165);
-        gpu2.addProperty("MaxRefreshRate", 240);
-        gpu2.addProperty("MinRefreshRate", 60);
-        gpu2.addProperty("AdapterDACType", "Internal DAC");
-        gpu2.addProperty("AdapterRAM", 20000000000L);
-        gpu2.addProperty("DriverDate", "2024-07-05");
-        gpu2.addProperty("DriverVersion", "24.7.1");
-        gpu2.addProperty("VideoProcessor", "Navi 31 XTX");
-
-        gpus.add(gpu1);
-        gpus.add(gpu2);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(gpus);
-    }
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32VideoControllerService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_VIDEO_CONTROLLER, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32VideoController.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32VideoController> videoControllers = service.get(5L);
-            assertEquals(2, videoControllers.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(videoControllers.get(0)).usingRecursiveComparison().isEqualTo(expectedGpu1);
-            assertThat(videoControllers.get(1)).usingRecursiveComparison().isEqualTo(expectedGpu2);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_VIDEO_CONTROLLER, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32VideoController.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
+
+        List<Win32VideoController> response = service.get(5L);
+        assertThat(response).isEmpty();
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_VIDEO_CONTROLLER, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32VideoController.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
-
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32VideoController.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
-    }
 }

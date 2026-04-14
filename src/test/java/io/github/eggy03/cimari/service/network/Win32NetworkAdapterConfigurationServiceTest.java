@@ -5,181 +5,131 @@
  */
 package io.github.eggy03.cimari.service.network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterConfiguration;
+import io.github.eggy03.cimari.mapping.network.Win32NetworkAdapterConfigurationMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32NetworkAdapterConfigurationServiceTest {
 
-    private static Win32NetworkAdapterConfiguration expectedEthernetConfig;
-    private static Win32NetworkAdapterConfiguration expectedWifiConfig;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32NetworkAdapterConfiguration expectedEthernetConfig = Win32NetworkAdapterConfiguration.builder()
+            .index(1)
+            .description("Intel(R) Ethernet Connection I219-V")
+            .caption("Ethernet Adapter Configuration")
+            .settingId("{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}")
+            .ipEnabled(true)
+            .ipAddress(Collections.singletonList("192.168.0.101"))
+            .ipSubnet(Collections.singletonList("255.255.255.0"))
+            .defaultIpGateway(Collections.singletonList("192.168.0.1"))
+            .dhcpEnabled(true)
+            .dhcpServer("192.168.0.1")
+            .dhcpLeaseObtained("2024-07-12T10:00:00Z")
+            .dhcpLeaseExpires("2024-07-13T10:00:00Z")
+            .dnsHostName("DESKTOP-ETHERNET")
+            .dnsServerSearchOrder(Arrays.asList("8.8.8.8", "8.8.4.4"))
+            .build();
+
+    private final Win32NetworkAdapterConfiguration expectedWifiConfig = Win32NetworkAdapterConfiguration.builder()
+            .index(2)
+            .description("Intel(R) Wi-Fi 6 AX200 160MHz")
+            .caption("Wi-Fi Adapter Configuration")
+            .settingId("{B2C3D4E5-F6A1-2345-6789-0ABCDEF12345}")
+            .ipEnabled(true)
+            .ipAddress(Collections.singletonList("192.168.1.150"))
+            .ipSubnet(Collections.singletonList("255.255.255.0"))
+            .defaultIpGateway(Collections.singletonList("192.168.1.1"))
+            .dhcpEnabled(true)
+            .dhcpServer("192.168.1.1")
+            .dhcpLeaseObtained("2024-07-12T11:00:00Z")
+            .dhcpLeaseExpires("2024-07-13T11:00:00Z")
+            .dnsHostName("LAPTOP-WIFI")
+            .dnsServerSearchOrder(Arrays.asList("1.1.1.1", "1.0.0.1"))
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32NetworkAdapterConfigurationMapper mapper;
+
+    @InjectMocks
     private Win32NetworkAdapterConfigurationService service;
 
-    @BeforeAll
-    static void setConfigs() {
-        expectedEthernetConfig = Win32NetworkAdapterConfiguration.builder()
-                .index(1)
-                .description("Intel(R) Ethernet Connection I219-V")
-                .caption("Ethernet Adapter Configuration")
-                .settingId("{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}")
-                .ipEnabled(true)
-                .ipAddress(Collections.singletonList("192.168.0.101"))
-                .ipSubnet(Collections.singletonList("255.255.255.0"))
-                .defaultIpGateway(Collections.singletonList("192.168.0.1"))
-                .dhcpEnabled(true)
-                .dhcpServer("192.168.0.1")
-                .dhcpLeaseObtained("2024-07-12T10:00:00Z")
-                .dhcpLeaseExpires("2024-07-13T10:00:00Z")
-                .dnsHostName("DESKTOP-ETHERNET")
-                .dnsServerSearchOrder(Arrays.asList("8.8.8.8", "8.8.4.4"))
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedWifiConfig = Win32NetworkAdapterConfiguration.builder()
-                .index(2)
-                .description("Intel(R) Wi-Fi 6 AX200 160MHz")
-                .caption("Wi-Fi Adapter Configuration")
-                .settingId("{B2C3D4E5-F6A1-2345-6789-0ABCDEF12345}")
-                .ipEnabled(true)
-                .ipAddress(Collections.singletonList("192.168.1.150"))
-                .ipSubnet(Collections.singletonList("255.255.255.0"))
-                .defaultIpGateway(Collections.singletonList("192.168.1.1"))
-                .dhcpEnabled(true)
-                .dhcpServer("192.168.1.1")
-                .dhcpLeaseObtained("2024-07-12T11:00:00Z")
-                .dhcpLeaseExpires("2024-07-13T11:00:00Z")
-                .dnsHostName("LAPTOP-WIFI")
-                .dnsServerSearchOrder(Arrays.asList("1.1.1.1", "1.0.0.1"))
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray configs = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedEthernetConfig, expectedWifiConfig));
 
-        JsonObject eth = new JsonObject();
-        eth.addProperty("Index", 1);
-        eth.addProperty("Description", "Intel(R) Ethernet Connection I219-V");
-        eth.addProperty("Caption", "Ethernet Adapter Configuration");
-        eth.addProperty("SettingID", "{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}");
-        eth.addProperty("IPEnabled", true);
-        eth.add("IPAddress", new Gson().toJsonTree(Collections.singletonList("192.168.0.101")));
-        eth.add("IPSubnet", new Gson().toJsonTree(Collections.singletonList("255.255.255.0")));
-        eth.add("DefaultIPGateway", new Gson().toJsonTree(Collections.singletonList("192.168.0.1")));
-        eth.addProperty("DHCPEnabled", true);
-        eth.addProperty("DHCPServer", "192.168.0.1");
-        eth.addProperty("DHCPLeaseObtained", "2024-07-12T10:00:00Z");
-        eth.addProperty("DHCPLeaseExpires", "2024-07-13T10:00:00Z");
-        eth.addProperty("DNSHostName", "DESKTOP-ETHERNET");
-        eth.add("DNSServerSearchOrder", new Gson().toJsonTree(Arrays.asList("8.8.8.8", "8.8.4.4")));
+        List<Win32NetworkAdapterConfiguration> response = service.get(5L);
+        assertThat(response).contains(expectedEthernetConfig, expectedWifiConfig); // Service should return mapper result unchanged
 
-        JsonObject wifi = new JsonObject();
-        wifi.addProperty("Index", 2);
-        wifi.addProperty("Description", "Intel(R) Wi-Fi 6 AX200 160MHz");
-        wifi.addProperty("Caption", "Wi-Fi Adapter Configuration");
-        wifi.addProperty("SettingID", "{B2C3D4E5-F6A1-2345-6789-0ABCDEF12345}");
-        wifi.addProperty("IPEnabled", true);
-        wifi.add("IPAddress", new Gson().toJsonTree(Collections.singletonList("192.168.1.150")));
-        wifi.add("IPSubnet", new Gson().toJsonTree(Collections.singletonList("255.255.255.0")));
-        wifi.add("DefaultIPGateway", new Gson().toJsonTree(Collections.singletonList("192.168.1.1")));
-        wifi.addProperty("DHCPEnabled", true);
-        wifi.addProperty("DHCPServer", "192.168.1.1");
-        wifi.addProperty("DHCPLeaseObtained", "2024-07-12T11:00:00Z");
-        wifi.addProperty("DHCPLeaseExpires", "2024-07-13T11:00:00Z");
-        wifi.addProperty("DNSHostName", "LAPTOP-WIFI");
-        wifi.add("DNSServerSearchOrder", new Gson().toJsonTree(Arrays.asList("1.1.1.1", "1.0.0.1")));
-
-        configs.add(eth);
-        configs.add(wifi);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(configs);
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32NetworkAdapterConfigurationService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_CONFIGURATION, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32NetworkAdapterConfiguration.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32NetworkAdapterConfiguration> configs = service.get(5L);
-            assertEquals(2, configs.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(configs.get(0)).usingRecursiveComparison().isEqualTo(expectedEthernetConfig);
-            assertThat(configs.get(1)).usingRecursiveComparison().isEqualTo(expectedWifiConfig);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_CONFIGURATION, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32NetworkAdapterConfiguration.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32NetworkAdapterConfiguration> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32NetworkAdapterConfiguration.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_NETWORK_ADAPTER_CONFIGURATION, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32NetworkAdapterConfiguration.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

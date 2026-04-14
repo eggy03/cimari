@@ -5,167 +5,124 @@
  */
 package io.github.eggy03.cimari.service.network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapter;
+import io.github.eggy03.cimari.mapping.network.Win32NetworkAdapterMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32NetworkAdapterServiceTest {
 
-    private static Win32NetworkAdapter expectedEthernetAdapter;
-    private static Win32NetworkAdapter expectedWifiAdapter;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32NetworkAdapter expectedEthernetAdapter = Win32NetworkAdapter.builder()
+            .deviceId("1")
+            .index(1)
+            .name("Ethernet")
+            .description("Intel(R) Ethernet Connection I219-V")
+            .pnpDeviceId("PCI\\VEN_8086&DEV_15B8&SUBSYS_06A41028&REV_31\\3&11583659&0&FE")
+            .macAddress("00:1A:2B:3C:4D:5E")
+            .installed(true)
+            .netEnabled(true)
+            .netConnectionId("Ethernet")
+            .physicalAdapter(true)
+            .timeOfLastReset("2024-07-12T15:30:00Z")
+            .build();
+    private final Win32NetworkAdapter expectedWifiAdapter = Win32NetworkAdapter.builder()
+            .deviceId("2")
+            .index(2)
+            .name("Wi-Fi")
+            .description("Intel(R) Wi-Fi 6 AX200 160MHz")
+            .pnpDeviceId("PCI\\VEN_8086&DEV_2723&SUBSYS_00848086&REV_1A\\3&11583659&0&A3")
+            .macAddress("A0:B1:C2:D3:E4:F5")
+            .installed(true)
+            .netEnabled(false)
+            .netConnectionId("Wi-Fi")
+            .physicalAdapter(true)
+            .timeOfLastReset("2024-07-12T15:45:00Z")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32NetworkAdapterMapper mapper;
+
+    @InjectMocks
     private Win32NetworkAdapterService service;
 
-    @BeforeAll
-    static void setAdapters() {
-        expectedEthernetAdapter = Win32NetworkAdapter.builder()
-                .deviceId("1")
-                .index(1)
-                .name("Ethernet")
-                .description("Intel(R) Ethernet Connection I219-V")
-                .pnpDeviceId("PCI\\VEN_8086&DEV_15B8&SUBSYS_06A41028&REV_31\\3&11583659&0&FE")
-                .macAddress("00:1A:2B:3C:4D:5E")
-                .installed(true)
-                .netEnabled(true)
-                .netConnectionId("Ethernet")
-                .physicalAdapter(true)
-                .timeOfLastReset("2024-07-12T15:30:00Z")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedWifiAdapter = Win32NetworkAdapter.builder()
-                .deviceId("2")
-                .index(2)
-                .name("Wi-Fi")
-                .description("Intel(R) Wi-Fi 6 AX200 160MHz")
-                .pnpDeviceId("PCI\\VEN_8086&DEV_2723&SUBSYS_00848086&REV_1A\\3&11583659&0&A3")
-                .macAddress("A0:B1:C2:D3:E4:F5")
-                .installed(true)
-                .netEnabled(false)
-                .netConnectionId("Wi-Fi")
-                .physicalAdapter(true)
-                .timeOfLastReset("2024-07-12T15:45:00Z")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray adapters = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedEthernetAdapter, expectedWifiAdapter));
 
-        JsonObject eth = new JsonObject();
-        eth.addProperty("DeviceID", "1");
-        eth.addProperty("Index", 1);
-        eth.addProperty("Name", "Ethernet");
-        eth.addProperty("Description", "Intel(R) Ethernet Connection I219-V");
-        eth.addProperty("PNPDeviceID", "PCI\\VEN_8086&DEV_15B8&SUBSYS_06A41028&REV_31\\3&11583659&0&FE");
-        eth.addProperty("MACAddress", "00:1A:2B:3C:4D:5E");
-        eth.addProperty("Installed", true);
-        eth.addProperty("NetEnabled", true);
-        eth.addProperty("NetConnectionID", "Ethernet");
-        eth.addProperty("PhysicalAdapter", true);
-        eth.addProperty("TimeOfLastReset", "2024-07-12T15:30:00Z");
+        List<Win32NetworkAdapter> response = service.get(5L);
+        assertThat(response).contains(expectedEthernetAdapter, expectedWifiAdapter); // Service should return mapper result unchanged
 
-        JsonObject wifi = new JsonObject();
-        wifi.addProperty("DeviceID", "2");
-        wifi.addProperty("Index", 2);
-        wifi.addProperty("Name", "Wi-Fi");
-        wifi.addProperty("Description", "Intel(R) Wi-Fi 6 AX200 160MHz");
-        wifi.addProperty("PNPDeviceID", "PCI\\VEN_8086&DEV_2723&SUBSYS_00848086&REV_1A\\3&11583659&0&A3");
-        wifi.addProperty("MACAddress", "A0:B1:C2:D3:E4:F5");
-        wifi.addProperty("Installed", true);
-        wifi.addProperty("NetEnabled", false);
-        wifi.addProperty("NetConnectionID", "Wi-Fi");
-        wifi.addProperty("PhysicalAdapter", true);
-        wifi.addProperty("TimeOfLastReset", "2024-07-12T15:45:00Z");
-
-        adapters.add(eth);
-        adapters.add(wifi);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(adapters);
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32NetworkAdapterService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_NETWORK_ADAPTER, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32NetworkAdapter.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32NetworkAdapter> adapters = service.get(5L);
-            assertEquals(2, adapters.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(adapters.get(0)).usingRecursiveComparison().isEqualTo(expectedEthernetAdapter);
-            assertThat(adapters.get(1)).usingRecursiveComparison().isEqualTo(expectedWifiAdapter);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_NETWORK_ADAPTER, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32NetworkAdapter.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32NetworkAdapter> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32NetworkAdapter.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_NETWORK_ADAPTER, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32NetworkAdapter.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

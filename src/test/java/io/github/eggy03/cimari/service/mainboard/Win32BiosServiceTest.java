@@ -5,163 +5,125 @@
  */
 package io.github.eggy03.cimari.service.mainboard;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.mainboard.Win32Bios;
+import io.github.eggy03.cimari.mapping.mainboard.Win32BiosMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32BiosServiceTest {
 
-    private static Win32Bios expectedBios1;
-    private static Win32Bios expectedBios2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32Bios expectedBios1 =
+            Win32Bios.builder()
+                    .name("American Megatrends Inc. BIOS")
+                    .caption("AMI BIOS")
+                    .manufacturer("American Megatrends Inc.")
+                    .releaseDate("2024-03-15")
+                    .smbiosPresent(true)
+                    .status("OK")
+                    .version("2.21.1278")
+                    .currentLanguage("en-US")
+                    .smbiosBiosVersion("A.10")
+                    .primaryBios(true)
+                    .build();
+
+    private final Win32Bios expectedBios2 =
+            Win32Bios.builder()
+                    .name("Phoenix Technologies LTD BIOS")
+                    .caption("Phoenix SecureCore BIOS")
+                    .manufacturer("Phoenix Technologies LTD")
+                    .releaseDate("2023-12-10")
+                    .smbiosPresent(true)
+                    .status("OK")
+                    .version("P1.30")
+                    .currentLanguage("en-US")
+                    .smbiosBiosVersion("1.30.0")
+                    .primaryBios(false)
+                    .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32BiosMapper mapper;
+
+    @InjectMocks
     private Win32BiosService service;
 
-    @BeforeAll
-    static void setBioses() {
-        expectedBios1 = Win32Bios.builder()
-                .name("American Megatrends Inc. BIOS")
-                .caption("AMI BIOS")
-                .manufacturer("American Megatrends Inc.")
-                .releaseDate("2024-03-15")
-                .smbiosPresent(true)
-                .status("OK")
-                .version("2.21.1278")
-                .currentLanguage("en-US")
-                .smbiosBiosVersion("A.10")
-                .primaryBios(true)
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedBios2 = Win32Bios.builder()
-                .name("Phoenix Technologies LTD BIOS")
-                .caption("Phoenix SecureCore BIOS")
-                .manufacturer("Phoenix Technologies LTD")
-                .releaseDate("2023-12-10")
-                .smbiosPresent(true)
-                .status("OK")
-                .version("P1.30")
-                .currentLanguage("en-US")
-                .smbiosBiosVersion("1.30.0")
-                .primaryBios(false)
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray bioses = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedBios1, expectedBios2));
 
-        JsonObject bios1 = new JsonObject();
-        bios1.addProperty("Name", "American Megatrends Inc. BIOS");
-        bios1.addProperty("Caption", "AMI BIOS");
-        bios1.addProperty("Manufacturer", "American Megatrends Inc.");
-        bios1.addProperty("ReleaseDate", "2024-03-15");
-        bios1.addProperty("SMBIOSPresent", true);
-        bios1.addProperty("Status", "OK");
-        bios1.addProperty("Version", "2.21.1278");
-        bios1.addProperty("CurrentLanguage", "en-US");
-        bios1.addProperty("SMBIOSBIOSVersion", "A.10");
-        bios1.addProperty("PrimaryBIOS", true);
+        List<Win32Bios> response = service.get(5L);
+        assertThat(response).contains(expectedBios1, expectedBios2); // Service should return mapper result unchanged
 
-        JsonObject bios2 = new JsonObject();
-        bios2.addProperty("Name", "Phoenix Technologies LTD BIOS");
-        bios2.addProperty("Caption", "Phoenix SecureCore BIOS");
-        bios2.addProperty("Manufacturer", "Phoenix Technologies LTD");
-        bios2.addProperty("ReleaseDate", "2023-12-10");
-        bios2.addProperty("SMBIOSPresent", true);
-        bios2.addProperty("Status", "OK");
-        bios2.addProperty("Version", "P1.30");
-        bios2.addProperty("CurrentLanguage", "en-US");
-        bios2.addProperty("SMBIOSBIOSVersion", "1.30.0");
-        bios2.addProperty("PrimaryBIOS", false);
-
-        bioses.add(bios1);
-        bioses.add(bios2);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(bioses);
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32BiosService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_BIOS, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32Bios.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32Bios> bios = service.get(5L);
-            assertEquals(2, bios.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(bios.get(0)).usingRecursiveComparison().isEqualTo(expectedBios1);
-            assertThat(bios.get(1)).usingRecursiveComparison().isEqualTo(expectedBios2);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_BIOS, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32Bios.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32Bios> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32Bios.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_BIOS, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32Bios.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

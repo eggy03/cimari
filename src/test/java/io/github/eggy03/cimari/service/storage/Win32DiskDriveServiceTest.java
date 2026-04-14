@@ -5,171 +5,127 @@
  */
 package io.github.eggy03.cimari.service.storage;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
+import io.github.eggy03.cimari.mapping.storage.Win32DiskDriveMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32DiskDriveServiceTest {
 
-    private static Win32DiskDrive expectedDiskDrive1;
-    private static Win32DiskDrive expectedDiskDrive2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32DiskDrive expectedDiskDrive1 = Win32DiskDrive.builder()
+            .deviceId("\\\\.\\PHYSICALDRIVE0")
+            .caption("Samsung SSD 970 EVO")
+            .model("MZ-V7E1T0")
+            .size(BigInteger.valueOf(1000204886016L))
+            .firmwareRevision("2B2QEXM7")
+            .serialNumber("S4EVNX0M123456")
+            .partitions(3L)
+            .status("OK")
+            .interfaceType("NVMe")
+            .pnpDeviceId("PCI\\VEN_144D&DEV_A808&SUBSYS_0A0E144D&REV_01\\4&1A2B3C4D&0&000000")
+            .capabilities(Arrays.asList(3, 4))
+            .capabilityDescriptions(Arrays.asList("desc1", "desc2"))
+            .build();
+    private final Win32DiskDrive expectedDiskDrive2 = Win32DiskDrive.builder()
+            .deviceId("\\\\.\\PHYSICALDRIVE1")
+            .caption("Seagate BarraCuda 2TB")
+            .model("ST2000DM008")
+            .size(BigInteger.valueOf(2000398934016L))
+            .firmwareRevision("CC26")
+            .serialNumber("ZFL123ABC456")
+            .partitions(2L)
+            .status("OK")
+            .interfaceType("SATA")
+            .pnpDeviceId("PCI\\VEN_8086&DEV_A102&SUBSYS_85C41043&REV_31\\3&11583659&0&FA")
+            .capabilities(Arrays.asList(3, 4))
+            .capabilityDescriptions(Arrays.asList("desc1", "desc2"))
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32DiskDriveMapper mapper;
+
+    @InjectMocks
     private Win32DiskDriveService service;
 
-    @BeforeAll
-    static void setDiskDrives() {
-        expectedDiskDrive1 = Win32DiskDrive.builder()
-                .deviceId("\\\\.\\PHYSICALDRIVE0")
-                .caption("Samsung SSD 970 EVO")
-                .model("MZ-V7E1T0")
-                .size(BigInteger.valueOf(1000204886016L))
-                .firmwareRevision("2B2QEXM7")
-                .serialNumber("S4EVNX0M123456")
-                .partitions(3L)
-                .status("OK")
-                .interfaceType("NVMe")
-                .pnpDeviceId("PCI\\VEN_144D&DEV_A808&SUBSYS_0A0E144D&REV_01\\4&1A2B3C4D&0&000000")
-                .capabilities(Arrays.asList(3, 4))
-                .capabilityDescriptions(Arrays.asList("desc1", "desc2"))
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedDiskDrive2 = Win32DiskDrive.builder()
-                .deviceId("\\\\.\\PHYSICALDRIVE1")
-                .caption("Seagate BarraCuda 2TB")
-                .model("ST2000DM008")
-                .size(BigInteger.valueOf(2000398934016L))
-                .firmwareRevision("CC26")
-                .serialNumber("ZFL123ABC456")
-                .partitions(2L)
-                .status("OK")
-                .interfaceType("SATA")
-                .pnpDeviceId("PCI\\VEN_8086&DEV_A102&SUBSYS_85C41043&REV_31\\3&11583659&0&FA")
-                .capabilities(Arrays.asList(3, 4))
-                .capabilityDescriptions(Arrays.asList("desc1", "desc2"))
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonObject disk1 = new JsonObject();
-        disk1.addProperty("DeviceID", "\\\\.\\PHYSICALDRIVE0");
-        disk1.addProperty("Caption", "Samsung SSD 970 EVO");
-        disk1.addProperty("Model", "MZ-V7E1T0");
-        disk1.addProperty("Size", 1000204886016L);
-        disk1.addProperty("FirmwareRevision", "2B2QEXM7");
-        disk1.addProperty("SerialNumber", "S4EVNX0M123456");
-        disk1.addProperty("Partitions", 3L);
-        disk1.addProperty("Status", "OK");
-        disk1.addProperty("InterfaceType", "NVMe");
-        disk1.addProperty("PNPDeviceID", "PCI\\VEN_144D&DEV_A808&SUBSYS_0A0E144D&REV_01\\4&1A2B3C4D&0&000000");
-        disk1.add("Capabilities", new Gson().toJsonTree(Arrays.asList(3, 4)));
-        disk1.add("CapabilityDescriptions", new Gson().toJsonTree(Arrays.asList("desc1", "desc2")));
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedDiskDrive1, expectedDiskDrive2));
 
-        JsonObject disk2 = new JsonObject();
-        disk2.addProperty("DeviceID", "\\\\.\\PHYSICALDRIVE1");
-        disk2.addProperty("Caption", "Seagate BarraCuda 2TB");
-        disk2.addProperty("Model", "ST2000DM008");
-        disk2.addProperty("Size", 2000398934016L);
-        disk2.addProperty("FirmwareRevision", "CC26");
-        disk2.addProperty("SerialNumber", "ZFL123ABC456");
-        disk2.addProperty("Partitions", 2L);
-        disk2.addProperty("Status", "OK");
-        disk2.addProperty("InterfaceType", "SATA");
-        disk2.addProperty("PNPDeviceID", "PCI\\VEN_8086&DEV_A102&SUBSYS_85C41043&REV_31\\3&11583659&0&FA");
-        disk2.add("Capabilities", new Gson().toJsonTree(Arrays.asList(3, 4)));
-        disk2.add("CapabilityDescriptions", new Gson().toJsonTree(Arrays.asList("desc1", "desc2")));
+        List<Win32DiskDrive> response = service.get(5L);
+        assertThat(response).contains(expectedDiskDrive1, expectedDiskDrive2); // Service should return mapper result unchanged
 
-        JsonArray array = new JsonArray();
-        array.add(disk1);
-        array.add(disk2);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(array);
-    }
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32DiskDriveService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_DISK_DRIVE, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32DiskDrive.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32DiskDrive> disks = service.get(5L);
-            assertEquals(2, disks.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(disks.get(0)).usingRecursiveComparison().isEqualTo(expectedDiskDrive1);
-            assertThat(disks.get(1)).usingRecursiveComparison().isEqualTo(expectedDiskDrive2);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_DISK_DRIVE, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32DiskDrive.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32DiskDrive> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32DiskDrive.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_DISK_DRIVE, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32DiskDrive.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

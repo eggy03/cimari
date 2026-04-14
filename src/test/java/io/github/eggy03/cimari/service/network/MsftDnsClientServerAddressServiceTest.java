@@ -5,139 +5,111 @@
  */
 package io.github.eggy03.cimari.service.network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.network.MsftDnsClientServerAddress;
+import io.github.eggy03.cimari.mapping.network.MsftDnsClientServerAddressMapper;
+import io.github.eggy03.cimari.shell.query.StandardCimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class MsftDnsClientServerAddressServiceTest {
 
-    private static MsftDnsClientServerAddress expectedDns1;
-    private static MsftDnsClientServerAddress expectedDns2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final MsftDnsClientServerAddress expectedDns1 = MsftDnsClientServerAddress.builder()
+            .interfaceIndex(1L)
+            .interfaceAlias("Ethernet")
+            .addressFamily(2) // IPv4
+            .dnsServerAddresses(Arrays.asList("8.8.8.8", "4.4.4.4"))
+            .build();
+
+    private final MsftDnsClientServerAddress expectedDns2 = MsftDnsClientServerAddress.builder()
+            .interfaceIndex(2L)
+            .interfaceAlias("Wi-Fi")
+            .addressFamily(23) // IPv6
+            .dnsServerAddresses(Arrays.asList("2001:4860:4860::8888", "2001:4860:4860::8844"))
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private MsftDnsClientServerAddressMapper mapper;
+
+    @InjectMocks
     private MsftDnsClientServerAddressService service;
 
-    @BeforeAll
-    static void setDnsConfigs() {
-        expectedDns1 = MsftDnsClientServerAddress.builder()
-                .interfaceIndex(1L)
-                .interfaceAlias("Ethernet")
-                .addressFamily(2) // IPv4
-                .dnsServerAddresses(Arrays.asList("8.8.8.8", "4.4.4.4"))
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedDns2 = MsftDnsClientServerAddress.builder()
-                .interfaceIndex(2L)
-                .interfaceAlias("Wi-Fi")
-                .addressFamily(23) // IPv6
-                .dnsServerAddresses(Arrays.asList("2001:4860:4860::8888", "2001:4860:4860::8844"))
-                .build();
-    }
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray dnsConfigs = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedDns1, expectedDns2));
 
-        JsonObject dns1 = new JsonObject();
-        dns1.addProperty("InterfaceIndex", 1L);
-        dns1.addProperty("InterfaceAlias", "Ethernet");
-        dns1.addProperty("AddressFamily", 2);
-        dns1.add("ServerAddresses", new Gson().toJsonTree(Arrays.asList("8.8.8.8", "4.4.4.4")));
+        List<MsftDnsClientServerAddress> response = service.get(5L);
+        assertThat(response).contains(expectedDns1, expectedDns2); // Service should return mapper result unchanged
 
-        JsonObject dns2 = new JsonObject();
-        dns2.addProperty("InterfaceIndex", 2L);
-        dns2.addProperty("InterfaceAlias", "Wi-Fi");
-        dns2.addProperty("AddressFamily", 23);
-        dns2.add("ServerAddresses", new Gson().toJsonTree(Arrays.asList("2001:4860:4860::8888", "2001:4860:4860::8844")));
-
-        dnsConfigs.add(dns1);
-        dnsConfigs.add(dns2);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(dnsConfigs);
-    }
-
-    @BeforeEach
-    void setUp() {
-        service = new MsftDnsClientServerAddressService();
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), MsftDnsClientServerAddress.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<MsftDnsClientServerAddress> dns = service.get(5L);
-            assertEquals(2, dns.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(dns.get(0)).usingRecursiveComparison().isEqualTo(expectedDns1);
-            assertThat(dns.get(1)).usingRecursiveComparison().isEqualTo(expectedDns2);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), MsftDnsClientServerAddress.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<MsftDnsClientServerAddress> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = MsftDnsClientServerAddress.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), MsftDnsClientServerAddress.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

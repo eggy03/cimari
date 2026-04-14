@@ -5,134 +5,110 @@
  */
 package io.github.eggy03.cimari.service.system;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.system.Win32Environment;
+import io.github.eggy03.cimari.mapping.system.Win32EnvironmentMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32EnvironmentTest {
 
-    private static Win32Environment sysVar;
-    private static Win32Environment userVar;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32Environment sysVar = Win32Environment.builder()
+            .name("PATH")
+            .systemVariable(true)
+            .variableValue("C:\\Windows\\System32")
+            .build();
+
+    private final Win32Environment userVar = Win32Environment.builder()
+            .name("TEMP")
+            .systemVariable(false)
+            .variableValue("C:\\Users\\User\\AppData\\Local\\Temp")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32EnvironmentMapper mapper;
+
+    @InjectMocks
     private Win32EnvironmentService service;
 
-    @BeforeAll
-    static void setEnvironmentVariables() {
-        sysVar = Win32Environment.builder()
-                .name("PATH")
-                .systemVariable(true)
-                .variableValue("C:\\Windows\\System32")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        userVar = Win32Environment.builder()
-                .name("TEMP")
-                .systemVariable(false)
-                .variableValue("C:\\Users\\User\\AppData\\Local\\Temp")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonObject sysEnv = new JsonObject();
-        sysEnv.addProperty("Name", "PATH");
-        sysEnv.addProperty("SystemVariable", true);
-        sysEnv.addProperty("VariableValue", "C:\\Windows\\System32");
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(sysVar, userVar));
 
-        JsonObject userEnv = new JsonObject();
-        userEnv.addProperty("Name", "TEMP");
-        userEnv.addProperty("SystemVariable", false);
-        userEnv.addProperty("VariableValue", "C:\\Users\\User\\AppData\\Local\\Temp");
+        List<Win32Environment> response = service.get(5L);
+        assertThat(response).contains(sysVar, userVar); // Service should return mapper result unchanged
 
-        JsonArray array = new JsonArray();
-        array.add(sysEnv);
-        array.add(userEnv);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(array);
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        service = new Win32EnvironmentService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_ENVIRONMENT, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32Environment.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32Environment> envList = service.get(5L);
-            assertEquals(2, envList.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(envList.get(0)).usingRecursiveComparison().isEqualTo(sysVar);
-            assertThat(envList.get(1)).usingRecursiveComparison().isEqualTo(userVar);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_ENVIRONMENT, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32Environment.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
+
+        List<Win32Environment> response = service.get(5L);
+        assertThat(response).isEmpty();
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_ENVIRONMENT, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32Environment.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
-
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32Environment.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
-    }
 }

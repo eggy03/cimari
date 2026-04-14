@@ -5,147 +5,115 @@
  */
 package io.github.eggy03.cimari.service.network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
+import io.github.eggy03.cimari.mapping.network.MsftNetConnectionProfileMapper;
+import io.github.eggy03.cimari.shell.query.StandardCimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class MsftNetConnectionProfileServiceTest {
 
-    private static MsftNetConnectionProfile expectedEthernetProfile;
-    private static MsftNetConnectionProfile expectedWifiProfile;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final MsftNetConnectionProfile expectedEthernetProfile = MsftNetConnectionProfile.builder()
+            .interfaceIndex(1L)
+            .interfaceAlias("Ethernet")
+            .networkCategory(1L) // Private
+            .domainAuthenticationKind(0L) // None
+            .ipv4Connectivity(4L) // Internet
+            .ipv6Connectivity(1L) // NoTraffic
+            .build();
+
+    private final MsftNetConnectionProfile expectedWifiProfile = MsftNetConnectionProfile.builder()
+            .interfaceIndex(2L)
+            .interfaceAlias("Wi-Fi")
+            .networkCategory(0L) // Public
+            .domainAuthenticationKind(0L) // None
+            .ipv4Connectivity(4L) // Internet
+            .ipv6Connectivity(4L) // Internet
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private MsftNetConnectionProfileMapper mapper;
+
+    @InjectMocks
     private MsftNetConnectionProfileService service;
 
-    @BeforeAll
-    static void setProfiles() {
-        expectedEthernetProfile = MsftNetConnectionProfile.builder()
-                .interfaceIndex(1L)
-                .interfaceAlias("Ethernet")
-                .networkCategory(1L) // Private
-                .domainAuthenticationKind(0L) // None
-                .ipv4Connectivity(4L) // Internet
-                .ipv6Connectivity(1L) // NoTraffic
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedWifiProfile = MsftNetConnectionProfile.builder()
-                .interfaceIndex(2L)
-                .interfaceAlias("Wi-Fi")
-                .networkCategory(0L) // Public
-                .domainAuthenticationKind(0L) // None
-                .ipv4Connectivity(4L) // Internet
-                .ipv6Connectivity(4L) // Internet
-                .build();
-    }
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray profiles = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedEthernetProfile, expectedWifiProfile));
 
-        JsonObject eth = new JsonObject();
-        eth.addProperty("InterfaceIndex", 1L);
-        eth.addProperty("InterfaceAlias", "Ethernet");
-        eth.addProperty("NetworkCategory", 1L);
-        eth.addProperty("DomainAuthenticationKind", 0L);
-        eth.addProperty("IPv4Connectivity", 4L);
-        eth.addProperty("IPv6Connectivity", 1L);
+        List<MsftNetConnectionProfile> response = service.get(5L);
+        assertThat(response).contains(expectedEthernetProfile, expectedWifiProfile); // Service should return mapper result unchanged
 
-        JsonObject wifi = new JsonObject();
-        wifi.addProperty("InterfaceIndex", 2L);
-        wifi.addProperty("InterfaceAlias", "Wi-Fi");
-        wifi.addProperty("NetworkCategory", 0L);
-        wifi.addProperty("DomainAuthenticationKind", 0L);
-        wifi.addProperty("IPv4Connectivity", 4L);
-        wifi.addProperty("IPv6Connectivity", 4L);
-
-        profiles.add(eth);
-        profiles.add(wifi);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(profiles);
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        service = new MsftNetConnectionProfileService();
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_CONNECTION_PROFILE, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), MsftNetConnectionProfile.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<MsftNetConnectionProfile> profiles = service.get(5L);
-            assertEquals(2, profiles.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(profiles.get(0)).usingRecursiveComparison().isEqualTo(expectedEthernetProfile);
-            assertThat(profiles.get(1)).usingRecursiveComparison().isEqualTo(expectedWifiProfile);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_CONNECTION_PROFILE, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), MsftNetConnectionProfile.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(StandardCimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<MsftNetConnectionProfile> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = MsftNetConnectionProfile.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_CONNECTION_PROFILE, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), MsftNetConnectionProfile.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }

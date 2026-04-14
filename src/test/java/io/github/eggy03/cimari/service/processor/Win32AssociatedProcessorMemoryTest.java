@@ -5,131 +5,107 @@
  */
 package io.github.eggy03.cimari.service.processor;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.SerializedName;
 import io.github.eggy03.cimari.entity.processor.Win32AssociatedProcessorMemory;
+import io.github.eggy03.cimari.mapping.processor.Win32AssociatedProcessorMemoryMapper;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Win32AssociatedProcessorMemoryTest {
 
-    private static Win32AssociatedProcessorMemory expectedAssoc1;
-    private static Win32AssociatedProcessorMemory expectedAssoc2;
-    private static String json;
+    private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
+    private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
+    private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
+
+    private final Win32AssociatedProcessorMemory expectedAssoc1 = Win32AssociatedProcessorMemory.builder()
+            .cacheMemoryDeviceId("CacheMemory0")
+            .processorDeviceId("CPU0")
+            .build();
+
+    private final Win32AssociatedProcessorMemory expectedAssoc2 = Win32AssociatedProcessorMemory.builder()
+            .cacheMemoryDeviceId("CacheMemory1")
+            .processorDeviceId("CPU1")
+            .build();
+
+    @Mock
+    private TerminalService terminalService;
+
+    @Mock
+    private Win32AssociatedProcessorMemoryMapper mapper;
+
+    @InjectMocks
     private Win32AssociatedProcessorMemoryService service;
 
-    @BeforeAll
-    static void setAssociations() {
-        expectedAssoc1 = Win32AssociatedProcessorMemory.builder()
-                .cacheMemoryDeviceId("CacheMemory0")
-                .processorDeviceId("CPU0")
-                .build();
+    @Test
+    void test_get_serviceReturnsMapperResult() {
 
-        expectedAssoc2 = Win32AssociatedProcessorMemory.builder()
-                .cacheMemoryDeviceId("CacheMemory1")
-                .processorDeviceId("CPU1")
-                .build();
-    }
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(validTerminalResult);
 
-    @BeforeAll
-    static void setupJson() {
-        JsonArray associations = new JsonArray();
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Arrays.asList(expectedAssoc1, expectedAssoc2));
 
-        JsonObject assoc1 = new JsonObject();
-        assoc1.addProperty("CacheMemoryDeviceID", "CacheMemory0");
-        assoc1.addProperty("ProcessorDeviceID", "CPU0");
+        List<Win32AssociatedProcessorMemory> response = service.get(5L);
+        assertThat(response).contains(expectedAssoc1, expectedAssoc2); // Service should return mapper result unchanged
 
-        JsonObject assoc2 = new JsonObject();
-        assoc2.addProperty("CacheMemoryDeviceID", "CacheMemory1");
-        assoc2.addProperty("ProcessorDeviceID", "CPU1");
-
-        associations.add(assoc1);
-        associations.add(assoc2);
-
-        json = new GsonBuilder().serializeNulls().create().toJson(associations);
-    }
-
-
-    @BeforeEach
-    void setApmService() {
-        service = new Win32AssociatedProcessorMemoryService();
+        verify(terminalService).executeQuery(Cimv2.WIN32_ASSOCIATED_PROCESSOR_MEMORY, 5L);
+        verify(mapper).mapToList(validTerminalResult.getResult(), Win32AssociatedProcessorMemory.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_success() {
+    void test_get_mapperThrows_servicePropagatesException() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn(json);
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(invalidTerminalResult);
 
-            List<Win32AssociatedProcessorMemory> apmList = service.get(5L);
-            assertEquals(2, apmList.size());
+        when(mapper.mapToList(anyString(), any()))
+                .thenThrow(JsonSyntaxException.class);
 
-            assertThat(apmList.get(0)).usingRecursiveComparison().isEqualTo(expectedAssoc1);
-            assertThat(apmList.get(1)).usingRecursiveComparison().isEqualTo(expectedAssoc2);
-        }
+        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+
+        verify(terminalService).executeQuery(Cimv2.WIN32_ASSOCIATED_PROCESSOR_MEMORY, 5L);
+        verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32AssociatedProcessorMemory.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
-    void test_getWithTimeout_invalidJson_throwsException() {
+    void test_get_serviceReturnsEmpty_whenMapperReturnsEmpty() {
 
-        try (MockedStatic<TerminalService> mockedTerminal = mockStatic(TerminalService.class)) {
-            mockedTerminal
-                    .when(() -> TerminalService.executeCommand(anyString(), anyLong()))
-                    .thenReturn("invalid json");
+        when(terminalService.executeQuery(any(Cimv2.class), anyLong()))
+                .thenReturn(emptyTerminalResult);
 
-            assertThrows(JsonSyntaxException.class, () -> service.get(5L));
-        }
-    }
+        when(mapper.mapToList(anyString(), any()))
+                .thenReturn(Collections.emptyList());
 
-    /*
-     * This test ensures that the test JSON has keys matching all @SerializedName
-     * (or raw field names if not annotated) declared in the entity class.
-     *
-     * The test fails if:
-     * - any field is added or removed in the entity without updating the test JSON
-     * - any @SerializedName value changes without updating the test JSON
-     */
-    @Test
-    void test_entityFieldParity_withTestJson() {
+        List<Win32AssociatedProcessorMemory> response = service.get(5L);
+        assertThat(response).isEmpty();
 
-        // get the serialized name for each field, in a set
-        // store the field name in case no serialized names are found
-        Field[] declaredClassFields = Win32AssociatedProcessorMemory.class.getDeclaredFields();
-        Set<String> serializedNames = new HashSet<>();
-
-        for (Field field : declaredClassFields) {
-            SerializedName s = field.getAnnotation(SerializedName.class);
-            serializedNames.add(s != null ? s.value() : field.getName());
-        }
-
-        // Extract JSON keys from the static test JSON
-        Set<String> jsonKeys = new Gson().fromJson(json, JsonArray.class)
-                .get(0).getAsJsonObject().keySet();
-
-        // Validate equality of keys vs serialized names
-        assertThat(serializedNames)
-                .as("Entity fields and JSON keys must match exactly")
-                .containsExactlyInAnyOrderElementsOf(jsonKeys);
+        verify(terminalService).executeQuery(Cimv2.WIN32_ASSOCIATED_PROCESSOR_MEMORY, 5L);
+        verify(mapper).mapToList(emptyTerminalResult.getResult(), Win32AssociatedProcessorMemory.class);
+        verifyNoMoreInteractions(terminalService);
+        verifyNoMoreInteractions(mapper);
     }
 }
