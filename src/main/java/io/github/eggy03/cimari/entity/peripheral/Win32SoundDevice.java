@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.peripheral;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a Sound device on a Windows system.
@@ -52,28 +51,28 @@ public class Win32SoundDevice {
     /**
      * Unique identifier of the sound device.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Windows Plug and Play device identifier.
      */
-    @SerializedName("PNPDeviceID")
+    @JsonProperty("PNPDeviceID")
     @Nullable
     String pnpDeviceId;
 
     /**
      * Friendly name of the sound device as recognized by the system.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Manufacturer of the sound device.
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
 
@@ -101,7 +100,7 @@ public class Win32SoundDevice {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
 
@@ -115,7 +114,7 @@ public class Win32SoundDevice {
      *   <li>5 - Not Applicable</li>
      * </ul>
      */
-    @SerializedName("StatusInfo")
+    @JsonProperty("StatusInfo")
     @Nullable
     Integer statusInfo;
 
@@ -125,12 +124,9 @@ public class Win32SoundDevice {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

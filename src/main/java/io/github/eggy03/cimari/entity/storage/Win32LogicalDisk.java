@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.storage;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
 
@@ -60,14 +59,14 @@ public class Win32LogicalDisk {
      * Appears as the drive letter assigned to the partition in the physical disk
      * Example: {@code "C:"}
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Description of the logical disk object.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
@@ -84,7 +83,7 @@ public class Win32LogicalDisk {
      * </ul>
      * <p>Data type: uint32</p>
      */
-    @SerializedName("DriveType")
+    @JsonProperty("DriveType")
     @Nullable
     Long driveType;
 
@@ -93,7 +92,7 @@ public class Win32LogicalDisk {
      * Value corresponds to a member of the MEDIA_TYPE enumeration defined in {@code Winioctl.h.}
      * Visit the microsoft documentation stated at the class level to know about the possible values.
      */
-    @SerializedName("MediaType")
+    @JsonProperty("MediaType")
     @Nullable
     Long mediaType;
 
@@ -101,21 +100,21 @@ public class Win32LogicalDisk {
      * File system on the logical disk.
      * Example: {@code "NTFS"}, {@code "FAT32"}, {@code "ReFS"}
      */
-    @SerializedName("FileSystem")
+    @JsonProperty("FileSystem")
     @Nullable
     String fileSystem;
 
     /**
      * Size of the disk drive in bytes.
      */
-    @SerializedName("Size")
+    @JsonProperty("Size")
     @Nullable
     BigInteger size;
 
     /**
      * Free space, in bytes, available on the logical disk.
      */
-    @SerializedName("FreeSpace")
+    @JsonProperty("FreeSpace")
     @Nullable
     BigInteger freeSpace;
 
@@ -124,34 +123,34 @@ public class Win32LogicalDisk {
      * If file-based compression is supported (e.g., NTFS), this value is {@code false}.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Compressed")
+    @JsonProperty("Compressed")
     @Nullable
     Boolean compressed;
     /**
      * Indicates whether the logical disk supports file-based compression (e.g., NTFS).
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("SupportsFileBasedCompression")
+    @JsonProperty("SupportsFileBasedCompression")
     @Nullable
     Boolean supportsFileBasedCompression;
     /**
      * Indicates whether this volume supports disk quotas.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("SupportsDiskQuotas")
+    @JsonProperty("SupportsDiskQuotas")
     @Nullable
     Boolean supportsDiskQuotas;
     /**
      * Volume name of the logical disk.
      * Example: {@code "Local Disk"}
      */
-    @SerializedName("VolumeName")
+    @JsonProperty("VolumeName")
     @Nullable
     String volumeName;
     /**
      * Volume serial number of the logical disk.
      */
-    @SerializedName("VolumeSerialNumber")
+    @JsonProperty("VolumeSerialNumber")
     @Nullable
     String volumeSerialNumber;
 
@@ -173,13 +172,10 @@ public class Win32LogicalDisk {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 
 }

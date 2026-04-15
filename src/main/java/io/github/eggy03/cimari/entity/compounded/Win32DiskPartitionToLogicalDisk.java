@@ -5,8 +5,7 @@
  */
 package io.github.eggy03.cimari.entity.compounded;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
@@ -14,8 +13,8 @@ import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class Win32DiskPartitionToLogicalDisk {
      * Typically represented as a string such as {@code "Disk #0, Partition #1"}.
      * </p>
      */
-    @SerializedName("PartitionID")
+    @JsonProperty("PartitionID")
     @Nullable
     String partitionId;
 
@@ -75,7 +74,7 @@ public class Win32DiskPartitionToLogicalDisk {
      * Represents the physical partition on a disk drive that may contain one or more logical disks.
      * </p>
      */
-    @SerializedName("Partition")
+    @JsonProperty("Partition")
     @Nullable
     Win32DiskPartition diskPartition;
 
@@ -85,7 +84,7 @@ public class Win32DiskPartitionToLogicalDisk {
      * Represents all logical disks or drive letters mapped to the specified {@link #diskPartition}.
      * </p>
      */
-    @SerializedName("LogicalDisks")
+    @JsonProperty("LogicalDisks")
     @Nullable
     List<Win32LogicalDisk> logicalDiskList;
 
@@ -95,12 +94,9 @@ public class Win32DiskPartitionToLogicalDisk {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

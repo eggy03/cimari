@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.peripheral;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -53,28 +52,28 @@ public class Win32Battery {
     /**
      * Identifier of the battery.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Short, one-line description of the battery object.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Description of the battery.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
     /**
      * Label by which the battery is known.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
@@ -102,7 +101,7 @@ public class Win32Battery {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
 
@@ -120,7 +119,7 @@ public class Win32Battery {
      *   <li>7 - Timed Power On Supported</li>
      * </ul>
      */
-    @SerializedName("PowerManagementCapabilities")
+    @JsonProperty("PowerManagementCapabilities")
     @Nullable
     List<Integer> powerManagementCapabilities;
 
@@ -128,7 +127,7 @@ public class Win32Battery {
      * Indicates whether the battery can be power-managed.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PowerManagementSupported")
+    @JsonProperty("PowerManagementSupported")
     @Nullable
     Boolean powerManagementSupported;
     /**
@@ -148,7 +147,7 @@ public class Win32Battery {
      *   <li>11 - Partially Charged</li>
      * </ul>
      */
-    @SerializedName("BatteryStatus")
+    @JsonProperty("BatteryStatus")
     @Nullable
     Integer batteryStatus;
     /**
@@ -165,31 +164,31 @@ public class Win32Battery {
      *   <li>8 - Lithium Polymer</li>
      * </ul>
      */
-    @SerializedName("Chemistry")
+    @JsonProperty("Chemistry")
     @Nullable
     Integer chemistry;
     /**
      * Design capacity of the battery in milliwatt-hours.
      */
-    @SerializedName("DesignCapacity")
+    @JsonProperty("DesignCapacity")
     @Nullable
     Integer designCapacity;
     /**
      * Design voltage of the battery in millivolts.
      */
-    @SerializedName("DesignVoltage")
+    @JsonProperty("DesignVoltage")
     @Nullable
     Integer designVoltage;
     /**
      * Estimated percentage of full charge remaining.
      */
-    @SerializedName("EstimatedChargeRemaining")
+    @JsonProperty("EstimatedChargeRemaining")
     @Nullable
     Long estimatedChargeRemaining;
     /**
      * Estimated remaining runtime of the battery in minutes.
      */
-    @SerializedName("EstimatedRunTime")
+    @JsonProperty("EstimatedRunTime")
     @Nullable
     Long estimatedRunTime;
 
@@ -203,12 +202,9 @@ public class Win32Battery {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

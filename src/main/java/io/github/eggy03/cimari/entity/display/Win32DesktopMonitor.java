@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.display;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a monitor device on a Windows system.
@@ -51,7 +50,7 @@ public class Win32DesktopMonitor {
      * <p>
      * Example: {@code "DesktopMonitor1"}
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
@@ -60,7 +59,7 @@ public class Win32DesktopMonitor {
      * <p>
      * Example: {@code "Default Monitor"}
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
@@ -69,7 +68,7 @@ public class Win32DesktopMonitor {
      * <p>
      * Example: {@code "DISPLAY\\DELA0D1\\4&273ACF3E&0&UID1048858"}
      */
-    @SerializedName("PNPDeviceID")
+    @JsonProperty("PNPDeviceID")
     @Nullable
     String pnpDeviceId;
 
@@ -97,7 +96,7 @@ public class Win32DesktopMonitor {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
 
@@ -106,7 +105,7 @@ public class Win32DesktopMonitor {
      * <p>
      * Example: {@code "NEC"}
      */
-    @SerializedName("MonitorManufacturer")
+    @JsonProperty("MonitorManufacturer")
     @Nullable
     String monitorManufacturer;
 
@@ -115,21 +114,21 @@ public class Win32DesktopMonitor {
      * <p>
      * Example: {@code "NEC 5FGp"}
      */
-    @SerializedName("MonitorType")
+    @JsonProperty("MonitorType")
     @Nullable
     String monitorType;
 
     /**
      * Resolution along the x-axis (horizontal direction) of the monitor.
      */
-    @SerializedName("PixelsPerXLogicalInch")
+    @JsonProperty("PixelsPerXLogicalInch")
     @Nullable
     Integer pixelsPerXLogicalInch;
 
     /**
      * Resolution along the y-axis (vertical direction) of the monitor.
      */
-    @SerializedName("PixelsPerYLogicalInch")
+    @JsonProperty("PixelsPerYLogicalInch")
     @Nullable
     Integer pixelsPerYLogicalInch;
 
@@ -139,12 +138,9 @@ public class Win32DesktopMonitor {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

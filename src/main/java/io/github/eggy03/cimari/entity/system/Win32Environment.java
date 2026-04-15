@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.system;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of the environment variables in a system running Windows.
@@ -51,7 +50,7 @@ public class Win32Environment {
     /**
      * Character string that specifies the name of a Windows-based environment variable.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
@@ -59,7 +58,7 @@ public class Win32Environment {
      * Indicates whether the variable is a system variable.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("SystemVariable")
+    @JsonProperty("SystemVariable")
     @Nullable
     Boolean systemVariable;
     /**
@@ -67,7 +66,7 @@ public class Win32Environment {
      * Information like the file system directory can change from computer to computer.
      * The operating system substitutes placeholders for these.
      */
-    @SerializedName("VariableValue")
+    @JsonProperty("VariableValue")
     @Nullable
     String variableValue;
 
@@ -81,12 +80,9 @@ public class Win32Environment {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

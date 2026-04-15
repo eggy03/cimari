@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.mainboard;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a motherboard device on a Windows system.
@@ -49,35 +48,35 @@ public class Win32Baseboard {
     /**
      * Name of the organization responsible for producing the baseboard.
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
 
     /**
      * Name by which the baseboard is known.
      */
-    @SerializedName("Model")
+    @JsonProperty("Model")
     @Nullable
     String model;
 
     /**
      * Baseboard part number defined by the manufacturer.
      */
-    @SerializedName("Product")
+    @JsonProperty("Product")
     @Nullable
     String product;
 
     /**
      * Manufacturer-allocated number used to identify the baseboard.
      */
-    @SerializedName("SerialNumber")
+    @JsonProperty("SerialNumber")
     @Nullable
     String serialNumber;
 
     /**
      * Version of the baseboard.
      */
-    @SerializedName("Version")
+    @JsonProperty("Version")
     @Nullable
     String version;
 
@@ -87,12 +86,9 @@ public class Win32Baseboard {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

@@ -5,8 +5,7 @@
  */
 package io.github.eggy03.cimari.entity.compounded;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDriveToDiskPartition;
@@ -15,8 +14,8 @@ import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class Win32DiskDriveToPartitionAndLogicalDisk {
      * This corresponds to the physical disk ID such as {@code "\\\\.\\PHYSICALDRIVE0"}.
      * </p>
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
@@ -94,7 +93,7 @@ public class Win32DiskDriveToPartitionAndLogicalDisk {
      * Represents the physical disk drive identified by the specified {@link #deviceId}.
      * </p>
      */
-    @SerializedName("DiskDrive")
+    @JsonProperty("DiskDrive")
     @Nullable
     Win32DiskDrive diskDrive;
 
@@ -104,14 +103,14 @@ public class Win32DiskDriveToPartitionAndLogicalDisk {
      * Represents all partitions physically present on the referenced {@link #diskDrive}.
      * </p>
      */
-    @SerializedName("Partitions")
+    @JsonProperty("Partitions")
     @Nullable
     List<Win32DiskPartition> diskPartitionList;
 
     /**
      * A list of {@link Win32LogicalDisk} entities associated with the {@link #deviceId}.
      */
-    @SerializedName("LogicalDisks")
+    @JsonProperty("LogicalDisks")
     @Nullable
     List<Win32LogicalDisk> logicalDiskList;
 
@@ -121,12 +120,9 @@ public class Win32DiskDriveToPartitionAndLogicalDisk {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.mainboard;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class Win32PortConnector {
      * <p>
      * Example: "Port Connector 1"
      */
-    @SerializedName("Tag")
+    @JsonProperty("Tag")
     @Nullable
     String tag;
 
@@ -61,7 +60,7 @@ public class Win32PortConnector {
      * that determine the type and use of the port.
      * Example: "COM1"
      */
-    @SerializedName("ExternalReferenceDesignator")
+    @JsonProperty("ExternalReferenceDesignator")
     @Nullable
     String externalReferenceDesignator;
 
@@ -70,7 +69,7 @@ public class Win32PortConnector {
      * to the manufacturer, and identify the circuit board location or use of the port.
      * Example: "J101"
      */
-    @SerializedName("InternalReferenceDesignator")
+    @JsonProperty("InternalReferenceDesignator")
     @Nullable
     String internalReferenceDesignator;
 
@@ -115,7 +114,7 @@ public class Win32PortConnector {
      *   <li>8251 FIFO Compatible (33)</li>
      * </ul>
      */
-    @SerializedName("PortType")
+    @JsonProperty("PortType")
     @Nullable
     Integer portType;
 
@@ -124,7 +123,7 @@ public class Win32PortConnector {
      * <p>
      * Refer to the microsoft documentation provided at the class level for a list of possible values
      */
-    @SerializedName("ConnectorType")
+    @JsonProperty("ConnectorType")
     @Nullable
     List<Integer> connectorType;
 
@@ -134,12 +133,9 @@ public class Win32PortConnector {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

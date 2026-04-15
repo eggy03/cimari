@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.network;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -59,28 +58,28 @@ public class Win32NetworkAdapterConfiguration {
      * Index number of the Windows network adapter configuration.
      * Used when multiple configurations exist.
      */
-    @SerializedName("Index")
+    @JsonProperty("Index")
     @Nullable
     Integer index;
 
     /**
      * Textual description of the network adapter configuration.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
     /**
      * Short textual caption describing the object.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Unique identifier by which the configuration instance is known.
      */
-    @SerializedName("SettingID")
+    @JsonProperty("SettingID")
     @Nullable
     String settingId;
 
@@ -88,63 +87,63 @@ public class Win32NetworkAdapterConfiguration {
      * Indicates whether TCP/IP is bound and enabled on this adapter.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("IPEnabled")
+    @JsonProperty("IPEnabled")
     @Nullable
     Boolean ipEnabled;
     /**
      * List of IP addresses associated with this network adapter.
      * May contain IPv4 and/or IPv6 addresses.
      */
-    @SerializedName("IPAddress")
+    @JsonProperty("IPAddress")
     @Nullable
     List<String> ipAddress;
     /**
      * Subnet masks associated with each IP address on this adapter.
      */
-    @SerializedName("IPSubnet")
+    @JsonProperty("IPSubnet")
     @Nullable
     List<String> ipSubnet;
     /**
      * List of default gateway IP addresses used by this system.
      */
-    @SerializedName("DefaultIPGateway")
+    @JsonProperty("DefaultIPGateway")
     @Nullable
     List<String> defaultIpGateway;
     /**
      * Indicates whether DHCP is enabled for this adapter.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("DHCPEnabled")
+    @JsonProperty("DHCPEnabled")
     @Nullable
     Boolean dhcpEnabled;
     /**
      * IP address of the DHCP server that assigned this configuration.
      */
-    @SerializedName("DHCPServer")
+    @JsonProperty("DHCPServer")
     @Nullable
     String dhcpServer;
     /**
      * Date and time when the DHCP lease was obtained.
      */
-    @SerializedName("DHCPLeaseObtained")
+    @JsonProperty("DHCPLeaseObtained")
     @Nullable
     String dhcpLeaseObtained;
     /**
      * Date and time when the DHCP lease expires.
      */
-    @SerializedName("DHCPLeaseExpires")
+    @JsonProperty("DHCPLeaseExpires")
     @Nullable
     String dhcpLeaseExpires;
     /**
      * Host name used to identify this computer on the network.
      */
-    @SerializedName("DNSHostName")
+    @JsonProperty("DNSHostName")
     @Nullable
     String dnsHostName;
     /**
      * List of DNS server IP addresses used for name resolution.
      */
-    @SerializedName("DNSServerSearchOrder")
+    @JsonProperty("DNSServerSearchOrder")
     @Nullable
     List<String> dnsServerSearchOrder;
 
@@ -162,12 +161,9 @@ public class Win32NetworkAdapterConfiguration {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

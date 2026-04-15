@@ -5,8 +5,7 @@
  */
 package io.github.eggy03.cimari.entity.compounded;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
@@ -14,8 +13,8 @@ import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -67,35 +66,35 @@ public class MsftNetAdapterToIpAndDnsAndProfile {
     /**
      * The unique index identifying the {@link MsftNetAdapter} instance
      */
-    @SerializedName("InterfaceIndex")
+    @JsonProperty("InterfaceIndex")
     @Nullable
     Long interfaceIndex;
 
     /**
      * The {@link MsftNetAdapter} associated with the index: {@link #interfaceIndex}
      */
-    @SerializedName("NetworkAdapter")
+    @JsonProperty("NetworkAdapter")
     @Nullable
     MsftNetAdapter adapter;
 
     /**
      * A list of {@link MsftNetIpAddress} associated with the index: {@link #interfaceIndex}
      */
-    @SerializedName("IPAddresses")
+    @JsonProperty("IPAddresses")
     @Nullable
     List<MsftNetIpAddress> ipAddressList;
 
     /**
      * A list of {@link MsftDnsClientServerAddress} associated with the index: {@link #interfaceIndex}
      */
-    @SerializedName("DNSServers")
+    @JsonProperty("DNSServers")
     @Nullable
     List<MsftDnsClientServerAddress> dnsClientServerAddressList;
 
     /**
      * A list of {@link MsftNetConnectionProfile} associated with the index: {@link #interfaceIndex}
      */
-    @SerializedName("Profile")
+    @JsonProperty("Profile")
     @Nullable
     List<MsftNetConnectionProfile> netConnectionProfileList;
 
@@ -105,12 +104,9 @@ public class MsftNetAdapterToIpAndDnsAndProfile {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

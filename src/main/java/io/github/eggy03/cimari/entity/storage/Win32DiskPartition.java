@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.storage;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
 
@@ -65,28 +64,28 @@ public class Win32DiskPartition {
     /**
      * Unique identifier of the disk drive and partition within the system.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Label by which the partition is known.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Description of the partition object.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
     /**
      * Size in bytes of the blocks that form this partition.
      */
-    @SerializedName("BlockSize")
+    @JsonProperty("BlockSize")
     @Nullable
     BigInteger blockSize;
 
@@ -94,7 +93,7 @@ public class Win32DiskPartition {
      * Total number of consecutive blocks that form this partition.
      * The total size of the partition can be calculated by multiplying this value by {@link #blockSize}.
      */
-    @SerializedName("NumberOfBlocks")
+    @JsonProperty("NumberOfBlocks")
     @Nullable
     BigInteger numberOfBlocks;
 
@@ -102,33 +101,33 @@ public class Win32DiskPartition {
      * Indicates whether the computer can be booted from this partition.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Bootable")
+    @JsonProperty("Bootable")
     @Nullable
     Boolean bootable;
     /**
      * Indicates whether this is the primary partition on the disk.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PrimaryPartition")
+    @JsonProperty("PrimaryPartition")
     @Nullable
     Boolean primaryPartition;
     /**
      * Indicates whether this is the active (boot) partition used by the operating system when booting.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("BootPartition")
+    @JsonProperty("BootPartition")
     @Nullable
     Boolean bootPartition;
     /**
      * Index number of the physical disk that contains this partition.
      */
-    @SerializedName("DiskIndex")
+    @JsonProperty("DiskIndex")
     @Nullable
     Long diskIndex;
     /**
      * Total size of the partition in bytes.
      */
-    @SerializedName("Size")
+    @JsonProperty("Size")
     @Nullable
     BigInteger size;
     /**
@@ -153,7 +152,7 @@ public class Win32DiskPartition {
      *     <li>Unknown</li>
      * </ul>
      */
-    @SerializedName("Type")
+    @JsonProperty("Type")
     @Nullable
     String type;
 
@@ -175,12 +174,9 @@ public class Win32DiskPartition {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

@@ -5,8 +5,7 @@
  */
 package io.github.eggy03.cimari.entity.system;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.entity.memory.Win32PhysicalMemory;
@@ -14,8 +13,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -66,7 +65,7 @@ public class Win32ComputerSystem {
      *   <li>3 — Unknown</li>
      * </ul>
      */
-    @SerializedName("AdminPasswordStatus")
+    @JsonProperty("AdminPasswordStatus")
     @Nullable
     Integer adminPasswordStatus;
 
@@ -79,7 +78,7 @@ public class Win32ComputerSystem {
      *   <li>3 — Unknown</li>
      * </ul>
      */
-    @SerializedName("KeyboardPasswordStatus")
+    @JsonProperty("KeyboardPasswordStatus")
     @Nullable
     Integer keyboardPasswordStatus;
 
@@ -92,7 +91,7 @@ public class Win32ComputerSystem {
      *   <li>3 — Unknown</li>
      * </ul>
      */
-    @SerializedName("PowerOnPasswordStatus")
+    @JsonProperty("PowerOnPasswordStatus")
     @Nullable
     Integer powerOnPasswordStatus;
 
@@ -107,7 +106,7 @@ public class Win32ComputerSystem {
      *   <li>"Fail-safe with network boot" — Safe mode with networking</li>
      * </ul>
      */
-    @SerializedName("BootupState")
+    @JsonProperty("BootupState")
     @Nullable
     String bootupState;
 
@@ -117,7 +116,7 @@ public class Win32ComputerSystem {
      * <p>
      * Note: BootStatus is platform/firmware dependent and is not supported before Windows 10 and Windows Server 2016
      */
-    @SerializedName("BootStatus")
+    @JsonProperty("BootStatus")
     @Nullable
     List<Integer> bootStatus;
 
@@ -125,7 +124,7 @@ public class Win32ComputerSystem {
      * If true, the automatic reset boot option is enabled.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("AutomaticResetBootOption")
+    @JsonProperty("AutomaticResetBootOption")
     @Nullable
     Boolean automaticResetBootOption;
     /**
@@ -143,7 +142,7 @@ public class Win32ComputerSystem {
      *   <li>9 — Power Save - Soft Off</li>
      * </ul>
      */
-    @SerializedName("PowerState")
+    @JsonProperty("PowerState")
     @Nullable
     Integer powerState;
 
@@ -161,7 +160,7 @@ public class Win32ComputerSystem {
      *   <li>6 — Non-recoverable</li>
      * </ul>
      */
-    @SerializedName("PowerSupplyState")
+    @JsonProperty("PowerSupplyState")
     @Nullable
     Integer powerSupplyState;
     /**
@@ -178,14 +177,14 @@ public class Win32ComputerSystem {
      *   <li>7 — Timed Power On Supported</li>
      * </ul>
      */
-    @SerializedName("PowerManagementCapabilities")
+    @JsonProperty("PowerManagementCapabilities")
     @Nullable
     List<Integer> powerManagementCapabilities;
     /**
      * If true, the device can be power-managed
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PowerManagementSupported")
+    @JsonProperty("PowerManagementSupported")
     @Nullable
     Boolean powerManagementSupported;
     /**
@@ -199,14 +198,14 @@ public class Win32ComputerSystem {
      *   <li>5 — Not Implemented</li>
      * </ul>
      */
-    @SerializedName("ResetCapability")
+    @JsonProperty("ResetCapability")
     @Nullable
     Integer resetCapability;
     /**
      * Number of automatic resets since the last reset.
      * A value of -1 indicates the count is unknown.
      */
-    @SerializedName("ResetCount")
+    @JsonProperty("ResetCount")
     @Nullable
     Integer resetCount;
 
@@ -216,7 +215,7 @@ public class Win32ComputerSystem {
      * Number of consecutive times a system reset is attempted.
      * A value of -1 indicates the limit is unknown.
      */
-    @SerializedName("ResetLimit")
+    @JsonProperty("ResetLimit")
     @Nullable
     Integer resetLimit;
     /**
@@ -229,32 +228,32 @@ public class Win32ComputerSystem {
      *   <li>3 — Unknown</li>
      * </ul>
      */
-    @SerializedName("FrontPanelResetStatus")
+    @JsonProperty("FrontPanelResetStatus")
     @Nullable
     Integer frontPanelResetStatus;
     /**
      * If true, automatic reset capability is available.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("AutomaticResetCapability")
+    @JsonProperty("AutomaticResetCapability")
     @Nullable
     Boolean automaticResetCapability;
     /**
      * Key of a CIM_System instance. Name of the computer system.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
     /**
      * Short one-line description of the object.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
     /**
      * Longer description of the object.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
@@ -263,49 +262,49 @@ public class Win32ComputerSystem {
     /**
      * Name of the computer manufacturer
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
     /**
      * Product name assigned by the manufacturer.
      */
-    @SerializedName("Model")
+    @JsonProperty("Model")
     @Nullable
     String model;
     /**
      * Name of the primary owner.
      */
-    @SerializedName("PrimaryOwnerName")
+    @JsonProperty("PrimaryOwnerName")
     @Nullable
     String primaryOwnerName;
     /**
      * Contact information for the primary owner.
      */
-    @SerializedName("PrimaryOwnerContact")
+    @JsonProperty("PrimaryOwnerContact")
     @Nullable
     String primaryOwnerContact;
     /**
      * List of roles the system performs in the environment (editable).
      */
-    @SerializedName("Roles")
+    @JsonProperty("Roles")
     @Nullable
     List<String> roles;
     /**
      * Chassis or enclosure SKU number (from SMBIOS).
      */
-    @SerializedName("ChassisSKUNumber")
+    @JsonProperty("ChassisSKUNumber")
     @Nullable
     String chassisSKUNumber;
     /**
      * SKU/Product ID for the system configuration.
      */
-    @SerializedName("SystemSKUNumber")
+    @JsonProperty("SystemSKUNumber")
     @Nullable
     String systemSKUNumber;
     /**
      * Family of the computer (SMBIOS Family field). May be unsupported on older OS versions.
      */
-    @SerializedName("SystemFamily")
+    @JsonProperty("SystemFamily")
     @Nullable
     String systemFamily;
     /**
@@ -325,37 +324,37 @@ public class Win32ComputerSystem {
      *   <li>"X86-Nec98 PC"</li>
      * </ul>
      */
-    @SerializedName("SystemType")
+    @JsonProperty("SystemType")
     @Nullable
     String systemType;
     /**
      * Currently logged-on user. In Terminal Services scenarios, this is the console user.
      */
-    @SerializedName("UserName")
+    @JsonProperty("UserName")
     @Nullable
     String userName;
     /**
      * Name of the workgroup or domain (if PartOfDomain==false this is a workgroup name).
      */
-    @SerializedName("Workgroup")
+    @JsonProperty("Workgroup")
     @Nullable
     String workgroup;
     /**
      * OEM-defined strings
      */
-    @SerializedName("OEMStringArray")
+    @JsonProperty("OEMStringArray")
     @Nullable
     List<String> oemStringArray;
     /**
      * Number of physical processors installed (enabled).
      */
-    @SerializedName("NumberOfProcessors")
+    @JsonProperty("NumberOfProcessors")
     @Nullable
     Long numberOfProcessors;
     /**
      * Number of logical processors available (includes hyperthreading logical CPUs).
      */
-    @SerializedName("NumberOfLogicalProcessors")
+    @JsonProperty("NumberOfLogicalProcessors")
     @Nullable
     Long numberOfLogicalProcessors;
     /**
@@ -363,28 +362,28 @@ public class Win32ComputerSystem {
      * Note: under some circumstances this may not be accurate (BIOS reservation). For accurate module-by-module capacity,
      * query the equivalent method(s) in {@link Win32PhysicalMemory}
      */
-    @SerializedName("TotalPhysicalMemory")
+    @JsonProperty("TotalPhysicalMemory")
     @Nullable
     BigInteger totalPhysicalMemory;
     /**
      * If true, the system manages the page file automatically.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("AutomaticManagedPagefile")
+    @JsonProperty("AutomaticManagedPagefile")
     @Nullable
     Boolean automaticManagedPagefile;
     /**
      * If true, an infrared (IR) port exists on the computer system.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("InfraredSupported")
+    @JsonProperty("InfraredSupported")
     @Nullable
     Boolean infraredSupported;
     /**
      * If true, network server mode is enabled (system behaves as a server).
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("NetworkServerModeEnabled")
+    @JsonProperty("NetworkServerModeEnabled")
     @Nullable
     Boolean networkServerModeEnabled;
 
@@ -395,7 +394,7 @@ public class Win32ComputerSystem {
      * Note: not supported before Windows 8 / Windows Server 2012 on older OSes.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("HypervisorPresent")
+    @JsonProperty("HypervisorPresent")
     @Nullable
     Boolean hypervisorPresent;
     /**
@@ -410,21 +409,21 @@ public class Win32ComputerSystem {
      *   <li>6 — Non-recoverable</li>
      * </ul>
      */
-    @SerializedName("ThermalState")
+    @JsonProperty("ThermalState")
     @Nullable
     Integer thermalState;
     /**
      * Amount of time the system is offset from UTC, in minutes.
      * Example: for UTC+5:30 (Asia/Kolkata) the value is 330.
      */
-    @SerializedName("CurrentTimeZone")
+    @JsonProperty("CurrentTimeZone")
     @Nullable
     Integer currentTimeZone;
     /**
      * If True, the daylight savings mode is ON.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("DaylightInEffect")
+    @JsonProperty("DaylightInEffect")
     @Nullable
     Boolean daylightInEffect;
 
@@ -466,12 +465,9 @@ public class Win32ComputerSystem {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

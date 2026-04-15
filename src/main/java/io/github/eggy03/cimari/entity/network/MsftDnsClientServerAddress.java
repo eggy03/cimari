@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.network;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -59,14 +58,14 @@ public class MsftDnsClientServerAddress {
      * Gets the user-friendly index of the server interface.
      * It's the unique interface index number used by the network stack.
      */
-    @SerializedName("InterfaceIndex")
+    @JsonProperty("InterfaceIndex")
     @Nullable
     Long interfaceIndex;
 
     /**
      * Gets the user-friendly name of the server interface.
      */
-    @SerializedName("InterfaceAlias")
+    @JsonProperty("InterfaceAlias")
     @Nullable
     String interfaceAlias;
 
@@ -79,14 +78,14 @@ public class MsftDnsClientServerAddress {
      *     <li>23 - IPv6</li>
      * </ul>
      */
-    @SerializedName("AddressFamily")
+    @JsonProperty("AddressFamily")
     @Nullable
     Integer addressFamily;
 
     /**
      * Gets a list that contains the DNS server addresses.
      */
-    @SerializedName("ServerAddresses")
+    @JsonProperty("ServerAddresses")
     @Nullable
     List<String> dnsServerAddresses;
 
@@ -96,12 +95,9 @@ public class MsftDnsClientServerAddress {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.mainboard;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a BIOS entity on a Windows system.
@@ -49,28 +48,28 @@ public class Win32Bios {
     /**
      * The BIOS name.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Short description of the BIOS.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Manufacturer of the BIOS.
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
 
     /**
      * BIOS release date in UTC format (YYYYMMDDHHMMSS.MMMMMM±OOO).
      */
-    @SerializedName("ReleaseDate")
+    @JsonProperty("ReleaseDate")
     @Nullable
     String releaseDate;
 
@@ -78,7 +77,7 @@ public class Win32Bios {
      * If true, the SMBIOS is available on this computer system.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("SMBIOSPresent")
+    @JsonProperty("SMBIOSPresent")
     @Nullable
     Boolean smbiosPresent;
     /**
@@ -105,32 +104,32 @@ public class Win32Bios {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
     /**
      * Version of the BIOS. This string is created by the BIOS manufacturer.
      */
-    @SerializedName("Version")
+    @JsonProperty("Version")
     @Nullable
     String version;
     /**
      * Name of the current BIOS language.
      */
-    @SerializedName("CurrentLanguage")
+    @JsonProperty("CurrentLanguage")
     @Nullable
     String currentLanguage;
     /**
      * BIOS version as reported by SMBIOS.
      */
-    @SerializedName("SMBIOSBIOSVersion")
+    @JsonProperty("SMBIOSBIOSVersion")
     @Nullable
     String smbiosBiosVersion;
     /**
      * If TRUE, this is the primary BIOS of the computer system.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PrimaryBIOS")
+    @JsonProperty("PrimaryBIOS")
     @Nullable
     Boolean primaryBios;
 
@@ -148,12 +147,9 @@ public class Win32Bios {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

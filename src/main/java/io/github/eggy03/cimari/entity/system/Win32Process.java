@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.system;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
 
@@ -51,42 +50,42 @@ public class Win32Process {
     /**
      * Unique identifier of the process.
      */
-    @SerializedName("ProcessId")
+    @JsonProperty("ProcessId")
     @Nullable
     Long processId;
 
     /**
      * Identifier of the session under which this process is running.
      */
-    @SerializedName("SessionId")
+    @JsonProperty("SessionId")
     @Nullable
     Long sessionId;
 
     /**
      * Name of the executable file responsible for this process.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Short one-line description of the process.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Full description of the process.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
     /**
      * Full path to the executable file of the process.
      */
-    @SerializedName("ExecutablePath")
+    @JsonProperty("ExecutablePath")
     @Nullable
     String executablePath;
 
@@ -105,21 +104,21 @@ public class Win32Process {
      *   <li>9 — Growing</li>
      * </ul>
      */
-    @SerializedName("ExecutionState")
+    @JsonProperty("ExecutionState")
     @Nullable
     Integer executionState;
 
     /**
      * Handle of the process (string representation of ProcessId).
      */
-    @SerializedName("Handle")
+    @JsonProperty("Handle")
     @Nullable
     String handle;
 
     /**
      * Number of handles currently open by the process.
      */
-    @SerializedName("HandleCount")
+    @JsonProperty("HandleCount")
     @Nullable
     Long handleCount;
 
@@ -129,91 +128,91 @@ public class Win32Process {
      *   <li>0 (lowest) to 31 (highest)</li>
      * </ul>
      */
-    @SerializedName("Priority")
+    @JsonProperty("Priority")
     @Nullable
     Long priority;
 
     /**
      * Number of active threads in the process.
      */
-    @SerializedName("ThreadCount")
+    @JsonProperty("ThreadCount")
     @Nullable
     Long threadCount;
 
     /**
      * Time spent by the process in kernel mode (in ms).
      */
-    @SerializedName("KernelModeTime")
+    @JsonProperty("KernelModeTime")
     @Nullable
     BigInteger kernelModeTime;
 
     /**
      * Time spent by the process in user mode (in ms).
      */
-    @SerializedName("UserModeTime")
+    @JsonProperty("UserModeTime")
     @Nullable
     BigInteger userModeTime;
 
     /**
      * Current working set size (in bytes) used by the process.
      */
-    @SerializedName("WorkingSetSize")
+    @JsonProperty("WorkingSetSize")
     @Nullable
     BigInteger workingSetSize;
 
     /**
      * Peak working set size (in KB) of the process.
      */
-    @SerializedName("PeakWorkingSetSize")
+    @JsonProperty("PeakWorkingSetSize")
     @Nullable
     BigInteger peakWorkingSetSize;
 
     /**
      * Current number of private memory pages used by the process.
      */
-    @SerializedName("PrivatePageCount")
+    @JsonProperty("PrivatePageCount")
     @Nullable
     BigInteger privatePageCount;
 
     /**
      * Current amount of page file usage (kilobytes).
      */
-    @SerializedName("PageFileUsage")
+    @JsonProperty("PageFileUsage")
     @Nullable
     Long pageFileUsage;
 
     /**
      * Peak page file usage (kilobytes).
      */
-    @SerializedName("PeakPageFileUsage")
+    @JsonProperty("PeakPageFileUsage")
     @Nullable
     Long peakPageFileUsage;
 
     /**
      * Current virtual address space used by the process (bytes).
      */
-    @SerializedName("VirtualSize")
+    @JsonProperty("VirtualSize")
     @Nullable
     BigInteger virtualSize;
 
     /**
      * Peak virtual address space used by the process (bytes).
      */
-    @SerializedName("PeakVirtualSize")
+    @JsonProperty("PeakVirtualSize")
     @Nullable
     BigInteger peakVirtualSize;
 
     /**
      * Date/time when the process was created.
      */
-    @SerializedName("CreationDate")
+    @JsonProperty("CreationDate")
     @Nullable
     String creationDate;
 
     /**
      * Date/time when the process was terminated (if available).
      */
-    @SerializedName("TerminationDate")
+    @JsonProperty("TerminationDate")
     @Nullable
     String terminationDate;
 
@@ -223,12 +222,9 @@ public class Win32Process {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

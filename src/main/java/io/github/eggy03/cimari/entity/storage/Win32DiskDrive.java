@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.storage;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -63,21 +62,21 @@ public class Win32DiskDrive {
     /**
      * Unique identifier of the disk drive with other devices on the system.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Short description of the object.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Manufacturer’s model number of the disk drive.
      */
-    @SerializedName("Model")
+    @JsonProperty("Model")
     @Nullable
     String model;
 
@@ -85,28 +84,28 @@ public class Win32DiskDrive {
      * Size of the disk drive, calculated by multiplying the total number of cylinders,
      * tracks in each cylinder, sectors in each track, and bytes in each sector.
      */
-    @SerializedName("Size")
+    @JsonProperty("Size")
     @Nullable
     BigInteger size;
 
     /**
      * Revision of the disk drive firmware assigned by the manufacturer.
      */
-    @SerializedName("FirmwareRevision")
+    @JsonProperty("FirmwareRevision")
     @Nullable
     String firmwareRevision;
 
     /**
      * Number allocated by the manufacturer to identify the physical media.
      */
-    @SerializedName("SerialNumber")
+    @JsonProperty("SerialNumber")
     @Nullable
     String serialNumber;
 
     /**
      * Number of partitions on this physical disk drive recognized by the operating system.
      */
-    @SerializedName("Partitions")
+    @JsonProperty("Partitions")
     @Nullable
     Long partitions;
 
@@ -134,21 +133,21 @@ public class Win32DiskDrive {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
 
     /**
      * Interface type of the physical disk drive (e.g., SCSI, IDE, USB, NVMe).
      */
-    @SerializedName("InterfaceType")
+    @JsonProperty("InterfaceType")
     @Nullable
     String interfaceType;
 
     /**
      * Windows Plug and Play device identifier of the logical device.
      */
-    @SerializedName("PNPDeviceID")
+    @JsonProperty("PNPDeviceID")
     @Nullable
     String pnpDeviceId;
 
@@ -170,7 +169,7 @@ public class Win32DiskDrive {
      *     <li>12 - Pre-dismount Eject Not Required</li>
      * </ul>
      */
-    @SerializedName("Capabilities")
+    @JsonProperty("Capabilities")
     @Nullable
     List<Integer> capabilities;
 
@@ -178,7 +177,7 @@ public class Win32DiskDrive {
      * List of more detailed explanations for any of the access device features indicated in the {@link #capabilities} array.
      * Note, each entry of this array is related to the entry in the {@link #capabilities} array that is located at the same index.
      */
-    @SerializedName("CapabilityDescriptions")
+    @JsonProperty("CapabilityDescriptions")
     @Nullable
     List<String> capabilityDescriptions;
 
@@ -188,12 +187,9 @@ public class Win32DiskDrive {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

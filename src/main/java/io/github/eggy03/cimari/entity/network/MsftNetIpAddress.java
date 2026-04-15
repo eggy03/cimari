@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.network;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of IPv4 and IPv6 address configuration for a Network Adapter on a Windows system.
@@ -57,14 +56,14 @@ public class MsftNetIpAddress {
     /**
      * Index of the network interface associated with this IP configuration.
      */
-    @SerializedName("InterfaceIndex")
+    @JsonProperty("InterfaceIndex")
     @Nullable
     Long interfaceIndex;
 
     /**
      * User-friendly name of the network interface.
      */
-    @SerializedName("InterfaceAlias")
+    @JsonProperty("InterfaceAlias")
     @Nullable
     String interfaceAlias;
 
@@ -75,28 +74,28 @@ public class MsftNetIpAddress {
      *     <li>23 - IPv6</li>
      * </ul>
      */
-    @SerializedName("AddressFamily")
+    @JsonProperty("AddressFamily")
     @Nullable
     Long addressFamily;
 
     /**
      * The IP address assigned to the interface (can be IPv4 or IPv6 or both).
      */
-    @SerializedName("IPAddress")
+    @JsonProperty("IPAddress")
     @Nullable
     String ipAddress;
 
     /**
      * The IPv4 address assigned to the interface, if applicable.
      */
-    @SerializedName("IPv4Address")
+    @JsonProperty("IPv4Address")
     @Nullable
     String ipv4Address;
 
     /**
      * The IPv6 address assigned to the interface, if applicable.
      */
-    @SerializedName("IPv6Address")
+    @JsonProperty("IPv6Address")
     @Nullable
     String ipv6Address;
 
@@ -107,7 +106,7 @@ public class MsftNetIpAddress {
      *     <li>2 - Anycast</li>
      * </ul>
      */
-    @SerializedName("Type")
+    @JsonProperty("Type")
     @Nullable
     Integer type;
 
@@ -121,7 +120,7 @@ public class MsftNetIpAddress {
      *     <li>4 - RouterAdvertisement</li>
      * </ul>
      */
-    @SerializedName("PrefixOrigin")
+    @JsonProperty("PrefixOrigin")
     @Nullable
     Long prefixOrigin;
 
@@ -136,14 +135,14 @@ public class MsftNetIpAddress {
      *     <li>5 - Random</li>
      * </ul>
      */
-    @SerializedName("SuffixOrigin")
+    @JsonProperty("SuffixOrigin")
     @Nullable
     Long suffixOrigin;
 
     /**
      * Length of the network prefix, in bits.
      */
-    @SerializedName("PrefixLength")
+    @JsonProperty("PrefixLength")
     @Nullable
     Long prefixLength;
 
@@ -151,7 +150,7 @@ public class MsftNetIpAddress {
      * Lifetime during which the address is preferred for use.
      * The default value is infinite.
      */
-    @SerializedName("PreferredLifetime")
+    @JsonProperty("PreferredLifetime")
     @Nullable
     Datetime preferredLifetime;
 
@@ -159,7 +158,7 @@ public class MsftNetIpAddress {
      * Total lifetime during which the address is valid.
      * The default value is infinite.
      */
-    @SerializedName("ValidLifetime")
+    @JsonProperty("ValidLifetime")
     @Nullable
     Datetime validLifeTime;
 
@@ -169,13 +168,10 @@ public class MsftNetIpAddress {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 
     /**
@@ -185,19 +181,19 @@ public class MsftNetIpAddress {
     @Builder(toBuilder = true)
     public static class Datetime {
 
-        @SerializedName("Days")
+        @JsonProperty("Days")
         @Nullable
         Long days;
 
-        @SerializedName("Hours")
+        @JsonProperty("Hours")
         @Nullable
         Long hours;
 
-        @SerializedName("Minutes")
+        @JsonProperty("Minutes")
         @Nullable
         Long minutes;
 
-        @SerializedName("Seconds")
+        @JsonProperty("Seconds")
         @Nullable
         Long seconds;
 
@@ -207,13 +203,10 @@ public class MsftNetIpAddress {
          * @return the {@link String} value of the object in JSON pretty-print format
          */
         @Override
-        @NotNull
         public String toString() {
-            return new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .create()
-                    .toJson(this);
+            return new ObjectMapper()
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(this);
         }
     }
 }

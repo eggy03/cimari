@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.peripheral;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -54,21 +53,21 @@ public class Win32Printer {
     /**
      * System-assigned unique identifier of the printer.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Name of the printer as recognized by the system.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Windows Plug and Play device identifier
      */
-    @SerializedName("PNPDeviceID")
+    @JsonProperty("PNPDeviceID")
     @Nullable
     String pnpDeviceId;
 
@@ -98,28 +97,28 @@ public class Win32Printer {
      *   <li>21 - Quality Low</li>
      * </ul>
      */
-    @SerializedName("Capabilities")
+    @JsonProperty("Capabilities")
     @Nullable
     List<Integer> capabilities;
 
     /**
      * Descriptive text corresponding to {@link #capabilities}.
      */
-    @SerializedName("CapabilityDescriptions")
+    @JsonProperty("CapabilityDescriptions")
     @Nullable
     List<String> capabilityDescriptions;
 
     /**
      * Printer’s horizontal resolution in DPI (dots per inch).
      */
-    @SerializedName("HorizontalResolution")
+    @JsonProperty("HorizontalResolution")
     @Nullable
     Long horizontalResolution;
 
     /**
      * Printer’s vertical resolution in DPI (dots per inch).
      */
-    @SerializedName("VerticalResolution")
+    @JsonProperty("VerticalResolution")
     @Nullable
     Long verticalResolution;
 
@@ -127,14 +126,14 @@ public class Win32Printer {
      * Numeric codes of paper sizes supported by the printer.
      * Refer to the documentation link attached at the class level for the exhaustive list of available sizes
      */
-    @SerializedName("PaperSizesSupported")
+    @JsonProperty("PaperSizesSupported")
     @Nullable
     List<Integer> paperSizesSupported;
 
     /**
      * Names of paper types or forms supported by the printer.
      */
-    @SerializedName("PrinterPaperNames")
+    @JsonProperty("PrinterPaperNames")
     @Nullable
     List<String> printerPaperNames;
 
@@ -150,7 +149,7 @@ public class Win32Printer {
      *   <li>7 - Offline</li>
      * </ul>
      */
-    @SerializedName("PrinterStatus")
+    @JsonProperty("PrinterStatus")
     @Nullable
     Integer printerStatus;
 
@@ -158,7 +157,7 @@ public class Win32Printer {
      * Data type of print jobs
      * Example: RAW or EMF
      */
-    @SerializedName("PrintJobDataType")
+    @JsonProperty("PrintJobDataType")
     @Nullable
     String printJobDataType;
 
@@ -166,14 +165,14 @@ public class Win32Printer {
      * Print processor used to process print jobs
      * Example: WinPrint
      */
-    @SerializedName("PrintProcessor")
+    @JsonProperty("PrintProcessor")
     @Nullable
     String printProcessor;
 
     /**
      * Name of the printer driver installed.
      */
-    @SerializedName("DriverName")
+    @JsonProperty("DriverName")
     @Nullable
     String driverName;
 
@@ -181,27 +180,27 @@ public class Win32Printer {
      * Indicates whether the printer is shared on the network.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Shared")
+    @JsonProperty("Shared")
     @Nullable
     Boolean shared;
     /**
      * Share name of the printer if it is shared.
      */
-    @SerializedName("ShareName")
+    @JsonProperty("ShareName")
     @Nullable
     String shareName;
     /**
      * Indicates whether spooling is enabled for the printer.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("SpoolEnabled")
+    @JsonProperty("SpoolEnabled")
     @Nullable
     Boolean spoolEnabled;
     /**
      * Specifies whether the printer is hidden from standard user interfaces.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Hidden")
+    @JsonProperty("Hidden")
     @Nullable
     Boolean hidden;
 
@@ -223,12 +222,9 @@ public class Win32Printer {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

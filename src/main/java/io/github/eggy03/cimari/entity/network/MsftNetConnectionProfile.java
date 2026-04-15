@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.network;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a connection profile for a particular network adapter on a Windows system.
@@ -53,7 +52,7 @@ public class MsftNetConnectionProfile {
     /**
      * The interface index of the network interface on which the profile is connected.
      */
-    @SerializedName("InterfaceIndex")
+    @JsonProperty("InterfaceIndex")
     @Nullable
     Long interfaceIndex;
 
@@ -61,7 +60,7 @@ public class MsftNetConnectionProfile {
      * The name of the network interface on which the profile is connected.
      * <p>Example: "Ethernet0"</p>
      */
-    @SerializedName("InterfaceAlias")
+    @JsonProperty("InterfaceAlias")
     @Nullable
     String interfaceAlias;
 
@@ -76,7 +75,7 @@ public class MsftNetConnectionProfile {
      *     <li>2 - DomainAuthenticated</li>
      * </ul>
      */
-    @SerializedName("NetworkCategory")
+    @JsonProperty("NetworkCategory")
     @Nullable
     Long networkCategory;
 
@@ -84,7 +83,7 @@ public class MsftNetConnectionProfile {
      * Indicates the domain authentication kind associated with the profile.
      * <p>WARNING: No existing documentation found about this field</p>
      */
-    @SerializedName("DomainAuthenticationKind")
+    @JsonProperty("DomainAuthenticationKind")
     @Nullable
     Long domainAuthenticationKind;
 
@@ -99,7 +98,7 @@ public class MsftNetConnectionProfile {
      *     <li>4 - Internet</li>
      * </ul>
      */
-    @SerializedName("IPv4Connectivity")
+    @JsonProperty("IPv4Connectivity")
     @Nullable
     Long ipv4Connectivity;
 
@@ -114,7 +113,7 @@ public class MsftNetConnectionProfile {
      *     <li>4 - Internet</li>
      * </ul>
      */
-    @SerializedName("IPv6Connectivity")
+    @JsonProperty("IPv6Connectivity")
     @Nullable
     Long ipv6Connectivity;
 
@@ -124,12 +123,9 @@ public class MsftNetConnectionProfile {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

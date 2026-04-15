@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.compounded;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.processor.Win32AssociatedProcessorMemory;
 import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class Win32ProcessorToCacheMemory {
      * Corresponds to the processor’s {@code DeviceID}, such as {@code "CPU0"} or {@code "CPU1"}.
      * </p>
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
@@ -70,7 +69,7 @@ public class Win32ProcessorToCacheMemory {
      * Represents the physical or logical processor containing one or more cache memory units.
      * </p>
      */
-    @SerializedName("Processor")
+    @JsonProperty("Processor")
     @Nullable
     Win32Processor processor;
 
@@ -81,7 +80,7 @@ public class Win32ProcessorToCacheMemory {
      * linked to the specified {@link #processor}.
      * </p>
      */
-    @SerializedName("CacheMemory")
+    @JsonProperty("CacheMemory")
     @Nullable
     List<Win32CacheMemory> cacheMemoryList;
 
@@ -91,12 +90,9 @@ public class Win32ProcessorToCacheMemory {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }
