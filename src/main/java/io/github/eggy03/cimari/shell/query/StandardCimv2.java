@@ -66,7 +66,7 @@ public enum StandardCimv2 {
         Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
 
         return prefix +
-                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
+                " | Select-Object -Property " + QueryUtility.getPropertiesFromJsonProperty(wmiClass) +
                 " | ConvertTo-Json";
 
     }

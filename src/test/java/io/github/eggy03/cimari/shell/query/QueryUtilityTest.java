@@ -5,7 +5,7 @@
  */
 package io.github.eggy03.cimari.shell.query;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.exception.AnnotationNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class QueryUtilityTest {
     @Test
     void getWmiClassNameFromWmiClassAnnotation_success() {
         String expectedString = "testClass";
-        String actualString = QueryUtility.getClassNameFromWmiClassAnnotation(MockWmiAnnotatedClass.class);
+        String actualString = QueryUtility.getPropertiesFromWmiClass(MockWmiAnnotatedClass.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
@@ -28,54 +28,54 @@ class QueryUtilityTest {
 
         assertThrows(
                 AnnotationNotFoundException.class,
-                () -> QueryUtility.getClassNameFromWmiClassAnnotation(MockNonWmiAnnotatedClass.class)
+                () -> QueryUtility.getPropertiesFromWmiClass(MockNonWmiAnnotatedClass.class)
         );
     }
 
     @Test
-    void getPropertiesFromSerializedNameAnnotation_withAnnotatedFields_success() {
+    void getPropertiesFromJsonProperty_withAnnotatedFields_success() {
 
         String expectedString = "field_one, field_three, field_two";
-        String actualString = QueryUtility.getPropertiesFromSerializedNameAnnotation(MockWithAnnotatedFields.class);
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockWithAnnotatedFields.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
 
     @Test
-    void getPropertiesFromSerializedNameAnnotation_withoutAnnotatedFields_success() {
+    void getPropertiesFromJsonProperty_withoutAnnotatedFields_success() {
 
         String expectedString = "fieldOne, fieldThree, fieldTwo";
-        String actualString = QueryUtility.getPropertiesFromSerializedNameAnnotation(MockWithoutAnnotatedFields.class);
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockWithoutAnnotatedFields.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
 
     @Test
-    void getPropertiesFromSerializedNameAnnotation_withAbstractClass_success_emptyString() {
+    void getPropertiesFromJsonProperty_withAbstractClass_success_emptyString() {
 
-        String actualString = QueryUtility.getPropertiesFromSerializedNameAnnotation(MockAbstractClass.class);
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockAbstractClass.class);
         assertThat(actualString).isNotNull().isEmpty();
     }
 
     @Test
-    void getFromSerializedNames_withAnnotatedFields_inheritedPropertiesFromAnotherClass_success() {
+    void getFromJsonProperties_withAnnotatedFields_inheritedPropertiesFromAnotherClass_success() {
 
         String expectedString = "field_four"; // inherited fields are not included
-        String actualString = QueryUtility.getPropertiesFromSerializedNameAnnotation(ExtensionOfMockWithAnnotatedFields.class);
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(ExtensionOfMockWithAnnotatedFields.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
 
     @SuppressWarnings("unused")
-    static class MockWithAnnotatedFields { // inner test class where fields are annotated with gson @SerializedName
+    static class MockWithAnnotatedFields { // inner test class where fields are annotated with gson @JsonProperty
 
-        @SerializedName("field_one")
+        @JsonProperty("field_one")
         String fieldOne;
 
-        @SerializedName("field_two")
+        @JsonProperty("field_two")
         String fieldTwo;
 
-        @SerializedName("field_three")
+        @JsonProperty("field_three")
         String fieldThree;
     }
 
@@ -94,7 +94,7 @@ class QueryUtilityTest {
     @SuppressWarnings("unused")
     static class ExtensionOfMockWithAnnotatedFields extends MockWithAnnotatedFields {
 
-        @SerializedName("field_four")
+        @JsonProperty("field_four")
         String fieldFour;
     }
 
