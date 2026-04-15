@@ -67,7 +67,7 @@ class QueryUtilityTest {
     }
 
     @SuppressWarnings("unused")
-    static class MockWithAnnotatedFields { // inner test class where fields are annotated with gson @JsonProperty
+    static class MockWithAnnotatedFields { // inner test class where fields are annotated with Jackson's @JsonProperty
 
         @JsonProperty("field_one")
         String fieldOne;

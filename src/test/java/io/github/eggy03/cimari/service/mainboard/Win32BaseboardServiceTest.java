@@ -5,7 +5,7 @@
  */
 package io.github.eggy03.cimari.service.mainboard;
 
-import com.google.gson.JsonSyntaxException;
+
 import io.github.eggy03.cimari.entity.mainboard.Win32Baseboard;
 import io.github.eggy03.cimari.mapping.mainboard.Win32BaseboardMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JacksonException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,9 +90,9 @@ class Win32BaseboardServiceTest {
                 .thenReturn(invalidTerminalResult);
 
         when(mapper.mapToList(anyString(), any()))
-                .thenThrow(JsonSyntaxException.class);
+                .thenThrow(JacksonException.class);
 
-        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+        assertThrows(JacksonException.class, () -> service.get(5L));
 
         verify(terminalService).executeQuery(Cimv2.WIN32_BASEBOARD, 5L);
         verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32Baseboard.class);
