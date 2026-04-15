@@ -5,7 +5,7 @@
  */
 package io.github.eggy03.cimari.service.network;
 
-import com.google.gson.JsonSyntaxException;
+
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import io.github.eggy03.cimari.mapping.network.MsftNetIpAddressMapper;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JacksonException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -106,9 +107,9 @@ class MsftNetIpAddressServiceTest {
                 .thenReturn(invalidTerminalResult);
 
         when(mapper.mapToList(anyString(), any()))
-                .thenThrow(JsonSyntaxException.class);
+                .thenThrow(JacksonException.class);
 
-        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+        assertThrows(JacksonException.class, () -> service.get(5L));
 
         verify(terminalService).executeQuery(StandardCimv2.MSFT_NET_IP_ADDRESS, 5L);
         verify(mapper).mapToList(invalidTerminalResult.getResult(), MsftNetIpAddress.class);

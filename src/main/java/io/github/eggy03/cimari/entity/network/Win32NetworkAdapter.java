@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.network;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable legacy representation of a network adapter on a Windows system.
@@ -52,14 +51,14 @@ public class Win32NetworkAdapter {
     /**
      * Unique identifier of the network adapter within the system.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Index number of the network adapter, stored in the system registry.
      */
-    @SerializedName("Index")
+    @JsonProperty("Index")
     @Nullable
     Integer index;
 
@@ -67,28 +66,28 @@ public class Win32NetworkAdapter {
      * Friendly name of the network adapter.
      * <p>Example: {@code "Intel(R) Ethernet Connection"}</p>
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Text description of the network adapter.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
     /**
      * Windows Plug-and-Play device identifier for the network adapter.
      */
-    @SerializedName("PNPDeviceID")
+    @JsonProperty("PNPDeviceID")
     @Nullable
     String pnpDeviceId;
 
     /**
      * Media access control (MAC) address for this adapter.
      */
-    @SerializedName("MACAddress")
+    @JsonProperty("MACAddress")
     @Nullable
     String macAddress;
 
@@ -96,33 +95,33 @@ public class Win32NetworkAdapter {
      * Indicates whether the network adapter is installed in the system.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Installed")
+    @JsonProperty("Installed")
     @Nullable
     Boolean installed;
     /**
      * Indicates whether the network adapter is currently enabled.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("NetEnabled")
+    @JsonProperty("NetEnabled")
     @Nullable
     Boolean netEnabled;
     /**
      * Name of the network connection as displayed in the Network Connections Control Panel.
      */
-    @SerializedName("NetConnectionID")
+    @JsonProperty("NetConnectionID")
     @Nullable
     String netConnectionId;
     /**
      * Indicates whether the adapter represents a physical or logical device.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PhysicalAdapter")
+    @JsonProperty("PhysicalAdapter")
     @Nullable
     Boolean physicalAdapter;
     /**
      * Date and time the network adapter was last reset.
      */
-    @SerializedName("TimeOfLastReset")
+    @JsonProperty("TimeOfLastReset")
     @Nullable
     String timeOfLastReset;
 
@@ -144,12 +143,9 @@ public class Win32NetworkAdapter {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

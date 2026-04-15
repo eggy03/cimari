@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.processor;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a processor cache (e.g., L1, L2, L3) on a Windows system.
@@ -56,7 +55,7 @@ public class Win32CacheMemory {
      * Example: {@code "Cache Memory 1"}
      * </p>
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
@@ -66,7 +65,7 @@ public class Win32CacheMemory {
      * Example: {@code "L2 Cache"}
      * </p>
      */
-    @SerializedName("Purpose")
+    @JsonProperty("Purpose")
     @Nullable
     String purpose;
 
@@ -82,7 +81,7 @@ public class Win32CacheMemory {
      *   <li>5 – Unified</li>
      * </ul>
      */
-    @SerializedName("CacheType")
+    @JsonProperty("CacheType")
     @Nullable
     Integer cacheType;
 
@@ -99,7 +98,7 @@ public class Win32CacheMemory {
      *   <li>6 – Not Applicable</li>
      * </ul>
      */
-    @SerializedName("Level")
+    @JsonProperty("Level")
     @Nullable
     Integer level;
 
@@ -109,7 +108,7 @@ public class Win32CacheMemory {
      * Example: {@code 512} for 512 KB.
      * </p>
      */
-    @SerializedName("InstalledSize")
+    @JsonProperty("InstalledSize")
     @Nullable
     Long installedSize;
 
@@ -128,7 +127,7 @@ public class Win32CacheMemory {
      *   <li>8 – 16-way Set-Associative</li>
      * </ul>
      */
-    @SerializedName("Associativity")
+    @JsonProperty("Associativity")
     @Nullable
     Integer associativity;
 
@@ -143,7 +142,7 @@ public class Win32CacheMemory {
      *   <li>3 – Unknown</li>
      * </ul>
      */
-    @SerializedName("Location")
+    @JsonProperty("Location")
     @Nullable
     Integer location;
 
@@ -161,7 +160,7 @@ public class Win32CacheMemory {
      *   <li>6 – Multi-bit ECC</li>
      * </ul>
      */
-    @SerializedName("ErrorCorrectType")
+    @JsonProperty("ErrorCorrectType")
     @Nullable
     Integer errorCorrectType;
 
@@ -193,7 +192,7 @@ public class Win32CacheMemory {
      *   <li>21 – Quiesced</li>
      * </ul>
      */
-    @SerializedName("Availability")
+    @JsonProperty("Availability")
     @Nullable
     Integer availability;
 
@@ -221,7 +220,7 @@ public class Win32CacheMemory {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
 
@@ -237,7 +236,7 @@ public class Win32CacheMemory {
      *   <li>5 – Not Applicable</li>
      * </ul>
      */
-    @SerializedName("StatusInfo")
+    @JsonProperty("StatusInfo")
     @Nullable
     Integer statusInfo;
 
@@ -247,12 +246,9 @@ public class Win32CacheMemory {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

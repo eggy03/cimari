@@ -5,15 +5,14 @@
  */
 package io.github.eggy03.cimari.entity.network;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of the association between a {@link Win32NetworkAdapter} and it's {@link Win32NetworkAdapterConfiguration}.
@@ -73,14 +72,14 @@ public class Win32NetworkAdapterSetting {
     /**
      * The {@code deviceId} field value of {@link Win32NetworkAdapter}
      */
-    @SerializedName("NetworkAdapterDeviceID")
+    @JsonProperty("NetworkAdapterDeviceID")
     @Nullable
     String networkAdapterDeviceId;
 
     /**
      * The {@code index} field value of {@link Win32NetworkAdapterConfiguration}
      */
-    @SerializedName("NetworkAdapterConfigurationIndex")
+    @JsonProperty("NetworkAdapterConfigurationIndex")
     @Nullable
     Integer networkAdapterConfigurationIndex;
 
@@ -90,12 +89,9 @@ public class Win32NetworkAdapterSetting {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

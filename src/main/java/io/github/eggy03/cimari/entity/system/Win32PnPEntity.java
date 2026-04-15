@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.system;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -56,14 +55,14 @@ public class Win32PnPEntity {
     /**
      * Identifier of the Plug and Play device.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Windows Plug and Play device identifier of the logical device.
      */
-    @SerializedName("PNPDeviceID")
+    @JsonProperty("PNPDeviceID")
     @Nullable
     String pnpDeviceId;
 
@@ -71,7 +70,7 @@ public class Win32PnPEntity {
      * A vendor-defined list of hardware identification strings used by Windows Setup
      * to match the device to an INF file.
      */
-    @SerializedName("HardwareID")
+    @JsonProperty("HardwareID")
     @Nullable
     List<String> hardwareId;
 
@@ -79,28 +78,28 @@ public class Win32PnPEntity {
      * A vendor-defined list of compatible identification strings that Windows Setup
      * uses as fallback identifiers when no matching hardware ID is found.
      */
-    @SerializedName("CompatibleID")
+    @JsonProperty("CompatibleID")
     @Nullable
     List<String> compatibleId;
 
     /**
      * The name by which the device is known.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * A human-readable description of the device.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
     /**
      * Name of the manufacturer of the Plug and Play device.
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
 
@@ -110,7 +109,7 @@ public class Win32PnPEntity {
      * Windows 8.1, Windows Server 2012, Windows 8, Windows Server 2008 R2, Windows 7,
      * Windows Server 2008 and Windows Vista.
      */
-    @SerializedName("Present")
+    @JsonProperty("Present")
     @Getter(AccessLevel.NONE)
     @Nullable
     Boolean present;
@@ -138,7 +137,7 @@ public class Win32PnPEntity {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
 
@@ -152,12 +151,9 @@ public class Win32PnPEntity {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

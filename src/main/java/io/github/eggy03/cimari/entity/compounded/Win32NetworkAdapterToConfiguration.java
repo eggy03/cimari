@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.compounded;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapter;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterConfiguration;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterSetting;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class Win32NetworkAdapterToConfiguration {
      * Typically corresponds to the adapter’s {@code DeviceID} as defined by Windows Management Instrumentation (WMI).
      * </p>
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
@@ -70,7 +69,7 @@ public class Win32NetworkAdapterToConfiguration {
      * Represents the physical or virtual network adapter that owns one or more configuration objects.
      * </p>
      */
-    @SerializedName("Adapter")
+    @JsonProperty("Adapter")
     @Nullable
     Win32NetworkAdapter adapter;
 
@@ -80,7 +79,7 @@ public class Win32NetworkAdapterToConfiguration {
      * Represents one or more configuration settings applied to the {@link #adapter},
      * </p>
      */
-    @SerializedName("Configurations")
+    @JsonProperty("Configurations")
     @Nullable
     List<Win32NetworkAdapterConfiguration> configurationList;
 
@@ -90,12 +89,9 @@ public class Win32NetworkAdapterToConfiguration {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

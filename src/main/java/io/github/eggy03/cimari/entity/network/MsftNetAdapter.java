@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.network;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable modern representation of a network adapter on a Windows system.
@@ -66,14 +65,14 @@ public class MsftNetAdapter {
     /**
      * Uniquely identifies the network adapter on the system.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Plug and Play (PnP) device identifier assigned to the adapter by Windows.
      */
-    @SerializedName("PnPDeviceID")
+    @JsonProperty("PnPDeviceID")
     @Nullable
     String pnpDeviceId;
 
@@ -83,7 +82,7 @@ public class MsftNetAdapter {
      * {@link MsftDnsClientServerAddress}, {@link MsftNetConnectionProfile}.</p>
      * <p>Example: 12</p>
      */
-    @SerializedName("InterfaceIndex")
+    @JsonProperty("InterfaceIndex")
     @Nullable
     Long interfaceIndex;
 
@@ -91,14 +90,14 @@ public class MsftNetAdapter {
      * Name of the network adapter interface.
      * <p>Example: "Realtek PCIe GbE Family Controller"</p>
      */
-    @SerializedName("InterfaceName")
+    @JsonProperty("InterfaceName")
     @Nullable
     String interfaceName;
 
     /**
      * Type of interface as defined by the IANA Interface Type registry.
      */
-    @SerializedName("InterfaceType")
+    @JsonProperty("InterfaceType")
     @Nullable
     Long interfaceType;
 
@@ -107,7 +106,7 @@ public class MsftNetAdapter {
      * is a unique name assigned to the network adapter during installation.
      * This name cannot be changed and is persisted as long as the network adapter is not uninstalled.
      */
-    @SerializedName("InterfaceDescription")
+    @JsonProperty("InterfaceDescription")
     @Nullable
     String interfaceDescription;
 
@@ -115,7 +114,7 @@ public class MsftNetAdapter {
      * Friendly alias name assigned to the network interface by the operating system or user.
      * <p>Example: "Ethernet"</p>
      */
-    @SerializedName("InterfaceAlias")
+    @JsonProperty("InterfaceAlias")
     @Nullable
     String interfaceAlias;
 
@@ -132,7 +131,7 @@ public class MsftNetAdapter {
      *     <li>7-LowerLayerDown</li>
      * </ul>
      */
-    @SerializedName("InterfaceOperationalStatus")
+    @JsonProperty("InterfaceOperationalStatus")
     @Nullable
     Long interfaceOperationalStatus;
 
@@ -141,21 +140,21 @@ public class MsftNetAdapter {
      * <p>Example: true for Hyper-V virtual adapters</p>
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Virtual")
+    @JsonProperty("Virtual")
     @Nullable
     Boolean virtual;
     /**
      * Indicates whether the adapter supports full-duplex mode.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("FullDuplex")
+    @JsonProperty("FullDuplex")
     @Nullable
     Boolean fullDuplex;
     /**
      * Indicates whether the adapter is hidden from the user interface.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Hidden")
+    @JsonProperty("Hidden")
     @Nullable
     Boolean hidden;
     /**
@@ -182,60 +181,60 @@ public class MsftNetAdapter {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
     /**
      * The physical (MAC) address of the network adapter.
      * <p>Example: "00:1A:2B:3C:4D:5E"</p>
      */
-    @SerializedName("LinkLayerAddress")
+    @JsonProperty("LinkLayerAddress")
     @Nullable
     String linkLayerAddress;
     /**
      * The current link speed as a formatted string, if available.
      * <p>Example: "1 Gbps"</p>
      */
-    @SerializedName("LinkSpeed")
+    @JsonProperty("LinkSpeed")
     @Nullable
     String linkSpeed;
     /**
      * Raw value of the current receive link speed in bits per second.
      */
-    @SerializedName("ReceiveLinkSpeed")
+    @JsonProperty("ReceiveLinkSpeed")
     @Nullable
     Long receiveLinkSpeedRaw;
     /**
      * Raw value of the current transmit link speed in bits per second.
      */
-    @SerializedName("TransmitLinkSpeed")
+    @JsonProperty("TransmitLinkSpeed")
     @Nullable
     Long transmitLinkSpeedRaw;
     /**
      * Name of the network adapter driver.
      * <p>Example: "rt640x64.sys"</p>
      */
-    @SerializedName("DriverName")
+    @JsonProperty("DriverName")
     @Nullable
     String driverName;
     /**
      * Version number of the network adapter driver.
      * <p>Example: "12.18.9.10"</p>
      */
-    @SerializedName("DriverVersion")
+    @JsonProperty("DriverVersion")
     @Nullable
     String driverVersion;
     /**
      * Date of the currently installed driver.
      */
-    @SerializedName("DriverDate")
+    @JsonProperty("DriverDate")
     @Nullable
     String driverDate;
     /**
      * Maximum Transmission Unit (MTU) size of the adapter, in bytes.
      * <p>Example: 1500</p>
      */
-    @SerializedName("MtuSize")
+    @JsonProperty("MtuSize")
     @Nullable
     Long mtuSize;
     /**
@@ -247,7 +246,7 @@ public class MsftNetAdapter {
      *     <li>2-Disconnected</li>
      * </ul>
      */
-    @SerializedName("MediaConnectState")
+    @JsonProperty("MediaConnectState")
     @Nullable
     Long mediaConnectState;
     /**
@@ -277,7 +276,7 @@ public class MsftNetAdapter {
      *     <li>19 – IP</li>
      * </ul>
      */
-    @SerializedName("NdisMedium")
+    @JsonProperty("NdisMedium")
     @Nullable
     Long ndisMedium;
     /**
@@ -307,14 +306,14 @@ public class MsftNetAdapter {
      *     <li>19 – Other</li>
      * </ul>
      */
-    @SerializedName("NdisPhysicalMedium")
+    @JsonProperty("NdisPhysicalMedium")
     @Nullable
     Long ndisPhysicalMedium;
     /**
      * Type of network media currently in use (for example, Ethernet or Wi-Fi).
      * String equivalent of {@link #ndisMedium}
      */
-    @SerializedName("MediaType")
+    @JsonProperty("MediaType")
     @Nullable
     String mediaType;
     /**
@@ -322,7 +321,7 @@ public class MsftNetAdapter {
      * String equivalent of {@link #ndisPhysicalMedium}
      * <p>Example: "802.3"</p>
      */
-    @SerializedName("PhysicalMediaType")
+    @JsonProperty("PhysicalMediaType")
     @Nullable
     String physicalMediaType;
 
@@ -344,12 +343,9 @@ public class MsftNetAdapter {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

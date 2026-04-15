@@ -248,8 +248,8 @@ public enum Cimv2 {
 
         Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
 
-        return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClassAnnotation(wmiClass) +
-                " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
+        return "Get-CimInstance -ClassName " + QueryUtility.getPropertiesFromWmiClass(wmiClass) +
+                " | Select-Object -Property " + QueryUtility.getPropertiesFromJsonProperty(wmiClass) +
                 " | ConvertTo-Json";
 
     }

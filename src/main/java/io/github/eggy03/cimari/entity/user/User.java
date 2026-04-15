@@ -5,12 +5,11 @@
  */
 package io.github.eggy03.cimari.entity.user;
 
-import com.google.gson.GsonBuilder;
 import io.github.eggy03.cimari.annotation.DeepImmutable;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a user on a system. The service which retrieves this info is platform-agnostic.
@@ -69,12 +68,9 @@ public class User {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

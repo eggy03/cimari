@@ -5,7 +5,7 @@
  */
 package io.github.eggy03.cimari.service.compounded;
 
-import com.google.gson.JsonSyntaxException;
+
 import io.github.eggy03.cimari.entity.compounded.HardwareId;
 import io.github.eggy03.cimari.mapping.compounded.HardwareIdMapper;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JacksonException;
 
 import java.util.Optional;
 
@@ -78,9 +79,9 @@ class HardwareIdServiceTest {
                 .thenReturn(invalidTerminalResult);
 
         when(mapper.mapToObject(anyString(), any()))
-                .thenThrow(JsonSyntaxException.class);
+                .thenThrow(JacksonException.class);
 
-        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+        assertThrows(JacksonException.class, () -> service.get(5L));
 
         verify(terminalService).executeScript(ScriptEnum.HWID, 5L);
         verify(mapper).mapToObject(invalidTerminalResult.getResult(), HardwareId.class);

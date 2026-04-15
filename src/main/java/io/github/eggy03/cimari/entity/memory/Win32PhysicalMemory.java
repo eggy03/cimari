@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.memory;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
 
@@ -49,28 +48,28 @@ public class Win32PhysicalMemory {
     /**
      * Unique identifier for the physical memory device represented by an instance of this class.
      */
-    @SerializedName("Tag")
+    @JsonProperty("Tag")
     @Nullable
     String tag;
 
     /**
      * Label for the Physical Memory.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Name of the organization responsible for producing the physical memory.
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
 
     /**
      * Model name for the physical element.
      */
-    @SerializedName("Model")
+    @JsonProperty("Model")
     @Nullable
     String model;
 
@@ -78,14 +77,14 @@ public class Win32PhysicalMemory {
      * Additional data, beyond asset tag information, that can be used to identify a physical element.
      * For example, bar code data associated with an element that also has an asset tag.
      */
-    @SerializedName("OtherIdentifyingInfo")
+    @JsonProperty("OtherIdentifyingInfo")
     @Nullable
     String otherIdentifyingInfo;
 
     /**
      * Part number assigned by the organization responsible for producing or manufacturing the physical element.
      */
-    @SerializedName("PartNumber")
+    @JsonProperty("PartNumber")
     @Nullable
     String partNumber;
 
@@ -118,21 +117,21 @@ public class Win32PhysicalMemory {
      *     <li>23 - LGA</li>
      * </ul>
      */
-    @SerializedName("FormFactor")
+    @JsonProperty("FormFactor")
     @Nullable
     Integer formFactor;
 
     /**
      * Physically labeled bank where the memory is located.
      */
-    @SerializedName("BankLabel")
+    @JsonProperty("BankLabel")
     @Nullable
     String bankLabel;
 
     /**
      * Total capacity of the physical memory—in bytes.
      */
-    @SerializedName("Capacity")
+    @JsonProperty("Capacity")
     @Nullable
     BigInteger capacity;
 
@@ -140,35 +139,35 @@ public class Win32PhysicalMemory {
      * Data width of the physical memory—in bits.
      * A data width of 0 (zero) and a total width of 8 (eight) indicates that the memory is used solely to provide error correction bits.
      */
-    @SerializedName("DataWidth")
+    @JsonProperty("DataWidth")
     @Nullable
     Integer dataWidth;
 
     /**
      * Speed of the physical memory—in MHz.
      */
-    @SerializedName("Speed")
+    @JsonProperty("Speed")
     @Nullable
     Long speed;
 
     /**
      * The configured clock speed of the memory device, in MHz, or 0, if the speed is unknown.
      */
-    @SerializedName("ConfiguredClockSpeed")
+    @JsonProperty("ConfiguredClockSpeed")
     @Nullable
     Long configuredClockSpeed;
 
     /**
      * Label of the socket or circuit board that holds the memory.
      */
-    @SerializedName("DeviceLocator")
+    @JsonProperty("DeviceLocator")
     @Nullable
     String deviceLocator;
 
     /**
      * Manufacturer-allocated number to identify the physical element.
      */
-    @SerializedName("SerialNumber")
+    @JsonProperty("SerialNumber")
     @Nullable
     String serialNumber;
 
@@ -178,12 +177,9 @@ public class Win32PhysicalMemory {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.system;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -55,42 +54,42 @@ public class Win32OperatingSystem {
     /**
      * Name of the operating system.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Short textual description (friendly name) of the operating system.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Date and time when the operating system was installed.
      */
-    @SerializedName("InstallDate")
+    @JsonProperty("InstallDate")
     @Nullable
     String installDate;
 
     /**
      * Name of the computer system running the operating system.
      */
-    @SerializedName("CSName")
+    @JsonProperty("CSName")
     @Nullable
     String csName;
 
     /**
      * Date and time when the computer was last booted.
      */
-    @SerializedName("LastBootUpTime")
+    @JsonProperty("LastBootUpTime")
     @Nullable
     String lastBootUpTime;
 
     /**
      * Current local date and time of the operating system.
      */
-    @SerializedName("LocalDateTime")
+    @JsonProperty("LocalDateTime")
     @Nullable
     String localDateTime;
 
@@ -98,55 +97,55 @@ public class Win32OperatingSystem {
      * Indicates whether this operating system is part of a distributed system.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Distributed")
+    @JsonProperty("Distributed")
     @Nullable
     Boolean distributed;
     /**
      * Number of user sessions currently active.
      */
-    @SerializedName("NumberOfUsers")
+    @JsonProperty("NumberOfUsers")
     @Nullable
     Integer numberOfUsers;
     /**
      * Version number of the operating system (for example, "10.0.22621").
      */
-    @SerializedName("Version")
+    @JsonProperty("Version")
     @Nullable
     String version;
     /**
      * Path to the boot device that the operating system uses to start the computer.
      */
-    @SerializedName("BootDevice")
+    @JsonProperty("BootDevice")
     @Nullable
     String bootDevice;
     /**
      * Internal build number of the operating system.
      */
-    @SerializedName("BuildNumber")
+    @JsonProperty("BuildNumber")
     @Nullable
     String buildNumber;
     /**
      * Type of build (e.g., "Multiprocessor Free" or "Checked").
      */
-    @SerializedName("BuildType")
+    @JsonProperty("BuildType")
     @Nullable
     String buildType;
     /**
      * Manufacturer of the operating system (typically "Microsoft Corporation").
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
     /**
      * Architecture of the operating system, such as "32-bit" or "64-bit".
      */
-    @SerializedName("OSArchitecture")
+    @JsonProperty("OSArchitecture")
     @Nullable
     String osArchitecture;
     /**
      * List of installed user interface languages (MUI language codes).
      */
-    @SerializedName("MUILanguages")
+    @JsonProperty("MUILanguages")
     @Nullable
     List<String> muiLanguages;
     /**
@@ -157,56 +156,56 @@ public class Win32OperatingSystem {
      * </ul>
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PortableOperatingSystem")
+    @JsonProperty("PortableOperatingSystem")
     @Nullable
     Boolean portableOperatingSystem;
     /**
      * Indicates whether this is the primary operating system on the computer.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Primary")
+    @JsonProperty("Primary")
     @Nullable
     Boolean primary;
     /**
      * Name of the registered user of the operating system.
      */
-    @SerializedName("RegisteredUser")
+    @JsonProperty("RegisteredUser")
     @Nullable
     String registeredUser;
     /**
      * Operating system serial number or product key identifier.
      */
-    @SerializedName("SerialNumber")
+    @JsonProperty("SerialNumber")
     @Nullable
     String serialNumber;
     /**
      * Major version number of the most recent service pack installed.
      */
-    @SerializedName("ServicePackMajorVersion")
+    @JsonProperty("ServicePackMajorVersion")
     @Nullable
     Integer servicePackMajorVersion;
     /**
      * Minor version number of the most recent service pack installed.
      */
-    @SerializedName("ServicePackMinorVersion")
+    @JsonProperty("ServicePackMinorVersion")
     @Nullable
     Integer servicePackMinorVersion;
     /**
      * Full path to the system directory (typically "C:\WINDOWS\system32").
      */
-    @SerializedName("SystemDirectory")
+    @JsonProperty("SystemDirectory")
     @Nullable
     String systemDirectory;
     /**
      * Drive letter where the operating system is installed (e.g., "C:").
      */
-    @SerializedName("SystemDrive")
+    @JsonProperty("SystemDrive")
     @Nullable
     String systemDrive;
     /**
      * Full path to the Windows installation directory (typically "C:\WINDOWS").
      */
-    @SerializedName("WindowsDirectory")
+    @JsonProperty("WindowsDirectory")
     @Nullable
     String windowsDirectory;
 
@@ -228,12 +227,9 @@ public class Win32OperatingSystem {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

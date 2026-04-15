@@ -5,14 +5,13 @@
  */
 package io.github.eggy03.cimari.entity.display;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a GPU device on a Windows system.
@@ -53,14 +52,14 @@ public class Win32VideoController {
     /**
      * Identifier (unique to the computer system) for this video controller.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Label by which the video controller is known.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
@@ -70,49 +69,49 @@ public class Win32VideoController {
      * Example: "*PNP030b"
      * </p>
      */
-    @SerializedName("PNPDeviceID")
+    @JsonProperty("PNPDeviceID")
     @Nullable
     String pnpDeviceId;
 
     /**
      * Number of bits used to display each pixel.
      */
-    @SerializedName("CurrentBitsPerPixel")
+    @JsonProperty("CurrentBitsPerPixel")
     @Nullable
     Integer currentBitsPerPixel;
 
     /**
      * Current number of horizontal pixels.
      */
-    @SerializedName("CurrentHorizontalResolution")
+    @JsonProperty("CurrentHorizontalResolution")
     @Nullable
     Integer currentHorizontalResolution;
 
     /**
      * Current number of vertical pixels.
      */
-    @SerializedName("CurrentVerticalResolution")
+    @JsonProperty("CurrentVerticalResolution")
     @Nullable
     Integer currentVerticalResolution;
 
     /**
      * Frequency at which the video controller refreshes the image for the monitor.
      */
-    @SerializedName("CurrentRefreshRate")
+    @JsonProperty("CurrentRefreshRate")
     @Nullable
     Integer currentRefreshRate;
 
     /**
      * Maximum refresh rate of the video controller in hertz.
      */
-    @SerializedName("MaxRefreshRate")
+    @JsonProperty("MaxRefreshRate")
     @Nullable
     Integer maxRefreshRate;
 
     /**
      * Minimum refresh rate of the video controller in hertz.
      */
-    @SerializedName("MinRefreshRate")
+    @JsonProperty("MinRefreshRate")
     @Nullable
     Integer minRefreshRate;
 
@@ -120,7 +119,7 @@ public class Win32VideoController {
      * Name or identifier of the digital-to-analog converter (DAC) chip.
      * The character set of this property is alphanumeric.
      */
-    @SerializedName("AdapterDACType")
+    @JsonProperty("AdapterDACType")
     @Nullable
     String adapterDacType;
 
@@ -130,21 +129,21 @@ public class Win32VideoController {
      * Example: 64000
      * </p>
      */
-    @SerializedName("AdapterRAM")
+    @JsonProperty("AdapterRAM")
     @Nullable
     Long adapterRam;
 
     /**
      * Last modification date and time of the currently installed video driver.
      */
-    @SerializedName("DriverDate")
+    @JsonProperty("DriverDate")
     @Nullable
     String driverDate;
 
     /**
      * Version number of the video driver.
      */
-    @SerializedName("DriverVersion")
+    @JsonProperty("DriverVersion")
     @Nullable
     String driverVersion;
 
@@ -152,7 +151,7 @@ public class Win32VideoController {
      * Free-form string describing the video processor.
      * <p>Example {@code AMD Radeon HD 5450}</p>
      */
-    @SerializedName("VideoProcessor")
+    @JsonProperty("VideoProcessor")
     @Nullable
     String videoProcessor;
 
@@ -162,12 +161,9 @@ public class Win32VideoController {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

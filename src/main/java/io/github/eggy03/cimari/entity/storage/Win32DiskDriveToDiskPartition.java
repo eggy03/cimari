@@ -5,15 +5,14 @@
  */
 package io.github.eggy03.cimari.entity.storage;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a {@link Win32DiskDrive} association with {@link Win32DiskPartition}.
@@ -71,14 +70,14 @@ public class Win32DiskDriveToDiskPartition {
     /**
      * Contains the {@code deviceId} field value of {@link Win32DiskDrive}
      */
-    @SerializedName("DiskDriveDeviceID")
+    @JsonProperty("DiskDriveDeviceID")
     @Nullable
     String diskDriveDeviceId;
 
     /**
      * Contains the {@code deviceId} field value of {@link Win32DiskPartition}
      */
-    @SerializedName("DiskPartitionDeviceID")
+    @JsonProperty("DiskPartitionDeviceID")
     @Nullable
     String diskPartitionDeviceId;
 
@@ -88,12 +87,9 @@ public class Win32DiskDriveToDiskPartition {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

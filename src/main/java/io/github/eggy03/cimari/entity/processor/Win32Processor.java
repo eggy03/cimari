@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.processor;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a CPU device on a Windows system.
@@ -54,49 +53,49 @@ public class Win32Processor {
     /**
      * Unique identifier of the processor on the system.
      */
-    @SerializedName("DeviceID")
+    @JsonProperty("DeviceID")
     @Nullable
     String deviceId;
 
     /**
      * Processor name: Typically includes manufacturer, brand, and model information.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
     /**
      * Number of physical cores on the processor.
      */
-    @SerializedName("NumberOfCores")
+    @JsonProperty("NumberOfCores")
     @Nullable
     Integer numberOfCores;
 
     /**
      * Number of enabled processor cores.
      */
-    @SerializedName("NumberOfEnabledCore")
+    @JsonProperty("NumberOfEnabledCore")
     @Nullable
     Integer numberOfEnabledCores;
 
     /**
      * Number of hardware threads across all cores.
      */
-    @SerializedName("ThreadCount")
+    @JsonProperty("ThreadCount")
     @Nullable
     Integer threadCount;
 
     /**
      * Number of logical processors on the system.
      */
-    @SerializedName("NumberOfLogicalProcessors")
+    @JsonProperty("NumberOfLogicalProcessors")
     @Nullable
     Integer numberOfLogicalProcessors;
 
     /**
      * Name of the processor manufacturer.
      */
-    @SerializedName("Manufacturer")
+    @JsonProperty("Manufacturer")
     @Nullable
     String manufacturer;
 
@@ -104,70 +103,70 @@ public class Win32Processor {
      * Width of the processor address bus in bits.
      * For a 32-bit CPU the value is 32 and for a 64-bit CPU, the value is 64
      */
-    @SerializedName("AddressWidth")
+    @JsonProperty("AddressWidth")
     @Nullable
     Integer addressWidth;
 
     /**
      * Size of the Level 2 cache in kilobytes.
      */
-    @SerializedName("L2CacheSize")
+    @JsonProperty("L2CacheSize")
     @Nullable
     Integer l2CacheSize;
 
     /**
      * Size of the Level 3 cache in kilobytes.
      */
-    @SerializedName("L3CacheSize")
+    @JsonProperty("L3CacheSize")
     @Nullable
     Integer l3CacheSize;
 
     /**
      * Maximum speed of the processor in megahertz under normal operating conditions.
      */
-    @SerializedName("MaxClockSpeed")
+    @JsonProperty("MaxClockSpeed")
     @Nullable
     Integer maxClockSpeed;
 
     /**
      * External clock frequency of the processor in megahertz.
      */
-    @SerializedName("ExtClock")
+    @JsonProperty("ExtClock")
     @Nullable
     Integer extClock;
 
     /**
      * Type of socket or slot used by the processor.
      */
-    @SerializedName("SocketDesignation")
+    @JsonProperty("SocketDesignation")
     @Nullable
     String socketDesignation;
 
     /**
      * Version of the processor as reported by the manufacturer.
      */
-    @SerializedName("Version")
+    @JsonProperty("Version")
     @Nullable
     String version;
 
     /**
      * Short textual description of the processor.
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Processor family type. Indicates the manufacturer and generation of the processor.
      */
-    @SerializedName("Family")
+    @JsonProperty("Family")
     @Nullable
     Integer family;
 
     /**
      * Stepping information for the processor revision.
      */
-    @SerializedName("Stepping")
+    @JsonProperty("Stepping")
     @Nullable
     String stepping;
 
@@ -175,13 +174,13 @@ public class Win32Processor {
      * Indicates whether virtualization technology is enabled in firmware.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("VirtualizationFirmwareEnabled")
+    @JsonProperty("VirtualizationFirmwareEnabled")
     @Nullable
     Boolean virtualizationFirmwareEnabled;
     /**
      * Processor identifier string, which may include family, model, and stepping information.
      */
-    @SerializedName("ProcessorId")
+    @JsonProperty("ProcessorId")
     @Nullable
     String processorId;
     /**
@@ -198,7 +197,7 @@ public class Win32Processor {
      *     <li>ARM64 (12)</li>
      * </ul>
      */
-    @SerializedName("Architecture")
+    @JsonProperty("Architecture")
     @Nullable
     Integer architecture;
 
@@ -212,12 +211,9 @@ public class Win32Processor {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

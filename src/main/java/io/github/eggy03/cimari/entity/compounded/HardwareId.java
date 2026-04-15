@@ -5,13 +5,12 @@
  */
 package io.github.eggy03.cimari.entity.compounded;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a hardware identity (HWID) in a Windows system.
@@ -89,7 +88,7 @@ public class HardwareId {
      * <p>For production applications, use {@link #hashHWID}</p>
      * <p>Read the class level documentation to know more about how this information is collected</p>
      */
-    @SerializedName("HWIDRaw")
+    @JsonProperty("HWIDRaw")
     @Nullable
     String rawHWID;
 
@@ -97,7 +96,7 @@ public class HardwareId {
      * SHA-256 hash of the {@link #rawHWID}
      * <p>Read the class level documentation to know more about how this information is collected</p>
      */
-    @SerializedName("HWIDHash")
+    @JsonProperty("HWIDHash")
     @Nullable
     String hashHWID;
 
@@ -107,12 +106,9 @@ public class HardwareId {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

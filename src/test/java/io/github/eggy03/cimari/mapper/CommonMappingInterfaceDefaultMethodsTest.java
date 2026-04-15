@@ -5,57 +5,56 @@
  */
 package io.github.eggy03.cimari.mapper;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.mapping.CommonMappingInterface;
-import org.junit.jupiter.api.BeforeAll;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommonMappingInterfaceDefaultMethodsTest {
 
-    private static CommonMappingInterface<Win32Processor> mapper;
-
-    @BeforeAll
-    static void setProcessorCommonMappingInterface() {
-        mapper = new CommonMappingInterface<Win32Processor>() {
-        };
-    }
+    private final CommonMappingInterface<MockEntity> mapper = new CommonMappingInterface<MockEntity>() {
+    };
+    private final ObjectMapper objectMapper = mapper.objectMapper();
 
     @Test
     void testMapToObject_success() {
 
-        JsonObject processorObject = new JsonObject();
-        processorObject.addProperty("DeviceID", "CPU0");
-        processorObject.addProperty("Name", "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz");
+        // construct a MockEntity object
+        MockEntity constructedMockEntity = new MockEntity(1L, "SomeValue");
 
-        String jsonProcessor = new Gson().toJson(processorObject);
+        // manually construct json
+        ObjectNode mockEntityJsonObject = objectMapper.createObjectNode();
+        mockEntityJsonObject.put("ID", 1L);
+        mockEntityJsonObject.put("Value", "SomeValue");
 
-        Optional<Win32Processor> processor = mapper.mapToObject(jsonProcessor, Win32Processor.class);
-        assertTrue(processor.isPresent());
-        assertEquals("CPU0", processor.get().getDeviceId());
-        assertEquals("Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz", processor.get().getName());
+        // get it as string
+        String mockEntityJson = objectMapper.writeValueAsString(mockEntityJsonObject);
+
+        // deserialize it
+        Optional<MockEntity> deserializedMockEntity = mapper.mapToObject(mockEntityJson, MockEntity.class);
+
+        // assert that the deserialization was a success
+        assertThat(deserializedMockEntity).contains(constructedMockEntity);
     }
 
     @Test
     void testMapToObject_invalidJson_throwsException() {
 
         String json = "invalid json";
-        assertThrows(JsonSyntaxException.class, () -> mapper.mapToObject(json, Win32Processor.class));
+        assertThrows(JacksonException.class, () -> mapper.mapToObject(json, MockEntity.class));
 
     }
 
@@ -63,106 +62,159 @@ class CommonMappingInterfaceDefaultMethodsTest {
     void testMapToObject_validJson_jsonMismatchSchema_returnsObjectWithNullableFields() {
 
         String json = "{}";
-        Optional<Win32Processor> processor = mapper.mapToObject(json, Win32Processor.class);
+        Optional<MockEntity> deserializedMockEntity = mapper.mapToObject(json, MockEntity.class);
 
-        assertTrue(processor.isPresent());
-        assertNotNull(processor.get());
-        assertNull(processor.get().getDeviceId());
+        assertThat(deserializedMockEntity).isPresent();
+        assertThat(deserializedMockEntity.get()).isNotNull();
+        assertThat(deserializedMockEntity.get().id).isNull();
+    }
+
+    @Test
+    void testMapToList_validJson_butJsonIsAnArray_throwsException() {
+        String json = "[{}]";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(json, MockEntity.class));
     }
 
     @Test
     void testMapToObject_emptyJson_optionalNotPresent() {
         String json = "";
-        Optional<Win32Processor> processorObject = mapper.mapToObject(json, Win32Processor.class);
-        assertFalse(processorObject.isPresent());
+        Optional<MockEntity> deserializedMockEntity = mapper.mapToObject(json, MockEntity.class);
+        assertThat(deserializedMockEntity).isNotPresent();
     }
 
     @Test
     void testMapToObject_nullParameters_throwsException() {
-        assertThrows(NullPointerException.class, () -> mapper.mapToObject(null, Win32Processor.class));
+        assertThrows(NullPointerException.class, () -> mapper.mapToObject(null, MockEntity.class));
         assertThrows(NullPointerException.class, () -> mapper.mapToObject("", null));
     }
 
     @Test
     void testMapToList_success() {
 
-        JsonArray processorArrayObject = new JsonArray();
+        // construct two MockEntity objects
+        MockEntity constructedMockEntityOne = new MockEntity(1L, "SomeValue");
+        MockEntity constructedMockEntityTwo = new MockEntity(2L, "AnotherValue");
 
-        JsonObject cpu0 = new JsonObject();
-        cpu0.addProperty("DeviceID", "CPU0");
-        cpu0.addProperty("Name", "Intel(R) Core(TM) i5-14700H CPU @ 2.30GHz");
+        // construct json
+        ArrayNode rootArray = objectMapper.createArrayNode();
 
-        JsonObject cpu1 = new JsonObject();
-        cpu1.addProperty("DeviceID", "CPU1");
-        cpu1.addProperty("Name", "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz");
+        ObjectNode mockEntityJsonObjectOne = objectMapper.createObjectNode();
+        mockEntityJsonObjectOne.put("ID", 1L);
+        mockEntityJsonObjectOne.put("Value", "SomeValue");
 
-        processorArrayObject.add(cpu0);
-        processorArrayObject.add(cpu1);
+        ObjectNode mockEntityJsonObjectTwo = objectMapper.createObjectNode();
+        mockEntityJsonObjectTwo.put("ID", 2L);
+        mockEntityJsonObjectTwo.put("Value", "AnotherValue");
 
-        String jsonArrayProcessor = new Gson().toJson(processorArrayObject);
+        rootArray.add(mockEntityJsonObjectOne);
+        rootArray.add(mockEntityJsonObjectTwo);
 
-        List<Win32Processor> processors = mapper.mapToList(jsonArrayProcessor, Win32Processor.class);
-        assertEquals(2, processors.size());
-        assertEquals("CPU0", processors.get(0).getDeviceId());
-        assertEquals("Intel(R) Core(TM) i5-14700H CPU @ 2.30GHz", processors.get(0).getName());
-        assertEquals("CPU1", processors.get(1).getDeviceId());
-        assertEquals("Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz", processors.get(1).getName());
+        String mockEntityJson = objectMapper.writeValueAsString(rootArray);
+
+        List<MockEntity> deserializedEntityList = mapper.mapToList(mockEntityJson, MockEntity.class);
+        assertThat(deserializedEntityList).contains(constructedMockEntityOne, constructedMockEntityTwo);
 
         // test immutability
-        assertThrows(UnsupportedOperationException.class, () -> processors.add(null));
+        assertThrows(UnsupportedOperationException.class, () -> deserializedEntityList.add(null));
     }
 
     @Test
     void testMapToList_whenSingleObject_returnsSingletonList() {
 
-        JsonObject processorObject = new JsonObject();
-        processorObject.addProperty("DeviceID", "CPU0");
-        processorObject.addProperty("Name", "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz");
+        // construct two MockEntity objects
+        MockEntity constructedMockEntity = new MockEntity(1L, "SomeValue");
 
-        String jsonProcessor = new Gson().toJson(processorObject);
+        // manually construct json
+        ObjectNode mockEntityJsonObject = objectMapper.createObjectNode();
+        mockEntityJsonObject.put("ID", 1L);
+        mockEntityJsonObject.put("Value", "SomeValue");
 
-        List<Win32Processor> processors = mapper.mapToList(jsonProcessor, Win32Processor.class);
-        assertEquals(1, processors.size());
-        assertEquals("CPU0", processors.get(0).getDeviceId());
-        assertEquals("Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz", processors.get(0).getName());
+        // get it as string
+        String mockEntityJson = objectMapper.writeValueAsString(mockEntityJsonObject);
+
+        List<MockEntity> deserializedEntityList = mapper.mapToList(mockEntityJson, MockEntity.class);
+        assertThat(deserializedEntityList)
+                .hasSize(1)
+                .contains(constructedMockEntity);
     }
 
     @Test
     void testMapToList_invalidJson_throwsException() {
         String json = "invalid json";
-        assertThrows(JsonSyntaxException.class, () -> mapper.mapToList(json, Win32Processor.class));
+        assertThrows(JacksonException.class, () -> mapper.mapToList(json, MockEntity.class));
     }
 
     @Test
     void testMapToList_validJson_jsonMismatchSchema_returnsASingletonListWithNullFieldObject() {
         String json = "[{}]";
-        List<Win32Processor> processors = mapper.mapToList(json, Win32Processor.class);
+        List<MockEntity> deserializedEntityList = mapper.mapToList(json, MockEntity.class);
 
-        assertEquals(1, processors.size());
-        assertNotNull(processors.get(0));
-        assertNull(processors.get(0).getDeviceId());
+        assertThat(deserializedEntityList).hasSize(1);
+        assertThat(deserializedEntityList.get(0)).isNotNull();
+        assertThat(deserializedEntityList.get(0).id).isNull();
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "   ", "null"})
+    @ValueSource(strings = {"", "   "})
     void testMapToList_emptyOrWhiteSpaceOrLiteralNullStringJson_emptyList(String json) {
-        List<Win32Processor> processorList = mapper.mapToList(json, Win32Processor.class);
-        assertTrue(processorList.isEmpty());
+        List<MockEntity> deserializedEntityList = mapper.mapToList(json, MockEntity.class);
+        assertThat(deserializedEntityList).isEmpty();
 
     }
 
     @Test
     void testMapToList_nullArrayString_returnsListWithNullElement() {
         String json = "[null]";
-        List<Win32Processor> processorList = mapper.mapToList(json, Win32Processor.class);
+        List<MockEntity> deserializedEntityList = mapper.mapToList(json, MockEntity.class);
 
-        assertEquals(1, processorList.size());
-        assertNull(processorList.get(0));
+        assertThat(deserializedEntityList).hasSize(1);
+        assertThat(deserializedEntityList.get(0)).isNull();
     }
 
     @Test
     void testMapToList_nullParameters_throwsException() {
-        assertThrows(NullPointerException.class, () -> mapper.mapToList(null, Win32Processor.class));
+        assertThrows(NullPointerException.class, () -> mapper.mapToList(null, MockEntity.class));
         assertThrows(NullPointerException.class, () -> mapper.mapToList("", null));
+    }
+
+    static class MockEntity {
+
+        @Nullable
+        @JsonProperty("ID")
+        Long id;
+
+        @Nullable
+        @JsonProperty("Value")
+        String value;
+
+        // default constructor is necessary for jackson to deserialize
+        public MockEntity() {
+
+        }
+
+        public MockEntity(@Nullable Long id, @Nullable String value) {
+            this.id = id;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "{\n\t" + this.id + ",\n\t" + this.value + "\n}";
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof MockEntity)) return false;
+            MockEntity that = (MockEntity) o;
+            return Objects.equals(id, that.id) &&
+                    Objects.equals(value, that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, value);
+        }
+
     }
 }

@@ -5,16 +5,15 @@
  */
 package io.github.eggy03.cimari.entity.user;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Immutable representation of a User Account in system running Windows.
@@ -63,7 +62,7 @@ public class Win32UserAccount {
      * in all subsequent interactions with Windows security.
      * Each SID is a unique identifier for a user or group, and a different user or group cannot have the same SID.
      */
-    @SerializedName("SID")
+    @JsonProperty("SID")
     @Nullable
     String sid;
 
@@ -81,7 +80,7 @@ public class Win32UserAccount {
      *   <li>9 — Computer</li>
      * </ul>
      */
-    @SerializedName("SIDType")
+    @JsonProperty("SIDType")
     @Nullable
     Integer sidType;
 
@@ -95,35 +94,35 @@ public class Win32UserAccount {
      *   <li>8192 — Server trust account</li>
      * </ul>
      */
-    @SerializedName("AccountType")
+    @JsonProperty("AccountType")
     @Nullable
     Long accountType;
 
     /**
      * Caption of the user account (domain/username).
      */
-    @SerializedName("Caption")
+    @JsonProperty("Caption")
     @Nullable
     String caption;
 
     /**
      * Description of the user account.
      */
-    @SerializedName("Description")
+    @JsonProperty("Description")
     @Nullable
     String description;
 
     /**
      * Domain to which the user account belongs.
      */
-    @SerializedName("Domain")
+    @JsonProperty("Domain")
     @Nullable
     String domain;
 
     /**
      * Name of the user account.
      */
-    @SerializedName("Name")
+    @JsonProperty("Name")
     @Nullable
     String name;
 
@@ -131,42 +130,42 @@ public class Win32UserAccount {
      * True if the account is disabled.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Disabled")
+    @JsonProperty("Disabled")
     @Nullable
     Boolean disabled;
     /**
      * True if this is a local account.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("LocalAccount")
+    @JsonProperty("LocalAccount")
     @Nullable
     Boolean localAccount;
     /**
      * True if the account is locked out.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("Lockout")
+    @JsonProperty("Lockout")
     @Nullable
     Boolean lockout;
     /**
      * True if a password is required.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PasswordRequired")
+    @JsonProperty("PasswordRequired")
     @Nullable
     Boolean passwordRequired;
     /**
      * True if the password expires.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PasswordExpires")
+    @JsonProperty("PasswordExpires")
     @Nullable
     Boolean passwordExpires;
     /**
      * True if the password can be changed.
      */
     @Getter(AccessLevel.NONE)
-    @SerializedName("PasswordChangeable")
+    @JsonProperty("PasswordChangeable")
     @Nullable
     Boolean passwordChangeable;
     /**
@@ -193,7 +192,7 @@ public class Win32UserAccount {
      *   <li>"Lost Comm"</li>
      * </ul>
      */
-    @SerializedName("Status")
+    @JsonProperty("Status")
     @Nullable
     String status;
 
@@ -227,12 +226,9 @@ public class Win32UserAccount {
      * @return the {@link String} value of the object in JSON pretty-print format
      */
     @Override
-    @NotNull
     public String toString() {
-        return new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create()
-                .toJson(this);
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
     }
 }

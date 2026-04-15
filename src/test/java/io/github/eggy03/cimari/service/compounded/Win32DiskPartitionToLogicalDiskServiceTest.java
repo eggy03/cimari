@@ -5,7 +5,7 @@
  */
 package io.github.eggy03.cimari.service.compounded;
 
-import com.google.gson.JsonSyntaxException;
+
 import io.github.eggy03.cimari.entity.compounded.Win32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.mapping.compounded.Win32DiskPartitionToLogicalDiskMapper;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JacksonException;
 
 import java.util.Collections;
 import java.util.List;
@@ -75,9 +76,9 @@ class Win32DiskPartitionToLogicalDiskServiceTest {
                 .thenReturn(invalidTerminalResult);
 
         when(mapper.mapToList(anyString(), any()))
-                .thenThrow(JsonSyntaxException.class);
+                .thenThrow(JacksonException.class);
 
-        assertThrows(JsonSyntaxException.class, () -> service.get(5L));
+        assertThrows(JacksonException.class, () -> service.get(5L));
 
         verify(terminalService).executeScript(ScriptEnum.WIN32_DISK_PARTITION_TO_LOGICAL_DISK, 5L);
         verify(mapper).mapToList(invalidTerminalResult.getResult(), Win32DiskPartitionToLogicalDisk.class);
