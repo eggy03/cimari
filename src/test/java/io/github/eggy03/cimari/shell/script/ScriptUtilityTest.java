@@ -69,4 +69,13 @@ class ScriptUtilityTest {
     void loadScript_invalidScriptPath_throwsException() {
         assertThrows(ResourceNotFoundException.class, () -> ScriptUtility.loadScript("/invalidPath"));
     }
+
+    @Test
+    @SuppressWarnings("all")
+    void testNullInputForBothTheMethods_throwsException() {
+        NullPointerException ex1 = assertThrows(NullPointerException.class, () -> ScriptUtility.loadAsBufferedReader(null));
+        NullPointerException ex2 = assertThrows(NullPointerException.class, () -> ScriptUtility.loadScript(null));
+        assertThat(ex1.getMessage()).isEqualTo("scriptPath cannot be null");
+        assertThat(ex2.getMessage()).isEqualTo("scriptPath cannot be null");
+    }
 }

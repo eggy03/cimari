@@ -70,7 +70,7 @@ class CommonMappingInterfaceDefaultMethodsTest {
     }
 
     @Test
-    void testMapToList_validJson_butJsonIsAnArray_throwsException() {
+    void testMapToObject_validJson_butJsonIsAnArray_throwsException() {
         String json = "[{}]";
         assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(json, MockEntity.class));
     }
@@ -83,9 +83,12 @@ class CommonMappingInterfaceDefaultMethodsTest {
     }
 
     @Test
+    @SuppressWarnings("all")
     void testMapToObject_nullParameters_throwsException() {
-        assertThrows(NullPointerException.class, () -> mapper.mapToObject(null, MockEntity.class));
-        assertThrows(NullPointerException.class, () -> mapper.mapToObject("", null));
+        NullPointerException ex1 = assertThrows(NullPointerException.class, () -> mapper.mapToObject(null, MockEntity.class));
+        NullPointerException ex2 = assertThrows(NullPointerException.class, () -> mapper.mapToObject("", null));
+        assertThat(ex1.getMessage()).isEqualTo("inputJson cannot be null");
+        assertThat(ex2.getMessage()).isEqualTo("objectClass cannot be null");
     }
 
     @Test
@@ -172,9 +175,12 @@ class CommonMappingInterfaceDefaultMethodsTest {
     }
 
     @Test
+    @SuppressWarnings("all")
     void testMapToList_nullParameters_throwsException() {
-        assertThrows(NullPointerException.class, () -> mapper.mapToList(null, MockEntity.class));
-        assertThrows(NullPointerException.class, () -> mapper.mapToList("", null));
+        NullPointerException ex1 = assertThrows(NullPointerException.class, () -> mapper.mapToList(null, MockEntity.class));
+        NullPointerException ex2 = assertThrows(NullPointerException.class, () -> mapper.mapToList("", null));
+        assertThat(ex1.getMessage()).isEqualTo("inputJson cannot be null");
+        assertThat(ex2.getMessage()).isEqualTo("objectClass cannot be null");
     }
 
     static class MockEntity {
