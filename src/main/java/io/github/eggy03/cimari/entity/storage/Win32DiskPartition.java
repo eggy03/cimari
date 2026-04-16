@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.storage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -56,10 +50,6 @@ import java.math.BigInteger;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskpartition">Win32_DiskPartition Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_DiskPartition")
 @NullMarked
 public class Win32DiskPartition {
@@ -103,21 +93,18 @@ public class Win32DiskPartition {
     /**
      * Indicates whether the computer can be booted from this partition.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Bootable")
     @Nullable
     Boolean bootable;
     /**
      * Indicates whether this is the primary partition on the disk.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("PrimaryPartition")
     @Nullable
     Boolean primaryPartition;
     /**
      * Indicates whether this is the active (boot) partition used by the operating system when booting.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("BootPartition")
     @Nullable
     Boolean bootPartition;

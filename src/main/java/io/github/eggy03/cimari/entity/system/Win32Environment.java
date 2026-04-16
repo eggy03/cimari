@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -43,9 +37,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-environment">Win32_Environment Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_Environment")
 @NullMarked
 public class Win32Environment {
@@ -60,7 +51,6 @@ public class Win32Environment {
     /**
      * Indicates whether the variable is a system variable.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("SystemVariable")
     @Nullable
     Boolean systemVariable;

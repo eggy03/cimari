@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.display;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -40,10 +36,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-desktopmonitor">Win32_DesktopMonitor Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_DesktopMonitor")
 @NullMarked
 public class Win32DesktopMonitor {

@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -45,9 +41,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://wutils.com/wmi/root/standardcimv2/msft_netconnectionprofile/">MSFT_NetConnectionProfile Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "MSFT_NetConnectionProfile")
 @NullMarked
 public class MsftNetConnectionProfile {

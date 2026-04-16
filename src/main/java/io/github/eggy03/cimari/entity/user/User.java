@@ -5,10 +5,6 @@
  */
 package io.github.eggy03.cimari.entity.user;
 
-import io.github.eggy03.cimari.annotation.DeepImmutable;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -39,10 +35,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see Win32UserAccount
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@DeepImmutable
 @NullMarked
 public class User {
 

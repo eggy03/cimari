@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -58,9 +52,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/netadaptercimprov/msft-netadapter">MSFT_NetAdapter Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "MSFT_NetAdapter")
 @NullMarked
 public class MsftNetAdapter {
@@ -142,21 +133,18 @@ public class MsftNetAdapter {
      * Indicates whether this adapter represents a virtual interface.
      * <p>Example: true for Hyper-V virtual adapters</p>
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Virtual")
     @Nullable
     Boolean virtual;
     /**
      * Indicates whether the adapter supports full-duplex mode.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("FullDuplex")
     @Nullable
     Boolean fullDuplex;
     /**
      * Indicates whether the adapter is hidden from the user interface.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Hidden")
     @Nullable
     Boolean hidden;

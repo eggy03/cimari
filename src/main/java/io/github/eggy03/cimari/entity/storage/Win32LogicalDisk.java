@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.storage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -50,9 +44,6 @@ import java.math.BigInteger;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-logicaldisk">Win32_LogicalDisk Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_LogicalDisk")
 @NullMarked
 public class Win32LogicalDisk {
@@ -125,21 +116,18 @@ public class Win32LogicalDisk {
      * Indicates if the logical volume exists as a single compressed entity (e.g., DoubleSpace).
      * If file-based compression is supported (e.g., NTFS), this value is {@code false}.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Compressed")
     @Nullable
     Boolean compressed;
     /**
      * Indicates whether the logical disk supports file-based compression (e.g., NTFS).
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("SupportsFileBasedCompression")
     @Nullable
     Boolean supportsFileBasedCompression;
     /**
      * Indicates whether this volume supports disk quotas.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("SupportsDiskQuotas")
     @Nullable
     Boolean supportsDiskQuotas;

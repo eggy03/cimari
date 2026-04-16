@@ -6,14 +6,8 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.entity.memory.Win32PhysicalMemory;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -49,9 +43,6 @@ import java.util.List;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-computersystem">Win32_ComputerSystem Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_ComputerSystem")
 @NullMarked
 public class Win32ComputerSystem {
@@ -126,7 +117,6 @@ public class Win32ComputerSystem {
     /**
      * If true, the automatic reset boot option is enabled.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("AutomaticResetBootOption")
     @Nullable
     Boolean automaticResetBootOption;
@@ -186,7 +176,6 @@ public class Win32ComputerSystem {
     /**
      * If true, the device can be power-managed
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("PowerManagementSupported")
     @Nullable
     Boolean powerManagementSupported;
@@ -237,7 +226,6 @@ public class Win32ComputerSystem {
     /**
      * If true, automatic reset capability is available.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("AutomaticResetCapability")
     @Nullable
     Boolean automaticResetCapability;
@@ -371,21 +359,18 @@ public class Win32ComputerSystem {
     /**
      * If true, the system manages the page file automatically.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("AutomaticManagedPagefile")
     @Nullable
     Boolean automaticManagedPagefile;
     /**
      * If true, an infrared (IR) port exists on the computer system.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("InfraredSupported")
     @Nullable
     Boolean infraredSupported;
     /**
      * If true, network server mode is enabled (system behaves as a server).
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("NetworkServerModeEnabled")
     @Nullable
     Boolean networkServerModeEnabled;
@@ -396,7 +381,6 @@ public class Win32ComputerSystem {
      * If true, a hypervisor is present on the system.
      * Note: not supported before Windows 8 / Windows Server 2012 on older OSes.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("HypervisorPresent")
     @Nullable
     Boolean hypervisorPresent;
@@ -425,7 +409,6 @@ public class Win32ComputerSystem {
     /**
      * If True, the daylight savings mode is ON.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("DaylightInEffect")
     @Nullable
     Boolean daylightInEffect;

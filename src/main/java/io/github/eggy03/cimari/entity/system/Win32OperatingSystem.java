@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -46,10 +40,6 @@ import java.util.List;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-operatingsystem">Win32_OperatingSystem Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_OperatingSystem")
 @NullMarked
 public class Win32OperatingSystem {
@@ -99,7 +89,6 @@ public class Win32OperatingSystem {
     /**
      * Indicates whether this operating system is part of a distributed system.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Distributed")
     @Nullable
     Boolean distributed;
@@ -158,14 +147,12 @@ public class Win32OperatingSystem {
      *   <li><b>false</b> — The operating system is installed on a fixed computer.</li>
      * </ul>
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("PortableOperatingSystem")
     @Nullable
     Boolean portableOperatingSystem;
     /**
      * Indicates whether this is the primary operating system on the computer.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Primary")
     @Nullable
     Boolean primary;

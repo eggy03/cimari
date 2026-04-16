@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -47,10 +41,6 @@ import java.util.List;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-pnpentity">Win32_PnPEntity Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_PnPEntity")
 @NullMarked
 public class Win32PnPEntity {
@@ -113,7 +103,6 @@ public class Win32PnPEntity {
      * Windows Server 2008 and Windows Vista.
      */
     @JsonProperty("Present")
-    @Getter(AccessLevel.NONE)
     @Nullable
     Boolean present;
     /**
