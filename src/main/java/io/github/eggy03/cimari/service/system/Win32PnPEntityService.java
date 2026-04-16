@@ -11,8 +11,7 @@ import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +72,7 @@ public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEnt
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<Win32PnPEntity> get(long timeout) {
+    public @NonNull List<Win32PnPEntity> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PNP_ENTITY, timeout);
         return mapper.mapToList(result.getResult(), Win32PnPEntity.class);
     }

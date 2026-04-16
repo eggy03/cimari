@@ -12,7 +12,9 @@ import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -51,6 +53,7 @@ import java.util.List;
 @Value
 @Builder(toBuilder = true)
 @ShallowImmutable
+@NullMarked
 public class Win32ProcessorToCacheMemory {
 
     /**
@@ -82,7 +85,7 @@ public class Win32ProcessorToCacheMemory {
      */
     @JsonProperty("CacheMemory")
     @Nullable
-    List<Win32CacheMemory> cacheMemoryList;
+    List<@Nullable Win32CacheMemory> cacheMemoryList;
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string

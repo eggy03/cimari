@@ -13,7 +13,9 @@ import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -56,6 +58,7 @@ import java.util.List;
 @Value
 @Builder(toBuilder = true)
 @ShallowImmutable
+@NullMarked
 public class Win32DiskPartitionToLogicalDisk {
 
     /**
@@ -86,7 +89,7 @@ public class Win32DiskPartitionToLogicalDisk {
      */
     @JsonProperty("LogicalDisks")
     @Nullable
-    List<Win32LogicalDisk> logicalDiskList;
+    List<@Nullable Win32LogicalDisk> logicalDiskList;
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string

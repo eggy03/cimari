@@ -92,4 +92,19 @@ class TerminalServiceTest {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> terminalService.execute("Write-Output \"Hello\"", -2));
         assertThat(ex.getMessage()).isEqualTo("Timeout cannot be negative");
     }
+
+    @Test
+    void testEmptyInput() {
+        String emptyInput = "";
+        TerminalResult result = terminalService.execute(emptyInput, TIMEOUT);
+        assertThat(result.getResult()).contains("Windows PowerShell");
+        assertThat(result.getError()).isEmpty();
+    }
+
+    @Test
+    @SuppressWarnings("all")
+    void testNullInput() {
+        NullPointerException ex = assertThrows(NullPointerException.class, () -> terminalService.execute(null, TIMEOUT));
+        assertThat(ex.getMessage()).isEqualTo("query or script to be executed cannot be null");
+    }
 }

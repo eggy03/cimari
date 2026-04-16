@@ -11,8 +11,7 @@ import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +72,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<MsftDnsClientServerAddress> get(long timeout) {
+    public @NonNull List<MsftDnsClientServerAddress> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_DNS_CLIENT_SERVER_ADDRESS, timeout);
         return mapper.mapToList(result.getResult(), MsftDnsClientServerAddress.class);
     }

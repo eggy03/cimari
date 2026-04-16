@@ -12,7 +12,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -52,6 +54,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_NetworkAdapterConfiguration")
+@NullMarked
 public class Win32NetworkAdapterConfiguration {
 
     /**
@@ -96,19 +99,19 @@ public class Win32NetworkAdapterConfiguration {
      */
     @JsonProperty("IPAddress")
     @Nullable
-    List<String> ipAddress;
+    List<@Nullable String> ipAddress;
     /**
      * Subnet masks associated with each IP address on this adapter.
      */
     @JsonProperty("IPSubnet")
     @Nullable
-    List<String> ipSubnet;
+    List<@Nullable String> ipSubnet;
     /**
      * List of default gateway IP addresses used by this system.
      */
     @JsonProperty("DefaultIPGateway")
     @Nullable
-    List<String> defaultIpGateway;
+    List<@Nullable String> defaultIpGateway;
     /**
      * Indicates whether DHCP is enabled for this adapter.
      */
@@ -145,7 +148,7 @@ public class Win32NetworkAdapterConfiguration {
      */
     @JsonProperty("DNSServerSearchOrder")
     @Nullable
-    List<String> dnsServerSearchOrder;
+    List<@Nullable String> dnsServerSearchOrder;
 
     public @Nullable Boolean isIPEnabled() {
         return ipEnabled;

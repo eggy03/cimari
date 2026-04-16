@@ -14,8 +14,7 @@ import io.github.eggy03.cimari.service.network.Win32NetworkAdapterSettingService
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -80,7 +79,7 @@ public class Win32NetworkAdapterToConfigurationService implements CommonServiceI
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<Win32NetworkAdapterToConfiguration> get(long timeout) {
+    public @NonNull List<Win32NetworkAdapterToConfiguration> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_NETWORK_ADAPTER_TO_CONFIGURATION, timeout);
         return mapper.mapToList(result.getResult(), Win32NetworkAdapterToConfiguration.class);
     }

@@ -8,11 +8,10 @@ package io.github.eggy03.cimari.shell.query;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.exception.AnnotationNotFoundException;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -22,8 +21,11 @@ import java.util.stream.Collectors;
  *
  * @since 1.0.0
  */
-@UtilityClass
 class QueryUtility {
+
+    private QueryUtility() {
+        throw new IllegalStateException("Utility Class");
+    }
 
     /**
      * <p>
@@ -36,8 +38,10 @@ class QueryUtility {
      * @throws AnnotationNotFoundException if the class to be inspected does not have the {@link WmiClass} annotation
      * @since 1.0.0
      */
-    @NotNull
-    static <T> String getPropertiesFromWmiClass(@NonNull Class<T> tClass) {
+    static @NonNull <T> String getPropertiesFromWmiClass(@NonNull Class<T> tClass) {
+
+        Objects.requireNonNull(tClass, "tClass cannot be null");
+
         WmiClass wmiClass = tClass.getAnnotation(WmiClass.class);
 
         if (wmiClass == null)
@@ -62,8 +66,9 @@ class QueryUtility {
      * {@link JsonProperty} annotation or the field name if the annotation is absent, in alphabetical order
      * @since 1.0.0
      */
-    @NotNull
-    static <T> String getPropertiesFromJsonProperty(@NonNull Class<T> tClass) {
+    static @NonNull <T> String getPropertiesFromJsonProperty(@NonNull Class<T> tClass) {
+
+        Objects.requireNonNull(tClass, "tClass cannot be null");
 
         return Arrays.stream(tClass.getDeclaredFields())
                 .filter(field -> !field.isSynthetic()) // filter out synthetic fields since JaCoCo creates $jacocoData field during tests which fails the assertions. This behavior is not observed in scenarios where code coverage is not run

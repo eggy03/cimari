@@ -11,8 +11,7 @@ import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +72,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<MsftNetAdapter> get(long timeout) {
+    public @NonNull List<MsftNetAdapter> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(StandardCimv2.MSFT_NET_ADAPTER, timeout);
         return mapper.mapToList(result.getResult(), MsftNetAdapter.class);
     }

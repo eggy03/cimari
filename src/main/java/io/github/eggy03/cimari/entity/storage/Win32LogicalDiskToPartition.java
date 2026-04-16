@@ -11,7 +11,9 @@ import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 /**
@@ -65,6 +67,7 @@ import tools.jackson.databind.ObjectMapper;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_LogicalDiskToPartition")
+@NullMarked
 public class Win32LogicalDiskToPartition {
 
     /**

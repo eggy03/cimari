@@ -1,6 +1,6 @@
 package io.github.eggy03.cimari.terminal;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
@@ -15,8 +15,8 @@ import java.util.Objects;
  */
 public class TerminalResult {
 
-    private final @NotNull String result;
-    private final @NotNull String error;
+    private final @NonNull String result;
+    private final @NonNull String error;
 
     /**
      * Constructs a {@link TerminalResult}.
@@ -25,7 +25,7 @@ public class TerminalResult {
      * @param error  the non-null standard error (stderr) produced by the execution
      * @throws NullPointerException if either {@code result} or {@code error} is {@code null}
      */
-    public TerminalResult(@NotNull String result, @NotNull String error) {
+    public TerminalResult(@NonNull String result, @NonNull String error) {
         this.result = Objects.requireNonNull(result, "result cannot be null");
         this.error = Objects.requireNonNull(error, "error cannot be null");
     }
@@ -36,7 +36,7 @@ public class TerminalResult {
      *
      * @return a non-null string containing the command output
      */
-    public @NotNull String getResult() {
+    public @NonNull String getResult() {
         return result;
     }
 
@@ -45,7 +45,7 @@ public class TerminalResult {
      *
      * @return a non-null string containing the error output
      */
-    public @NotNull String getError() {
+    public @NonNull String getError() {
         return error;
     }
 

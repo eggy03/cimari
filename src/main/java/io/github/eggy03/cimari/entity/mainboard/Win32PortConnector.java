@@ -10,7 +10,9 @@ import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -44,6 +46,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_PortConnector")
+@NullMarked
 public class Win32PortConnector {
 
     /**
@@ -125,7 +128,7 @@ public class Win32PortConnector {
      */
     @JsonProperty("ConnectorType")
     @Nullable
-    List<Integer> connectorType;
+    List<@Nullable Integer> connectorType;
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string

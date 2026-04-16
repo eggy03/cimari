@@ -12,7 +12,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 /**
@@ -49,6 +51,7 @@ import tools.jackson.databind.ObjectMapper;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_UserAccount")
+@NullMarked
 public class Win32UserAccount {
 
     /**

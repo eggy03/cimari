@@ -13,7 +13,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
@@ -51,6 +53,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_ComputerSystem")
+@NullMarked
 public class Win32ComputerSystem {
 
     // Password Status Properties
@@ -118,7 +121,7 @@ public class Win32ComputerSystem {
      */
     @JsonProperty("BootStatus")
     @Nullable
-    List<Integer> bootStatus;
+    List<@Nullable Integer> bootStatus;
 
     /**
      * If true, the automatic reset boot option is enabled.
@@ -179,7 +182,7 @@ public class Win32ComputerSystem {
      */
     @JsonProperty("PowerManagementCapabilities")
     @Nullable
-    List<Integer> powerManagementCapabilities;
+    List<@Nullable Integer> powerManagementCapabilities;
     /**
      * If true, the device can be power-managed
      */
@@ -288,7 +291,7 @@ public class Win32ComputerSystem {
      */
     @JsonProperty("Roles")
     @Nullable
-    List<String> roles;
+    List<@Nullable String> roles;
     /**
      * Chassis or enclosure SKU number (from SMBIOS).
      */
@@ -344,7 +347,7 @@ public class Win32ComputerSystem {
      */
     @JsonProperty("OEMStringArray")
     @Nullable
-    List<String> oemStringArray;
+    List<@Nullable String> oemStringArray;
     /**
      * Number of physical processors installed (enabled).
      */

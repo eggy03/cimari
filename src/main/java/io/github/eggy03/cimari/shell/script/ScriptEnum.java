@@ -11,7 +11,7 @@ import io.github.eggy03.cimari.entity.compounded.Win32DiskDriveToPartitionAndLog
 import io.github.eggy03.cimari.entity.compounded.Win32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.entity.compounded.Win32NetworkAdapterToConfiguration;
 import io.github.eggy03.cimari.entity.compounded.Win32ProcessorToCacheMemory;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
@@ -62,11 +62,11 @@ public enum ScriptEnum {
 
     private final String script;
 
-    ScriptEnum(@NotNull String script) {
+    ScriptEnum(@NonNull String script) {
         this.script = Objects.requireNonNull(script, "script cannot be null");
     }
 
-    public @NotNull String getScript() {
+    public @NonNull String getScript() {
         return this.script;
     }
 }

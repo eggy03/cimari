@@ -13,8 +13,7 @@ import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -76,7 +75,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<Win32DiskDriveToDiskPartition> get(long timeout) {
+    public @NonNull List<Win32DiskDriveToDiskPartition> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_DISK_DRIVE_TO_DISK_PARTITION, timeout);
         return mapper.mapToList(result.getResult(), Win32DiskDriveToDiskPartition.class);
     }

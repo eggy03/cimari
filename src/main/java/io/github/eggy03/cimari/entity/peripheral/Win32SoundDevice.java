@@ -10,7 +10,9 @@ import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 /**
@@ -46,6 +48,7 @@ import tools.jackson.databind.ObjectMapper;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_SoundDevice")
+@NullMarked
 public class Win32SoundDevice {
 
     /**

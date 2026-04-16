@@ -15,7 +15,7 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class TerminalService {
      * @param timeoutSeconds The non-null, positive value of time in seconds after which the session will be force stopped.
      * @return The result of the query executed, wrapped in {@link TerminalResult}
      */
-    public @NotNull TerminalResult executeQuery(@NotNull Cimv2 queryEnum, long timeoutSeconds) {
+    public @NonNull TerminalResult executeQuery(@NonNull Cimv2 queryEnum, long timeoutSeconds) {
         Objects.requireNonNull(queryEnum, "queryEnum cannot be null");
         return execute(queryEnum.getQuery(), timeoutSeconds);
     }
@@ -51,7 +51,7 @@ public class TerminalService {
      * @param timeoutSeconds The non-null, positive value of time in seconds after which the session will be force stopped.
      * @return The result of the query executed, wrapped in {@link TerminalResult}
      */
-    public @NotNull TerminalResult executeQuery(@NotNull StandardCimv2 queryEnum, long timeoutSeconds) {
+    public @NonNull TerminalResult executeQuery(@NonNull StandardCimv2 queryEnum, long timeoutSeconds) {
         Objects.requireNonNull(queryEnum, "queryEnum cannot be null");
         return execute(queryEnum.getQuery(), timeoutSeconds);
     }
@@ -63,7 +63,7 @@ public class TerminalService {
      * @param timeoutSeconds The non-null, positive value of time in seconds after which the session will be force stopped.
      * @return The result of the script executed, wrapped in {@link TerminalResult}
      */
-    public @NotNull TerminalResult executeScript(@NotNull ScriptEnum scriptEnum, long timeoutSeconds) {
+    public @NonNull TerminalResult executeScript(@NonNull ScriptEnum scriptEnum, long timeoutSeconds) {
         Objects.requireNonNull(scriptEnum, "scriptEnum cannot be null");
         return execute(scriptEnum.getScript(), timeoutSeconds);
     }
@@ -77,7 +77,7 @@ public class TerminalService {
      * @throws IllegalArgumentException if timeout is in negative.
      * @since 1.0.0
      */
-    @NotNull TerminalResult execute(@NotNull String command, long timeout) {
+    @NonNull TerminalResult execute(@NonNull String command, long timeout) {
 
         Objects.requireNonNull(command, "query or script to be executed cannot be null");
 

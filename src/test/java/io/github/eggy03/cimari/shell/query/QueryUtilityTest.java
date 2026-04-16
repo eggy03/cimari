@@ -66,6 +66,15 @@ class QueryUtilityTest {
         assertThat(expectedString).isEqualTo(actualString);
     }
 
+    @Test
+    @SuppressWarnings("all")
+    void testBothMethodsForNullInputs_throwsException() {
+        NullPointerException ex1 = assertThrows(NullPointerException.class, () -> QueryUtility.getPropertiesFromWmiClass(null));
+        NullPointerException ex2 = assertThrows(NullPointerException.class, () -> QueryUtility.getPropertiesFromJsonProperty(null));
+        assertThat(ex1.getMessage()).isEqualTo("tClass cannot be null");
+        assertThat(ex2.getMessage()).isEqualTo("tClass cannot be null");
+    }
+
     @SuppressWarnings("unused")
     static class MockWithAnnotatedFields { // inner test class where fields are annotated with Jackson's @JsonProperty
 

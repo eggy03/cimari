@@ -5,8 +5,7 @@
  */
 package io.github.eggy03.cimari.mapping;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.JsonNode;
@@ -45,7 +44,7 @@ public interface CommonMappingInterface<S> {
      * @return the {@link ObjectMapper} to use
      * @since 1.0.0
      */
-    default @NotNull ObjectMapper objectMapper() {
+    default @NonNull ObjectMapper objectMapper() {
         return DEFAULT_MAPPER;
     }
 
@@ -67,9 +66,7 @@ public interface CommonMappingInterface<S> {
      * @throws IllegalArgumentException if deserialization of {@code inputJson} to {@code objectClass} fails due to incompatible type
      * @since 1.0.0
      */
-    @NotNull
-    @Unmodifiable
-    default List<S> mapToList(String inputJson, Class<S> objectClass) { //todo add jspecify not null annotations
+    default @NonNull List<S> mapToList(@NonNull String inputJson, @NonNull Class<S> objectClass) {
 
         Objects.requireNonNull(objectClass, "objectClass cannot be null");
         Objects.requireNonNull(inputJson, "inputJson cannot be null");
@@ -108,8 +105,7 @@ public interface CommonMappingInterface<S> {
      * @throws IllegalArgumentException if deserialization of {@code inputJson} to {@code objectClass} fails due to incompatible type
      * @since 1.0.0
      */
-    @NotNull
-    default Optional<S> mapToObject(String inputJson, Class<S> objectClass) { //todo add jspecify not null annotations
+    default @NonNull Optional<S> mapToObject(@NonNull String inputJson, @NonNull Class<S> objectClass) {
 
         Objects.requireNonNull(objectClass, "objectClass cannot be null");
         Objects.requireNonNull(inputJson, "inputJson cannot be null");

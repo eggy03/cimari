@@ -12,7 +12,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -48,6 +50,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_Printer")
+@NullMarked
 public class Win32Printer {
 
     /**
@@ -99,14 +102,14 @@ public class Win32Printer {
      */
     @JsonProperty("Capabilities")
     @Nullable
-    List<Integer> capabilities;
+    List<@Nullable Integer> capabilities;
 
     /**
      * Descriptive text corresponding to {@link #capabilities}.
      */
     @JsonProperty("CapabilityDescriptions")
     @Nullable
-    List<String> capabilityDescriptions;
+    List<@Nullable String> capabilityDescriptions;
 
     /**
      * Printer’s horizontal resolution in DPI (dots per inch).
@@ -128,14 +131,14 @@ public class Win32Printer {
      */
     @JsonProperty("PaperSizesSupported")
     @Nullable
-    List<Integer> paperSizesSupported;
+    List<@Nullable Integer> paperSizesSupported;
 
     /**
      * Names of paper types or forms supported by the printer.
      */
     @JsonProperty("PrinterPaperNames")
     @Nullable
-    List<String> printerPaperNames;
+    List<@Nullable String> printerPaperNames;
 
     /**
      * Current operational state of the printer.
