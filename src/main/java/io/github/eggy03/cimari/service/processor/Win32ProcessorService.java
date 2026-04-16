@@ -59,7 +59,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
     }
 
     /**
-     * Retrieves an unmodifiable {@link List} {@link Win32Processor} objects
+     * Retrieves an unmodifiable {@link List} of {@link Win32Processor} objects
      * <p>
      * Each invocation creates an isolated PowerShell process, which is
      * pre-maturely terminated if execution exceeds the specified timeout.
