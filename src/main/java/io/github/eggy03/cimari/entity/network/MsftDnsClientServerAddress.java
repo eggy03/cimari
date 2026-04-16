@@ -10,7 +10,9 @@ import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -52,6 +54,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "MSFT_DNSClientServerAddress")
+@NullMarked
 public class MsftDnsClientServerAddress {
 
     /**
@@ -87,7 +90,7 @@ public class MsftDnsClientServerAddress {
      */
     @JsonProperty("ServerAddresses")
     @Nullable
-    List<String> dnsServerAddresses;
+    List<@Nullable String> dnsServerAddresses;
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string

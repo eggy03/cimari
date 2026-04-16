@@ -12,7 +12,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -49,6 +51,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_OperatingSystem")
+@NullMarked
 public class Win32OperatingSystem {
 
     /**
@@ -147,7 +150,7 @@ public class Win32OperatingSystem {
      */
     @JsonProperty("MUILanguages")
     @Nullable
-    List<String> muiLanguages;
+    List<@Nullable String> muiLanguages;
     /**
      * Indicates whether the operating system is installed on a portable device.
      * <ul>

@@ -13,7 +13,8 @@ import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -61,6 +62,7 @@ import java.util.List;
 @Value
 @Builder(toBuilder = true)
 @ShallowImmutable
+@NullMarked
 public class MsftNetAdapterToIpAndDnsAndProfile {
 
     /**
@@ -82,21 +84,21 @@ public class MsftNetAdapterToIpAndDnsAndProfile {
      */
     @JsonProperty("IPAddresses")
     @Nullable
-    List<MsftNetIpAddress> ipAddressList;
+    List<@Nullable MsftNetIpAddress> ipAddressList;
 
     /**
      * A list of {@link MsftDnsClientServerAddress} associated with the index: {@link #interfaceIndex}
      */
     @JsonProperty("DNSServers")
     @Nullable
-    List<MsftDnsClientServerAddress> dnsClientServerAddressList;
+    List<@Nullable MsftDnsClientServerAddress> dnsClientServerAddressList;
 
     /**
      * A list of {@link MsftNetConnectionProfile} associated with the index: {@link #interfaceIndex}
      */
     @JsonProperty("Profile")
     @Nullable
-    List<MsftNetConnectionProfile> netConnectionProfileList;
+    List<@Nullable MsftNetConnectionProfile> netConnectionProfileList;
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string

@@ -10,7 +10,9 @@ import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
@@ -57,6 +59,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_DiskDrive")
+@NullMarked
 public class Win32DiskDrive {
 
     /**
@@ -171,7 +174,7 @@ public class Win32DiskDrive {
      */
     @JsonProperty("Capabilities")
     @Nullable
-    List<Integer> capabilities;
+    List<@Nullable Integer> capabilities;
 
     /**
      * List of more detailed explanations for any of the access device features indicated in the {@link #capabilities} array.
@@ -179,7 +182,7 @@ public class Win32DiskDrive {
      */
     @JsonProperty("CapabilityDescriptions")
     @Nullable
-    List<String> capabilityDescriptions;
+    List<@Nullable String> capabilityDescriptions;
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string

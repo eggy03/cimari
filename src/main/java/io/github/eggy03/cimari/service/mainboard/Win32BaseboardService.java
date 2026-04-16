@@ -11,8 +11,7 @@ import io.github.eggy03.cimari.service.CommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -74,7 +73,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<Win32Baseboard> get(long timeout) {
+    public @NonNull List<Win32Baseboard> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_BASEBOARD, timeout);
         return mapper.mapToList(result.getResult(), Win32Baseboard.class);
     }

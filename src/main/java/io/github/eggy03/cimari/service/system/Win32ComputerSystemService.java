@@ -11,7 +11,7 @@ import io.github.eggy03.cimari.service.OptionalCommonServiceInterface;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -73,7 +73,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      * @since 1.0.0
      */
     @Override
-    public @NotNull Optional<Win32ComputerSystem> get(long timeout) {
+    public @NonNull Optional<Win32ComputerSystem> get(long timeout) {
         TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_COMPUTER_SYSTEM, timeout);
         return mapper.mapToObject(result.getResult(), Win32ComputerSystem.class);
     }

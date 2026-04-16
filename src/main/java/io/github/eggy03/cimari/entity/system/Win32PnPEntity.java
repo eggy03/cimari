@@ -12,7 +12,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -50,6 +52,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_PnPEntity")
+@NullMarked
 public class Win32PnPEntity {
 
     /**
@@ -72,7 +75,7 @@ public class Win32PnPEntity {
      */
     @JsonProperty("HardwareID")
     @Nullable
-    List<String> hardwareId;
+    List<@Nullable String> hardwareId;
 
     /**
      * A vendor-defined list of compatible identification strings that Windows Setup
@@ -80,7 +83,7 @@ public class Win32PnPEntity {
      */
     @JsonProperty("CompatibleID")
     @Nullable
-    List<String> compatibleId;
+    List<@Nullable String> compatibleId;
 
     /**
      * The name by which the device is known.

@@ -14,8 +14,7 @@ import io.github.eggy03.cimari.service.processor.Win32ProcessorService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -79,7 +78,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<Win32ProcessorToCacheMemory> get(long timeout) {
+    public @NonNull List<Win32ProcessorToCacheMemory> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.WIN32_PROCESSOR_TO_CACHE_MEMORY, timeout);
         return mapper.mapToList(result.getResult(), Win32ProcessorToCacheMemory.class);
     }

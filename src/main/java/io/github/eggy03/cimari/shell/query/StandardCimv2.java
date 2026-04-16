@@ -9,8 +9,8 @@ import io.github.eggy03.cimari.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
 import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
-import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+
 
 import java.util.Objects;
 
@@ -56,13 +56,13 @@ public enum StandardCimv2 {
 
     private final String query;
 
-    StandardCimv2(@NotNull String query) {
+    StandardCimv2(@NonNull String query) {
         this.query = Objects.requireNonNull(query, "query cannot be null");
     }
 
-    @NotNull
-    private static <T> String generateQuery(@NonNull String prefix, @NonNull Class<T> wmiClass) {
+    private static @NonNull <T> String generateQuery(@NonNull String prefix, @NonNull Class<T> wmiClass) {
 
+        Objects.requireNonNull(prefix, "prefix cannot be null");
         Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
 
         return prefix +
@@ -71,7 +71,7 @@ public enum StandardCimv2 {
 
     }
 
-    public @NotNull String getQuery() {
+    public @NonNull String getQuery() {
         return this.query;
     }
 }

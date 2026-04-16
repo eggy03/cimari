@@ -8,7 +8,9 @@ package io.github.eggy03.cimari.entity.user;
 import io.github.eggy03.cimari.annotation.DeepImmutable;
 import lombok.Builder;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 /**
@@ -41,6 +43,7 @@ import tools.jackson.databind.ObjectMapper;
 @Value
 @Builder(toBuilder = true)
 @DeepImmutable
+@NullMarked
 public class User {
 
     /**

@@ -6,7 +6,7 @@
 package io.github.eggy03.cimari.service.user;
 
 import io.github.eggy03.cimari.entity.user.User;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Service class for fetching the current system user information.
@@ -33,8 +33,7 @@ public class UserService {
      * @return a non-null {@link User} object containing the username,
      * user home directory, and current working directory.
      */
-    @NotNull
-    public User getUser() {
+    public @NonNull User getUser() {
 
         return User.builder()
                 .userName(System.getProperty("user.name"))

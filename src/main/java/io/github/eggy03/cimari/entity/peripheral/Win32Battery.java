@@ -12,7 +12,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -47,6 +49,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @ShallowImmutable
 @WmiClass(className = "Win32_Battery")
+@NullMarked
 public class Win32Battery {
 
     /**
@@ -121,7 +124,7 @@ public class Win32Battery {
      */
     @JsonProperty("PowerManagementCapabilities")
     @Nullable
-    List<Integer> powerManagementCapabilities;
+    List<@Nullable Integer> powerManagementCapabilities;
 
     /**
      * Indicates whether the battery can be power-managed.

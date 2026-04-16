@@ -7,9 +7,7 @@ package io.github.eggy03.cimari.shell.script;
 
 import io.github.eggy03.cimari.exception.ResourceNotFoundException;
 import io.github.eggy03.cimari.exception.ResourceOperationException;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * <p>
@@ -28,8 +27,11 @@ import java.util.Iterator;
  *
  * @since 1.0.0
  */
-@UtilityClass
 class ScriptUtility {
+
+    private ScriptUtility() {
+        throw new IllegalStateException("Utility Class");
+    }
 
     /**
      * Loads a PowerShell script from the classpath and wraps it in a {@link BufferedReader}.
@@ -41,8 +43,9 @@ class ScriptUtility {
      * @throws ResourceNotFoundException if the script resource cannot be found
      * @since 1.0.0
      */
-    @NotNull
-    static BufferedReader loadAsBufferedReader(@NonNull String scriptPath) {
+    static @NonNull BufferedReader loadAsBufferedReader(@NonNull String scriptPath) {
+
+        Objects.requireNonNull(scriptPath, "scriptPath cannot be null");
 
         InputStream resource = ScriptUtility.class.getResourceAsStream(scriptPath);
         if (resource == null)
@@ -68,8 +71,9 @@ class ScriptUtility {
      * @throws ResourceOperationException when I/O operations on the resource fail
      * @since 1.0.0
      */
-    @NotNull
-    static String loadScript(@NonNull String scriptPath) {
+    static @NonNull String loadScript(@NonNull String scriptPath) {
+
+        Objects.requireNonNull(scriptPath, "scriptPath cannot be null");
 
         InputStream resource = ScriptUtility.class.getResourceAsStream(scriptPath);
         if (resource == null)
@@ -81,6 +85,7 @@ class ScriptUtility {
 
             StringBuilder script = new StringBuilder();
 
+            // make sure the lines of the script are preserved in the final string
             Iterator<String> iterator = resourceBuffer.lines().iterator();
             while (iterator.hasNext()) {
                 script.append(iterator.next());

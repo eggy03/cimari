@@ -27,7 +27,7 @@ import io.github.eggy03.cimari.entity.system.Win32OperatingSystem;
 import io.github.eggy03.cimari.entity.system.Win32PnPEntity;
 import io.github.eggy03.cimari.entity.system.Win32Process;
 import io.github.eggy03.cimari.entity.user.Win32UserAccount;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
@@ -240,11 +240,11 @@ public enum Cimv2 {
 
     private final String query;
 
-    Cimv2(@NotNull String query) {
+    Cimv2(@NonNull String query) {
         this.query = Objects.requireNonNull(query, "query cannot be null");
     }
 
-    private static <T> @NotNull String generateQuery(@NotNull Class<T> wmiClass) {
+    private static <T> @NonNull String generateQuery(@NonNull Class<T> wmiClass) {
 
         Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
 
@@ -254,7 +254,7 @@ public enum Cimv2 {
 
     }
 
-    public @NotNull String getQuery() {
+    public @NonNull String getQuery() {
         return this.query;
     }
 }

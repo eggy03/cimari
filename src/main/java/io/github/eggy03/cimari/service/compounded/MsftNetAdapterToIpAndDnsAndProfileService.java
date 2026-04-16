@@ -15,8 +15,7 @@ import io.github.eggy03.cimari.service.network.MsftNetIpAddressService;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.terminal.TerminalResult;
 import io.github.eggy03.cimari.terminal.TerminalService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -82,7 +81,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      * @since 1.0.0
      */
     @Override
-    public @NotNull @Unmodifiable List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
+    public @NonNull List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {
         TerminalResult result = terminalService.executeScript(ScriptEnum.MSFT_NET_ADAPTER_TO_IP_AND_DNS_AND_PROFILE, timeout);
         return mapper.mapToList(result.getResult(), MsftNetAdapterToIpAndDnsAndProfile.class);
     }
