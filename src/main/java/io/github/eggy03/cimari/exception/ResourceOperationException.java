@@ -5,13 +5,26 @@
  */
 package io.github.eggy03.cimari.exception;
 
-import lombok.experimental.StandardException;
-
 /**
  * Usually thrown to indicate that necessary I/O operations on a resource has failed
  *
  * @since 1.0.0
  */
-@StandardException
+
 public class ResourceOperationException extends RuntimeException {
+
+    @SuppressWarnings("unused")
+    public ResourceOperationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    @SuppressWarnings("unused")
+    public ResourceOperationException(String message) {
+        super(message);
+    }
+
+    @SuppressWarnings("unused")
+    public ResourceOperationException(Throwable cause) {
+        super("I/O operations failed on resource", cause);
+    }
 }
