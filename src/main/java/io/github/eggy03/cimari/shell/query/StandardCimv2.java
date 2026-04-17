@@ -54,7 +54,7 @@ public enum StandardCimv2 {
      */
     MSFT_NET_CONNECTION_PROFILE(generateQuery("Get-NetConnectionProfile", MsftNetConnectionProfile.class));
 
-    private final String query;
+    private final @NonNull String query;
 
     StandardCimv2(@NonNull String query) {
         this.query = Objects.requireNonNull(query, "query cannot be null");

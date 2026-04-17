@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32SoundDeviceService implements CommonServiceInterface<Win32SoundDevice> {
 
-    private final TerminalService terminalService;
-    private final Win32SoundDeviceMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32SoundDeviceMapper mapper;
 
     /**
      * Creates {@link Win32SoundDeviceService} with default configuration.

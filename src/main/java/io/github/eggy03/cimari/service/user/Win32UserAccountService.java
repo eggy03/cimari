@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32UserAccountService implements CommonServiceInterface<Win32UserAccount> {
 
-    private final TerminalService terminalService;
-    private final Win32UserAccountMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32UserAccountMapper mapper;
 
     /**
      * Creates {@link Win32UserAccountService} with default configuration

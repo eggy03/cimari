@@ -33,8 +33,8 @@ import java.util.Optional;
  */
 public class HardwareIdService implements OptionalCommonServiceInterface<HardwareId> {
 
-    private final TerminalService terminalService;
-    private final HardwareIdMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull HardwareIdMapper mapper;
 
     /**
      * Creates {@link HardwareIdService} with default configuration.

@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class MsftDnsClientServerAddressService implements CommonServiceInterface<MsftDnsClientServerAddress> {
 
-    private final TerminalService terminalService;
-    private final MsftDnsClientServerAddressMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull MsftDnsClientServerAddressMapper mapper;
 
     /**
      * Creates {@link MsftDnsClientServerAddressService} with default configuration.

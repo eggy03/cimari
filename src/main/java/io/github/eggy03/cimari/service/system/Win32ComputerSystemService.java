@@ -34,8 +34,8 @@ import java.util.Optional;
  */
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
 
-    private final TerminalService terminalService;
-    private final Win32ComputerSystemMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32ComputerSystemMapper mapper;
 
     /**
      * Creates {@link Win32ComputerSystemService} with default configuration.

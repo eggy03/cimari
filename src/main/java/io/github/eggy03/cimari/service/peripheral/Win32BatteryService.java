@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32BatteryService implements CommonServiceInterface<Win32Battery> {
 
-    private final TerminalService terminalService;
-    private final Win32BatteryMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32BatteryMapper mapper;
 
     /**
      * Creates {@link Win32BatteryService} with default configuration.

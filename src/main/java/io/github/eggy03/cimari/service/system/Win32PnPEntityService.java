@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEntity> {
 
-    private final TerminalService terminalService;
-    private final Win32PnPEntityMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32PnPEntityMapper mapper;
 
     /**
      * Creates {@link Win32PnPEntityService} with default configuration.

@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32PhysicalMemory> {
 
-    private final TerminalService terminalService;
-    private final Win32PhysicalMemoryMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32PhysicalMemoryMapper mapper;
 
     /**
      * Creates {@link Win32PhysicalMemoryService} with default configuration.

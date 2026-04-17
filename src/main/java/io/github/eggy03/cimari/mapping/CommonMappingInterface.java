@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 public interface CommonMappingInterface<S> {
 
-    ObjectMapper DEFAULT_MAPPER = new ObjectMapper();
+    @NonNull ObjectMapper DEFAULT_MAPPER = new ObjectMapper();
 
     /**
      * Configure the {@link ObjectMapper} to be used for JSON processing.

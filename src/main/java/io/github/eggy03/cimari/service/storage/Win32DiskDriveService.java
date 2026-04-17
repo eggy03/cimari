@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDrive> {
 
-    private final TerminalService terminalService;
-    private final Win32DiskDriveMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32DiskDriveMapper mapper;
 
     /**
      * Creates {@link Win32DiskDriveService} with default configuration.

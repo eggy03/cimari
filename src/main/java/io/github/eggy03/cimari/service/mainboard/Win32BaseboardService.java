@@ -35,8 +35,8 @@ import java.util.Objects;
  */
 public class Win32BaseboardService implements CommonServiceInterface<Win32Baseboard> {
 
-    private final TerminalService terminalService;
-    private final Win32BaseboardMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32BaseboardMapper mapper;
 
     /**
      * Creates {@link Win32BaseboardService} with default configuration.

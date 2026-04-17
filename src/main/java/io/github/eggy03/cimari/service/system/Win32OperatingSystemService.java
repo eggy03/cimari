@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32OperatingSystemService implements CommonServiceInterface<Win32OperatingSystem> {
 
-    private final TerminalService terminalService;
-    private final Win32OperatingSystemMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32OperatingSystemMapper mapper;
 
     /**
      * Creates {@link Win32OperatingSystemService} with default configuration.

@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32DesktopMonitorService implements CommonServiceInterface<Win32DesktopMonitor> {
 
-    private final TerminalService terminalService;
-    private final Win32DesktopMonitorMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32DesktopMonitorMapper mapper;
 
     /**
      * Creates {@link Win32DesktopMonitorService} with default configuration.

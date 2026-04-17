@@ -60,7 +60,7 @@ public enum ScriptEnum {
      */
     HWID(loadScript("/HardwareID.ps1"));
 
-    private final String script;
+    private final @NonNull String script;
 
     ScriptEnum(@NonNull String script) {
         this.script = Objects.requireNonNull(script, "script cannot be null");

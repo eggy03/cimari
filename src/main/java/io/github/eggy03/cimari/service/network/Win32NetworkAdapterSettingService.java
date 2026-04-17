@@ -36,8 +36,8 @@ import java.util.Objects;
  */
 public class Win32NetworkAdapterSettingService implements CommonServiceInterface<Win32NetworkAdapterSetting> {
 
-    private final TerminalService terminalService;
-    private final Win32NetworkAdapterSettingMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32NetworkAdapterSettingMapper mapper;
 
     /**
      * Creates {@link Win32NetworkAdapterSettingService} with default configuration.

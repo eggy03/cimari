@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32CacheMemoryService implements CommonServiceInterface<Win32CacheMemory> {
 
-    private final TerminalService terminalService;
-    private final Win32CacheMemoryMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32CacheMemoryMapper mapper;
 
     /**
      * Creates {@link Win32CacheMemoryService} with default configuration.

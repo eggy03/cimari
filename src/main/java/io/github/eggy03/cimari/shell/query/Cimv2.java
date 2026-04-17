@@ -238,7 +238,7 @@ public enum Cimv2 {
      */
     WIN32_PNP_ENTITY(generateQuery(Win32PnPEntity.class));
 
-    private final String query;
+    private final @NonNull String query;
 
     Cimv2(@NonNull String query) {
         this.query = Objects.requireNonNull(query, "query cannot be null");
