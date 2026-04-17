@@ -6,13 +6,9 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.processor.Win32AssociatedProcessorMemory;
 import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -35,24 +31,10 @@ import java.util.List;
  * all instances of cache memories for a particular processor.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32ProcessorToCacheMemory cpuInfo = Win32ProcessorToCacheMemory.builder()
- *     .deviceId("CPU0")
- *     .processor(processor)
- *     .cacheMemoryList(cacheList)
- *     .build();
- * }</pre>
- *
- *
  * @see Win32Processor
  * @see Win32CacheMemory
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @NullMarked
 public class Win32ProcessorToCacheMemory {
 

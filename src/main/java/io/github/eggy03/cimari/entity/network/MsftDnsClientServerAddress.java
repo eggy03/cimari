@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -28,20 +24,6 @@ import java.util.List;
  * a replacement for {@link Win32NetworkAdapterConfiguration}
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftDnsClientServerAddress dns = MsftDnsClientServerAddress.builder()
- *     .interfaceIndex(1)
- *     .interfaceAlias("Ethernet")
- *     .addressFamily(23)
- *     .build();
- *
- * // Create a modified copy
- * MsftDnsClientServerAddress updated = dns.toBuilder()
- *     .addressFamily(2)
- *     .build();
- * }</pre>
- *
  * <p>See {@link MsftNetAdapter}, for network adapter information.</p>
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>
@@ -50,9 +32,6 @@ import java.util.List;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/dnsclientcimprov/msft-dnsclientserveraddress">MSFT_DNSClientServerAddress Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "MSFT_DNSClientServerAddress")
 @NullMarked
 public class MsftDnsClientServerAddress {

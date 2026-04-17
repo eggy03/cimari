@@ -6,9 +6,6 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
-import lombok.Builder;
-import lombok.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -67,20 +64,8 @@ import tools.jackson.databind.ObjectMapper;
  * this value can be detected during runtime.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * HardwareId hwid = HardwareId.builder()
- *     .rawHWID("UUID|DISK1|CPU1")
- *     .hashHWID("03560274-043C-05B7-4C06-C80700080009")
- *     .build();
- * }</pre>
- *
- *
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @NullMarked
 public class HardwareId {
 

@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.memory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -23,27 +19,9 @@ import java.math.BigInteger;
  * Fields correspond to properties retrieved from the {@code Win32_PhysicalMemory} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32PhysicalMemory ram = Win32PhysicalMemory.builder()
- *     .capacity(16L * 1024 * 1024 * 1024)
- *     .speed(3200)
- *     .build();
- *
- * // Create a modified copy
- * Win32PhysicalMemory upgraded = ram.toBuilder()
- *     .speed(3600)
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-physicalmemory">Win32_PhysicalMemory Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_PhysicalMemory")
 @NullMarked
 public class Win32PhysicalMemory {

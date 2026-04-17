@@ -6,13 +6,9 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapter;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterConfiguration;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterSetting;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -34,25 +30,11 @@ import java.util.List;
  * for a particular adapter
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32NetworkAdapterToConfiguration adapterInfo = Win32NetworkAdapterToConfiguration.builder()
- *     .deviceId("1")
- *     .adapter(networkAdapter)
- *     .configurationList(configurations)
- *     .build();
- * }</pre>
- *
- *
  * @see Win32NetworkAdapter
  * @see Win32NetworkAdapterConfiguration
  * @see Win32NetworkAdapterSetting
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @NullMarked
 public class Win32NetworkAdapterToConfiguration {
 

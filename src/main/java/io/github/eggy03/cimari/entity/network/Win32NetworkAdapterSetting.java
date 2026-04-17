@@ -6,12 +6,8 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -43,21 +39,6 @@ import tools.jackson.databind.ObjectMapper;
  *     and the resulting JSON returned is deserialized into this entity class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new NetworkAdapterSetting instance
- * Win32NetworkAdapterSetting nas = Win32NetworkAdapterSetting.builder()
- *     .networkAdapterDeviceId("1")
- *     .networkAdapterConfigurationIndex(1)
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32NetworkAdapterSetting updated = nas.toBuilder()
- *     .networkAdapterConfigurationIndex(2)
- *     .build();
- *
- * }</pre>
- *
  * <p>See {@link Win32NetworkAdapter} for adapter info.</p>
  * <p>See {@link Win32NetworkAdapterConfiguration} for related adapter config info.</p>
  *
@@ -65,9 +46,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadaptersetting">Win32_NetworkAdapterSetting Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_NetworkAdapterSetting")
 @NullMarked
 public class Win32NetworkAdapterSetting {

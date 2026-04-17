@@ -6,14 +6,26 @@
 package io.github.eggy03.cimari.exception;
 
 import io.github.eggy03.cimari.terminal.TerminalService;
-import lombok.experimental.StandardException;
 
 /**
  * A generic wrapper for all IO exceptions occurring from {@link TerminalService}
  *
  * @since 1.0.0
  */
-@StandardException
 public class TerminalIOException extends RuntimeException {
 
+    @SuppressWarnings("unused")
+    public TerminalIOException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    @SuppressWarnings("unused")
+    public TerminalIOException(String message) {
+        super(message);
+    }
+
+    @SuppressWarnings("unused")
+    public TerminalIOException(Throwable cause) {
+        super("Terminal IO Exception", cause);
+    }
 }

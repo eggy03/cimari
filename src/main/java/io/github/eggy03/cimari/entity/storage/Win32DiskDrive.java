@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.storage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -24,40 +20,12 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_DiskDrive} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32DiskDrive drive = Win32DiskDrive.builder()
- *     .deviceId("\\\\.\\PHYSICALDRIVE0")
- *     .caption("Samsung SSD 970 EVO")
- *     .model("MZ-V7E1T0")
- *     .size(1000204886016L)
- *     .firmwareRevision("2B2QEXM7")
- *     .serialNumber("S4EVNX0M123456")
- *     .partitions(3)
- *     .status("OK")
- *     .interfaceType("NVMe")
- *     .pnpDeviceId("PCI\\VEN_144D&DEV_A808&SUBSYS_0A0E144D&REV_01\\4&1A2B3C4D&0&000000")
- *     .build();
- *
- * // Create a modified copy
- * Win32DiskDrive updatedDrive = drive.toBuilder()
- *     .size(2000409772032L)
- *     .build();
- *
- * }</pre>
- *
  * <p>See {@link Win32DiskPartition} for information about partitions on this disk.</p>
  * <p>See {@link Win32LogicalDisk} for information about the logical volumes on this disk.</p>
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskdrive">Win32_DiskDrive Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_DiskDrive")
 @NullMarked
 public class Win32DiskDrive {

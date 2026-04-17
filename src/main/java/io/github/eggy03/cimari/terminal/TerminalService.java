@@ -9,13 +9,14 @@ import io.github.eggy03.cimari.exception.TerminalIOException;
 import io.github.eggy03.cimari.shell.query.Cimv2;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,8 +30,9 @@ import java.util.Objects;
  * </p>
  * @since 1.0.0
  */
-@Slf4j
 public class TerminalService {
+
+    public static final Logger log = LoggerFactory.getLogger(TerminalService.class);
 
     /**
      * Launches a standalone PowerShell session, executes {@link Cimv2} queries and returns the result

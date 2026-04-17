@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.mainboard;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -21,18 +17,6 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_Baseboard} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32Baseboard board = Win32Baseboard.builder()
- *     .manufacturer("ASUS")
- *     .serialNumber("ABC123456")
- *     .build();
- *
- * // Create a modified copy
- * Win32Baseboard updated = board.toBuilder()
- *     .serialNumber("XYZ987654")
- *     .build();
- * }</pre>
  * <p>
  * {@link Win32PortConnector} contains details about ports on this mainboard.
  *
@@ -40,10 +24,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-baseboard">Win32_Baseboard Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_Baseboard")
 @NullMarked
 public class Win32Baseboard {

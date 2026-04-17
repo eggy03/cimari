@@ -6,15 +6,11 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDriveToDiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -29,16 +25,6 @@ import java.util.List;
  * Each instance represents a single physical {@code DiskDrive} identified by {@link #deviceId},
  * and maintains a one-to-many mapping with its corresponding {@code DiskPartitions} and {@code LogicalDisks}.
  * </p>
- *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32DiskDriveToPartitionAndLogicalDisk diskInfo = Win32DiskDriveToPartitionAndLogicalDisk.builder()
- *     .deviceId("\\\\.\\PHYSICALDRIVE0")
- *     .diskDrive(drive)
- *     .diskPartitionList(partitions)
- *     .logicalDiskList(logicalDisks)
- *     .build();
- * }</pre>
  *
  * <p>
  * <b>NOTE: </b>While a {@code DiskDrive} has {@code 1:N} relationship with {@code DiskPartitions} and {@code LogicalDisks},
@@ -73,10 +59,6 @@ import java.util.List;
  * @see Win32LogicalDiskToPartition
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @NullMarked
 public class Win32DiskDriveToPartitionAndLogicalDisk {
 

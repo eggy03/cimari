@@ -6,14 +6,10 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -39,25 +35,11 @@ import java.util.List;
  * is also available by the name of {@link Win32DiskDriveToPartitionAndLogicalDisk}.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32DiskPartitionToLogicalDisk partitionInfo = Win32DiskPartitionToLogicalDisk.builder()
- *     .partitionId("Disk #0, Partition #1")
- *     .diskPartition(partition)
- *     .logicalDiskList(logicalDisks)
- *     .build();
- * }</pre>
- *
- *
  * @see Win32DiskPartition
  * @see Win32LogicalDisk
  * @see Win32LogicalDiskToPartition
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @NullMarked
 public class Win32DiskPartitionToLogicalDisk {
 

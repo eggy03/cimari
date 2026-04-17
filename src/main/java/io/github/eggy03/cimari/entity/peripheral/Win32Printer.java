@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.peripheral;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -25,30 +19,9 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_Printer} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32Printer printer = Win32Printer.builder()
- *     .deviceId("PR1")
- *     .name("Primary Printer")
- *     .isShared(true)
- *     .shareName("Shared Primary Printer")
- *     .build();
- *
- * // Modify using toBuilder()
- * Win32Printer updated = printer.toBuilder()
- *     .isShared(false)
- *     .shareName(null)
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-printer">Win32_Printer Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_Printer")
 @NullMarked
 public class Win32Printer {
@@ -182,7 +155,6 @@ public class Win32Printer {
     /**
      * Indicates whether the printer is shared on the network.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Shared")
     @Nullable
     Boolean shared;
@@ -195,14 +167,12 @@ public class Win32Printer {
     /**
      * Indicates whether spooling is enabled for the printer.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("SpoolEnabled")
     @Nullable
     Boolean spoolEnabled;
     /**
      * Specifies whether the printer is hidden from standard user interfaces.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Hidden")
     @Nullable
     Boolean hidden;

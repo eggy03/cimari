@@ -6,10 +6,7 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
 
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -26,21 +23,6 @@ import tools.jackson.databind.ObjectMapper;
  * replacement for {@link Win32NetworkAdapterConfiguration}
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftNetIpAddress address = MsftNetIpAddress.builder()
- *     .interfaceIndex(1)
- *     .addressFamily(0)
- *     .ipv4Address("192.168.0.210")
- *     .ipv6Address("fe80::abed:1234:5678:9abc")
- *     .build();
- *
- * // Create a modified copy
- * MsftNetIpAddress updated = address.toBuilder()
- *     .ipv4Address("192.168.0.255")
- *     .build();
- * }</pre>
- *
  * <p>See {@link MsftNetAdapter}, for network adapter information.</p>
  * <p>See {@link MsftDnsClientServerAddress}, for information regarding the connected DNS servers of a network adapter.</p>
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
@@ -49,9 +31,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/nettcpipprov/msft-netipaddress">MSFT_NetIPAddress Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "MSFT_NetIPAddress")
 @NullMarked
 public class MsftNetIpAddress {
@@ -180,8 +159,6 @@ public class MsftNetIpAddress {
     /**
      * Lifetime over which the address is preferred. The default value is infinite.
      */
-    @Value
-    @Builder(toBuilder = true)
     public static class Datetime {
 
         @JsonProperty("Days")

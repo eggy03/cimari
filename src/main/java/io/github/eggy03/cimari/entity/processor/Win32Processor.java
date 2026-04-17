@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.processor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -23,32 +17,11 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_Processor} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new Processor instance
- * Win32Processor cpu = Win32Processor.builder()
- *     .name("Intel Core i9-13900K")
- *     .numberOfCores(24)
- *     .threadCount(32)
- *     .maxClockSpeed(5300)
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32Processor updated = cpu.toBuilder()
- *     .threadCount(64)
- *     .build();
- * }</pre>
- * <p>
  * See {@link Win32CacheMemory} for related cache information.
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor">Win32_Processor Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_Processor")
 @NullMarked
 public class Win32Processor {
@@ -176,7 +149,6 @@ public class Win32Processor {
     /**
      * Indicates whether virtualization technology is enabled in firmware.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("VirtualizationFirmwareEnabled")
     @Nullable
     Boolean virtualizationFirmwareEnabled;

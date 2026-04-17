@@ -5,13 +5,25 @@
  */
 package io.github.eggy03.cimari.exception;
 
-import lombok.experimental.StandardException;
-
 /**
  * Indicates that a given annotation is not found during runtime.
  *
  * @since 1.0.0
  */
-@StandardException
 public class AnnotationNotFoundException extends RuntimeException {
+
+    @SuppressWarnings("unused")
+    public AnnotationNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    @SuppressWarnings("unused")
+    public AnnotationNotFoundException(String message) {
+        super(message);
+    }
+
+    @SuppressWarnings("unused")
+    public AnnotationNotFoundException(Throwable cause) {
+        super("A required annotation was not found", cause);
+    }
 }

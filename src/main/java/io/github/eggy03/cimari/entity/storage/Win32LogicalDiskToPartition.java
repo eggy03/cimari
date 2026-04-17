@@ -6,12 +6,8 @@
 package io.github.eggy03.cimari.entity.storage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -43,19 +39,6 @@ import tools.jackson.databind.ObjectMapper;
  *     and the resulting JSON returned is deserialized into this entity class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32LogicalDiskToPartition ldt = Win32LogicalDiskToPartition.builder()
- *     .diskPartitionDeviceId("Disk #0 Partition #1")
- *     .logicalDiskDeviceId("C:")
- *     .build();
- * // Create a modified copy using the builder
- * LWin32LogicalDiskToPartition updated = ldt.toBuilder()
- *     .logicalDiskDeviceId("D:")
- *     .build();
- * }</pre>
- *
  * <p>See {@link Win32DiskPartition} for related partitions on a physical disk.</p>
  * <p>See {@link Win32LogicalDisk} for partition info for partitions on a physical disk</p>
  *
@@ -63,9 +46,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-logicaldisktopartition">Win32_LogicalDiskToPartition Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_LogicalDiskToPartition")
 @NullMarked
 public class Win32LogicalDiskToPartition {

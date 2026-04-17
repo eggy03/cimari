@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -23,30 +17,11 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_NetworkAdapter} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32NetworkAdapter adapter = Win32NetworkAdapter.builder()
- *     .name("Ethernet 1")
- *     .macAddress("00:1A:2B:3C:4D:5E")
- *     .netEnabled(true)
- *     .build();
- *
- * // Create a modified copy
- * Win32NetworkAdapter updated = adapter.toBuilder()
- *     .netEnabled(false)
- *     .build();
- * }</pre>
- * <p>
  * {@link Win32NetworkAdapterConfiguration} contains related network configuration details.
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapter">Win32_NetworkAdapter Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_NetworkAdapter")
 @NullMarked
 public class Win32NetworkAdapter {
@@ -97,14 +72,12 @@ public class Win32NetworkAdapter {
     /**
      * Indicates whether the network adapter is installed in the system.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("Installed")
     @Nullable
     Boolean installed;
     /**
      * Indicates whether the network adapter is currently enabled.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("NetEnabled")
     @Nullable
     Boolean netEnabled;
@@ -117,7 +90,6 @@ public class Win32NetworkAdapter {
     /**
      * Indicates whether the adapter represents a physical or logical device.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("PhysicalAdapter")
     @Nullable
     Boolean physicalAdapter;

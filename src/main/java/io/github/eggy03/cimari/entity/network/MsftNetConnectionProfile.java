@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -22,21 +18,6 @@ import tools.jackson.databind.ObjectMapper;
  * {@code root/StandardCimv2} namespace.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftNetConnectionProfile profile = MsftNetConnectionProfile.builder()
- *     .interfaceIndex(1)
- *     .networkCategory(0)
- *     .ipv4Connectivity(4)
- *     .ipv6Connectivity(1)
- *     .build();
- *
- * // Create a modified copy
- * MsftNetConnectionProfile updated = profile.toBuilder()
- *     .networkCategory(1)
- *     .build();
- * }</pre>
- *
  * <p>See {@link MsftNetAdapter}, for network adapter information.</p>
  * <p>See {@link MsftDnsClientServerAddress}, for information regarding the connected DNS servers of a network adapter.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>
@@ -45,9 +26,6 @@ import tools.jackson.databind.ObjectMapper;
  * @see <a href="https://wutils.com/wmi/root/standardcimv2/msft_netconnectionprofile/">MSFT_NetConnectionProfile Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "MSFT_NetConnectionProfile")
 @NullMarked
 public class MsftNetConnectionProfile {

@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.peripheral;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -25,29 +19,9 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_Battery} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * // Build a new battery instance
- * Win32Battery battery = Win32Battery.builder()
- *     .deviceId("BAT0")
- *     .name("Primary Battery")
- *     .estimatedChargeRemaining(75)
- *     .build();
- *
- * // Modify using toBuilder (copy-on-write)
- * Win32Battery updated = battery.toBuilder()
- *     .estimatedChargeRemaining(50)
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-battery">Win32_Battery Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_Battery")
 @NullMarked
 public class Win32Battery {
@@ -129,7 +103,6 @@ public class Win32Battery {
     /**
      * Indicates whether the battery can be power-managed.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("PowerManagementSupported")
     @Nullable
     Boolean powerManagementSupported;

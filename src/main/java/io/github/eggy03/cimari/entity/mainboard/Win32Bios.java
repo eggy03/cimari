@@ -6,13 +6,7 @@
 package io.github.eggy03.cimari.entity.mainboard;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -23,27 +17,9 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_BIOS} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32Bios bios = Win32Bios.builder()
- *     .name("BIOS Name")
- *     .version("1.2.3")
- *     .build();
- *
- * // Create a modified copy
- * Win32Bios updated = bios.toBuilder()
- *     .version("1.2.4")
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-bios">Win32_BIOS</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_BIOS")
 @NullMarked
 public class Win32Bios {
@@ -79,7 +55,6 @@ public class Win32Bios {
     /**
      * If true, the SMBIOS is available on this computer system.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("SMBIOSPresent")
     @Nullable
     Boolean smbiosPresent;
@@ -131,7 +106,6 @@ public class Win32Bios {
     /**
      * If TRUE, this is the primary BIOS of the computer system.
      */
-    @Getter(AccessLevel.NONE)
     @JsonProperty("PrimaryBIOS")
     @Nullable
     Boolean primaryBios;

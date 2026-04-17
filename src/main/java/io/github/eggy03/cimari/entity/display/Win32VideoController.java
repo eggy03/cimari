@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.display;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -25,29 +21,10 @@ import tools.jackson.databind.ObjectMapper;
  * Hardware that is not compatible with Windows Display Driver Model (WDDM) returns inaccurate
  * property values for instances of this class.
  * </p>
- * <h2>Usage example</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32VideoController gpu = Win32VideoController.builder()
- *     .deviceId("GPU1")
- *     .name("AMD Radeon HD 5450")
- *     .currentRefreshRate(60)
- *     .build();
- *
- * // Modify using toBuilder (copy-on-write)
- * Win32VideoController updated = gpu.toBuilder()
- *     .currentRefreshRate(144)
- *     .build();
- * }</pre>
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-videocontroller">Win32_VideoController Documentation</a>
  * @since 1.0.0
  */
-
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_VideoController")
 @NullMarked
 public class Win32VideoController {

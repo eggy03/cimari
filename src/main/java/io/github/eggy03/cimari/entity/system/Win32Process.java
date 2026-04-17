@@ -6,11 +6,7 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.eggy03.cimari.annotation.ShallowImmutable;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -23,29 +19,9 @@ import java.math.BigInteger;
  * Fields correspond to properties retrieved from the {@code Win32_Process} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new Process instance
- * Win32Process process = Win32Process.builder()
- *     .processId(19845)
- *     .name("svchost.exe")
- *     .priority(8)
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32Process updated = process.toBuilder()
- *     .priority(1)
- *     .build();
- *
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-process">Win32_Process Documentation</a>
  * @since 1.0.0
  */
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
 @WmiClass(className = "Win32_Process")
 @NullMarked
 public class Win32Process {
