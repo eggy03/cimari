@@ -27,10 +27,12 @@ class CommonMappingInterfaceDefaultMethodsTest {
 
     private final CommonMappingInterface<MockEntity> mapper = new CommonMappingInterface<MockEntity>() {
     };
-    private final ObjectMapper objectMapper = mapper.objectMapper();
+    private final ObjectMapper objectMapper = mapper.createObjectMapper();
+
+    // MAP TO OBJECT TESTS
 
     @Test
-    void testMapToObject_success() {
+    void testMapToObject_validJsonObject_matchesSchema_returnsMockEntityWithNonNullFields() {
 
         // construct a MockEntity object
         MockEntity constructedMockEntity = new MockEntity(1L, "SomeValue");
@@ -51,17 +53,9 @@ class CommonMappingInterfaceDefaultMethodsTest {
     }
 
     @Test
-    void testMapToObject_invalidJson_throwsException() {
+    void testMapToObject_validJsonObject_doesNotMatchSchema_returnsMockEntityWithNullFields() {
 
-        String json = "invalid json";
-        assertThrows(JacksonException.class, () -> mapper.mapToObject(json, MockEntity.class));
-
-    }
-
-    @Test
-    void testMapToObject_validJson_jsonMismatchSchema_returnsObjectWithNullableFields() {
-
-        String json = "{}";
+        String json = "{\"a\" : \"1\" , \"b\" : \"2\"}";
         Optional<MockEntity> deserializedMockEntity = mapper.mapToObject(json, MockEntity.class);
 
         assertThat(deserializedMockEntity).isPresent();
@@ -70,14 +64,32 @@ class CommonMappingInterfaceDefaultMethodsTest {
     }
 
     @Test
-    void testMapToObject_validJson_butJsonIsAnArray_throwsException() {
-        String json = "[{}]";
-        assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(json, MockEntity.class));
+    void testMapToObject_validJsonType_butIsNotObject_throwsIllegalArgumentException() {
+        String stringToken = "\"json string\"";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(stringToken, MockEntity.class));
+
+        String nullToken = "null";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(nullToken, MockEntity.class));
+
+        String trueToken = "true";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(trueToken, MockEntity.class));
+
+        String falseToken = "false";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(falseToken, MockEntity.class));
+
+        String jsonArray = "[{\"a\" : \"1\" , \"b\" : \"2\"}, {\"c\" : \"3\" , \"d\" : \"4\"}]";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToObject(jsonArray, MockEntity.class));
     }
 
     @Test
-    void testMapToObject_emptyJson_optionalNotPresent() {
-        String json = "";
+    void testMapToObject_invalidJsonType_throwsJacksonException() {
+        String invalidJson = "invalid json string";
+        assertThrows(JacksonException.class, () -> mapper.mapToObject(invalidJson, MockEntity.class));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    void testMapToObject_emptyOrWhiteSpaceJsonString_optionalNotPresent(String json) {
         Optional<MockEntity> deserializedMockEntity = mapper.mapToObject(json, MockEntity.class);
         assertThat(deserializedMockEntity).isNotPresent();
     }
@@ -91,8 +103,11 @@ class CommonMappingInterfaceDefaultMethodsTest {
         assertThat(ex2.getMessage()).isEqualTo("objectClass cannot be null");
     }
 
+
+    // MAP TO LIST TESTS
+
     @Test
-    void testMapToList_success() {
+    void testMapToList_validJsonArray_returnsListOfMockEntitiesWithNonNullFields() {
 
         // construct two MockEntity objects
         MockEntity constructedMockEntityOne = new MockEntity(1L, "SomeValue");
@@ -122,7 +137,7 @@ class CommonMappingInterfaceDefaultMethodsTest {
     }
 
     @Test
-    void testMapToList_whenSingleObject_returnsSingletonList() {
+    void testMapToList_validJsonObject_returnsSingletonListOfMockEntityWithNonNullFields() {
 
         // construct two MockEntity objects
         MockEntity constructedMockEntity = new MockEntity(1L, "SomeValue");
@@ -142,36 +157,54 @@ class CommonMappingInterfaceDefaultMethodsTest {
     }
 
     @Test
-    void testMapToList_invalidJson_throwsException() {
-        String json = "invalid json";
-        assertThrows(JacksonException.class, () -> mapper.mapToList(json, MockEntity.class));
+    void testMapToList_validJsonArrayOrObject_doesNotMatchSchema_returnsListOfMockEntitiesWithNullFields() {
+        String jsonArray = "[{\"a\" : \"1\" , \"b\" : \"2\"}, {\"c\" : \"3\" , \"d\" : \"4\"}]";
+        String jsonObject = "{\"a\" : \"1\" , \"b\" : \"2\"}";
+
+        List<MockEntity> deserializedEntityListForArray = mapper.mapToList(jsonArray, MockEntity.class);
+        List<MockEntity> deserializedEntityListForObject = mapper.mapToList(jsonObject, MockEntity.class);
+
+        assertThat(deserializedEntityListForArray).hasSize(2);
+
+        assertThat(deserializedEntityListForArray.get(0)).isNotNull();
+        assertThat(deserializedEntityListForArray.get(1)).isNotNull();
+
+        assertThat(deserializedEntityListForArray.get(0).id).isNull();
+        assertThat(deserializedEntityListForArray.get(1).id).isNull();
+
+        assertThat(deserializedEntityListForObject).hasSize(1);
+
+        assertThat(deserializedEntityListForObject.get(0)).isNotNull();
+        assertThat(deserializedEntityListForObject.get(0).id).isNull();
     }
 
     @Test
-    void testMapToList_validJson_jsonMismatchSchema_returnsASingletonListWithNullFieldObject() {
-        String json = "[{}]";
-        List<MockEntity> deserializedEntityList = mapper.mapToList(json, MockEntity.class);
+    void testMapToList_validJsonType_butIsNotArrayOrObject_throwsIllegalArgumentException() {
+        String jsonString = "\"json string\"";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToList(jsonString, MockEntity.class));
 
-        assertThat(deserializedEntityList).hasSize(1);
-        assertThat(deserializedEntityList.get(0)).isNotNull();
-        assertThat(deserializedEntityList.get(0).id).isNull();
+        String nullToken = "null";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToList(nullToken, MockEntity.class));
+
+        String trueToken = "true";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToList(trueToken, MockEntity.class));
+
+        String falseToken = "false";
+        assertThrows(IllegalArgumentException.class, () -> mapper.mapToList(falseToken, MockEntity.class));
+    }
+
+    @Test
+    void testMapToList_invalidJsonType_throwsJacksonException() {
+        String invalidJson = "invalid json string";
+        assertThrows(JacksonException.class, () -> mapper.mapToList(invalidJson, MockEntity.class));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "   "})
-    void testMapToList_emptyOrWhiteSpaceOrLiteralNullStringJson_emptyList(String json) {
+    void testMapToList_emptyOrWhiteSpaceStringJson_emptyList(String json) {
         List<MockEntity> deserializedEntityList = mapper.mapToList(json, MockEntity.class);
         assertThat(deserializedEntityList).isEmpty();
 
-    }
-
-    @Test
-    void testMapToList_nullArrayString_returnsListWithNullElement() {
-        String json = "[null]";
-        List<MockEntity> deserializedEntityList = mapper.mapToList(json, MockEntity.class);
-
-        assertThat(deserializedEntityList).hasSize(1);
-        assertThat(deserializedEntityList.get(0)).isNull();
     }
 
     @Test
