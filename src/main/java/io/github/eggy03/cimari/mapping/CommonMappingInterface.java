@@ -31,21 +31,24 @@ import java.util.Optional;
  */
 public interface CommonMappingInterface<S> {
 
-    @NonNull ObjectMapper DEFAULT_MAPPER = new ObjectMapper();
-
     /**
      * Configure the {@link ObjectMapper} to be used for JSON processing.
+     *
      * <p>
-     * The default implementation returns a shared {@link #DEFAULT_MAPPER} instance.
-     * Implementations may override this method to provide a custom-configured
-     * {@link ObjectMapper}
+     * The default implementation returns a new {@link ObjectMapper} instance with default configuration,
+     * for each invocation.
+     * </p>
+     *
+     * <p>
+     * Custom implementations may override this method to provide a custom-configured
+     * {@link ObjectMapper}.
      * </p>
      *
      * @return the {@link ObjectMapper} to use
      * @since 1.0.0
      */
-    default @NonNull ObjectMapper objectMapper() {
-        return DEFAULT_MAPPER;
+    default @NonNull ObjectMapper createObjectMapper() {
+        return new ObjectMapper();
     }
 
     /**
@@ -55,15 +58,16 @@ public interface CommonMappingInterface<S> {
      *     it is deserialized into an unmodifiable list containing exactly one object of the given type.</li>
      *     <li>If the JSON represents an array of objects of type {@code <S>},
      *     it is deserialized into an unmodifiable list of objects of the given type.</li>
-     *     <li>If the JSON is null or empty, returns an empty unmodifiable list.</li>
+     *     <li>If the JSON is an empty string, returns an empty unmodifiable list.</li>
      * </ul>
      *
      * @param inputJson   the JSON string to parse
      * @param objectClass the class of the objects in the list
      * @return an immutable, non-null list of objects deserialized from JSON.
      * @throws NullPointerException     if {@code inputJson} or {@code objectClass} is null
-     * @throws JacksonException         if {@code inputJson} parsing fails
-     * @throws IllegalArgumentException if deserialization of {@code inputJson} to {@code objectClass} fails due to incompatible type
+     * @throws JacksonException         if {@code inputJson} is parsing fails
+     * @throws IllegalArgumentException if {@code inputJson} deserialization to {@code objectClass} fails
+     * due to incompatible type, or if {@code inputJson} is not a JSON Array or Object
      * @since 1.0.0
      */
     default @NonNull List<S> mapToList(@NonNull String inputJson, @NonNull Class<S> objectClass) {
@@ -75,19 +79,20 @@ public interface CommonMappingInterface<S> {
         if (trimmedInputJson.isEmpty())
             return Collections.emptyList();
 
-        JsonNode inputJsonNode = objectMapper().readTree(trimmedInputJson);
+        ObjectMapper mapper = createObjectMapper();
+        JsonNode inputJsonNode = mapper.readTree(trimmedInputJson);
 
         if (inputJsonNode.isArray()) {
 
-            TypeFactory typeFactory = objectMapper().getTypeFactory();
+            TypeFactory typeFactory = mapper.getTypeFactory();
             JavaType listType = typeFactory.constructCollectionType(List.class, objectClass);
 
-            List<S> result = objectMapper().convertValue(inputJsonNode, listType);
+            List<S> result = mapper.convertValue(inputJsonNode, listType);
             return result == null ? Collections.emptyList() : Collections.unmodifiableList(new ArrayList<>(result));
 
         } else if (inputJsonNode.isObject()) {
 
-            S result = objectMapper().convertValue(inputJsonNode, objectClass);
+            S result = mapper.convertValue(inputJsonNode, objectClass);
             return result == null ? Collections.emptyList() : Collections.singletonList(result);
 
         } else
@@ -102,7 +107,8 @@ public interface CommonMappingInterface<S> {
      * @return an {@link Optional} of type {@code <S>}
      * @throws NullPointerException     if {@code inputJson} or {@code objectClass} is null
      * @throws JacksonException         if {@code inputJson} parsing fails
-     * @throws IllegalArgumentException if deserialization of {@code inputJson} to {@code objectClass} fails due to incompatible type
+     * @throws IllegalArgumentException if {@code inputJson} deserialization to {@code objectClass} fails
+     * due to incompatible type, or if {@code inputJson} is not a JSON Object
      * @since 1.0.0
      */
     default @NonNull Optional<S> mapToObject(@NonNull String inputJson, @NonNull Class<S> objectClass) {
@@ -114,10 +120,11 @@ public interface CommonMappingInterface<S> {
         if (trimmedInputJson.isEmpty())
             return Optional.empty();
 
-        JsonNode inputJsonNode = objectMapper().readTree(trimmedInputJson);
+        ObjectMapper mapper = createObjectMapper();
+        JsonNode inputJsonNode = mapper.readTree(trimmedInputJson);
 
         if (inputJsonNode.isObject()) {
-            S result = objectMapper().convertValue(inputJsonNode, objectClass);
+            S result = mapper.convertValue(inputJsonNode, objectClass);
             return Optional.ofNullable(result);
         } else
             throw new IllegalArgumentException("Expected JSON Object but got: " + inputJsonNode.getNodeType());
