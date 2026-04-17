@@ -19,20 +19,6 @@ import java.math.BigInteger;
  * Fields correspond to properties retrieved from the {@code Win32_PhysicalMemory} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32PhysicalMemory ram = Win32PhysicalMemory.builder()
- *     .capacity(16L * 1024 * 1024 * 1024)
- *     .speed(3200)
- *     .build();
- *
- * // Create a modified copy
- * Win32PhysicalMemory upgraded = ram.toBuilder()
- *     .speed(3600)
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-physicalmemory">Win32_PhysicalMemory Documentation</a>
  * @since 1.0.0
  */

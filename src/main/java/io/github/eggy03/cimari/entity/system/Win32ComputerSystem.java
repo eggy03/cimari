@@ -21,25 +21,6 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_ComputerSystem} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32ComputerSystem system = Win32ComputerSystem.builder()
- *     .caption("Workstation PC")
- *     .description("High-end office workstation")
- *     .name("User-PC")
- *     .chassisSKUNumber("PROD-1234")
- *     .systemSKUNumber("Default String")
- *     .build();
- *
- * // Create a modified copy
- * Win32ComputerSystem updated = system.toBuilder()
- *     .name("Admin-PC")
- *     .build();
- *
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-computersystem">Win32_ComputerSystem Documentation</a>
  * @since 1.0.0
  */

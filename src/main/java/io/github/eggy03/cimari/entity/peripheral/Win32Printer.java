@@ -19,24 +19,6 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_Printer} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32Printer printer = Win32Printer.builder()
- *     .deviceId("PR1")
- *     .name("Primary Printer")
- *     .isShared(true)
- *     .shareName("Shared Primary Printer")
- *     .build();
- *
- * // Modify using toBuilder()
- * Win32Printer updated = printer.toBuilder()
- *     .isShared(false)
- *     .shareName(null)
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-printer">Win32_Printer Documentation</a>
  * @since 1.0.0
  */

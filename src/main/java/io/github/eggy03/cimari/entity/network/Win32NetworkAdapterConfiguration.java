@@ -19,26 +19,7 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_NetworkAdapterConfiguration} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Create a new configuration using the builder
- * Win32NetworkAdapterConfiguration config = Win32NetworkAdapterConfiguration.builder()
- *     .index(1)
- *     .description("Ethernet Adapter")
- *     .ipEnabled(true)
- *     .ipAddress(List.of("192.168.1.100"))
- *     .dnsServerSearchOrder(List.of("8.8.8.8", "8.8.4.4"))
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32NetworkAdapterConfiguration updated = config.toBuilder()
- *     .description("Updated Ethernet Adapter")
- *     .build();
- *
- * }</pre>
- * <p>
  * See {@link Win32NetworkAdapter} for the corresponding adapter entity
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapterconfiguration">Win32_NetworkAdapterConfiguration Documentation</a>
  * @since 1.0.0

@@ -15,23 +15,6 @@ import tools.jackson.databind.ObjectMapper;
  * Fields capture basic user information such as username, home directory, and user directory.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new User
- * User user = User.builder()
- *     .userName("john_doe")
- *     .userHome("C:\\Users\\john_doe")
- *     .userDirectory("C:\\Users\\john_doe\\Documents")
- *     .build();
- *
- * // Create a modified copy using the builder
- * User updatedUser = user.toBuilder()
- *     .userName("jane_doe")
- *     .build();
- *
- * }</pre>
- *
- *
  * @see Win32UserAccount
  * @since 1.0.0
  */

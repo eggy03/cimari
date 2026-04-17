@@ -17,22 +17,7 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_NetworkAdapter} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32NetworkAdapter adapter = Win32NetworkAdapter.builder()
- *     .name("Ethernet 1")
- *     .macAddress("00:1A:2B:3C:4D:5E")
- *     .netEnabled(true)
- *     .build();
- *
- * // Create a modified copy
- * Win32NetworkAdapter updated = adapter.toBuilder()
- *     .netEnabled(false)
- *     .build();
- * }</pre>
- * <p>
  * {@link Win32NetworkAdapterConfiguration} contains related network configuration details.
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapter">Win32_NetworkAdapter Documentation</a>
  * @since 1.0.0

@@ -23,21 +23,6 @@ import tools.jackson.databind.ObjectMapper;
  * replacement for {@link Win32NetworkAdapterConfiguration}
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftNetIpAddress address = MsftNetIpAddress.builder()
- *     .interfaceIndex(1)
- *     .addressFamily(0)
- *     .ipv4Address("192.168.0.210")
- *     .ipv6Address("fe80::abed:1234:5678:9abc")
- *     .build();
- *
- * // Create a modified copy
- * MsftNetIpAddress updated = address.toBuilder()
- *     .ipv4Address("192.168.0.255")
- *     .build();
- * }</pre>
- *
  * <p>See {@link MsftNetAdapter}, for network adapter information.</p>
  * <p>See {@link MsftDnsClientServerAddress}, for information regarding the connected DNS servers of a network adapter.</p>
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
@@ -174,8 +159,6 @@ public class MsftNetIpAddress {
     /**
      * Lifetime over which the address is preferred. The default value is infinite.
      */
-    @Value
-    @Builder(toBuilder = true)
     public static class Datetime {
 
         @JsonProperty("Days")

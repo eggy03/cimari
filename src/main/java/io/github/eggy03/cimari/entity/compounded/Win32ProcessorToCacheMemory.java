@@ -31,16 +31,6 @@ import java.util.List;
  * all instances of cache memories for a particular processor.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32ProcessorToCacheMemory cpuInfo = Win32ProcessorToCacheMemory.builder()
- *     .deviceId("CPU0")
- *     .processor(processor)
- *     .cacheMemoryList(cacheList)
- *     .build();
- * }</pre>
- *
- *
  * @see Win32Processor
  * @see Win32CacheMemory
  * @since 1.0.0

@@ -19,22 +19,6 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_Battery} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * // Build a new battery instance
- * Win32Battery battery = Win32Battery.builder()
- *     .deviceId("BAT0")
- *     .name("Primary Battery")
- *     .estimatedChargeRemaining(75)
- *     .build();
- *
- * // Modify using toBuilder (copy-on-write)
- * Win32Battery updated = battery.toBuilder()
- *     .estimatedChargeRemaining(50)
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-battery">Win32_Battery Documentation</a>
  * @since 1.0.0
  */

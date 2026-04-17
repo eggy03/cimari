@@ -17,23 +17,6 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_Environment} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32Environment env = Win32Environment.builder()
- *     .name("DOT_NET_CLI_TELEMETRY_DISABLE")
- *     .systemVariable(true)
- *     .variableValue("0")
- *     .build();
- *
- * // Create a modified copy
- * Win32Environment updated = env.toBuilder()
- *     .variableValue("1")
- *     .build();
- *
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-environment">Win32_Environment Documentation</a>
  * @since 1.0.0
  */

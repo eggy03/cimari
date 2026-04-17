@@ -27,17 +27,6 @@ import java.util.List;
  * and {@code ConnectionProfile} entities.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftNetAdapterToIpAndDnsAndProfile adapterInfo = MsftNetAdapterToIpAndDnsAndProfile.builder()
- *     .interfaceIndex(12L)
- *     .adapter(msftNetAdapter)
- *     .ipAddressList(ipAddresses)
- *     .dnsClientServerAddressList(dnsServers)
- *     .netConnectionProfileList(connectionProfiles)
- *     .build();
- * }</pre>
- *
  * <p>
  * This is purely a convenience class designed to simplify data retrieval
  * for all related network configuration entities through a single call.

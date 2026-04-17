@@ -35,16 +35,6 @@ import java.util.List;
  * is also available by the name of {@link Win32DiskDriveToPartitionAndLogicalDisk}.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32DiskPartitionToLogicalDisk partitionInfo = Win32DiskPartitionToLogicalDisk.builder()
- *     .partitionId("Disk #0, Partition #1")
- *     .diskPartition(partition)
- *     .logicalDiskList(logicalDisks)
- *     .build();
- * }</pre>
- *
- *
  * @see Win32DiskPartition
  * @see Win32LogicalDisk
  * @see Win32LogicalDiskToPartition

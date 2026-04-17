@@ -17,24 +17,7 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_Processor} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new Processor instance
- * Win32Processor cpu = Win32Processor.builder()
- *     .name("Intel Core i9-13900K")
- *     .numberOfCores(24)
- *     .threadCount(32)
- *     .maxClockSpeed(5300)
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32Processor updated = cpu.toBuilder()
- *     .threadCount(64)
- *     .build();
- * }</pre>
- * <p>
  * See {@link Win32CacheMemory} for related cache information.
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor">Win32_Processor Documentation</a>
  * @since 1.0.0

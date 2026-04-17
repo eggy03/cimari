@@ -39,19 +39,6 @@ import tools.jackson.databind.ObjectMapper;
  *     and the resulting JSON returned is deserialized into this entity class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32LogicalDiskToPartition ldt = Win32LogicalDiskToPartition.builder()
- *     .diskPartitionDeviceId("Disk #0 Partition #1")
- *     .logicalDiskDeviceId("C:")
- *     .build();
- * // Create a modified copy using the builder
- * LWin32LogicalDiskToPartition updated = ldt.toBuilder()
- *     .logicalDiskDeviceId("D:")
- *     .build();
- * }</pre>
- *
  * <p>See {@link Win32DiskPartition} for related partitions on a physical disk.</p>
  * <p>See {@link Win32LogicalDisk} for partition info for partitions on a physical disk</p>
  *

@@ -19,24 +19,6 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_OperatingSystem} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new OperatingSystem instance
- * Win32OperatingSystem os = Win32OperatingSystem.builder()
- *     .name("Windows 11 Pro")
- *     .version("22H2")
- *     .numberOfUsers(1)
- *     .osArchitecture("64-bit")
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32OperatingSystem updated = os.toBuilder()
- *     .numberOfUsers(5)
- *     .build();
- *
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-operatingsystem">Win32_OperatingSystem Documentation</a>
  * @since 1.0.0
  */

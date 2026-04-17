@@ -19,33 +19,8 @@ import java.math.BigInteger;
  * Fields correspond to properties retrieved from the {@code Win32_DiskPartition} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32DiskPartition partition = Win32DiskPartition.builder()
- *     .deviceId("Disk0\\Partition1")
- *     .name("System Reserved")
- *     .description("EFI System Partition")
- *     .blockSize(512L)
- *     .numberOfBlocks(131072L)
- *     .bootable(true)
- *     .primaryPartition(true)
- *     .bootPartition(true)
- *     .diskIndex(0)
- *     .size(67108864L)
- *     .type("EFI")
- *     .build();
- *
- * // Create a modified copy
- * Win32DiskPartition resizedPartition = partition.toBuilder()
- *     .size(134217728L)
- *     .build();
- *
- * }</pre>
- *
  * <p>See {@link Win32DiskDrive} for information about physical disks.</p>
  * <p>See {@link Win32LogicalDisk} for information about the logical volumes on a physical disk.</p>
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskpartition">Win32_DiskPartition Documentation</a>
  * @since 1.0.0

@@ -17,22 +17,6 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_DesktopMonitor} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32DesktopMonitor monitor = Win32DesktopMonitor.builder()
- *     .deviceId("MON1")
- *     .name("Generic PnP Monitor")
- *     .pixelsPerXLogicalInch(96)
- *     .build();
- *
- * // Modify using toBuilder (copy-on-write)
- * Win32DesktopMonitor updated = monitor.toBuilder()
- *     .pixelsPerXLogicalInch(120)
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-desktopmonitor">Win32_DesktopMonitor Documentation</a>
  * @since 1.0.0
  */

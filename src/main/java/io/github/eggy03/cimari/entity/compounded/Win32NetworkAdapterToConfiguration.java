@@ -30,16 +30,6 @@ import java.util.List;
  * for a particular adapter
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32NetworkAdapterToConfiguration adapterInfo = Win32NetworkAdapterToConfiguration.builder()
- *     .deviceId("1")
- *     .adapter(networkAdapter)
- *     .configurationList(configurations)
- *     .build();
- * }</pre>
- *
- *
  * @see Win32NetworkAdapter
  * @see Win32NetworkAdapterConfiguration
  * @see Win32NetworkAdapterSetting

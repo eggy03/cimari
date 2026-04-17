@@ -18,21 +18,6 @@ import tools.jackson.databind.ObjectMapper;
  * {@code root/StandardCimv2} namespace.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftNetConnectionProfile profile = MsftNetConnectionProfile.builder()
- *     .interfaceIndex(1)
- *     .networkCategory(0)
- *     .ipv4Connectivity(4)
- *     .ipv6Connectivity(1)
- *     .build();
- *
- * // Create a modified copy
- * MsftNetConnectionProfile updated = profile.toBuilder()
- *     .networkCategory(1)
- *     .build();
- * }</pre>
- *
  * <p>See {@link MsftNetAdapter}, for network adapter information.</p>
  * <p>See {@link MsftDnsClientServerAddress}, for information regarding the connected DNS servers of a network adapter.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>

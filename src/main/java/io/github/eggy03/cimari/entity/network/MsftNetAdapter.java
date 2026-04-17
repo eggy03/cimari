@@ -29,20 +29,6 @@ import tools.jackson.databind.ObjectMapper;
  * and all of them are directly linked via the {@code interfaceIndex} field.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftNetAdapter adapter = MsftNetAdapter.builder()
- *     .interfaceName("Ethernet1")
- *     .linkLayerAddress("00:1A:2B:3C:4D:5E")
- *     .linkSpeed("1Gbps)
- *     .build();
- *
- * // Create a modified copy
- * MsftNetAdapter updated = adapter.toBuilder()
- *     .linkSpeed("2.5Gbps")
- *     .build();
- * }</pre>
- *
  * <p>See {@link Win32NetworkAdapter}, the now deprecated equivalent WMI class.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>

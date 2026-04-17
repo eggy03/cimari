@@ -39,21 +39,6 @@ import tools.jackson.databind.ObjectMapper;
  *     and the resulting JSON returned is deserialized into this entity class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new NetworkAdapterSetting instance
- * Win32NetworkAdapterSetting nas = Win32NetworkAdapterSetting.builder()
- *     .networkAdapterDeviceId("1")
- *     .networkAdapterConfigurationIndex(1)
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32NetworkAdapterSetting updated = nas.toBuilder()
- *     .networkAdapterConfigurationIndex(2)
- *     .build();
- *
- * }</pre>
- *
  * <p>See {@link Win32NetworkAdapter} for adapter info.</p>
  * <p>See {@link Win32NetworkAdapterConfiguration} for related adapter config info.</p>
  *

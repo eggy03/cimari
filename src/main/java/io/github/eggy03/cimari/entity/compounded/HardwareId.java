@@ -64,15 +64,6 @@ import tools.jackson.databind.ObjectMapper;
  * this value can be detected during runtime.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * HardwareId hwid = HardwareId.builder()
- *     .rawHWID("UUID|DISK1|CPU1")
- *     .hashHWID("03560274-043C-05B7-4C06-C80700080009")
- *     .build();
- * }</pre>
- *
- *
  * @since 1.0.0
  */
 @NullMarked

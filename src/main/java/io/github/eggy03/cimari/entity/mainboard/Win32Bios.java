@@ -17,20 +17,6 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_BIOS} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32Bios bios = Win32Bios.builder()
- *     .name("BIOS Name")
- *     .version("1.2.3")
- *     .build();
- *
- * // Create a modified copy
- * Win32Bios updated = bios.toBuilder()
- *     .version("1.2.4")
- *     .build();
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-bios">Win32_BIOS</a>
  * @since 1.0.0
  */

@@ -19,23 +19,6 @@ import java.math.BigInteger;
  * Fields correspond to properties retrieved from the {@code Win32_Process} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new Process instance
- * Win32Process process = Win32Process.builder()
- *     .processId(19845)
- *     .name("svchost.exe")
- *     .priority(8)
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32Process updated = process.toBuilder()
- *     .priority(1)
- *     .build();
- *
- * }</pre>
- *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-process">Win32_Process Documentation</a>
  * @since 1.0.0
  */

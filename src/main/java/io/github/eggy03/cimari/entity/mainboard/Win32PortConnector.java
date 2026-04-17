@@ -19,20 +19,7 @@ import java.util.List;
  * Fields correspond to properties retrieved from the {@code Win32_PortConnector} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32PortConnector port = Win32PortConnector.builder()
- *     .externalReferenceDesignator("USB3_0")
- *     .build();
- *
- * // Create a modified copy
- * Win32PortConnector updated = port.toBuilder()
- *     .externalReferenceDesignator("USB3_1")
- *     .build();
- * }</pre>
- * <p>
  * {@link Win32Baseboard} contains the details of the motherboard this port belongs to.
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-portconnector">Win32_PortConnector Documentation</a>
  * @since 1.0.0

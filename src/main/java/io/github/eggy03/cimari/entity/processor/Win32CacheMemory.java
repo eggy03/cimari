@@ -17,25 +17,7 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_CacheMemory} WMI class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32CacheMemory l2Cache = Win32CacheMemory.builder()
- *     .deviceId("CPU0_L2")
- *     .purpose("Instruction")
- *     .installedSize(512)
- *     .associativity(8)
- *     .build();
- *
- * // Create a modified copy using the builder
- * Win32CacheMemory resized = l2Cache.toBuilder()
- *     .installedSize(1024)
- *     .build();
- *
- * }</pre>
- * <p>
  * See {@link Win32Processor} for related CPU information.
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-cachememory">Win32_CacheMemory Documentation</a>
  * @since 1.0.0

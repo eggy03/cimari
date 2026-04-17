@@ -17,18 +17,6 @@ import tools.jackson.databind.ObjectMapper;
  * Fields correspond to properties retrieved from the {@code Win32_Baseboard} WMI class.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32Baseboard board = Win32Baseboard.builder()
- *     .manufacturer("ASUS")
- *     .serialNumber("ABC123456")
- *     .build();
- *
- * // Create a modified copy
- * Win32Baseboard updated = board.toBuilder()
- *     .serialNumber("XYZ987654")
- *     .build();
- * }</pre>
  * <p>
  * {@link Win32PortConnector} contains details about ports on this mainboard.
  *

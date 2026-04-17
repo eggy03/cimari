@@ -24,20 +24,6 @@ import java.util.List;
  * a replacement for {@link Win32NetworkAdapterConfiguration}
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * MsftDnsClientServerAddress dns = MsftDnsClientServerAddress.builder()
- *     .interfaceIndex(1)
- *     .interfaceAlias("Ethernet")
- *     .addressFamily(23)
- *     .build();
- *
- * // Create a modified copy
- * MsftDnsClientServerAddress updated = dns.toBuilder()
- *     .addressFamily(2)
- *     .build();
- * }</pre>
- *
  * <p>See {@link MsftNetAdapter}, for network adapter information.</p>
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>

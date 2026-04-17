@@ -21,21 +21,6 @@ import tools.jackson.databind.ObjectMapper;
  * Hardware that is not compatible with Windows Display Driver Model (WDDM) returns inaccurate
  * property values for instances of this class.
  * </p>
- * <h2>Usage example</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32VideoController gpu = Win32VideoController.builder()
- *     .deviceId("GPU1")
- *     .name("AMD Radeon HD 5450")
- *     .currentRefreshRate(60)
- *     .build();
- *
- * // Modify using toBuilder (copy-on-write)
- * Win32VideoController updated = gpu.toBuilder()
- *     .currentRefreshRate(144)
- *     .build();
- * }</pre>
- *
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-videocontroller">Win32_VideoController Documentation</a>
  * @since 1.0.0

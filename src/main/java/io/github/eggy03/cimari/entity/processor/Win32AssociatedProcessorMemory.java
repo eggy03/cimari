@@ -39,19 +39,6 @@ import tools.jackson.databind.ObjectMapper;
  *     and the resulting JSON returned is deserialized into this entity class.
  * </p>
  *
- * <h2>Usage examples</h2>
- * <pre>{@code
- * // Build a new instance
- * Win32AssociatedProcessorMemory apm = Win32AssociatedProcessorMemory.builder()
- *     .cacheMemoryDeviceId("Cache Memory 1")
- *     .processorDeviceId("CPU0")
- *     .build();
- * // Create a modified copy using the builder
- * Win32AssociatedProcessorMemory updated = apm.toBuilder()
- *     .cacheMemoryDeviceId("Cache Memory 2")
- *     .build();
- * }</pre>
- *
  * <p>See {@link Win32Processor} for related CPU information.</p>
  * <p>See {@link Win32CacheMemory} for related CPU Cache information.</p>
  *

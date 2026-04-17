@@ -26,16 +26,6 @@ import java.util.List;
  * and maintains a one-to-many mapping with its corresponding {@code DiskPartitions} and {@code LogicalDisks}.
  * </p>
  *
- * <h2>Usage example</h2>
- * <pre>{@code
- * Win32DiskDriveToPartitionAndLogicalDisk diskInfo = Win32DiskDriveToPartitionAndLogicalDisk.builder()
- *     .deviceId("\\\\.\\PHYSICALDRIVE0")
- *     .diskDrive(drive)
- *     .diskPartitionList(partitions)
- *     .logicalDiskList(logicalDisks)
- *     .build();
- * }</pre>
- *
  * <p>
  * <b>NOTE: </b>While a {@code DiskDrive} has {@code 1:N} relationship with {@code DiskPartitions} and {@code LogicalDisks},
  * a single instance of a {@code DiskPartition} may also have {@code 1:N} relationship with {@code LogicalDisks}.
