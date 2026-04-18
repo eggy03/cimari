@@ -24,7 +24,6 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>
  * {@link Win32PortConnector} contains details about ports on this mainboard.
  *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-baseboard">Win32_Baseboard Documentation</a>
  * @since 1.0.0
  */

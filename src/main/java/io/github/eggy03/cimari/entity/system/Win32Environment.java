@@ -45,6 +45,7 @@ public abstract class Win32Environment {
     @JsonProperty("SystemVariable")
     @Nullable
     public abstract Boolean systemVariable();
+
     /**
      * Placeholder variable of a Windows-based environment variable.
      * Information like the file system directory can change from computer to computer.

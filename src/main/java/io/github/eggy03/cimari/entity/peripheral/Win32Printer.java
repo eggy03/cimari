@@ -166,18 +166,21 @@ public abstract class Win32Printer {
     @JsonProperty("Shared")
     @Nullable
     public abstract Boolean shared();
+
     /**
      * Share name of the printer if it is shared.
      */
     @JsonProperty("ShareName")
     @Nullable
     public abstract String shareName();
+
     /**
      * Indicates whether spooling is enabled for the printer.
      */
     @JsonProperty("SpoolEnabled")
     @Nullable
     public abstract Boolean spoolEnabled();
+
     /**
      * Specifies whether the printer is hidden from standard user interfaces.
      */

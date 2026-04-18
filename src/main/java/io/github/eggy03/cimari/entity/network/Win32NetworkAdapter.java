@@ -20,7 +20,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_NetworkAdapter} WMI class.
  * </p>
- *
+ * <p>
  * {@link Win32NetworkAdapterConfiguration} contains related network configuration details.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapter">Win32_NetworkAdapter Documentation</a>
@@ -83,24 +83,28 @@ public abstract class Win32NetworkAdapter {
     @JsonProperty("Installed")
     @Nullable
     public abstract Boolean installed();
+
     /**
      * Indicates whether the network adapter is currently enabled.
      */
     @JsonProperty("NetEnabled")
     @Nullable
     public abstract Boolean netEnabled();
+
     /**
      * Name of the network connection as displayed in the Network Connections Control Panel.
      */
     @JsonProperty("NetConnectionID")
     @Nullable
     public abstract String netConnectionId();
+
     /**
      * Indicates whether the adapter represents a physical or logical device.
      */
     @JsonProperty("PhysicalAdapter")
     @Nullable
     public abstract Boolean physicalAdapter();
+
     /**
      * Date and time the network adapter was last reset.
      */

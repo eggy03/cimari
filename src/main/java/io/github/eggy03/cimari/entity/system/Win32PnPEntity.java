@@ -95,6 +95,7 @@ public abstract class Win32PnPEntity {
     @JsonProperty("Present")
     @Nullable
     public abstract Boolean present();
+
     /**
      * Current operational status of the PnP Device.
      * <p>Possible OPERATIONAL values:</p>

@@ -66,6 +66,7 @@ public abstract class Win32Bios {
     @JsonProperty("SMBIOSPresent")
     @Nullable
     public abstract Boolean smbiosPresent();
+
     /**
      * Current operational status of the BIOS.
      * <p>Possible OPERATIONAL values:</p>
@@ -93,24 +94,28 @@ public abstract class Win32Bios {
     @JsonProperty("Status")
     @Nullable
     public abstract String status();
+
     /**
      * Version of the BIOS. This string is created by the BIOS manufacturer.
      */
     @JsonProperty("Version")
     @Nullable
     public abstract String version();
+
     /**
      * Name of the current BIOS language.
      */
     @JsonProperty("CurrentLanguage")
     @Nullable
     public abstract String currentLanguage();
+
     /**
      * BIOS version as reported by SMBIOS.
      */
     @JsonProperty("SMBIOSBIOSVersion")
     @Nullable
     public abstract String smbiosBiosVersion();
+
     /**
      * If TRUE, this is the primary BIOS of the computer system.
      */

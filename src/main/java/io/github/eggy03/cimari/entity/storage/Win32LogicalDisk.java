@@ -108,18 +108,21 @@ public abstract class Win32LogicalDisk {
     @JsonProperty("Compressed")
     @Nullable
     public abstract Boolean compressed();
+
     /**
      * Indicates whether the logical disk supports file-based compression (e.g., NTFS).
      */
     @JsonProperty("SupportsFileBasedCompression")
     @Nullable
     public abstract Boolean supportsFileBasedCompression();
+
     /**
      * Indicates whether this volume supports disk quotas.
      */
     @JsonProperty("SupportsDiskQuotas")
     @Nullable
     public abstract Boolean supportsDiskQuotas();
+
     /**
      * Volume name of the logical disk.
      * Example: {@code "Local Disk"}
@@ -127,6 +130,7 @@ public abstract class Win32LogicalDisk {
     @JsonProperty("VolumeName")
     @Nullable
     public abstract String volumeName();
+
     /**
      * Volume serial number of the logical disk.
      */

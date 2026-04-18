@@ -79,30 +79,35 @@ public abstract class Win32DiskPartition {
     @JsonProperty("Bootable")
     @Nullable
     public abstract Boolean bootable();
+
     /**
      * Indicates whether this is the primary partition on the disk.
      */
     @JsonProperty("PrimaryPartition")
     @Nullable
     public abstract Boolean primaryPartition();
+
     /**
      * Indicates whether this is the active (boot) partition used by the operating system when booting.
      */
     @JsonProperty("BootPartition")
     @Nullable
     public abstract Boolean bootPartition();
+
     /**
      * Index number of the physical disk that contains this partition.
      */
     @JsonProperty("DiskIndex")
     @Nullable
     public abstract Long diskIndex();
+
     /**
      * Total size of the partition in bytes.
      */
     @JsonProperty("Size")
     @Nullable
     public abstract BigInteger size();
+
     /**
      * Type of the partition
      * <p>Possible Values (Non-exhaustive, will be updated when new values are found):</p>

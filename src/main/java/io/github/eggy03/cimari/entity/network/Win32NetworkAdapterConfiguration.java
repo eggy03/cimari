@@ -22,7 +22,7 @@ import java.util.List;
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_NetworkAdapterConfiguration} WMI class.
  * </p>
- *
+ * <p>
  * See {@link Win32NetworkAdapter} for the corresponding adapter entity
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapterconfiguration">Win32_NetworkAdapterConfiguration Documentation</a>
@@ -71,6 +71,7 @@ public abstract class Win32NetworkAdapterConfiguration {
     @JsonProperty("IPEnabled")
     @Nullable
     public abstract Boolean ipEnabled();
+
     /**
      * List of IP addresses associated with this network adapter.
      * May contain IPv4 and/or IPv6 addresses.
@@ -78,48 +79,56 @@ public abstract class Win32NetworkAdapterConfiguration {
     @JsonProperty("IPAddress")
     @Nullable
     public abstract List<@Nullable String> ipAddress();
+
     /**
      * Subnet masks associated with each IP address on this adapter.
      */
     @JsonProperty("IPSubnet")
     @Nullable
     public abstract List<@Nullable String> ipSubnet();
+
     /**
      * List of default gateway IP addresses used by this system.
      */
     @JsonProperty("DefaultIPGateway")
     @Nullable
     public abstract List<@Nullable String> defaultIpGateway();
+
     /**
      * Indicates whether DHCP is enabled for this adapter.
      */
     @JsonProperty("DHCPEnabled")
     @Nullable
     public abstract Boolean dhcpEnabled();
+
     /**
      * IP address of the DHCP server that assigned this configuration.
      */
     @JsonProperty("DHCPServer")
     @Nullable
     public abstract String dhcpServer();
+
     /**
      * Date and time when the DHCP lease was obtained.
      */
     @JsonProperty("DHCPLeaseObtained")
     @Nullable
     public abstract String dhcpLeaseObtained();
+
     /**
      * Date and time when the DHCP lease expires.
      */
     @JsonProperty("DHCPLeaseExpires")
     @Nullable
     public abstract String dhcpLeaseExpires();
+
     /**
      * Host name used to identify this computer on the network.
      */
     @JsonProperty("DNSHostName")
     @Nullable
     public abstract String dnsHostName();
+
     /**
      * List of DNS server IP addresses used for name resolution.
      */

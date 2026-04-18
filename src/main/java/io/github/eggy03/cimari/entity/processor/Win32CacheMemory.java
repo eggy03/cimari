@@ -20,7 +20,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_CacheMemory} WMI class.
  * </p>
- *
+ * <p>
  * See {@link Win32Processor} for related CPU information.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-cachememory">Win32_CacheMemory Documentation</a>

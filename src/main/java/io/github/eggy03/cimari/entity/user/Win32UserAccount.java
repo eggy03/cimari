@@ -113,36 +113,42 @@ public abstract class Win32UserAccount {
     @JsonProperty("Disabled")
     @Nullable
     public abstract Boolean disabled();
+
     /**
      * True if this is a local account.
      */
     @JsonProperty("LocalAccount")
     @Nullable
     public abstract Boolean localAccount();
+
     /**
      * True if the account is locked out.
      */
     @JsonProperty("Lockout")
     @Nullable
     public abstract Boolean lockout();
+
     /**
      * True if a password is required.
      */
     @JsonProperty("PasswordRequired")
     @Nullable
     public abstract Boolean passwordRequired();
+
     /**
      * True if the password expires.
      */
     @JsonProperty("PasswordExpires")
     @Nullable
     public abstract Boolean passwordExpires();
+
     /**
      * True if the password can be changed.
      */
     @JsonProperty("PasswordChangeable")
     @Nullable
     public abstract Boolean passwordChangeable();
+
     /**
      * Current operational status of the account.
      * <p>Possible OPERATIONAL values:</p>

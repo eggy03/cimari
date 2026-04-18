@@ -20,7 +20,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_Processor} WMI class.
  * </p>
- *
+ * <p>
  * See {@link Win32CacheMemory} for related cache information.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor">Win32_Processor Documentation</a>
@@ -160,12 +160,14 @@ public abstract class Win32Processor {
     @JsonProperty("VirtualizationFirmwareEnabled")
     @Nullable
     public abstract Boolean virtualizationFirmwareEnabled();
+
     /**
      * Processor identifier string, which may include family, model, and stepping information.
      */
     @JsonProperty("ProcessorId")
     @Nullable
     public abstract String processorId();
+
     /**
      * Processor architecture used by the platform.
      * <p>Possible Values:</p>

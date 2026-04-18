@@ -41,7 +41,6 @@ import java.util.List;
  * {@code Win32_NetworkAdapter} is deprecated by Microsoft in favor of the MSFT classes.
  * </p>
  *
- *
  * @see MsftNetAdapter
  * @see MsftNetIpAddress
  * @see MsftDnsClientServerAddress

@@ -82,54 +82,63 @@ public abstract class Win32OperatingSystem {
     @JsonProperty("Distributed")
     @Nullable
     public abstract Boolean distributed();
+
     /**
      * Number of user sessions currently active.
      */
     @JsonProperty("NumberOfUsers")
     @Nullable
     public abstract Integer numberOfUsers();
+
     /**
      * Version number of the operating system (for example, "10.0.22621").
      */
     @JsonProperty("Version")
     @Nullable
     public abstract String version();
+
     /**
      * Path to the boot device that the operating system uses to start the computer.
      */
     @JsonProperty("BootDevice")
     @Nullable
     public abstract String bootDevice();
+
     /**
      * Internal build number of the operating system.
      */
     @JsonProperty("BuildNumber")
     @Nullable
     public abstract String buildNumber();
+
     /**
      * Type of build (e.g., "Multiprocessor Free" or "Checked").
      */
     @JsonProperty("BuildType")
     @Nullable
     public abstract String buildType();
+
     /**
      * Manufacturer of the operating system (typically "Microsoft Corporation").
      */
     @JsonProperty("Manufacturer")
     @Nullable
     public abstract String manufacturer();
+
     /**
      * Architecture of the operating system, such as "32-bit" or "64-bit".
      */
     @JsonProperty("OSArchitecture")
     @Nullable
     public abstract String osArchitecture();
+
     /**
      * List of installed user interface languages (MUI language codes).
      */
     @JsonProperty("MUILanguages")
     @Nullable
     public abstract List<@Nullable String> muiLanguages();
+
     /**
      * Indicates whether the operating system is installed on a portable device.
      * <ul>
@@ -140,48 +149,56 @@ public abstract class Win32OperatingSystem {
     @JsonProperty("PortableOperatingSystem")
     @Nullable
     public abstract Boolean portableOperatingSystem();
+
     /**
      * Indicates whether this is the primary operating system on the computer.
      */
     @JsonProperty("Primary")
     @Nullable
     public abstract Boolean primary();
+
     /**
      * Name of the registered user of the operating system.
      */
     @JsonProperty("RegisteredUser")
     @Nullable
     public abstract String registeredUser();
+
     /**
      * Operating system serial number or product key identifier.
      */
     @JsonProperty("SerialNumber")
     @Nullable
     public abstract String serialNumber();
+
     /**
      * Major version number of the most recent service pack installed.
      */
     @JsonProperty("ServicePackMajorVersion")
     @Nullable
     public abstract Integer servicePackMajorVersion();
+
     /**
      * Minor version number of the most recent service pack installed.
      */
     @JsonProperty("ServicePackMinorVersion")
     @Nullable
     public abstract Integer servicePackMinorVersion();
+
     /**
      * Full path to the system directory (typically "C:\WINDOWS\system32").
      */
     @JsonProperty("SystemDirectory")
     @Nullable
     public abstract String systemDirectory();
+
     /**
      * Drive letter where the operating system is installed (e.g., "C:").
      */
     @JsonProperty("SystemDrive")
     @Nullable
     public abstract String systemDrive();
+
     /**
      * Full path to the Windows installation directory (typically "C:\WINDOWS").
      */

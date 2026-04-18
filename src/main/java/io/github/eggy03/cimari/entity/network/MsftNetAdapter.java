@@ -38,7 +38,6 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  * <p>See {@link MsftDnsClientServerAddress}, for configuration information regarding the DNS servers of a network adapter.</p>
  *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/netadaptercimprov/msft-netadapter">MSFT_NetAdapter Documentation</a>
  * @since 1.0.0
  */
@@ -130,18 +129,21 @@ public abstract class MsftNetAdapter {
     @JsonProperty("Virtual")
     @Nullable
     public abstract Boolean virtual();
+
     /**
      * Indicates whether the adapter supports full-duplex mode.
      */
     @JsonProperty("FullDuplex")
     @Nullable
     public abstract Boolean fullDuplex();
+
     /**
      * Indicates whether the adapter is hidden from the user interface.
      */
     @JsonProperty("Hidden")
     @Nullable
     public abstract Boolean hidden();
+
     /**
      * Current operational status of the net adapter device.
      * <p>Possible OPERATIONAL values:</p>
@@ -169,6 +171,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("Status")
     @Nullable
     public abstract String status();
+
     /**
      * The physical (MAC) address of the network adapter.
      * <p>Example: "00:1A:2B:3C:4D:5E"</p>
@@ -176,6 +179,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("LinkLayerAddress")
     @Nullable
     public abstract String linkLayerAddress();
+
     /**
      * The current link speed as a formatted string, if available.
      * <p>Example: "1 Gbps"</p>
@@ -183,18 +187,21 @@ public abstract class MsftNetAdapter {
     @JsonProperty("LinkSpeed")
     @Nullable
     public abstract String linkSpeed();
+
     /**
      * Raw value of the current receive link speed in bits per second.
      */
     @JsonProperty("ReceiveLinkSpeed")
     @Nullable
     public abstract Long receiveLinkSpeedRaw();
+
     /**
      * Raw value of the current transmit link speed in bits per second.
      */
     @JsonProperty("TransmitLinkSpeed")
     @Nullable
     public abstract Long transmitLinkSpeedRaw();
+
     /**
      * Name of the network adapter driver.
      * <p>Example: "rt640x64.sys"</p>
@@ -202,6 +209,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("DriverName")
     @Nullable
     public abstract String driverName();
+
     /**
      * Version number of the network adapter driver.
      * <p>Example: "12.18.9.10"</p>
@@ -209,12 +217,14 @@ public abstract class MsftNetAdapter {
     @JsonProperty("DriverVersion")
     @Nullable
     public abstract String driverVersion();
+
     /**
      * Date of the currently installed driver.
      */
     @JsonProperty("DriverDate")
     @Nullable
     public abstract String driverDate();
+
     /**
      * Maximum Transmission Unit (MTU) size of the adapter, in bytes.
      * <p>Example: 1500</p>
@@ -222,6 +232,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("MtuSize")
     @Nullable
     public abstract Long mtuSize();
+
     /**
      * The current media connection state of the adapter.
      * <p>Possible values: </p>
@@ -234,6 +245,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("MediaConnectState")
     @Nullable
     public abstract Long mediaConnectState();
+
     /**
      * Network adapter media type.
      * Numeric equivalent of {@link #mediaType}
@@ -264,6 +276,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("NdisMedium")
     @Nullable
     public abstract Long ndisMedium();
+
     /**
      * The types of physical media that the network adapter supports.
      * Numeric equivalent of {@link #physicalMediaType}
@@ -294,6 +307,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("NdisPhysicalMedium")
     @Nullable
     public abstract Long ndisPhysicalMedium();
+
     /**
      * Type of network media currently in use (for example, Ethernet or Wi-Fi).
      * String equivalent of {@link #ndisMedium}
@@ -301,6 +315,7 @@ public abstract class MsftNetAdapter {
     @JsonProperty("MediaType")
     @Nullable
     public abstract String mediaType();
+
     /**
      * Physical type of network media
      * String equivalent of {@link #ndisPhysicalMedium}

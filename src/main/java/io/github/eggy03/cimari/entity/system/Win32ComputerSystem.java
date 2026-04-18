@@ -109,6 +109,7 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("AutomaticResetBootOption")
     @Nullable
     public abstract Boolean automaticResetBootOption();
+
     /**
      * Current power state of the computer system. Possible values:
      * <ul>
@@ -130,6 +131,7 @@ public abstract class Win32ComputerSystem {
 
 
     // Power
+
     /**
      * State of the power supply or supplies when last booted.
      * <p>Possible Values:</p>
@@ -145,6 +147,7 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("PowerSupplyState")
     @Nullable
     public abstract Integer powerSupplyState();
+
     /**
      * Array of specific power-related capabilities.
      * <p>Possible Values: </p>
@@ -162,12 +165,14 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("PowerManagementCapabilities")
     @Nullable
     public abstract List<@Nullable Integer> powerManagementCapabilities();
+
     /**
      * If true, the device can be power-managed
      */
     @JsonProperty("PowerManagementSupported")
     @Nullable
     public abstract Boolean powerManagementSupported();
+
     /**
      * If enabled, indicates the unitary computer system can be reset using power and reset buttons.
      * Typical values:
@@ -182,6 +187,7 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("ResetCapability")
     @Nullable
     public abstract Integer resetCapability();
+
     /**
      * Number of automatic resets since the last reset.
      * A value of -1 indicates the count is unknown.
@@ -192,6 +198,7 @@ public abstract class Win32ComputerSystem {
 
 
     // Reset
+
     /**
      * Number of consecutive times a system reset is attempted.
      * A value of -1 indicates the limit is unknown.
@@ -199,6 +206,7 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("ResetLimit")
     @Nullable
     public abstract Integer resetLimit();
+
     /**
      * Hardware security setting for the front-panel reset button.
      * Typical values:
@@ -212,24 +220,28 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("FrontPanelResetStatus")
     @Nullable
     public abstract Integer frontPanelResetStatus();
+
     /**
      * If true, automatic reset capability is available.
      */
     @JsonProperty("AutomaticResetCapability")
     @Nullable
     public abstract Boolean automaticResetCapability();
+
     /**
      * Key of a CIM_System instance. Name of the computer system.
      */
     @JsonProperty("Name")
     @Nullable
     public abstract String name();
+
     /**
      * Short one-line description of the object.
      */
     @JsonProperty("Caption")
     @Nullable
     public abstract String caption();
+
     /**
      * Longer description of the object.
      */
@@ -239,54 +251,63 @@ public abstract class Win32ComputerSystem {
 
 
     // General identifying / owner info
+
     /**
      * Name of the computer manufacturer
      */
     @JsonProperty("Manufacturer")
     @Nullable
     public abstract String manufacturer();
+
     /**
      * Product name assigned by the manufacturer.
      */
     @JsonProperty("Model")
     @Nullable
     public abstract String model();
+
     /**
      * Name of the primary owner.
      */
     @JsonProperty("PrimaryOwnerName")
     @Nullable
     public abstract String primaryOwnerName();
+
     /**
      * Contact information for the primary owner.
      */
     @JsonProperty("PrimaryOwnerContact")
     @Nullable
     public abstract String primaryOwnerContact();
+
     /**
      * List of roles the system performs in the environment (editable).
      */
     @JsonProperty("Roles")
     @Nullable
     public abstract List<@Nullable String> roles();
+
     /**
      * Chassis or enclosure SKU number (from SMBIOS).
      */
     @JsonProperty("ChassisSKUNumber")
     @Nullable
     public abstract String chassisSKUNumber();
+
     /**
      * SKU/Product ID for the system configuration.
      */
     @JsonProperty("SystemSKUNumber")
     @Nullable
     public abstract String systemSKUNumber();
+
     /**
      * Family of the computer (SMBIOS Family field). May be unsupported on older OS versions.
      */
     @JsonProperty("SystemFamily")
     @Nullable
     public abstract String systemFamily();
+
     /**
      * System architecture description
      * <p>Possible Values: </p>
@@ -307,36 +328,42 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("SystemType")
     @Nullable
     public abstract String systemType();
+
     /**
      * Currently logged-on user. In Terminal Services scenarios, this is the console user.
      */
     @JsonProperty("UserName")
     @Nullable
     public abstract String userName();
+
     /**
      * Name of the workgroup or domain (if PartOfDomain==false this is a workgroup name).
      */
     @JsonProperty("Workgroup")
     @Nullable
     public abstract String workgroup();
+
     /**
      * OEM-defined strings
      */
     @JsonProperty("OEMStringArray")
     @Nullable
     public abstract List<@Nullable String> oemStringArray();
+
     /**
      * Number of physical processors installed (enabled).
      */
     @JsonProperty("NumberOfProcessors")
     @Nullable
     public abstract Long numberOfProcessors();
+
     /**
      * Number of logical processors available (includes hyperthreading logical CPUs).
      */
     @JsonProperty("NumberOfLogicalProcessors")
     @Nullable
     public abstract Long numberOfLogicalProcessors();
+
     /**
      * Total size of physical memory in bytes.
      * Note: under some circumstances this may not be accurate (BIOS reservation). For accurate module-by-module capacity,
@@ -345,18 +372,21 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("TotalPhysicalMemory")
     @Nullable
     public abstract BigInteger totalPhysicalMemory();
+
     /**
      * If true, the system manages the page file automatically.
      */
     @JsonProperty("AutomaticManagedPagefile")
     @Nullable
     public abstract Boolean automaticManagedPagefile();
+
     /**
      * If true, an infrared (IR) port exists on the computer system.
      */
     @JsonProperty("InfraredSupported")
     @Nullable
     public abstract Boolean infraredSupported();
+
     /**
      * If true, network server mode is enabled (system behaves as a server).
      */
@@ -366,6 +396,7 @@ public abstract class Win32ComputerSystem {
 
 
     // Uncategorized
+
     /**
      * If true, a hypervisor is present on the system.
      * Note: not supported before Windows 8 / Windows Server 2012 on older OSes.
@@ -373,6 +404,7 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("HypervisorPresent")
     @Nullable
     public abstract Boolean hypervisorPresent();
+
     /**
      * Thermal state of the system when last booted.
      * <p>Possible values:</p>
@@ -388,6 +420,7 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("ThermalState")
     @Nullable
     public abstract Integer thermalState();
+
     /**
      * Amount of time the system is offset from UTC, in minutes.
      * Example: for UTC+5:30 (Asia/Kolkata) the value is 330.
@@ -395,6 +428,7 @@ public abstract class Win32ComputerSystem {
     @JsonProperty("CurrentTimeZone")
     @Nullable
     public abstract Integer currentTimeZone();
+
     /**
      * If True, the daylight savings mode is ON.
      */

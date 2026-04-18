@@ -114,6 +114,7 @@ public abstract class Win32Battery {
     @JsonProperty("PowerManagementSupported")
     @Nullable
     public abstract Boolean powerManagementSupported();
+
     /**
      * Status of the battery.
      * <p>Possible values:</p>
@@ -134,6 +135,7 @@ public abstract class Win32Battery {
     @JsonProperty("BatteryStatus")
     @Nullable
     public abstract Integer batteryStatus();
+
     /**
      * Type of battery chemistry.
      * <p>Possible values:</p>
@@ -151,24 +153,28 @@ public abstract class Win32Battery {
     @JsonProperty("Chemistry")
     @Nullable
     public abstract Integer chemistry();
+
     /**
      * Design capacity of the battery in milliwatt-hours.
      */
     @JsonProperty("DesignCapacity")
     @Nullable
     public abstract Integer designCapacity();
+
     /**
      * Design voltage of the battery in millivolts.
      */
     @JsonProperty("DesignVoltage")
     @Nullable
     public abstract Integer designVoltage();
+
     /**
      * Estimated percentage of full charge remaining.
      */
     @JsonProperty("EstimatedChargeRemaining")
     @Nullable
     public abstract Long estimatedChargeRemaining();
+
     /**
      * Estimated remaining runtime of the battery in minutes.
      */
