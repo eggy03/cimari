@@ -29,7 +29,8 @@ import java.lang.annotation.Target;
         visibility = Value.Style.ImplementationVisibility.PUBLIC, // Generated class will be always public
         builder = "new", // construct builder using 'new' instead of factory method (required for Jackson).
         // Generated builders will have attributes annotated with @JsonProperty so deserialization will work properly.
-        defaults = @Value.Immutable(copy = true) // Enable copy methods
+        defaults = @Value.Immutable(copy = true), // Enable copy methods
+        passAnnotations = WmiClass.class // this annotation is needed to build queries at runtime from @JsonProperty values
 )
 public @interface ImmutableEntityStyle {
 }
