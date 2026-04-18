@@ -21,8 +21,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS) // Make it class retention for incremental compilation
 @Value.Style(
-        typeAbstract = {"Abstract*"}, // 'Abstract' prefix will be detected and trimmed
-        typeImmutable = "*", // No prefix or suffix for generated immutable type
+        typeAbstract = {"*"}, // No prefix or suffix will be detected and trimmed
+        typeImmutable = "Immutable*", // generated immutable types will have Immutable as prefix
         visibility = Value.Style.ImplementationVisibility.PUBLIC, // Generated class will be always public
         builder = "new", // construct builder using 'new' instead of factory method (required for Jackson).
         // Generated builders will have attributes annotated with @JsonProperty so deserialization will work properly.
