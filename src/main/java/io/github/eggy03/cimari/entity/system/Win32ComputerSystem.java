@@ -8,7 +8,6 @@ package io.github.eggy03.cimari.entity.system;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
-import io.github.eggy03.cimari.entity.memory.Win32PhysicalMemory;
 import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -367,7 +366,7 @@ public abstract class Win32ComputerSystem {
     /**
      * Total size of physical memory in bytes.
      * Note: under some circumstances this may not be accurate (BIOS reservation). For accurate module-by-module capacity,
-     * query the equivalent method(s) in {@link Win32PhysicalMemory}
+     * query the equivalent method(s) in {@code Win32_PhysicalMemory}
      */
     @JsonProperty("TotalPhysicalMemory")
     @Nullable
