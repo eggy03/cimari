@@ -22,8 +22,6 @@ import java.util.Objects;
  * <p>
  * This class executes the {@link Cimv2#WIN32_BASEBOARD} PowerShell command
  * and maps the resulting output into a {@link Win32Baseboard} with default configuration.
- *
- * @since 1.0.0
  * </p>
  *
  * <h2>Usage examples</h2>
