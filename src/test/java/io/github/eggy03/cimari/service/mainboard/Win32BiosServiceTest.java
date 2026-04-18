@@ -39,7 +39,7 @@ class Win32BiosServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32Bios expectedBios1 =
-            Win32Bios.builder()
+            new Win32Bios.Builder()
                     .name("American Megatrends Inc. BIOS")
                     .caption("AMI BIOS")
                     .manufacturer("American Megatrends Inc.")
@@ -53,7 +53,7 @@ class Win32BiosServiceTest {
                     .build();
 
     private final Win32Bios expectedBios2 =
-            Win32Bios.builder()
+            new Win32Bios.Builder()
                     .name("Phoenix Technologies LTD BIOS")
                     .caption("Phoenix SecureCore BIOS")
                     .manufacturer("Phoenix Technologies LTD")

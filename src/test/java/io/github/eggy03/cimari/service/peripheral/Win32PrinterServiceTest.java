@@ -38,7 +38,7 @@ class Win32PrinterServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Printer expectedPrinter1 = Win32Printer.builder()
+    private final Win32Printer expectedPrinter1 = new Win32Printer.Builder()
             .deviceId("PRN1")
             .name("HP LaserJet Pro M404dn")
             .pnpDeviceId("USBPRINT\\Hewlett-PackardHP_LaB1A1\\7&1111A11&0&USB001")
@@ -57,7 +57,7 @@ class Win32PrinterServiceTest {
             .spoolEnabled(true)
             .hidden(false)
             .build();
-    private final Win32Printer expectedPrinter2 = Win32Printer.builder()
+    private final Win32Printer expectedPrinter2 = new Win32Printer.Builder()
             .deviceId("PRN2")
             .name("Canon PIXMA G3020")
             .pnpDeviceId("USBPRINT\\CanonG3020_SERIES\\7&2222B22&0&USB002")

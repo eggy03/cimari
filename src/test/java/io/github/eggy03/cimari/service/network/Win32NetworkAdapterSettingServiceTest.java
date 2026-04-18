@@ -38,11 +38,11 @@ class Win32NetworkAdapterSettingServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32NetworkAdapterSetting expectedEthernetSetting = Win32NetworkAdapterSetting.builder()
+    private final Win32NetworkAdapterSetting expectedEthernetSetting = new Win32NetworkAdapterSetting.Builder()
             .networkAdapterDeviceId("1")
             .networkAdapterConfigurationIndex(1)
             .build();
-    private final Win32NetworkAdapterSetting expectedWifiSetting = Win32NetworkAdapterSetting.builder()
+    private final Win32NetworkAdapterSetting expectedWifiSetting = new Win32NetworkAdapterSetting.Builder()
             .networkAdapterDeviceId("2")
             .networkAdapterConfigurationIndex(2)
             .build();

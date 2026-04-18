@@ -38,7 +38,7 @@ class Win32ProcessorToCacheMemoryServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32ProcessorToCacheMemory expectedObject
-            = Win32ProcessorToCacheMemory.builder()
+            = new Win32ProcessorToCacheMemory.Builder()
             .deviceId("1L")
             .build();
 

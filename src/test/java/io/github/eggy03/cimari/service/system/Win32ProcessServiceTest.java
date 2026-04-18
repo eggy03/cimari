@@ -39,7 +39,7 @@ class Win32ProcessServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Process expectedProcess1 = Win32Process.builder()
+    private final Win32Process expectedProcess1 = new Win32Process.Builder()
             .processId(1234L)
             .sessionId(1L)
             .name("explorer.exe")
@@ -64,7 +64,7 @@ class Win32ProcessServiceTest {
             .terminationDate(null)
             .build();
 
-    private final Win32Process expectedProcess2 = Win32Process.builder()
+    private final Win32Process expectedProcess2 = new Win32Process.Builder()
             .processId(5678L)
             .sessionId(1L)
             .name("svchost.exe")

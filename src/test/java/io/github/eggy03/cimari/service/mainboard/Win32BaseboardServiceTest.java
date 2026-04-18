@@ -39,7 +39,7 @@ class Win32BaseboardServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32Baseboard expectedBoard1 =
-            Win32Baseboard.builder()
+            new Win32Baseboard.Builder()
                     .manufacturer("ASUS")
                     .model("ROG STRIX Z790-E GAMING WIFI")
                     .product("Z790-E")
@@ -48,7 +48,7 @@ class Win32BaseboardServiceTest {
                     .build();
 
     private final Win32Baseboard expectedBoard2 =
-            Win32Baseboard.builder()
+            new Win32Baseboard.Builder()
                     .manufacturer("MSI")
                     .model("MAG B650 TOMAHAWK WIFI")
                     .product("B650 TOMAHAWK")

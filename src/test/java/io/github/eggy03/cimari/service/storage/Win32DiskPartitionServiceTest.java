@@ -39,7 +39,7 @@ class Win32DiskPartitionServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32DiskPartition expectedSystemPartition = Win32DiskPartition.builder()
+    private final Win32DiskPartition expectedSystemPartition = new Win32DiskPartition.Builder()
             .deviceId("Disk0\\Partition1")
             .name("System Reserved")
             .description("EFI System Partition")
@@ -52,7 +52,7 @@ class Win32DiskPartitionServiceTest {
             .size(BigInteger.valueOf(67108864L))
             .type("EFI")
             .build();
-    private final Win32DiskPartition expectedDataPartition = Win32DiskPartition.builder()
+    private final Win32DiskPartition expectedDataPartition = new Win32DiskPartition.Builder()
             .deviceId("Disk0\\Partition2")
             .name("Local Disk (C:)")
             .description("Primary OS Partition")

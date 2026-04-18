@@ -38,7 +38,7 @@ class Win32BatteryServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Battery expectedPrimaryBattery = Win32Battery.builder()
+    private final Win32Battery expectedPrimaryBattery = new Win32Battery.Builder()
             .deviceId("BAT0")
             .caption("Primary Battery")
             .description("Internal Lithium-Ion Battery")
@@ -53,7 +53,7 @@ class Win32BatteryServiceTest {
             .estimatedChargeRemaining(87L)
             .estimatedRunTime(120L)
             .build();
-    private final Win32Battery expectedSecondaryBattery = Win32Battery.builder()
+    private final Win32Battery expectedSecondaryBattery = new Win32Battery.Builder()
             .deviceId("BAT1")
             .caption("Backup Battery")
             .description("External Lithium-Polymer Battery")

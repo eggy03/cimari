@@ -38,7 +38,7 @@ class Win32CacheMemoryServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32CacheMemory expectedL1Cache = Win32CacheMemory.builder()
+    private final Win32CacheMemory expectedL1Cache = new Win32CacheMemory.Builder()
             .deviceId("CPU0_L1")
             .purpose("Instruction")
             .cacheType(3)
@@ -51,7 +51,7 @@ class Win32CacheMemoryServiceTest {
             .status("OK")
             .statusInfo(3)
             .build();
-    private final Win32CacheMemory expectedL2Cache = Win32CacheMemory.builder()
+    private final Win32CacheMemory expectedL2Cache = new Win32CacheMemory.Builder()
             .deviceId("CPU0_L2")
             .purpose("Unified")
             .cacheType(5)
@@ -64,7 +64,7 @@ class Win32CacheMemoryServiceTest {
             .status("OK")
             .statusInfo(3)
             .build();
-    private final Win32CacheMemory expectedL3Cache = Win32CacheMemory.builder()
+    private final Win32CacheMemory expectedL3Cache = new Win32CacheMemory.Builder()
             .deviceId("CPU0_L3")
             .purpose("Unified")
             .cacheType(5)

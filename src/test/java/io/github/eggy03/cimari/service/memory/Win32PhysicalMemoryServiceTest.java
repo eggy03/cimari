@@ -39,7 +39,7 @@ class Win32PhysicalMemoryServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32PhysicalMemory expectedMemory1 = Win32PhysicalMemory.builder()
+    private final Win32PhysicalMemory expectedMemory1 = new Win32PhysicalMemory.Builder()
             .tag("PhysicalMemory1")
             .name("Corsair Vengeance LPX DDR4")
             .manufacturer("Corsair")
@@ -55,7 +55,7 @@ class Win32PhysicalMemoryServiceTest {
             .deviceLocator("DIMM_A1")
             .serialNumber("ABC123456789")
             .build();
-    private final Win32PhysicalMemory expectedMemory2 = Win32PhysicalMemory.builder()
+    private final Win32PhysicalMemory expectedMemory2 = new Win32PhysicalMemory.Builder()
             .tag("PhysicalMemory2")
             .name("G.Skill Trident Z5 DDR5")
             .manufacturer("G.Skill")

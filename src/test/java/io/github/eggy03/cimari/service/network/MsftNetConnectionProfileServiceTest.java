@@ -38,7 +38,7 @@ class MsftNetConnectionProfileServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final MsftNetConnectionProfile expectedEthernetProfile = MsftNetConnectionProfile.builder()
+    private final MsftNetConnectionProfile expectedEthernetProfile = new MsftNetConnectionProfile.Builder()
             .interfaceIndex(1L)
             .interfaceAlias("Ethernet")
             .networkCategory(1L) // Private
@@ -47,7 +47,7 @@ class MsftNetConnectionProfileServiceTest {
             .ipv6Connectivity(1L) // NoTraffic
             .build();
 
-    private final MsftNetConnectionProfile expectedWifiProfile = MsftNetConnectionProfile.builder()
+    private final MsftNetConnectionProfile expectedWifiProfile = new MsftNetConnectionProfile.Builder()
             .interfaceIndex(2L)
             .interfaceAlias("Wi-Fi")
             .networkCategory(0L) // Public

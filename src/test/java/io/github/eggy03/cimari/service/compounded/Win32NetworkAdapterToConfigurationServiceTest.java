@@ -38,7 +38,7 @@ class Win32NetworkAdapterToConfigurationServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32NetworkAdapterToConfiguration expectedObject
-            = Win32NetworkAdapterToConfiguration.builder()
+            = new Win32NetworkAdapterToConfiguration.Builder()
             .deviceId("1L")
             .build();
 

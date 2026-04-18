@@ -21,7 +21,7 @@ class Win32ComputerSystemServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32ComputerSystem expectedComputerSystem = Win32ComputerSystem.builder()
+    private final Win32ComputerSystem expectedComputerSystem = new Win32ComputerSystem.Builder()
             .adminPasswordStatus(3)
             .keyboardPasswordStatus(3)
             .powerOnPasswordStatus(3)

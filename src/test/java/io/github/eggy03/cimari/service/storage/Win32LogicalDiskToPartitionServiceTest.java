@@ -38,11 +38,11 @@ class Win32LogicalDiskToPartitionServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32LogicalDiskToPartition expectedSystemLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
+    private final Win32LogicalDiskToPartition expectedSystemLogicalDiskPartition = new Win32LogicalDiskToPartition.Builder()
             .diskPartitionDeviceId("Disk #0 Partition #1")
             .logicalDiskDeviceId("C:")
             .build();
-    private final Win32LogicalDiskToPartition expectedDataLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
+    private final Win32LogicalDiskToPartition expectedDataLogicalDiskPartition = new Win32LogicalDiskToPartition.Builder()
             .diskPartitionDeviceId("Disk #0 Partition #2")
             .logicalDiskDeviceId("D:")
             .build();

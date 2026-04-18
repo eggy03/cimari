@@ -38,7 +38,7 @@ class Win32SoundDeviceServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32SoundDevice expectedDevice1 = Win32SoundDevice.builder()
+    private final Win32SoundDevice expectedDevice1 = new Win32SoundDevice.Builder()
             .deviceId("AUDIO\\0001")
             .name("Realtek High Definition Audio")
             .pnpDeviceId("HDAUDIO\\FUNC_01&VEN_10EC&DEV_0256&SUBSYS_10431A00&REV_1000")
@@ -46,7 +46,7 @@ class Win32SoundDeviceServiceTest {
             .status("OK")
             .statusInfo(3)
             .build();
-    private final Win32SoundDevice expectedDevice2 = Win32SoundDevice.builder()
+    private final Win32SoundDevice expectedDevice2 = new Win32SoundDevice.Builder()
             .deviceId("AUDIO\\0002")
             .name("NVIDIA High Definition Audio")
             .pnpDeviceId("HDAUDIO\\FUNC_01&VEN_10DE&DEV_0080&SUBSYS_10DE1467&REV_1001")

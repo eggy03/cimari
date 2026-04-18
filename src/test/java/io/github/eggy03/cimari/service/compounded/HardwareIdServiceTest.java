@@ -39,7 +39,7 @@ class HardwareIdServiceTest {
     /**
      * Expected domain object returned by the mapper.
      */
-    private final HardwareId deserializedObject = HardwareId.builder()
+    private final HardwareId deserializedObject = new HardwareId.Builder()
             .rawHWID("ABC123")
             .hashHWID("123XYZ")
             .build();

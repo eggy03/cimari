@@ -38,14 +38,14 @@ class MsftDnsClientServerAddressServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final MsftDnsClientServerAddress expectedDns1 = MsftDnsClientServerAddress.builder()
+    private final MsftDnsClientServerAddress expectedDns1 = new MsftDnsClientServerAddress.Builder()
             .interfaceIndex(1L)
             .interfaceAlias("Ethernet")
             .addressFamily(2) // IPv4
             .dnsServerAddresses(Arrays.asList("8.8.8.8", "4.4.4.4"))
             .build();
 
-    private final MsftDnsClientServerAddress expectedDns2 = MsftDnsClientServerAddress.builder()
+    private final MsftDnsClientServerAddress expectedDns2 = new MsftDnsClientServerAddress.Builder()
             .interfaceIndex(2L)
             .interfaceAlias("Wi-Fi")
             .addressFamily(23) // IPv6

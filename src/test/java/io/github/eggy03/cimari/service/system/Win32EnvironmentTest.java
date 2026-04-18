@@ -38,13 +38,13 @@ class Win32EnvironmentTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Environment sysVar = Win32Environment.builder()
+    private final Win32Environment sysVar = new Win32Environment.Builder()
             .name("PATH")
             .systemVariable(true)
             .variableValue("C:\\Windows\\System32")
             .build();
 
-    private final Win32Environment userVar = Win32Environment.builder()
+    private final Win32Environment userVar = new Win32Environment.Builder()
             .name("TEMP")
             .systemVariable(false)
             .variableValue("C:\\Users\\User\\AppData\\Local\\Temp")

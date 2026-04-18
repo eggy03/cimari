@@ -38,7 +38,7 @@ class Win32DiskPartitionToLogicalDiskServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32DiskPartitionToLogicalDisk expectedObject
-            = Win32DiskPartitionToLogicalDisk.builder()
+            = new Win32DiskPartitionToLogicalDisk.Builder()
             .partitionId("1L")
             .build();
 

@@ -38,7 +38,7 @@ class MsftNetAdapterServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final MsftNetAdapter expectedEthernet = MsftNetAdapter.builder()
+    private final MsftNetAdapter expectedEthernet = new MsftNetAdapter.Builder()
             .deviceId("NET1")
             .pnpDeviceId("PCI\\VEN_8086&DEV_15BB&SUBSYS_07B01028&REV_10\\3&11583659&0&FE")
             .interfaceIndex(1L)
@@ -66,7 +66,7 @@ class MsftNetAdapterServiceTest {
             .ndisPhysicalMedium(1L)
             .build();
 
-    private final MsftNetAdapter expectedWifi = MsftNetAdapter.builder()
+    private final MsftNetAdapter expectedWifi = new MsftNetAdapter.Builder()
             .deviceId("NET2")
             .pnpDeviceId("PCI\\VEN_14E4&DEV_43A0&SUBSYS_061114E4&REV_03\\4&2AAB3B17&0&00E1")
             .interfaceIndex(2L)

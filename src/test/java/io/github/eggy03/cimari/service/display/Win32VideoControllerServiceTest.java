@@ -38,7 +38,7 @@ class Win32VideoControllerServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32VideoController expectedGpu1 = Win32VideoController.builder()
+    private final Win32VideoController expectedGpu1 = new Win32VideoController.Builder()
             .deviceId("GPU1")
             .name("NVIDIA GeForce RTX 4090")
             .pnpDeviceId("PCI\\VEN_10DE&DEV_2684&SUBSYS_409010DE&REV_A1")
@@ -55,7 +55,7 @@ class Win32VideoControllerServiceTest {
             .videoProcessor("AD102")
             .build();
 
-    private final Win32VideoController expectedGpu2 = Win32VideoController.builder()
+    private final Win32VideoController expectedGpu2 = new Win32VideoController.Builder()
             .deviceId("GPU2")
             .name("AMD Radeon RX 7900 XTX")
             .pnpDeviceId("PCI\\VEN_1002&DEV_744C&SUBSYS_79001002&REV_C8")

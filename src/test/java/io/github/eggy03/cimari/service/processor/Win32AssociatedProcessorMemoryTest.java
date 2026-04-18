@@ -38,12 +38,12 @@ class Win32AssociatedProcessorMemoryTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32AssociatedProcessorMemory expectedAssoc1 = Win32AssociatedProcessorMemory.builder()
+    private final Win32AssociatedProcessorMemory expectedAssoc1 = new Win32AssociatedProcessorMemory.Builder()
             .cacheMemoryDeviceId("CacheMemory0")
             .processorDeviceId("CPU0")
             .build();
 
-    private final Win32AssociatedProcessorMemory expectedAssoc2 = Win32AssociatedProcessorMemory.builder()
+    private final Win32AssociatedProcessorMemory expectedAssoc2 = new Win32AssociatedProcessorMemory.Builder()
             .cacheMemoryDeviceId("CacheMemory1")
             .processorDeviceId("CPU1")
             .build();

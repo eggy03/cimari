@@ -39,7 +39,7 @@ class Win32LogicalDiskServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32LogicalDisk expectedSystemVolume = Win32LogicalDisk.builder()
+    private final Win32LogicalDisk expectedSystemVolume = new Win32LogicalDisk.Builder()
             .deviceId("C:")
             .description("System Volume")
             .driveType(3L)
@@ -53,7 +53,7 @@ class Win32LogicalDiskServiceTest {
             .volumeName("Windows")
             .volumeSerialNumber("1A2B-3C4D")
             .build();
-    private final Win32LogicalDisk expectedDataVolume = Win32LogicalDisk.builder()
+    private final Win32LogicalDisk expectedDataVolume = new Win32LogicalDisk.Builder()
             .deviceId("D:")
             .description("Data Volume")
             .driveType(3L)

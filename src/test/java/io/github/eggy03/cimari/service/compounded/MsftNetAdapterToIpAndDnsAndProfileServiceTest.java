@@ -38,7 +38,7 @@ class MsftNetAdapterToIpAndDnsAndProfileServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final MsftNetAdapterToIpAndDnsAndProfile expectedObject
-            = MsftNetAdapterToIpAndDnsAndProfile.builder()
+            = new MsftNetAdapterToIpAndDnsAndProfile.Builder()
             .interfaceIndex(1L)
             .build();
 

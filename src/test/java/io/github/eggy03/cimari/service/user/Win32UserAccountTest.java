@@ -38,7 +38,7 @@ class Win32UserAccountTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32UserAccount expectedUser1 = Win32UserAccount.builder()
+    private final Win32UserAccount expectedUser1 = new Win32UserAccount.Builder()
             .sid("S-1-5-21-1234567890-1001")
             .sidType(1)
             .accountType(512L)
@@ -55,7 +55,7 @@ class Win32UserAccountTest {
             .status("OK")
             .build();
 
-    private final Win32UserAccount expectedUser2 = Win32UserAccount.builder()
+    private final Win32UserAccount expectedUser2 = new Win32UserAccount.Builder()
             .sid("S-1-5-21-0987654321-1002")
             .sidType(1)
             .accountType(512L)

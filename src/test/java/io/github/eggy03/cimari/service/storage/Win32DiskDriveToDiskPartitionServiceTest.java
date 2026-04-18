@@ -38,11 +38,11 @@ class Win32DiskDriveToDiskPartitionServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32DiskDriveToDiskPartition expectedMapping1 = Win32DiskDriveToDiskPartition.builder()
+    private final Win32DiskDriveToDiskPartition expectedMapping1 = new Win32DiskDriveToDiskPartition.Builder()
             .diskDriveDeviceId("PHYSICALDRIVE0")
             .diskPartitionDeviceId("Disk #0 Partition #1")
             .build();
-    private final Win32DiskDriveToDiskPartition expectedMapping2 = Win32DiskDriveToDiskPartition.builder()
+    private final Win32DiskDriveToDiskPartition expectedMapping2 = new Win32DiskDriveToDiskPartition.Builder()
             .diskDriveDeviceId("PHYSICALDRIVE1")
             .diskPartitionDeviceId("Disk #1 Partition #1")
             .build();
