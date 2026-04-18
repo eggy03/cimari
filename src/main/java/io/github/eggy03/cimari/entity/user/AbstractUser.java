@@ -10,6 +10,7 @@ import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a user on a system. The service which retrieves this info is platform-agnostic.
@@ -23,6 +24,7 @@ import tools.jackson.databind.ObjectMapper;
 @NullMarked
 @Value.Immutable
 @ImmutableEntityStyle
+@JsonSerialize(as = User.class)
 public abstract class AbstractUser {
 
     /**
