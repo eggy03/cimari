@@ -12,6 +12,8 @@ import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a motherboard device on a Windows system.
@@ -30,6 +32,8 @@ import tools.jackson.databind.ObjectMapper;
 @NullMarked
 @Value.Immutable
 @ImmutableEntityStyle
+@JsonSerialize(as = Win32Baseboard.class)
+@JsonDeserialize(as = Win32Baseboard.class)
 public abstract class AbstractWin32Baseboard {
 
     /**

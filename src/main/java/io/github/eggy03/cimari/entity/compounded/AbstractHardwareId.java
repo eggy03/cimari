@@ -11,6 +11,8 @@ import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a hardware identity (HWID) in a Windows system.
@@ -71,6 +73,8 @@ import tools.jackson.databind.ObjectMapper;
 @NullMarked
 @Value.Immutable
 @ImmutableEntityStyle
+@JsonSerialize(as = HardwareId.class)
+@JsonDeserialize(as = HardwareId.class)
 public abstract class AbstractHardwareId {
 
     /**

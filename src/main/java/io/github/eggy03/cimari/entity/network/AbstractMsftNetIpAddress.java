@@ -13,6 +13,8 @@ import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of IPv4 and IPv6 address configuration for a Network Adapter on a Windows system.
@@ -37,6 +39,8 @@ import tools.jackson.databind.ObjectMapper;
 @NullMarked
 @Value.Immutable
 @ImmutableEntityStyle
+@JsonSerialize(as = MsftNetIpAddress.class)
+@JsonDeserialize(as = MsftNetIpAddress.class)
 public abstract class AbstractMsftNetIpAddress {
 
     /**
@@ -166,6 +170,8 @@ public abstract class AbstractMsftNetIpAddress {
     @NullMarked
     @Value.Immutable
     @ImmutableEntityStyle
+    @JsonSerialize(as = Datetime.class)
+    @JsonDeserialize(as = Datetime.class)
     public abstract static class AbstractDatetime {
 
         @JsonProperty("Days")

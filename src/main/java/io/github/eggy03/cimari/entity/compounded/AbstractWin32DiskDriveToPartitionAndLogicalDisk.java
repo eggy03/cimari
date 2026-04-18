@@ -19,6 +19,8 @@ import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -67,6 +69,8 @@ import java.util.List;
 @NullMarked
 @Value.Immutable
 @ImmutableEntityStyle
+@JsonSerialize(as = Win32DiskDriveToPartitionAndLogicalDisk.class)
+@JsonDeserialize(as = Win32DiskDriveToPartitionAndLogicalDisk.class)
 public abstract class AbstractWin32DiskDriveToPartitionAndLogicalDisk {
 
     /**
