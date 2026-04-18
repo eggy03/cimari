@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.network;
 
 
+import io.github.eggy03.cimari.entity.network.AbstractMsftNetIpAddress;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import io.github.eggy03.cimari.mapping.network.MsftNetIpAddressMapper;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MsftNetIpAddressServiceTest {
 
-    static MsftNetIpAddress.Datetime lifetime = MsftNetIpAddress.Datetime.builder()
+    static AbstractMsftNetIpAddress.AbstractDatetime lifetime = AbstractMsftNetIpAddress.AbstractDatetime.builder()
             .days(9999L)
             .hours(0L)
             .minutes(0L)

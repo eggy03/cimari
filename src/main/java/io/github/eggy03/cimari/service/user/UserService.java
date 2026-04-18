@@ -35,7 +35,7 @@ public class UserService {
      */
     public @NonNull User getUser() {
 
-        return User.builder()
+        return new User.Builder()
                 .userName(System.getProperty("user.name"))
                 .userHome(System.getProperty("user.home"))
                 .userDirectory(System.getProperty("user.dir"))
