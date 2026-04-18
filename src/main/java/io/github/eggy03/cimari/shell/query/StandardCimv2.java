@@ -5,10 +5,10 @@
  */
 package io.github.eggy03.cimari.shell.query;
 
-import io.github.eggy03.cimari.entity.network.AbstractMsftDnsClientServerAddress;
-import io.github.eggy03.cimari.entity.network.AbstractMsftNetAdapter;
-import io.github.eggy03.cimari.entity.network.AbstractMsftNetConnectionProfile;
-import io.github.eggy03.cimari.entity.network.AbstractMsftNetIpAddress;
+import io.github.eggy03.cimari.entity.network.MsftDnsClientServerAddress;
+import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
+import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
+import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
@@ -35,28 +35,28 @@ public enum StandardCimv2 {
      *
      * @since 1.0.0
      */
-    MSFT_NET_ADAPTER(generateQuery("Get-NetAdapter", AbstractMsftNetAdapter.class)),
+    MSFT_NET_ADAPTER(generateQuery("Get-NetAdapter", MsftNetAdapter.class)),
 
     /**
      * Query to fetch the properties of the {@code MSFT_NetIPAddress} class
      *
      * @since 1.0.0
      */
-    MSFT_NET_IP_ADDRESS(generateQuery("Get-NetIPAddress", AbstractMsftNetIpAddress.class)),
+    MSFT_NET_IP_ADDRESS(generateQuery("Get-NetIPAddress", MsftNetIpAddress.class)),
 
     /**
      * Query to fetch the properties of the {@code MSFT_NetDNSClientServerAddress} class
      *
      * @since 1.0.0
      */
-    MSFT_NET_DNS_CLIENT_SERVER_ADDRESS(generateQuery("Get-DNSClientServerAddress", AbstractMsftDnsClientServerAddress.class)),
+    MSFT_NET_DNS_CLIENT_SERVER_ADDRESS(generateQuery("Get-DNSClientServerAddress", MsftDnsClientServerAddress.class)),
 
     /**
      * Query to fetch the properties of the {@code MSFT_NetConnectionProfile} class
      *
      * @since 1.0.0
      */
-    MSFT_NET_CONNECTION_PROFILE(generateQuery("Get-NetConnectionProfile", AbstractMsftNetConnectionProfile.class));
+    MSFT_NET_CONNECTION_PROFILE(generateQuery("Get-NetConnectionProfile", MsftNetConnectionProfile.class));
 
     private final @NonNull String query;
 

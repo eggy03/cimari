@@ -5,28 +5,28 @@
  */
 package io.github.eggy03.cimari.shell.query;
 
-import io.github.eggy03.cimari.entity.display.AbstractWin32DesktopMonitor;
-import io.github.eggy03.cimari.entity.display.AbstractWin32VideoController;
-import io.github.eggy03.cimari.entity.mainboard.AbstractWin32Baseboard;
-import io.github.eggy03.cimari.entity.mainboard.AbstractWin32Bios;
-import io.github.eggy03.cimari.entity.mainboard.AbstractWin32PortConnector;
-import io.github.eggy03.cimari.entity.memory.AbstractWin32PhysicalMemory;
-import io.github.eggy03.cimari.entity.network.AbstractWin32NetworkAdapter;
-import io.github.eggy03.cimari.entity.network.AbstractWin32NetworkAdapterConfiguration;
-import io.github.eggy03.cimari.entity.peripheral.AbstractWin32Battery;
-import io.github.eggy03.cimari.entity.peripheral.AbstractWin32Printer;
-import io.github.eggy03.cimari.entity.peripheral.AbstractWin32SoundDevice;
-import io.github.eggy03.cimari.entity.processor.AbstractWin32CacheMemory;
-import io.github.eggy03.cimari.entity.processor.AbstractWin32Processor;
-import io.github.eggy03.cimari.entity.storage.AbstractWin32DiskDrive;
-import io.github.eggy03.cimari.entity.storage.AbstractWin32DiskPartition;
-import io.github.eggy03.cimari.entity.storage.AbstractWin32LogicalDisk;
-import io.github.eggy03.cimari.entity.system.AbstractWin32ComputerSystem;
-import io.github.eggy03.cimari.entity.system.AbstractWin32Environment;
-import io.github.eggy03.cimari.entity.system.AbstractWin32OperatingSystem;
-import io.github.eggy03.cimari.entity.system.AbstractWin32PnPEntity;
-import io.github.eggy03.cimari.entity.system.AbstractWin32Process;
-import io.github.eggy03.cimari.entity.user.AbstractWin32UserAccount;
+import io.github.eggy03.cimari.entity.display.Win32DesktopMonitor;
+import io.github.eggy03.cimari.entity.display.Win32VideoController;
+import io.github.eggy03.cimari.entity.mainboard.Win32Baseboard;
+import io.github.eggy03.cimari.entity.mainboard.Win32Bios;
+import io.github.eggy03.cimari.entity.mainboard.Win32PortConnector;
+import io.github.eggy03.cimari.entity.memory.Win32PhysicalMemory;
+import io.github.eggy03.cimari.entity.network.Win32NetworkAdapter;
+import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterConfiguration;
+import io.github.eggy03.cimari.entity.peripheral.Win32Battery;
+import io.github.eggy03.cimari.entity.peripheral.Win32Printer;
+import io.github.eggy03.cimari.entity.peripheral.Win32SoundDevice;
+import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
+import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
+import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
+import io.github.eggy03.cimari.entity.system.Win32ComputerSystem;
+import io.github.eggy03.cimari.entity.system.Win32Environment;
+import io.github.eggy03.cimari.entity.system.Win32OperatingSystem;
+import io.github.eggy03.cimari.entity.system.Win32PnPEntity;
+import io.github.eggy03.cimari.entity.system.Win32Process;
+import io.github.eggy03.cimari.entity.user.Win32UserAccount;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
@@ -52,35 +52,35 @@ public enum Cimv2 {
      *
      * @since 1.0.0
      */
-    WIN32_BATTERY(generateQuery(AbstractWin32Battery.class)),
+    WIN32_BATTERY(generateQuery(Win32Battery.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DesktopMonitor} class
      *
      * @since 1.0.0
      */
-    WIN32_DESKTOP_MONITOR(generateQuery(AbstractWin32DesktopMonitor.class)),
+    WIN32_DESKTOP_MONITOR(generateQuery(Win32DesktopMonitor.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_VideoController} class
      *
      * @since 1.0.0
      */
-    WIN32_VIDEO_CONTROLLER(generateQuery(AbstractWin32VideoController.class)),
+    WIN32_VIDEO_CONTROLLER(generateQuery(Win32VideoController.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Processor} class
      *
      * @since 1.0.0
      */
-    WIN32_PROCESSOR(generateQuery(AbstractWin32Processor.class)),
+    WIN32_PROCESSOR(generateQuery(Win32Processor.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_CacheMemory} class
      *
      * @since 1.0.0
      */
-    WIN32_CACHE_MEMORY(generateQuery(AbstractWin32CacheMemory.class)),
+    WIN32_CACHE_MEMORY(generateQuery(Win32CacheMemory.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_AssociatedProcessorMemory} class in a custom object
@@ -98,42 +98,42 @@ public enum Cimv2 {
      *
      * @since 1.0.0
      */
-    WIN32_BIOS(generateQuery(AbstractWin32Bios.class)),
+    WIN32_BIOS(generateQuery(Win32Bios.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Baseboard} class
      *
      * @since 1.0.0
      */
-    WIN32_BASEBOARD(generateQuery(AbstractWin32Baseboard.class)),
+    WIN32_BASEBOARD(generateQuery(Win32Baseboard.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PortConnector} class
      *
      * @since 1.0.0
      */
-    WIN32_PORT_CONNECTOR(generateQuery(AbstractWin32PortConnector.class)),
+    WIN32_PORT_CONNECTOR(generateQuery(Win32PortConnector.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PhysicalMemory} class
      *
      * @since 1.0.0
      */
-    WIN32_PHYSICAL_MEMORY(generateQuery(AbstractWin32PhysicalMemory.class)),
+    WIN32_PHYSICAL_MEMORY(generateQuery(Win32PhysicalMemory.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapter} class
      *
      * @since 1.0.0
      */
-    WIN32_NETWORK_ADAPTER(generateQuery(AbstractWin32NetworkAdapter.class)),
+    WIN32_NETWORK_ADAPTER(generateQuery(Win32NetworkAdapter.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapterConfiguration} class
      *
      * @since 1.0.0
      */
-    WIN32_NETWORK_ADAPTER_CONFIGURATION(generateQuery(AbstractWin32NetworkAdapterConfiguration.class)),
+    WIN32_NETWORK_ADAPTER_CONFIGURATION(generateQuery(Win32NetworkAdapterConfiguration.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapterSetting} in a custom object
@@ -151,28 +151,28 @@ public enum Cimv2 {
      *
      * @since 1.0.0
      */
-    WIN32_OPERATING_SYSTEM(generateQuery(AbstractWin32OperatingSystem.class)),
+    WIN32_OPERATING_SYSTEM(generateQuery(Win32OperatingSystem.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskDrive} class
      *
      * @since 1.0.0
      */
-    WIN32_DISK_DRIVE(generateQuery(AbstractWin32DiskDrive.class)),
+    WIN32_DISK_DRIVE(generateQuery(Win32DiskDrive.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskPartition} class
      *
      * @since 1.0.0
      */
-    WIN32_DISK_PARTITION(generateQuery(AbstractWin32DiskPartition.class)),
+    WIN32_DISK_PARTITION(generateQuery(Win32DiskPartition.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_LogicalDisk} class
      *
      * @since 1.0.0
      */
-    WIN32_LOGICAL_DISK(generateQuery(AbstractWin32LogicalDisk.class)),
+    WIN32_LOGICAL_DISK(generateQuery(Win32LogicalDisk.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskDriveToDiskPartition} class in a custom object
@@ -201,47 +201,47 @@ public enum Cimv2 {
      *
      * @since 1.0.0
      */
-    WIN32_COMPUTER_SYSTEM(generateQuery(AbstractWin32ComputerSystem.class)),
+    WIN32_COMPUTER_SYSTEM(generateQuery(Win32ComputerSystem.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Environment} class
      *
      * @since 1.0.0
      */
-    WIN32_ENVIRONMENT(generateQuery(AbstractWin32Environment.class)),
+    WIN32_ENVIRONMENT(generateQuery(Win32Environment.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Printer} class
      *
      * @since 1.0.0
      */
-    WIN32_PRINTER(generateQuery(AbstractWin32Printer.class)),
+    WIN32_PRINTER(generateQuery(Win32Printer.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_UserAccount} class
      *
      * @since 1.0.0
      */
-    WIN32_USER_ACCOUNT(generateQuery(AbstractWin32UserAccount.class)),
+    WIN32_USER_ACCOUNT(generateQuery(Win32UserAccount.class)),
 
     /**
      * Query to fetch some select properties of {@code Win32_Process} class
      *
      * @since 1.0.0
      */
-    WIN32_PROCESS(generateQuery(AbstractWin32Process.class)),
+    WIN32_PROCESS(generateQuery(Win32Process.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_SoundDevice} class
      *
      * @since 1.0.0
      */
-    WIN32_SOUND_DEVICE(generateQuery(AbstractWin32SoundDevice.class)),
+    WIN32_SOUND_DEVICE(generateQuery(Win32SoundDevice.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PnPEntity} class
      */
-    WIN32_PNP_ENTITY(generateQuery(AbstractWin32PnPEntity.class));
+    WIN32_PNP_ENTITY(generateQuery(Win32PnPEntity.class));
 
     private final @NonNull String query;
 

@@ -1,0 +1,85 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2025 The ferrumx-windows contributors
+ * SPDX-FileCopyrightText: 2026 Cimari contributors
+ */
+package io.github.eggy03.cimari.entity.storage;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
+import io.github.eggy03.cimari.annotation.WmiClass;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import org.immutables.value.Value;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+
+/**
+ * Immutable representation of a {@link Win32DiskDrive} association with {@link Win32DiskPartition}.
+ * <p>
+ * Fields <b>indirectly</b> correspond to properties retrieved from the {@code Win32_DiskDriveToDiskPartition} WMI class
+ * and represent an association between {@code Win32_DiskDrive} and {@code Win32_DiskPartition}.
+ * </p>
+ * <p>Associates {@link Win32DiskDrive} with {@link Win32DiskPartition} via their device IDs</p>
+ *
+ * <p>This class has the following two fields:</p>
+ * <ul>
+ *     <li>{@code diskDriveDeviceId} - contains the {@code deviceId} field of {@link Win32DiskDrive}</li>
+ *     <li>{@code diskPartitionDeviceId} - contains the {@code deviceId} field of {@link Win32DiskPartition}</li>
+ * </ul>
+ *
+ * <p>
+ *     <b>Extra Notes:</b> The {@code Win32_DiskDriveToDiskPartition} WMI class itself does not directly expose
+ *     the {@code DeviceID} (from {@code Win32_DiskDrive}) or the {@code DeviceID}
+ *     (from {@code Win32_DiskPartition}) as standalone properties.
+ *     Instead, these values are nested within its references: {@code Antecedent} and {@code Dependent}.
+ * </p>
+ * <p>
+ *     To simplify data mapping, the PowerShell query defined in
+ *     {@link Cimv2#WIN32_DISK_DRIVE_TO_DISK_PARTITION} constructs a custom {@code PSObject}
+ *     that maps {@code Antecedent.DeviceID} to {@code diskDriveDeviceId} and {@code Dependent.DeviceID} to {@code diskPartitionDeviceId}
+ *     and the resulting JSON returned is deserialized into this entity class.
+ * </p>
+ *
+ * <p>See {@link Win32DiskDrive} for related physical disk info.</p>
+ * <p>See {@link Win32DiskPartition} for related partitions on a physical disk.</p>
+ *
+ * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskdrivetodiskpartition">Win32_DiskDriveToDiskPartition Documentation</a>
+ * @since 1.0.0
+ */
+@WmiClass(className = "Win32_DiskDriveToDiskPartition")
+@NullMarked
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32DiskDriveToDiskPartition.class)
+@JsonDeserialize(as = ImmutableWin32DiskDriveToDiskPartition.class)
+public abstract class Win32DiskDriveToDiskPartition {
+
+    /**
+     * Contains the {@code deviceId} field value of {@link Win32DiskDrive}
+     */
+    @JsonProperty("DiskDriveDeviceID")
+    @Nullable
+    public abstract String diskDriveDeviceId();
+
+    /**
+     * Contains the {@code deviceId} field value of {@link Win32DiskPartition}
+     */
+    @JsonProperty("DiskPartitionDeviceID")
+    @Nullable
+    public abstract String diskPartitionDeviceId();
+
+    /**
+     * Retrieves the entity in a JSON pretty-print formatted string
+     *
+     * @return the {@link String} value of the object in JSON pretty-print format
+     */
+    @Override
+    public String toString() {
+        return new ObjectMapper()
+                .writerWithDefaultPrettyPrinter()
+                .writeValueAsString(this);
+    }
+}
