@@ -1,7 +1,6 @@
 package io.github.eggy03.cimari.annotation;
 
 import org.immutables.value.Value;
-import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,14 +14,12 @@ import java.lang.annotation.Target;
  * </p>
  * <p>
  * It modifies the naming and structural style of the generated immutable implementations via {@link Value.Style}
- * and contains {@link JsonSerialize} for automatic Jackson integration.
  * </p>
  *
  * @since 0.2.0
  */
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS) // Make it class retention for incremental compilation
-@JsonSerialize // Jackson automatic integration
 @Value.Style(
         typeAbstract = {"Abstract*"}, // 'Abstract' prefix will be detected and trimmed
         typeImmutable = "*", // No prefix or suffix for generated immutable type
@@ -34,9 +31,3 @@ import java.lang.annotation.Target;
 )
 public @interface ImmutableEntityStyle {
 }
-
-/*
-NOTE: If you are using {@JsonProperty} to match field names of your entity class with the expected JSON,
-make sure builder = "new" is applied either via this annotation or manually and then use {@JsonDeserialize(builder = )
-See: https://immutables.github.io/json.html#jackson
- */
