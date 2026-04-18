@@ -34,3 +34,9 @@ import java.lang.annotation.Target;
 )
 public @interface ImmutableEntityStyle {
 }
+
+/*
+NOTE: If you are using {@JsonProperty} to match field names of your entity class with the expected JSON,
+make sure builder = "new" is applied either via this annotation or manually and then use {@JsonDeserialize(builder = )
+See: https://immutables.github.io/json.html#jackson
+ */
