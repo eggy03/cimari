@@ -54,8 +54,7 @@ class QueryUtility {
      * Retrieves all {@link JsonProperty} values declared on the methods of the specified class
      * and returns them as a comma-separated string.
      *
-     * <p>If a method does not declare a {@link JsonProperty} annotation,
-     * its actual method name is used instead.</p>
+     * <p>Skips methods not having the {@link JsonProperty} annotation</p>
      *
      * <p>The method inspects only methods declared directly within the provided class.
      * Inherited class methods are not included.</p>
@@ -72,10 +71,10 @@ class QueryUtility {
 
         return Arrays.stream(tClass.getDeclaredMethods())
                 .filter(method -> !method.isSynthetic()) // filter out synthetic methods since JaCoCo creates $jacocoData method during tests which fails the assertions. This behavior is not observed in scenarios where code coverage is not run
-                .map(method -> {
-                    JsonProperty property = method.getAnnotation(JsonProperty.class);
-                    return property != null ? property.value() : method.getName();
-                })
+                .map(method -> method.getAnnotation(JsonProperty.class))
+                .filter(Objects::nonNull)
+                .map(JsonProperty::value)
+                .filter(Objects::nonNull)
                 .sorted()
                 .collect(Collectors.joining(", "));
     }

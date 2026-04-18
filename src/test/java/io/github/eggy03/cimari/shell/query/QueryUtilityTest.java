@@ -42,9 +42,9 @@ class QueryUtilityTest {
     }
 
     @Test
-    void getPropertiesFromJsonProperty_withoutAnnotatedMethods_success() {
+    void getPropertiesFromJsonProperty_withoutAnnotatedMethods_returnsEmptyString() {
 
-        String expectedString = "methodOne, methodThree, methodTwo";
+        String expectedString = "";
         String actualString = QueryUtility.getPropertiesFromJsonProperty(MockWithoutAnnotatedMethods.class);
 
         assertThat(expectedString).isEqualTo(actualString);
@@ -106,7 +106,7 @@ class QueryUtilityTest {
     abstract static class ExtensionOfMockWithAnnotatedMethods extends MockWithAnnotatedMethods {
 
         @JsonProperty("method_four")
-        String methodFour;
+        public abstract String methodFour();
     }
 
     @SuppressWarnings("unused")
