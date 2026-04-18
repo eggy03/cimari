@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MsftNetIpAddressServiceTest {
 
-    static MsftNetIpAddress.Datetime lifetime = new ImmutableDatetime.Builder()
+    static final MsftNetIpAddress.Datetime lifetime = new ImmutableDatetime.Builder()
             .days(9999L)
             .hours(0L)
             .minutes(0L)
