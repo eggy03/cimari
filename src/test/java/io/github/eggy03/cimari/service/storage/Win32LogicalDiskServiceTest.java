@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.storage;
 
 
+import io.github.eggy03.cimari.entity.storage.ImmutableWin32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.mapping.storage.Win32LogicalDiskMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -39,7 +40,7 @@ class Win32LogicalDiskServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32LogicalDisk expectedSystemVolume = new Win32LogicalDisk.Builder()
+    private final Win32LogicalDisk expectedSystemVolume = new ImmutableWin32LogicalDisk.Builder()
             .deviceId("C:")
             .description("System Volume")
             .driveType(3L)
@@ -53,7 +54,7 @@ class Win32LogicalDiskServiceTest {
             .volumeName("Windows")
             .volumeSerialNumber("1A2B-3C4D")
             .build();
-    private final Win32LogicalDisk expectedDataVolume = new Win32LogicalDisk.Builder()
+    private final Win32LogicalDisk expectedDataVolume = new ImmutableWin32LogicalDisk.Builder()
             .deviceId("D:")
             .description("Data Volume")
             .driveType(3L)

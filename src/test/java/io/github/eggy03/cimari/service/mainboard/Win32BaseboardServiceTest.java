@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.mainboard;
 
 
+import io.github.eggy03.cimari.entity.mainboard.ImmutableWin32Baseboard;
 import io.github.eggy03.cimari.entity.mainboard.Win32Baseboard;
 import io.github.eggy03.cimari.mapping.mainboard.Win32BaseboardMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -39,7 +40,7 @@ class Win32BaseboardServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32Baseboard expectedBoard1 =
-            new Win32Baseboard.Builder()
+            new ImmutableWin32Baseboard.Builder()
                     .manufacturer("ASUS")
                     .model("ROG STRIX Z790-E GAMING WIFI")
                     .product("Z790-E")
@@ -48,7 +49,7 @@ class Win32BaseboardServiceTest {
                     .build();
 
     private final Win32Baseboard expectedBoard2 =
-            new Win32Baseboard.Builder()
+            new ImmutableWin32Baseboard.Builder()
                     .manufacturer("MSI")
                     .model("MAG B650 TOMAHAWK WIFI")
                     .product("B650 TOMAHAWK")

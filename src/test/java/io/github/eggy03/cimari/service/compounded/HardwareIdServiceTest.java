@@ -7,6 +7,7 @@ package io.github.eggy03.cimari.service.compounded;
 
 
 import io.github.eggy03.cimari.entity.compounded.HardwareId;
+import io.github.eggy03.cimari.entity.compounded.ImmutableHardwareId;
 import io.github.eggy03.cimari.mapping.compounded.HardwareIdMapper;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
 import io.github.eggy03.cimari.terminal.TerminalResult;
@@ -39,7 +40,7 @@ class HardwareIdServiceTest {
     /**
      * Expected domain object returned by the mapper.
      */
-    private final HardwareId deserializedObject = new HardwareId.Builder()
+    private final HardwareId deserializedObject = new ImmutableHardwareId.Builder()
             .rawHWID("ABC123")
             .hashHWID("123XYZ")
             .build();

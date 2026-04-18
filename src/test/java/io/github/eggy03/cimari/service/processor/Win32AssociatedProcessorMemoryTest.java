@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.processor;
 
 
+import io.github.eggy03.cimari.entity.processor.ImmutableWin32AssociatedProcessorMemory;
 import io.github.eggy03.cimari.entity.processor.Win32AssociatedProcessorMemory;
 import io.github.eggy03.cimari.mapping.processor.Win32AssociatedProcessorMemoryMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,12 +39,12 @@ class Win32AssociatedProcessorMemoryTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32AssociatedProcessorMemory expectedAssoc1 = new Win32AssociatedProcessorMemory.Builder()
+    private final Win32AssociatedProcessorMemory expectedAssoc1 = new ImmutableWin32AssociatedProcessorMemory.Builder()
             .cacheMemoryDeviceId("CacheMemory0")
             .processorDeviceId("CPU0")
             .build();
 
-    private final Win32AssociatedProcessorMemory expectedAssoc2 = new Win32AssociatedProcessorMemory.Builder()
+    private final Win32AssociatedProcessorMemory expectedAssoc2 = new ImmutableWin32AssociatedProcessorMemory.Builder()
             .cacheMemoryDeviceId("CacheMemory1")
             .processorDeviceId("CPU1")
             .build();

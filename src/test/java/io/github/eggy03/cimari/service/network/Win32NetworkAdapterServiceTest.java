@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.network;
 
 
+import io.github.eggy03.cimari.entity.network.ImmutableWin32NetworkAdapter;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapter;
 import io.github.eggy03.cimari.mapping.network.Win32NetworkAdapterMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,7 +39,7 @@ class Win32NetworkAdapterServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32NetworkAdapter expectedEthernetAdapter = new Win32NetworkAdapter.Builder()
+    private final Win32NetworkAdapter expectedEthernetAdapter = new ImmutableWin32NetworkAdapter.Builder()
             .deviceId("1")
             .index(1)
             .name("Ethernet")
@@ -51,7 +52,7 @@ class Win32NetworkAdapterServiceTest {
             .physicalAdapter(true)
             .timeOfLastReset("2024-07-12T15:30:00Z")
             .build();
-    private final Win32NetworkAdapter expectedWifiAdapter = new Win32NetworkAdapter.Builder()
+    private final Win32NetworkAdapter expectedWifiAdapter = new ImmutableWin32NetworkAdapter.Builder()
             .deviceId("2")
             .index(2)
             .name("Wi-Fi")

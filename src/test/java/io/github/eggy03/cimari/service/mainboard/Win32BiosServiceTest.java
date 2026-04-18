@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.mainboard;
 
 
+import io.github.eggy03.cimari.entity.mainboard.ImmutableWin32Bios;
 import io.github.eggy03.cimari.entity.mainboard.Win32Bios;
 import io.github.eggy03.cimari.mapping.mainboard.Win32BiosMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -39,7 +40,7 @@ class Win32BiosServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32Bios expectedBios1 =
-            new Win32Bios.Builder()
+            new ImmutableWin32Bios.Builder()
                     .name("American Megatrends Inc. BIOS")
                     .caption("AMI BIOS")
                     .manufacturer("American Megatrends Inc.")
@@ -53,7 +54,7 @@ class Win32BiosServiceTest {
                     .build();
 
     private final Win32Bios expectedBios2 =
-            new Win32Bios.Builder()
+            new ImmutableWin32Bios.Builder()
                     .name("Phoenix Technologies LTD BIOS")
                     .caption("Phoenix SecureCore BIOS")
                     .manufacturer("Phoenix Technologies LTD")

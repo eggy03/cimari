@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.system;
 
 
+import io.github.eggy03.cimari.entity.system.ImmutableWin32Process;
 import io.github.eggy03.cimari.entity.system.Win32Process;
 import io.github.eggy03.cimari.mapping.system.Win32ProcessMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -39,7 +40,7 @@ class Win32ProcessServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Process expectedProcess1 = new Win32Process.Builder()
+    private final Win32Process expectedProcess1 = new ImmutableWin32Process.Builder()
             .processId(1234L)
             .sessionId(1L)
             .name("explorer.exe")
@@ -64,7 +65,7 @@ class Win32ProcessServiceTest {
             .terminationDate(null)
             .build();
 
-    private final Win32Process expectedProcess2 = new Win32Process.Builder()
+    private final Win32Process expectedProcess2 = new ImmutableWin32Process.Builder()
             .processId(5678L)
             .sessionId(1L)
             .name("svchost.exe")

@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.compounded;
 
 
+import io.github.eggy03.cimari.entity.compounded.ImmutableWin32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.entity.compounded.Win32DiskPartitionToLogicalDisk;
 import io.github.eggy03.cimari.mapping.compounded.Win32DiskPartitionToLogicalDiskMapper;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
@@ -38,7 +39,7 @@ class Win32DiskPartitionToLogicalDiskServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32DiskPartitionToLogicalDisk expectedObject
-            = new Win32DiskPartitionToLogicalDisk.Builder()
+            = new ImmutableWin32DiskPartitionToLogicalDisk.Builder()
             .partitionId("1L")
             .build();
 

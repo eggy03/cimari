@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.mainboard;
 
 
+import io.github.eggy03.cimari.entity.mainboard.ImmutableWin32PortConnector;
 import io.github.eggy03.cimari.entity.mainboard.Win32PortConnector;
 import io.github.eggy03.cimari.mapping.mainboard.Win32PortConnectorMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,7 +39,7 @@ class Win32PortConnectorServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32PortConnector expectedPort1 = new Win32PortConnector.Builder()
+    private final Win32PortConnector expectedPort1 = new ImmutableWin32PortConnector.Builder()
             .tag("PortConnector1")
             .externalReferenceDesignator("USB3_0")
             .internalReferenceDesignator("JUSB1")
@@ -46,7 +47,7 @@ class Win32PortConnectorServiceTest {
             .portType(1)
             .build();
 
-    private final Win32PortConnector expectedPort2 = new Win32PortConnector.Builder()
+    private final Win32PortConnector expectedPort2 = new ImmutableWin32PortConnector.Builder()
             .tag("PortConnector2")
             .externalReferenceDesignator("HDMI_OUT")
             .internalReferenceDesignator("JHDMI1")

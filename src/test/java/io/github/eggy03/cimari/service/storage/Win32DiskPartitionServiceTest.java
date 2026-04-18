@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.storage;
 
 
+import io.github.eggy03.cimari.entity.storage.ImmutableWin32DiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
 import io.github.eggy03.cimari.mapping.storage.Win32DiskPartitionMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -39,7 +40,7 @@ class Win32DiskPartitionServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32DiskPartition expectedSystemPartition = new Win32DiskPartition.Builder()
+    private final Win32DiskPartition expectedSystemPartition = new ImmutableWin32DiskPartition.Builder()
             .deviceId("Disk0\\Partition1")
             .name("System Reserved")
             .description("EFI System Partition")
@@ -52,7 +53,7 @@ class Win32DiskPartitionServiceTest {
             .size(BigInteger.valueOf(67108864L))
             .type("EFI")
             .build();
-    private final Win32DiskPartition expectedDataPartition = new Win32DiskPartition.Builder()
+    private final Win32DiskPartition expectedDataPartition = new ImmutableWin32DiskPartition.Builder()
             .deviceId("Disk0\\Partition2")
             .name("Local Disk (C:)")
             .description("Primary OS Partition")

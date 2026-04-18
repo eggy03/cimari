@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.system;
 
 
+import io.github.eggy03.cimari.entity.system.ImmutableWin32PnPEntity;
 import io.github.eggy03.cimari.entity.system.Win32PnPEntity;
 import io.github.eggy03.cimari.mapping.system.Win32PnPEntityMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,7 +39,7 @@ class Win32PnPEntityServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32PnPEntity expectedDevice1 = new Win32PnPEntity.Builder()
+    private final Win32PnPEntity expectedDevice1 = new ImmutableWin32PnPEntity.Builder()
             .deviceId("USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2")
             .pnpDeviceId("USB\\VID_045E&PID_07A5\\6&1A2C0F8&0&2")
             .hardwareId(Collections.singletonList("USB\\VID_045E&PID_07A5&REV_0100"))
@@ -50,7 +51,7 @@ class Win32PnPEntityServiceTest {
             .status("OK")
             .build();
 
-    private final Win32PnPEntity expectedDevice2 = new Win32PnPEntity.Builder()
+    private final Win32PnPEntity expectedDevice2 = new ImmutableWin32PnPEntity.Builder()
             .deviceId("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008")
             .pnpDeviceId("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043&REV_A1\\4&2D77E6E1&0&0008")
             .hardwareId(Arrays.asList("PCI\\VEN_10DE&DEV_1C82&SUBSYS_85AE1043", "PCI\\VEN_10DE&DEV_1C82"))

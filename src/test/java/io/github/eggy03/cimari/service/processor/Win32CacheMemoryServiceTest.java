@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.processor;
 
 
+import io.github.eggy03.cimari.entity.processor.ImmutableWin32CacheMemory;
 import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.mapping.processor.Win32CacheMemoryMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,7 +39,7 @@ class Win32CacheMemoryServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32CacheMemory expectedL1Cache = new Win32CacheMemory.Builder()
+    private final Win32CacheMemory expectedL1Cache = new ImmutableWin32CacheMemory.Builder()
             .deviceId("CPU0_L1")
             .purpose("Instruction")
             .cacheType(3)
@@ -51,7 +52,7 @@ class Win32CacheMemoryServiceTest {
             .status("OK")
             .statusInfo(3)
             .build();
-    private final Win32CacheMemory expectedL2Cache = new Win32CacheMemory.Builder()
+    private final Win32CacheMemory expectedL2Cache = new ImmutableWin32CacheMemory.Builder()
             .deviceId("CPU0_L2")
             .purpose("Unified")
             .cacheType(5)
@@ -64,7 +65,7 @@ class Win32CacheMemoryServiceTest {
             .status("OK")
             .statusInfo(3)
             .build();
-    private final Win32CacheMemory expectedL3Cache = new Win32CacheMemory.Builder()
+    private final Win32CacheMemory expectedL3Cache = new ImmutableWin32CacheMemory.Builder()
             .deviceId("CPU0_L3")
             .purpose("Unified")
             .cacheType(5)

@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.peripheral;
 
 
+import io.github.eggy03.cimari.entity.peripheral.ImmutableWin32Battery;
 import io.github.eggy03.cimari.entity.peripheral.Win32Battery;
 import io.github.eggy03.cimari.mapping.peripheral.Win32BatteryMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,7 +39,7 @@ class Win32BatteryServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Battery expectedPrimaryBattery = new Win32Battery.Builder()
+    private final Win32Battery expectedPrimaryBattery = new ImmutableWin32Battery.Builder()
             .deviceId("BAT0")
             .caption("Primary Battery")
             .description("Internal Lithium-Ion Battery")
@@ -53,7 +54,7 @@ class Win32BatteryServiceTest {
             .estimatedChargeRemaining(87L)
             .estimatedRunTime(120L)
             .build();
-    private final Win32Battery expectedSecondaryBattery = new Win32Battery.Builder()
+    private final Win32Battery expectedSecondaryBattery = new ImmutableWin32Battery.Builder()
             .deviceId("BAT1")
             .caption("Backup Battery")
             .description("External Lithium-Polymer Battery")
