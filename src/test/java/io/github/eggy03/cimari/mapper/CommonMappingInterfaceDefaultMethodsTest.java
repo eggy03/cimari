@@ -27,7 +27,7 @@ class CommonMappingInterfaceDefaultMethodsTest {
 
     private final CommonMappingInterface<MockEntity> mapper = new CommonMappingInterface<MockEntity>() {
     };
-    private final ObjectMapper objectMapper = mapper.createObjectMapper();
+    private final ObjectMapper objectMapper = mapper.configureObjectMapper();
 
     // MAP TO OBJECT TESTS
 

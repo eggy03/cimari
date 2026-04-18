@@ -35,8 +35,7 @@ public interface CommonMappingInterface<S> {
      * Configure the {@link ObjectMapper} to be used for JSON processing.
      *
      * <p>
-     * The default implementation returns a new {@link ObjectMapper} instance with default configuration,
-     * for each invocation.
+     * The default implementation returns a new {@link ObjectMapper} instance with default configuration.
      * </p>
      *
      * <p>
@@ -47,7 +46,7 @@ public interface CommonMappingInterface<S> {
      * @return the {@link ObjectMapper} to use
      * @since 1.0.0
      */
-    default @NonNull ObjectMapper createObjectMapper() {
+    default @NonNull ObjectMapper configureObjectMapper() {
         return new ObjectMapper();
     }
 
@@ -65,9 +64,8 @@ public interface CommonMappingInterface<S> {
      * @param objectClass the class of the objects in the list
      * @return an immutable, non-null list of objects deserialized from JSON.
      * @throws NullPointerException     if {@code inputJson} or {@code objectClass} is null
-     * @throws JacksonException         if {@code inputJson} is parsing fails
-     * @throws IllegalArgumentException if {@code inputJson} deserialization to {@code objectClass} fails
-     * due to incompatible type, or if {@code inputJson} is not a JSON Array or Object
+     * @throws JacksonException         if {@code inputJson} is parsing fails or deserialization to {@code objectClass} fails
+     * @throws IllegalArgumentException if {@code inputJson} is not a JSON Array or Object
      * @since 1.0.0
      */
     default @NonNull List<S> mapToList(@NonNull String inputJson, @NonNull Class<S> objectClass) {
@@ -79,7 +77,7 @@ public interface CommonMappingInterface<S> {
         if (trimmedInputJson.isEmpty())
             return Collections.emptyList();
 
-        ObjectMapper mapper = createObjectMapper();
+        ObjectMapper mapper = configureObjectMapper();
         JsonNode inputJsonNode = mapper.readTree(trimmedInputJson);
 
         if (inputJsonNode.isArray()) {
@@ -87,12 +85,12 @@ public interface CommonMappingInterface<S> {
             TypeFactory typeFactory = mapper.getTypeFactory();
             JavaType listType = typeFactory.constructCollectionType(List.class, objectClass);
 
-            List<S> result = mapper.convertValue(inputJsonNode, listType);
+            List<S> result = mapper.treeToValue(inputJsonNode, listType);
             return result == null ? Collections.emptyList() : Collections.unmodifiableList(new ArrayList<>(result));
 
         } else if (inputJsonNode.isObject()) {
 
-            S result = mapper.convertValue(inputJsonNode, objectClass);
+            S result = mapper.treeToValue(inputJsonNode, objectClass);
             return result == null ? Collections.emptyList() : Collections.singletonList(result);
 
         } else
@@ -106,9 +104,8 @@ public interface CommonMappingInterface<S> {
      * @param objectClass the class of the object to which {@code inputJson} will be deserialized to
      * @return an {@link Optional} of type {@code <S>}
      * @throws NullPointerException     if {@code inputJson} or {@code objectClass} is null
-     * @throws JacksonException         if {@code inputJson} parsing fails
-     * @throws IllegalArgumentException if {@code inputJson} deserialization to {@code objectClass} fails
-     * due to incompatible type, or if {@code inputJson} is not a JSON Object
+     * @throws JacksonException         if {@code inputJson} is parsing fails or deserialization to {@code objectClass} fails
+     * @throws IllegalArgumentException if {@code inputJson} is not a JSON Object
      * @since 1.0.0
      */
     default @NonNull Optional<S> mapToObject(@NonNull String inputJson, @NonNull Class<S> objectClass) {
@@ -120,11 +117,11 @@ public interface CommonMappingInterface<S> {
         if (trimmedInputJson.isEmpty())
             return Optional.empty();
 
-        ObjectMapper mapper = createObjectMapper();
+        ObjectMapper mapper = configureObjectMapper();
         JsonNode inputJsonNode = mapper.readTree(trimmedInputJson);
 
         if (inputJsonNode.isObject()) {
-            S result = mapper.convertValue(inputJsonNode, objectClass);
+            S result = mapper.treeToValue(inputJsonNode, objectClass);
             return Optional.ofNullable(result);
         } else
             throw new IllegalArgumentException("Expected JSON Object but got: " + inputJsonNode.getNodeType());
