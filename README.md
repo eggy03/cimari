@@ -17,22 +17,26 @@
 
 # About
 
-Cimari is a fork of FerrumX-Windows 4.1.0, created to introduce fundamental changes to the entity classes, in
-an attempt to make them immutable.
+Cimari is a project derived from [ferrumx-windows](https://github.com/eggy03/ferrumx-windows), created to introduce
+architectural changes to the entity classes, most notable of which is, making them deeply immutable.
 
 FerrumX-Windows relies on [Lombok](https://projectlombok.org/) for a lot of boilerplate code generation for
-its entity classes. While Lombok supports basic immutability, it has no support for nested immutability and without
-that, entity classes cannot be guaranteed to be thread-safe.
+its entity classes. While Lombok supports basic immutability, it does not make
+Collections or Maps immutable, without which, entity classes can only be considered to be shallow immutable.
 
-The goal of this fork is to address the immutability issue by switching to [Immutables](https://immutables.github.io/),
-which supports immutability of nested objects and collections.
+Cimari addresses this issue by switching to [Immutables](https://immutables.github.io/),
+which supports deep immutability.
 
 In addition, Cimari removes the dependency on [jPowerShell](https://github.com/profesorfalken/jPowerShell) along with
 the service methods built around it.
+
+The list doesn't end here. Besides the mentioned changes, there are other internal refactors which attempt to make
+the project more readable and maintainable.
+
 The full list of changes can be found in [Migration Guide](/docs/MIGRATION.md) and [Changelog](/CHANGELOG.md).
 
-I will continue maintaining FerrumX-Windows separately for as long as I can. However, all new features may not be ported
-to it.
+I will continue maintaining FerrumX-Windows separately for as long as I can.
+However, all new features may not be backported.
 
 # Introduction
 
@@ -49,8 +53,7 @@ Both CIM and SMBIOS standards are defined by Distributed Management Task Force.
 Written entirely in Java, the wrapper's primary job is to query the PowerShell for these classes and deserialize
 provided [SMBIOS](https://www.dmtf.org/standards/smbios) output into typed entities.
 Each entity, to which the output is deserialized, represents a loose mapping of an equivalent `Win32 Provider` or an
-`MSFT`
-class.
+`MSFT`class.
 For example, the [Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor)
 provider class has an equivalent `Win32Processor.java` entity which is composed of only the read-only properties of the
 provider class.
