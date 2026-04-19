@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
 
-    private final TerminalService terminalService;
-    private final Win32ProcessorMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32ProcessorMapper mapper;
 
     /**
      * Creates {@link Win32ProcessorService} with default configuration.

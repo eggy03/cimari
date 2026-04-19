@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
 
-    private final TerminalService terminalService;
-    private final Win32BiosMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32BiosMapper mapper;
 
     /**
      * Creates {@link Win32BiosService} with default configuration.

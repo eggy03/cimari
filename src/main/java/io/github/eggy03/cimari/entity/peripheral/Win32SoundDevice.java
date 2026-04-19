@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.peripheral;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a Sound device on a Windows system.
@@ -22,35 +26,39 @@ import tools.jackson.databind.ObjectMapper;
  */
 @WmiClass(className = "Win32_SoundDevice")
 @NullMarked
-public class Win32SoundDevice {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32SoundDevice.class)
+@JsonDeserialize(as = ImmutableWin32SoundDevice.class)
+public abstract class Win32SoundDevice {
 
     /**
      * Unique identifier of the sound device.
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Windows Plug and Play device identifier.
      */
     @JsonProperty("PNPDeviceID")
     @Nullable
-    String pnpDeviceId;
+    public abstract String pnpDeviceId();
 
     /**
      * Friendly name of the sound device as recognized by the system.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Manufacturer of the sound device.
      */
     @JsonProperty("Manufacturer")
     @Nullable
-    String manufacturer;
+    public abstract String manufacturer();
 
     /**
      * Current operational status of the sound device.
@@ -78,7 +86,7 @@ public class Win32SoundDevice {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
+    public abstract String status();
 
     /**
      * Numeric state of the logical device.
@@ -92,15 +100,14 @@ public class Win32SoundDevice {
      */
     @JsonProperty("StatusInfo")
     @Nullable
-    Integer statusInfo;
+    public abstract Integer statusInfo();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

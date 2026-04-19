@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.system;
 
 
+import io.github.eggy03.cimari.entity.system.ImmutableWin32Environment;
 import io.github.eggy03.cimari.entity.system.Win32Environment;
 import io.github.eggy03.cimari.mapping.system.Win32EnvironmentMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,13 +39,13 @@ class Win32EnvironmentTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Environment sysVar = Win32Environment.builder()
+    private final Win32Environment sysVar = new ImmutableWin32Environment.Builder()
             .name("PATH")
             .systemVariable(true)
             .variableValue("C:\\Windows\\System32")
             .build();
 
-    private final Win32Environment userVar = Win32Environment.builder()
+    private final Win32Environment userVar = new ImmutableWin32Environment.Builder()
             .name("TEMP")
             .systemVariable(false)
             .variableValue("C:\\Users\\User\\AppData\\Local\\Temp")

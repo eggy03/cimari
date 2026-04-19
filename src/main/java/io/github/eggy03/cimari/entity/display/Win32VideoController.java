@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.display;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a GPU device on a Windows system.
@@ -27,21 +31,25 @@ import tools.jackson.databind.ObjectMapper;
  */
 @WmiClass(className = "Win32_VideoController")
 @NullMarked
-public class Win32VideoController {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32VideoController.class)
+@JsonDeserialize(as = ImmutableWin32VideoController.class)
+public abstract class Win32VideoController {
 
     /**
      * Identifier (unique to the computer system) for this video controller.
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Label by which the video controller is known.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Windows Plug and Play device identifier of the video controller.
@@ -51,49 +59,49 @@ public class Win32VideoController {
      */
     @JsonProperty("PNPDeviceID")
     @Nullable
-    String pnpDeviceId;
+    public abstract String pnpDeviceId();
 
     /**
      * Number of bits used to display each pixel.
      */
     @JsonProperty("CurrentBitsPerPixel")
     @Nullable
-    Integer currentBitsPerPixel;
+    public abstract Integer currentBitsPerPixel();
 
     /**
      * Current number of horizontal pixels.
      */
     @JsonProperty("CurrentHorizontalResolution")
     @Nullable
-    Integer currentHorizontalResolution;
+    public abstract Integer currentHorizontalResolution();
 
     /**
      * Current number of vertical pixels.
      */
     @JsonProperty("CurrentVerticalResolution")
     @Nullable
-    Integer currentVerticalResolution;
+    public abstract Integer currentVerticalResolution();
 
     /**
      * Frequency at which the video controller refreshes the image for the monitor.
      */
     @JsonProperty("CurrentRefreshRate")
     @Nullable
-    Integer currentRefreshRate;
+    public abstract Integer currentRefreshRate();
 
     /**
      * Maximum refresh rate of the video controller in hertz.
      */
     @JsonProperty("MaxRefreshRate")
     @Nullable
-    Integer maxRefreshRate;
+    public abstract Integer maxRefreshRate();
 
     /**
      * Minimum refresh rate of the video controller in hertz.
      */
     @JsonProperty("MinRefreshRate")
     @Nullable
-    Integer minRefreshRate;
+    public abstract Integer minRefreshRate();
 
     /**
      * Name or identifier of the digital-to-analog converter (DAC) chip.
@@ -101,7 +109,7 @@ public class Win32VideoController {
      */
     @JsonProperty("AdapterDACType")
     @Nullable
-    String adapterDacType;
+    public abstract String adapterDacType();
 
     /**
      * Memory size of the video adapter in bytes.
@@ -111,21 +119,21 @@ public class Win32VideoController {
      */
     @JsonProperty("AdapterRAM")
     @Nullable
-    Long adapterRam;
+    public abstract Long adapterRam();
 
     /**
      * Last modification date and time of the currently installed video driver.
      */
     @JsonProperty("DriverDate")
     @Nullable
-    String driverDate;
+    public abstract String driverDate();
 
     /**
      * Version number of the video driver.
      */
     @JsonProperty("DriverVersion")
     @Nullable
-    String driverVersion;
+    public abstract String driverVersion();
 
     /**
      * Free-form string describing the video processor.
@@ -133,15 +141,14 @@ public class Win32VideoController {
      */
     @JsonProperty("VideoProcessor")
     @Nullable
-    String videoProcessor;
+    public abstract String videoProcessor();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

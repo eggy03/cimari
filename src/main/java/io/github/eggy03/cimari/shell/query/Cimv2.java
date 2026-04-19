@@ -238,7 +238,7 @@ public enum Cimv2 {
      */
     WIN32_PNP_ENTITY(generateQuery(Win32PnPEntity.class));
 
-    private final String query;
+    private final @NonNull String query;
 
     Cimv2(@NonNull String query) {
         this.query = Objects.requireNonNull(query, "query cannot be null");
@@ -248,7 +248,7 @@ public enum Cimv2 {
 
         Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
 
-        return "Get-CimInstance -ClassName " + QueryUtility.getPropertiesFromWmiClass(wmiClass) +
+        return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClass(wmiClass) +
                 " | Select-Object -Property " + QueryUtility.getPropertiesFromJsonProperty(wmiClass) +
                 " | ConvertTo-Json";
 

@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32VideoControllerService implements CommonServiceInterface<Win32VideoController> {
 
-    private final TerminalService terminalService;
-    private final Win32VideoControllerMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32VideoControllerMapper mapper;
 
     /**
      * Creates {@link Win32VideoControllerService} with default configuration.

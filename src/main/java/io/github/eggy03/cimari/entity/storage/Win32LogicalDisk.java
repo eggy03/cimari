@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.storage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigInteger;
 
@@ -27,7 +31,11 @@ import java.math.BigInteger;
  */
 @WmiClass(className = "Win32_LogicalDisk")
 @NullMarked
-public class Win32LogicalDisk {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32LogicalDisk.class)
+@JsonDeserialize(as = ImmutableWin32LogicalDisk.class)
+public abstract class Win32LogicalDisk {
 
     /**
      * Unique identifier of the logical disk from other devices on the system.
@@ -36,14 +44,14 @@ public class Win32LogicalDisk {
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Description of the logical disk object.
      */
     @JsonProperty("Description")
     @Nullable
-    String description;
+    public abstract String description();
 
     /**
      * Numeric value that corresponds to the type of disk drive this logical disk represents.
@@ -60,7 +68,7 @@ public class Win32LogicalDisk {
      */
     @JsonProperty("DriveType")
     @Nullable
-    Long driveType;
+    public abstract Long driveType();
 
     /**
      * Type of media currently present in the logical drive.
@@ -69,7 +77,7 @@ public class Win32LogicalDisk {
      */
     @JsonProperty("MediaType")
     @Nullable
-    Long mediaType;
+    public abstract Long mediaType();
 
     /**
      * File system on the logical disk.
@@ -77,21 +85,21 @@ public class Win32LogicalDisk {
      */
     @JsonProperty("FileSystem")
     @Nullable
-    String fileSystem;
+    public abstract String fileSystem();
 
     /**
      * Size of the disk drive in bytes.
      */
     @JsonProperty("Size")
     @Nullable
-    BigInteger size;
+    public abstract BigInteger size();
 
     /**
      * Free space, in bytes, available on the logical disk.
      */
     @JsonProperty("FreeSpace")
     @Nullable
-    BigInteger freeSpace;
+    public abstract BigInteger freeSpace();
 
     /**
      * Indicates if the logical volume exists as a single compressed entity (e.g., DoubleSpace).
@@ -99,52 +107,43 @@ public class Win32LogicalDisk {
      */
     @JsonProperty("Compressed")
     @Nullable
-    Boolean compressed;
+    public abstract Boolean compressed();
+
     /**
      * Indicates whether the logical disk supports file-based compression (e.g., NTFS).
      */
     @JsonProperty("SupportsFileBasedCompression")
     @Nullable
-    Boolean supportsFileBasedCompression;
+    public abstract Boolean supportsFileBasedCompression();
+
     /**
      * Indicates whether this volume supports disk quotas.
      */
     @JsonProperty("SupportsDiskQuotas")
     @Nullable
-    Boolean supportsDiskQuotas;
+    public abstract Boolean supportsDiskQuotas();
+
     /**
      * Volume name of the logical disk.
      * Example: {@code "Local Disk"}
      */
     @JsonProperty("VolumeName")
     @Nullable
-    String volumeName;
+    public abstract String volumeName();
+
     /**
      * Volume serial number of the logical disk.
      */
     @JsonProperty("VolumeSerialNumber")
     @Nullable
-    String volumeSerialNumber;
-
-    public @Nullable Boolean isCompressed() {
-        return compressed;
-    }
-
-    public @Nullable Boolean supportsFileBasedCompression() {
-        return supportsFileBasedCompression;
-    }
-
-    public @Nullable Boolean supportsDiskQuotas() {
-        return supportsDiskQuotas;
-    }
+    public abstract String volumeSerialNumber();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

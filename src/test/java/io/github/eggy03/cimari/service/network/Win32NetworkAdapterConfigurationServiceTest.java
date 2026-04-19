@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.network;
 
 
+import io.github.eggy03.cimari.entity.network.ImmutableWin32NetworkAdapterConfiguration;
 import io.github.eggy03.cimari.entity.network.Win32NetworkAdapterConfiguration;
 import io.github.eggy03.cimari.mapping.network.Win32NetworkAdapterConfigurationMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,7 +39,7 @@ class Win32NetworkAdapterConfigurationServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32NetworkAdapterConfiguration expectedEthernetConfig = Win32NetworkAdapterConfiguration.builder()
+    private final Win32NetworkAdapterConfiguration expectedEthernetConfig = new ImmutableWin32NetworkAdapterConfiguration.Builder()
             .index(1)
             .description("Intel(R) Ethernet Connection I219-V")
             .caption("Ethernet Adapter Configuration")
@@ -55,7 +56,7 @@ class Win32NetworkAdapterConfigurationServiceTest {
             .dnsServerSearchOrder(Arrays.asList("8.8.8.8", "8.8.4.4"))
             .build();
 
-    private final Win32NetworkAdapterConfiguration expectedWifiConfig = Win32NetworkAdapterConfiguration.builder()
+    private final Win32NetworkAdapterConfiguration expectedWifiConfig = new ImmutableWin32NetworkAdapterConfiguration.Builder()
             .index(2)
             .description("Intel(R) Wi-Fi 6 AX200 160MHz")
             .caption("Wi-Fi Adapter Configuration")

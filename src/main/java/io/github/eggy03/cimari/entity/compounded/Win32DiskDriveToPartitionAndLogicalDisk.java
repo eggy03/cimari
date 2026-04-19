@@ -6,14 +6,18 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDriveToDiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -51,7 +55,6 @@ import java.util.List;
  * of the classes and their associations with each other.
  * </p>
  *
- *
  * @see Win32DiskDrive
  * @see Win32DiskPartition
  * @see Win32LogicalDisk
@@ -60,7 +63,11 @@ import java.util.List;
  * @since 1.0.0
  */
 @NullMarked
-public class Win32DiskDriveToPartitionAndLogicalDisk {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32DiskDriveToPartitionAndLogicalDisk.class)
+@JsonDeserialize(as = ImmutableWin32DiskDriveToPartitionAndLogicalDisk.class)
+public abstract class Win32DiskDriveToPartitionAndLogicalDisk {
 
     /**
      * The unique identifier for the {@link Win32DiskDrive} instance.
@@ -70,7 +77,7 @@ public class Win32DiskDriveToPartitionAndLogicalDisk {
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * The {@link Win32DiskDrive} entity associated with the {@link #deviceId}.
@@ -80,7 +87,7 @@ public class Win32DiskDriveToPartitionAndLogicalDisk {
      */
     @JsonProperty("DiskDrive")
     @Nullable
-    Win32DiskDrive diskDrive;
+    public abstract Win32DiskDrive diskDrive();
 
     /**
      * A list of {@link Win32DiskPartition} entities associated with the {@link #deviceId}.
@@ -90,22 +97,21 @@ public class Win32DiskDriveToPartitionAndLogicalDisk {
      */
     @JsonProperty("Partitions")
     @Nullable
-    List<@Nullable Win32DiskPartition> diskPartitionList;
+    public abstract List<@Nullable Win32DiskPartition> diskPartitionList();
 
     /**
      * A list of {@link Win32LogicalDisk} entities associated with the {@link #deviceId}.
      */
     @JsonProperty("LogicalDisks")
     @Nullable
-    List<@Nullable Win32LogicalDisk> logicalDiskList;
+    public abstract List<@Nullable Win32LogicalDisk> logicalDiskList();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -24,104 +28,117 @@ import java.util.List;
  */
 @WmiClass(className = "Win32_OperatingSystem")
 @NullMarked
-public class Win32OperatingSystem {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32OperatingSystem.class)
+@JsonDeserialize(as = ImmutableWin32OperatingSystem.class)
+public abstract class Win32OperatingSystem {
 
     /**
      * Name of the operating system.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Short textual description (friendly name) of the operating system.
      */
     @JsonProperty("Caption")
     @Nullable
-    String caption;
+    public abstract String caption();
 
     /**
      * Date and time when the operating system was installed.
      */
     @JsonProperty("InstallDate")
     @Nullable
-    String installDate;
+    public abstract String installDate();
 
     /**
      * Name of the computer system running the operating system.
      */
     @JsonProperty("CSName")
     @Nullable
-    String csName;
+    public abstract String csName();
 
     /**
      * Date and time when the computer was last booted.
      */
     @JsonProperty("LastBootUpTime")
     @Nullable
-    String lastBootUpTime;
+    public abstract String lastBootUpTime();
 
     /**
      * Current local date and time of the operating system.
      */
     @JsonProperty("LocalDateTime")
     @Nullable
-    String localDateTime;
+    public abstract String localDateTime();
 
     /**
      * Indicates whether this operating system is part of a distributed system.
      */
     @JsonProperty("Distributed")
     @Nullable
-    Boolean distributed;
+    public abstract Boolean distributed();
+
     /**
      * Number of user sessions currently active.
      */
     @JsonProperty("NumberOfUsers")
     @Nullable
-    Integer numberOfUsers;
+    public abstract Integer numberOfUsers();
+
     /**
      * Version number of the operating system (for example, "10.0.22621").
      */
     @JsonProperty("Version")
     @Nullable
-    String version;
+    public abstract String version();
+
     /**
      * Path to the boot device that the operating system uses to start the computer.
      */
     @JsonProperty("BootDevice")
     @Nullable
-    String bootDevice;
+    public abstract String bootDevice();
+
     /**
      * Internal build number of the operating system.
      */
     @JsonProperty("BuildNumber")
     @Nullable
-    String buildNumber;
+    public abstract String buildNumber();
+
     /**
      * Type of build (e.g., "Multiprocessor Free" or "Checked").
      */
     @JsonProperty("BuildType")
     @Nullable
-    String buildType;
+    public abstract String buildType();
+
     /**
      * Manufacturer of the operating system (typically "Microsoft Corporation").
      */
     @JsonProperty("Manufacturer")
     @Nullable
-    String manufacturer;
+    public abstract String manufacturer();
+
     /**
      * Architecture of the operating system, such as "32-bit" or "64-bit".
      */
     @JsonProperty("OSArchitecture")
     @Nullable
-    String osArchitecture;
+    public abstract String osArchitecture();
+
     /**
      * List of installed user interface languages (MUI language codes).
      */
     @JsonProperty("MUILanguages")
     @Nullable
-    List<@Nullable String> muiLanguages;
+    public abstract List<@Nullable String> muiLanguages();
+
     /**
      * Indicates whether the operating system is installed on a portable device.
      * <ul>
@@ -131,75 +148,70 @@ public class Win32OperatingSystem {
      */
     @JsonProperty("PortableOperatingSystem")
     @Nullable
-    Boolean portableOperatingSystem;
+    public abstract Boolean portableOperatingSystem();
+
     /**
      * Indicates whether this is the primary operating system on the computer.
      */
     @JsonProperty("Primary")
     @Nullable
-    Boolean primary;
+    public abstract Boolean primary();
+
     /**
      * Name of the registered user of the operating system.
      */
     @JsonProperty("RegisteredUser")
     @Nullable
-    String registeredUser;
+    public abstract String registeredUser();
+
     /**
      * Operating system serial number or product key identifier.
      */
     @JsonProperty("SerialNumber")
     @Nullable
-    String serialNumber;
+    public abstract String serialNumber();
+
     /**
      * Major version number of the most recent service pack installed.
      */
     @JsonProperty("ServicePackMajorVersion")
     @Nullable
-    Integer servicePackMajorVersion;
+    public abstract Integer servicePackMajorVersion();
+
     /**
      * Minor version number of the most recent service pack installed.
      */
     @JsonProperty("ServicePackMinorVersion")
     @Nullable
-    Integer servicePackMinorVersion;
+    public abstract Integer servicePackMinorVersion();
+
     /**
      * Full path to the system directory (typically "C:\WINDOWS\system32").
      */
     @JsonProperty("SystemDirectory")
     @Nullable
-    String systemDirectory;
+    public abstract String systemDirectory();
+
     /**
      * Drive letter where the operating system is installed (e.g., "C:").
      */
     @JsonProperty("SystemDrive")
     @Nullable
-    String systemDrive;
+    public abstract String systemDrive();
+
     /**
      * Full path to the Windows installation directory (typically "C:\WINDOWS").
      */
     @JsonProperty("WindowsDirectory")
     @Nullable
-    String windowsDirectory;
-
-    public @Nullable Boolean isDistributed() {
-        return distributed;
-    }
-
-    public @Nullable Boolean isPortable() {
-        return portableOperatingSystem;
-    }
-
-    public @Nullable Boolean isPrimary() {
-        return primary;
-    }
+    public abstract String windowsDirectory();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

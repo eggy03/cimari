@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.storage;
 
 
+import io.github.eggy03.cimari.entity.storage.ImmutableWin32LogicalDiskToPartition;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
 import io.github.eggy03.cimari.mapping.storage.Win32LogicalDiskToPartitionMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,11 +39,11 @@ class Win32LogicalDiskToPartitionServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32LogicalDiskToPartition expectedSystemLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
+    private final Win32LogicalDiskToPartition expectedSystemLogicalDiskPartition = new ImmutableWin32LogicalDiskToPartition.Builder()
             .diskPartitionDeviceId("Disk #0 Partition #1")
             .logicalDiskDeviceId("C:")
             .build();
-    private final Win32LogicalDiskToPartition expectedDataLogicalDiskPartition = Win32LogicalDiskToPartition.builder()
+    private final Win32LogicalDiskToPartition expectedDataLogicalDiskPartition = new ImmutableWin32LogicalDiskToPartition.Builder()
             .diskPartitionDeviceId("Disk #0 Partition #2")
             .logicalDiskDeviceId("D:")
             .build();

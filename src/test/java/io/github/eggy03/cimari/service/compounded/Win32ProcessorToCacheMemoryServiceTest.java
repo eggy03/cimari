@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.compounded;
 
 
+import io.github.eggy03.cimari.entity.compounded.ImmutableWin32ProcessorToCacheMemory;
 import io.github.eggy03.cimari.entity.compounded.Win32ProcessorToCacheMemory;
 import io.github.eggy03.cimari.mapping.compounded.Win32ProcessorToCacheMemoryMapper;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
@@ -38,7 +39,7 @@ class Win32ProcessorToCacheMemoryServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32ProcessorToCacheMemory expectedObject
-            = Win32ProcessorToCacheMemory.builder()
+            = new ImmutableWin32ProcessorToCacheMemory.Builder()
             .deviceId("1L")
             .build();
 

@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a User Account in system running Windows.
@@ -22,7 +26,11 @@ import tools.jackson.databind.ObjectMapper;
  */
 @WmiClass(className = "Win32_UserAccount")
 @NullMarked
-public class Win32UserAccount {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32UserAccount.class)
+@JsonDeserialize(as = ImmutableWin32UserAccount.class)
+public abstract class Win32UserAccount {
 
     /**
      * Security identifier (SID) for this account.
@@ -37,7 +45,7 @@ public class Win32UserAccount {
      */
     @JsonProperty("SID")
     @Nullable
-    String sid;
+    public abstract String sid();
 
     /**
      * Type of SID.
@@ -55,7 +63,7 @@ public class Win32UserAccount {
      */
     @JsonProperty("SIDType")
     @Nullable
-    Integer sidType;
+    public abstract Integer sidType();
 
     /**
      * Type of user account.
@@ -69,72 +77,78 @@ public class Win32UserAccount {
      */
     @JsonProperty("AccountType")
     @Nullable
-    Long accountType;
+    public abstract Long accountType();
 
     /**
      * Caption of the user account (domain/username).
      */
     @JsonProperty("Caption")
     @Nullable
-    String caption;
+    public abstract String caption();
 
     /**
      * Description of the user account.
      */
     @JsonProperty("Description")
     @Nullable
-    String description;
+    public abstract String description();
 
     /**
      * Domain to which the user account belongs.
      */
     @JsonProperty("Domain")
     @Nullable
-    String domain;
+    public abstract String domain();
 
     /**
      * Name of the user account.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * True if the account is disabled.
      */
     @JsonProperty("Disabled")
     @Nullable
-    Boolean disabled;
+    public abstract Boolean disabled();
+
     /**
      * True if this is a local account.
      */
     @JsonProperty("LocalAccount")
     @Nullable
-    Boolean localAccount;
+    public abstract Boolean localAccount();
+
     /**
      * True if the account is locked out.
      */
     @JsonProperty("Lockout")
     @Nullable
-    Boolean lockout;
+    public abstract Boolean lockout();
+
     /**
      * True if a password is required.
      */
     @JsonProperty("PasswordRequired")
     @Nullable
-    Boolean passwordRequired;
+    public abstract Boolean passwordRequired();
+
     /**
      * True if the password expires.
      */
     @JsonProperty("PasswordExpires")
     @Nullable
-    Boolean passwordExpires;
+    public abstract Boolean passwordExpires();
+
     /**
      * True if the password can be changed.
      */
     @JsonProperty("PasswordChangeable")
     @Nullable
-    Boolean passwordChangeable;
+    public abstract Boolean passwordChangeable();
+
     /**
      * Current operational status of the account.
      * <p>Possible OPERATIONAL values:</p>
@@ -161,39 +175,14 @@ public class Win32UserAccount {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
-
-    public @Nullable Boolean isDisabled() {
-        return disabled;
-    }
-
-    public @Nullable Boolean isLocalAccount() {
-        return localAccount;
-    }
-
-    public @Nullable Boolean isLockedOut() {
-        return lockout;
-    }
-
-    public @Nullable Boolean isPasswordRequired() {
-        return passwordRequired;
-    }
-
-    public @Nullable Boolean doesPasswordExpire() {
-        return passwordExpires;
-    }
-
-    public @Nullable Boolean isPasswordChangeable() {
-        return passwordChangeable;
-    }
+    public abstract String status();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

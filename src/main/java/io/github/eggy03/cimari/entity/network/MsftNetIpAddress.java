@@ -6,11 +6,15 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
 
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of IPv4 and IPv6 address configuration for a Network Adapter on a Windows system.
@@ -27,27 +31,30 @@ import tools.jackson.databind.ObjectMapper;
  * <p>See {@link MsftDnsClientServerAddress}, for information regarding the connected DNS servers of a network adapter.</p>
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/nettcpipprov/msft-netipaddress">MSFT_NetIPAddress Documentation</a>
  * @since 1.0.0
  */
 @WmiClass(className = "MSFT_NetIPAddress")
 @NullMarked
-public class MsftNetIpAddress {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableMsftNetIpAddress.class)
+@JsonDeserialize(as = ImmutableMsftNetIpAddress.class)
+public abstract class MsftNetIpAddress {
 
     /**
      * Index of the network interface associated with this IP configuration.
      */
     @JsonProperty("InterfaceIndex")
     @Nullable
-    Long interfaceIndex;
+    public abstract Long interfaceIndex();
 
     /**
      * User-friendly name of the network interface.
      */
     @JsonProperty("InterfaceAlias")
     @Nullable
-    String interfaceAlias;
+    public abstract String interfaceAlias();
 
     /**
      * Address family of the IP address.
@@ -58,28 +65,28 @@ public class MsftNetIpAddress {
      */
     @JsonProperty("AddressFamily")
     @Nullable
-    Long addressFamily;
+    public abstract Long addressFamily();
 
     /**
      * The IP address assigned to the interface (can be IPv4 or IPv6 or both).
      */
     @JsonProperty("IPAddress")
     @Nullable
-    String ipAddress;
+    public abstract String ipAddress();
 
     /**
      * The IPv4 address assigned to the interface, if applicable.
      */
     @JsonProperty("IPv4Address")
     @Nullable
-    String ipv4Address;
+    public abstract String ipv4Address();
 
     /**
      * The IPv6 address assigned to the interface, if applicable.
      */
     @JsonProperty("IPv6Address")
     @Nullable
-    String ipv6Address;
+    public abstract String ipv6Address();
 
     /**
      * Type of IP address.
@@ -90,7 +97,7 @@ public class MsftNetIpAddress {
      */
     @JsonProperty("Type")
     @Nullable
-    Integer type;
+    public abstract Integer type();
 
     /**
      * Source of the prefix for this IP Address.
@@ -104,7 +111,7 @@ public class MsftNetIpAddress {
      */
     @JsonProperty("PrefixOrigin")
     @Nullable
-    Long prefixOrigin;
+    public abstract Long prefixOrigin();
 
     /**
      * Source of the suffix for the IP address.
@@ -119,14 +126,14 @@ public class MsftNetIpAddress {
      */
     @JsonProperty("SuffixOrigin")
     @Nullable
-    Long suffixOrigin;
+    public abstract Long suffixOrigin();
 
     /**
      * Length of the network prefix, in bits.
      */
     @JsonProperty("PrefixLength")
     @Nullable
-    Long prefixLength;
+    public abstract Long prefixLength();
 
     /**
      * Lifetime during which the address is preferred for use.
@@ -134,7 +141,7 @@ public class MsftNetIpAddress {
      */
     @JsonProperty("PreferredLifetime")
     @Nullable
-    Datetime preferredLifetime;
+    public abstract Datetime preferredLifetime();
 
     /**
      * Total lifetime during which the address is valid.
@@ -142,15 +149,14 @@ public class MsftNetIpAddress {
      */
     @JsonProperty("ValidLifetime")
     @Nullable
-    Datetime validLifeTime;
+    public abstract Datetime validLifeTime();
 
     /**
      * Prints the entity in a JSON pretty-print format
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);
@@ -159,23 +165,28 @@ public class MsftNetIpAddress {
     /**
      * Lifetime over which the address is preferred. The default value is infinite.
      */
-    public static class Datetime {
+    @NullMarked
+    @Value.Immutable
+    @ImmutableEntityStyle
+    @JsonSerialize(as = ImmutableDatetime.class)
+    @JsonDeserialize(as = ImmutableDatetime.class)
+    public abstract static class Datetime {
 
         @JsonProperty("Days")
         @Nullable
-        Long days;
+        public abstract Long days();
 
         @JsonProperty("Hours")
         @Nullable
-        Long hours;
+        public abstract Long hours();
 
         @JsonProperty("Minutes")
         @Nullable
-        Long minutes;
+        public abstract Long minutes();
 
         @JsonProperty("Seconds")
         @Nullable
-        Long seconds;
+        public abstract Long seconds();
 
         /**
          * Retrieves the entity in a JSON pretty-print formatted string

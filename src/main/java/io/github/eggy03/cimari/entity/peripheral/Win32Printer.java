@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.peripheral;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -24,28 +28,32 @@ import java.util.List;
  */
 @WmiClass(className = "Win32_Printer")
 @NullMarked
-public class Win32Printer {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32Printer.class)
+@JsonDeserialize(as = ImmutableWin32Printer.class)
+public abstract class Win32Printer {
 
     /**
      * System-assigned unique identifier of the printer.
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Name of the printer as recognized by the system.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Windows Plug and Play device identifier
      */
     @JsonProperty("PNPDeviceID")
     @Nullable
-    String pnpDeviceId;
+    public abstract String pnpDeviceId();
 
     /**
      * List of capability codes supported by the printer.
@@ -75,28 +83,28 @@ public class Win32Printer {
      */
     @JsonProperty("Capabilities")
     @Nullable
-    List<@Nullable Integer> capabilities;
+    public abstract List<@Nullable Integer> capabilities();
 
     /**
      * Descriptive text corresponding to {@link #capabilities}.
      */
     @JsonProperty("CapabilityDescriptions")
     @Nullable
-    List<@Nullable String> capabilityDescriptions;
+    public abstract List<@Nullable String> capabilityDescriptions();
 
     /**
      * Printer’s horizontal resolution in DPI (dots per inch).
      */
     @JsonProperty("HorizontalResolution")
     @Nullable
-    Long horizontalResolution;
+    public abstract Long horizontalResolution();
 
     /**
      * Printer’s vertical resolution in DPI (dots per inch).
      */
     @JsonProperty("VerticalResolution")
     @Nullable
-    Long verticalResolution;
+    public abstract Long verticalResolution();
 
     /**
      * Numeric codes of paper sizes supported by the printer.
@@ -104,14 +112,14 @@ public class Win32Printer {
      */
     @JsonProperty("PaperSizesSupported")
     @Nullable
-    List<@Nullable Integer> paperSizesSupported;
+    public abstract List<@Nullable Integer> paperSizesSupported();
 
     /**
      * Names of paper types or forms supported by the printer.
      */
     @JsonProperty("PrinterPaperNames")
     @Nullable
-    List<@Nullable String> printerPaperNames;
+    public abstract List<@Nullable String> printerPaperNames();
 
     /**
      * Current operational state of the printer.
@@ -127,7 +135,7 @@ public class Win32Printer {
      */
     @JsonProperty("PrinterStatus")
     @Nullable
-    Integer printerStatus;
+    public abstract Integer printerStatus();
 
     /**
      * Data type of print jobs
@@ -135,7 +143,7 @@ public class Win32Printer {
      */
     @JsonProperty("PrintJobDataType")
     @Nullable
-    String printJobDataType;
+    public abstract String printJobDataType();
 
     /**
      * Print processor used to process print jobs
@@ -143,59 +151,49 @@ public class Win32Printer {
      */
     @JsonProperty("PrintProcessor")
     @Nullable
-    String printProcessor;
+    public abstract String printProcessor();
 
     /**
      * Name of the printer driver installed.
      */
     @JsonProperty("DriverName")
     @Nullable
-    String driverName;
+    public abstract String driverName();
 
     /**
      * Indicates whether the printer is shared on the network.
      */
     @JsonProperty("Shared")
     @Nullable
-    Boolean shared;
+    public abstract Boolean shared();
+
     /**
      * Share name of the printer if it is shared.
      */
     @JsonProperty("ShareName")
     @Nullable
-    String shareName;
+    public abstract String shareName();
+
     /**
      * Indicates whether spooling is enabled for the printer.
      */
     @JsonProperty("SpoolEnabled")
     @Nullable
-    Boolean spoolEnabled;
+    public abstract Boolean spoolEnabled();
+
     /**
      * Specifies whether the printer is hidden from standard user interfaces.
      */
     @JsonProperty("Hidden")
     @Nullable
-    Boolean hidden;
-
-    public @Nullable Boolean isShared() {
-        return shared;
-    }
-
-    public @Nullable Boolean hasSpoolEnabled() {
-        return spoolEnabled;
-    }
-
-    public @Nullable Boolean isHidden() {
-        return hidden;
-    }
+    public abstract Boolean hidden();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

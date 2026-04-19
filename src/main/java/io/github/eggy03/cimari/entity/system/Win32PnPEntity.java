@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -25,21 +29,25 @@ import java.util.List;
  */
 @WmiClass(className = "Win32_PnPEntity")
 @NullMarked
-public class Win32PnPEntity {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32PnPEntity.class)
+@JsonDeserialize(as = ImmutableWin32PnPEntity.class)
+public abstract class Win32PnPEntity {
 
     /**
      * Identifier of the Plug and Play device.
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Windows Plug and Play device identifier of the logical device.
      */
     @JsonProperty("PNPDeviceID")
     @Nullable
-    String pnpDeviceId;
+    public abstract String pnpDeviceId();
 
     /**
      * A vendor-defined list of hardware identification strings used by Windows Setup
@@ -47,7 +55,7 @@ public class Win32PnPEntity {
      */
     @JsonProperty("HardwareID")
     @Nullable
-    List<@Nullable String> hardwareId;
+    public abstract List<@Nullable String> hardwareId();
 
     /**
      * A vendor-defined list of compatible identification strings that Windows Setup
@@ -55,28 +63,28 @@ public class Win32PnPEntity {
      */
     @JsonProperty("CompatibleID")
     @Nullable
-    List<@Nullable String> compatibleId;
+    public abstract List<@Nullable String> compatibleId();
 
     /**
      * The name by which the device is known.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * A human-readable description of the device.
      */
     @JsonProperty("Description")
     @Nullable
-    String description;
+    public abstract String description();
 
     /**
      * Name of the manufacturer of the Plug and Play device.
      */
     @JsonProperty("Manufacturer")
     @Nullable
-    String manufacturer;
+    public abstract String manufacturer();
 
     /**
      * Indicates whether this Plug and Play device is currently present in the system.
@@ -86,7 +94,8 @@ public class Win32PnPEntity {
      */
     @JsonProperty("Present")
     @Nullable
-    Boolean present;
+    public abstract Boolean present();
+
     /**
      * Current operational status of the PnP Device.
      * <p>Possible OPERATIONAL values:</p>
@@ -113,19 +122,14 @@ public class Win32PnPEntity {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
-
-    public @Nullable Boolean isPresent() {
-        return present;
-    }
+    public abstract String status();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

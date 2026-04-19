@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32EnvironmentService implements CommonServiceInterface<Win32Environment> {
 
-    private final TerminalService terminalService;
-    private final Win32EnvironmentMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32EnvironmentMapper mapper;
 
     /**
      * Creates {@link Win32EnvironmentService} with default configuration.

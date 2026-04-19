@@ -6,17 +6,21 @@
 package io.github.eggy03.cimari.entity.processor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a processor cache (e.g., L1, L2, L3) on a Windows system.
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_CacheMemory} WMI class.
  * </p>
- *
+ * <p>
  * See {@link Win32Processor} for related CPU information.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-cachememory">Win32_CacheMemory Documentation</a>
@@ -24,7 +28,11 @@ import tools.jackson.databind.ObjectMapper;
  */
 @WmiClass(className = "Win32_CacheMemory")
 @NullMarked
-public class Win32CacheMemory {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32CacheMemory.class)
+@JsonDeserialize(as = ImmutableWin32CacheMemory.class)
+public abstract class Win32CacheMemory {
 
     /**
      * Unique identifier of the cache instance.
@@ -34,7 +42,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Free-form description of the cache purpose or level designation.
@@ -44,7 +52,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("Purpose")
     @Nullable
-    String purpose;
+    public abstract String purpose();
 
     /**
      * Type of cache.
@@ -60,7 +68,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("CacheType")
     @Nullable
-    Integer cacheType;
+    public abstract Integer cacheType();
 
     /**
      * Cache hierarchy level.
@@ -77,7 +85,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("Level")
     @Nullable
-    Integer level;
+    public abstract Integer level();
 
     /**
      * Installed cache size in kilobytes.
@@ -87,7 +95,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("InstalledSize")
     @Nullable
-    Long installedSize;
+    public abstract Long installedSize();
 
     /**
      * Cache associativity.
@@ -106,7 +114,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("Associativity")
     @Nullable
-    Integer associativity;
+    public abstract Integer associativity();
 
     /**
      * Physical cache location relative to the processor.
@@ -121,7 +129,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("Location")
     @Nullable
-    Integer location;
+    public abstract Integer location();
 
     /**
      * Error-correction method used by the cache.
@@ -139,7 +147,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("ErrorCorrectType")
     @Nullable
-    Integer errorCorrectType;
+    public abstract Integer errorCorrectType();
 
     /**
      * Current availability and operational state.
@@ -171,7 +179,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("Availability")
     @Nullable
-    Integer availability;
+    public abstract Integer availability();
 
     /**
      * Current operational status of the cache device.
@@ -199,7 +207,7 @@ public class Win32CacheMemory {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
+    public abstract String status();
 
     /**
      * Logical state of the device.
@@ -215,15 +223,14 @@ public class Win32CacheMemory {
      */
     @JsonProperty("StatusInfo")
     @Nullable
-    Integer statusInfo;
+    public abstract Integer statusInfo();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

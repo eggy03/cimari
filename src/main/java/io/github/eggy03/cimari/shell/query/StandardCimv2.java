@@ -11,7 +11,6 @@ import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import org.jspecify.annotations.NonNull;
 
-
 import java.util.Objects;
 
 /**
@@ -54,7 +53,7 @@ public enum StandardCimv2 {
      */
     MSFT_NET_CONNECTION_PROFILE(generateQuery("Get-NetConnectionProfile", MsftNetConnectionProfile.class));
 
-    private final String query;
+    private final @NonNull String query;
 
     StandardCimv2(@NonNull String query) {
         this.query = Objects.requireNonNull(query, "query cannot be null");

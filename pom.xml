@@ -27,6 +27,7 @@
         <sonar.organization>eggy03</sonar.organization>
 
         <!-- dependencies version -->
+        <immutables.version>2.12.1</immutables.version>
         <commons.exec.version>1.6.0</commons.exec.version>
         <jackson.version>3.1.1</jackson.version>
         <jspecify.version>1.0.0</jspecify.version>
@@ -36,6 +37,8 @@
 
         <!-- plugins version -->
         <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
+        <build.helper.maven.plugin.version>3.6.1</build.helper.maven.plugin.version>
+        <maven.source.plugin.version>3.4.0</maven.source.plugin.version>
         <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
         <sign.maven.plugin.version>1.1.0</sign.maven.plugin.version>
         <central.publishing.maven.plugin.version>0.10.0</central.publishing.maven.plugin.version>
@@ -45,6 +48,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.immutables</groupId>
+                <artifactId>bom</artifactId>
+                <version>${immutables.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>tools.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
@@ -56,6 +66,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.immutables</groupId>
+            <artifactId>value</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-exec</artifactId>
@@ -148,9 +163,50 @@
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
                     <annotationProcessorPaths>
-                        <!--TODO add immutables annotation processor-->
+                        <path>
+                            <groupId>org.immutables</groupId>
+                            <artifactId>value</artifactId>
+                            <version>${immutables.version}</version>
+                        </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+
+            <!-- Add Generated Sources -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build.helper.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/annotations</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Attach Generated Sources -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Attach javadoc -->

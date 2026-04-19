@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32PortConnectorService implements CommonServiceInterface<Win32PortConnector> {
 
-    private final TerminalService terminalService;
-    private final Win32PortConnectorMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32PortConnectorMapper mapper;
 
     /**
      * Creates {@link Win32PortConnectorService} with default configuration.

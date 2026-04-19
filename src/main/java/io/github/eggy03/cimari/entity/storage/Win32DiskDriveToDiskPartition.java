@@ -6,11 +6,15 @@
 package io.github.eggy03.cimari.entity.storage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a {@link Win32DiskDrive} association with {@link Win32DiskPartition}.
@@ -47,29 +51,32 @@ import tools.jackson.databind.ObjectMapper;
  */
 @WmiClass(className = "Win32_DiskDriveToDiskPartition")
 @NullMarked
-public class Win32DiskDriveToDiskPartition {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32DiskDriveToDiskPartition.class)
+@JsonDeserialize(as = ImmutableWin32DiskDriveToDiskPartition.class)
+public abstract class Win32DiskDriveToDiskPartition {
 
     /**
      * Contains the {@code deviceId} field value of {@link Win32DiskDrive}
      */
     @JsonProperty("DiskDriveDeviceID")
     @Nullable
-    String diskDriveDeviceId;
+    public abstract String diskDriveDeviceId();
 
     /**
      * Contains the {@code deviceId} field value of {@link Win32DiskPartition}
      */
     @JsonProperty("DiskPartitionDeviceID")
     @Nullable
-    String diskPartitionDeviceId;
+    public abstract String diskPartitionDeviceId();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

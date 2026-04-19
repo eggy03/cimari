@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIpAddress> {
 
-    private final TerminalService terminalService;
-    private final MsftNetIpAddressMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull MsftNetIpAddressMapper mapper;
 
     /**
      * Creates {@link MsftNetIpAddressService} with default configuration.

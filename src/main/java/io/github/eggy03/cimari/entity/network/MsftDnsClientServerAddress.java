@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -28,13 +32,16 @@ import java.util.List;
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>
  *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/dnsclientcimprov/msft-dnsclientserveraddress">MSFT_DNSClientServerAddress Documentation</a>
  * @since 1.0.0
  */
 @WmiClass(className = "MSFT_DNSClientServerAddress")
 @NullMarked
-public class MsftDnsClientServerAddress {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableMsftDnsClientServerAddress.class)
+@JsonDeserialize(as = ImmutableMsftDnsClientServerAddress.class)
+public abstract class MsftDnsClientServerAddress {
 
     /**
      * Gets the user-friendly index of the server interface.
@@ -42,14 +49,14 @@ public class MsftDnsClientServerAddress {
      */
     @JsonProperty("InterfaceIndex")
     @Nullable
-    Long interfaceIndex;
+    public abstract Long interfaceIndex();
 
     /**
      * Gets the user-friendly name of the server interface.
      */
     @JsonProperty("InterfaceAlias")
     @Nullable
-    String interfaceAlias;
+    public abstract String interfaceAlias();
 
     /**
      * Gets the address family of the server address.
@@ -62,22 +69,21 @@ public class MsftDnsClientServerAddress {
      */
     @JsonProperty("AddressFamily")
     @Nullable
-    Integer addressFamily;
+    public abstract Integer addressFamily();
 
     /**
      * Gets a list that contains the DNS server addresses.
      */
     @JsonProperty("ServerAddresses")
     @Nullable
-    List<@Nullable String> dnsServerAddresses;
+    public abstract List<@Nullable String> dnsServerAddresses();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

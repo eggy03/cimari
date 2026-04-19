@@ -21,8 +21,6 @@ import java.util.Optional;
  * <p>
  * This class executes the {@link Cimv2#WIN32_COMPUTER_SYSTEM} PowerShell command
  * and maps the resulting output into an {@link Optional} {@link Win32ComputerSystem} with default configuration.
- *
- * @since 1.0.0
  * </p>
  *
  * <h2>Usage examples</h2>
@@ -30,12 +28,13 @@ import java.util.Optional;
  * Win32ComputerSystemService service = new Win32ComputerSystemService();
  * Optional<Win32ComputerSystem> system = service.get(10);
  * }</pre>
+ *
  * @since 1.0.0
  */
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
 
-    private final TerminalService terminalService;
-    private final Win32ComputerSystemMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32ComputerSystemMapper mapper;
 
     /**
      * Creates {@link Win32ComputerSystemService} with default configuration.

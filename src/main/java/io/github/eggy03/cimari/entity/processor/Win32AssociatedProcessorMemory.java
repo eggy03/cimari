@@ -6,11 +6,15 @@
 package io.github.eggy03.cimari.entity.processor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a {@link Win32Processor} association with {@link Win32CacheMemory}.
@@ -42,35 +46,37 @@ import tools.jackson.databind.ObjectMapper;
  * <p>See {@link Win32Processor} for related CPU information.</p>
  * <p>See {@link Win32CacheMemory} for related CPU Cache information.</p>
  *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-associatedprocessormemory">Win32_AssociatedProcessorMemory Documentation</a>
  * @since 1.0.0
  */
 @WmiClass(className = "Win32_AssociatedProcessorMemory")
 @NullMarked
-public class Win32AssociatedProcessorMemory {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32AssociatedProcessorMemory.class)
+@JsonDeserialize(as = ImmutableWin32AssociatedProcessorMemory.class)
+public abstract class Win32AssociatedProcessorMemory {
 
     /**
      * Contains the {@code deviceId} field value of {@link Win32CacheMemory}
      */
     @JsonProperty("CacheMemoryDeviceID")
     @Nullable
-    String cacheMemoryDeviceId;
+    public abstract String cacheMemoryDeviceId();
 
     /**
      * Contains the {@code deviceId} field value of {@link Win32Processor}
      */
     @JsonProperty("ProcessorDeviceID")
     @Nullable
-    String processorDeviceId;
+    public abstract String processorDeviceId();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

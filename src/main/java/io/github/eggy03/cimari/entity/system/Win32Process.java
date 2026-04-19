@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigInteger;
 
@@ -24,49 +28,53 @@ import java.math.BigInteger;
  */
 @WmiClass(className = "Win32_Process")
 @NullMarked
-public class Win32Process {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32Process.class)
+@JsonDeserialize(as = ImmutableWin32Process.class)
+public abstract class Win32Process {
 
     /**
      * Unique identifier of the process.
      */
     @JsonProperty("ProcessId")
     @Nullable
-    Long processId;
+    public abstract Long processId();
 
     /**
      * Identifier of the session under which this process is running.
      */
     @JsonProperty("SessionId")
     @Nullable
-    Long sessionId;
+    public abstract Long sessionId();
 
     /**
      * Name of the executable file responsible for this process.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Short one-line description of the process.
      */
     @JsonProperty("Caption")
     @Nullable
-    String caption;
+    public abstract String caption();
 
     /**
      * Full description of the process.
      */
     @JsonProperty("Description")
     @Nullable
-    String description;
+    public abstract String description();
 
     /**
      * Full path to the executable file of the process.
      */
     @JsonProperty("ExecutablePath")
     @Nullable
-    String executablePath;
+    public abstract String executablePath();
 
     /**
      * Current execution state of the process.
@@ -85,21 +93,21 @@ public class Win32Process {
      */
     @JsonProperty("ExecutionState")
     @Nullable
-    Integer executionState;
+    public abstract Integer executionState();
 
     /**
      * Handle of the process (string representation of ProcessId).
      */
     @JsonProperty("Handle")
     @Nullable
-    String handle;
+    public abstract String handle();
 
     /**
      * Number of handles currently open by the process.
      */
     @JsonProperty("HandleCount")
     @Nullable
-    Long handleCount;
+    public abstract Long handleCount();
 
     /**
      * Scheduling priority of the process.
@@ -109,99 +117,98 @@ public class Win32Process {
      */
     @JsonProperty("Priority")
     @Nullable
-    Long priority;
+    public abstract Long priority();
 
     /**
      * Number of active threads in the process.
      */
     @JsonProperty("ThreadCount")
     @Nullable
-    Long threadCount;
+    public abstract Long threadCount();
 
     /**
      * Time spent by the process in kernel mode (in ms).
      */
     @JsonProperty("KernelModeTime")
     @Nullable
-    BigInteger kernelModeTime;
+    public abstract BigInteger kernelModeTime();
 
     /**
      * Time spent by the process in user mode (in ms).
      */
     @JsonProperty("UserModeTime")
     @Nullable
-    BigInteger userModeTime;
+    public abstract BigInteger userModeTime();
 
     /**
      * Current working set size (in bytes) used by the process.
      */
     @JsonProperty("WorkingSetSize")
     @Nullable
-    BigInteger workingSetSize;
+    public abstract BigInteger workingSetSize();
 
     /**
      * Peak working set size (in KB) of the process.
      */
     @JsonProperty("PeakWorkingSetSize")
     @Nullable
-    BigInteger peakWorkingSetSize;
+    public abstract BigInteger peakWorkingSetSize();
 
     /**
      * Current number of private memory pages used by the process.
      */
     @JsonProperty("PrivatePageCount")
     @Nullable
-    BigInteger privatePageCount;
+    public abstract BigInteger privatePageCount();
 
     /**
      * Current amount of page file usage (kilobytes).
      */
     @JsonProperty("PageFileUsage")
     @Nullable
-    Long pageFileUsage;
+    public abstract Long pageFileUsage();
 
     /**
      * Peak page file usage (kilobytes).
      */
     @JsonProperty("PeakPageFileUsage")
     @Nullable
-    Long peakPageFileUsage;
+    public abstract Long peakPageFileUsage();
 
     /**
      * Current virtual address space used by the process (bytes).
      */
     @JsonProperty("VirtualSize")
     @Nullable
-    BigInteger virtualSize;
+    public abstract BigInteger virtualSize();
 
     /**
      * Peak virtual address space used by the process (bytes).
      */
     @JsonProperty("PeakVirtualSize")
     @Nullable
-    BigInteger peakVirtualSize;
+    public abstract BigInteger peakVirtualSize();
 
     /**
      * Date/time when the process was created.
      */
     @JsonProperty("CreationDate")
     @Nullable
-    String creationDate;
+    public abstract String creationDate();
 
     /**
      * Date/time when the process was terminated (if available).
      */
     @JsonProperty("TerminationDate")
     @Nullable
-    String terminationDate;
+    public abstract String terminationDate();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

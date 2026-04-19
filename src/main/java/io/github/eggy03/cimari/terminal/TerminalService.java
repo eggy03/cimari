@@ -28,6 +28,7 @@ import java.util.Objects;
  * <p>
  * <b>Mostly for internal use </b>
  * </p>
+ *
  * @since 1.0.0
  */
 public class TerminalService {
@@ -83,7 +84,7 @@ public class TerminalService {
 
         Objects.requireNonNull(command, "query or script to be executed cannot be null");
 
-        if(timeout < 0)
+        if (timeout < 0)
             throw new IllegalArgumentException("Timeout cannot be negative");
 
         CommandLine cmdLine = new CommandLine("powershell.exe");

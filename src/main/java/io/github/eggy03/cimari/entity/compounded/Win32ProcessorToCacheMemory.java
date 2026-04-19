@@ -6,12 +6,16 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.entity.processor.Win32AssociatedProcessorMemory;
 import io.github.eggy03.cimari.entity.processor.Win32CacheMemory;
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -36,7 +40,11 @@ import java.util.List;
  * @since 1.0.0
  */
 @NullMarked
-public class Win32ProcessorToCacheMemory {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32ProcessorToCacheMemory.class)
+@JsonDeserialize(as = ImmutableWin32ProcessorToCacheMemory.class)
+public abstract class Win32ProcessorToCacheMemory {
 
     /**
      * The unique identifier for the {@link Win32Processor} instance.
@@ -46,7 +54,7 @@ public class Win32ProcessorToCacheMemory {
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * The {@link Win32Processor} entity associated with the {@link #deviceId}.
@@ -56,7 +64,7 @@ public class Win32ProcessorToCacheMemory {
      */
     @JsonProperty("Processor")
     @Nullable
-    Win32Processor processor;
+    public abstract Win32Processor processor();
 
     /**
      * A list of {@link Win32CacheMemory} entities associated with the {@link #deviceId}.
@@ -67,15 +75,14 @@ public class Win32ProcessorToCacheMemory {
      */
     @JsonProperty("CacheMemory")
     @Nullable
-    List<@Nullable Win32CacheMemory> cacheMemoryList;
+    public abstract List<@Nullable Win32CacheMemory> cacheMemoryList();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

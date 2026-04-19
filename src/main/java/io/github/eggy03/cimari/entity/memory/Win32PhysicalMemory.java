@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.memory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigInteger;
 
@@ -24,35 +28,39 @@ import java.math.BigInteger;
  */
 @WmiClass(className = "Win32_PhysicalMemory")
 @NullMarked
-public class Win32PhysicalMemory {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32PhysicalMemory.class)
+@JsonDeserialize(as = ImmutableWin32PhysicalMemory.class)
+public abstract class Win32PhysicalMemory {
 
     /**
      * Unique identifier for the physical memory device represented by an instance of this class.
      */
     @JsonProperty("Tag")
     @Nullable
-    String tag;
+    public abstract String tag();
 
     /**
      * Label for the Physical Memory.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Name of the organization responsible for producing the physical memory.
      */
     @JsonProperty("Manufacturer")
     @Nullable
-    String manufacturer;
+    public abstract String manufacturer();
 
     /**
      * Model name for the physical element.
      */
     @JsonProperty("Model")
     @Nullable
-    String model;
+    public abstract String model();
 
     /**
      * Additional data, beyond asset tag information, that can be used to identify a physical element.
@@ -60,14 +68,14 @@ public class Win32PhysicalMemory {
      */
     @JsonProperty("OtherIdentifyingInfo")
     @Nullable
-    String otherIdentifyingInfo;
+    public abstract String otherIdentifyingInfo();
 
     /**
      * Part number assigned by the organization responsible for producing or manufacturing the physical element.
      */
     @JsonProperty("PartNumber")
     @Nullable
-    String partNumber;
+    public abstract String partNumber();
 
     /**
      * Implementation form factor for the chip.
@@ -100,21 +108,21 @@ public class Win32PhysicalMemory {
      */
     @JsonProperty("FormFactor")
     @Nullable
-    Integer formFactor;
+    public abstract Integer formFactor();
 
     /**
      * Physically labeled bank where the memory is located.
      */
     @JsonProperty("BankLabel")
     @Nullable
-    String bankLabel;
+    public abstract String bankLabel();
 
     /**
      * Total capacity of the physical memory—in bytes.
      */
     @JsonProperty("Capacity")
     @Nullable
-    BigInteger capacity;
+    public abstract BigInteger capacity();
 
     /**
      * Data width of the physical memory—in bits.
@@ -122,43 +130,42 @@ public class Win32PhysicalMemory {
      */
     @JsonProperty("DataWidth")
     @Nullable
-    Integer dataWidth;
+    public abstract Integer dataWidth();
 
     /**
      * Speed of the physical memory—in MHz.
      */
     @JsonProperty("Speed")
     @Nullable
-    Long speed;
+    public abstract Long speed();
 
     /**
      * The configured clock speed of the memory device, in MHz, or 0, if the speed is unknown.
      */
     @JsonProperty("ConfiguredClockSpeed")
     @Nullable
-    Long configuredClockSpeed;
+    public abstract Long configuredClockSpeed();
 
     /**
      * Label of the socket or circuit board that holds the memory.
      */
     @JsonProperty("DeviceLocator")
     @Nullable
-    String deviceLocator;
+    public abstract String deviceLocator();
 
     /**
      * Manufacturer-allocated number to identify the physical element.
      */
     @JsonProperty("SerialNumber")
     @Nullable
-    String serialNumber;
+    public abstract String serialNumber();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

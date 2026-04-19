@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.network;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable modern representation of a network adapter on a Windows system.
@@ -34,27 +38,30 @@ import tools.jackson.databind.ObjectMapper;
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  * <p>See {@link MsftDnsClientServerAddress}, for configuration information regarding the DNS servers of a network adapter.</p>
  *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/netadaptercimprov/msft-netadapter">MSFT_NetAdapter Documentation</a>
  * @since 1.0.0
  */
 @WmiClass(className = "MSFT_NetAdapter")
 @NullMarked
-public class MsftNetAdapter {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableMsftNetAdapter.class)
+@JsonDeserialize(as = ImmutableMsftNetAdapter.class)
+public abstract class MsftNetAdapter {
 
     /**
      * Uniquely identifies the network adapter on the system.
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Plug and Play (PnP) device identifier assigned to the adapter by Windows.
      */
     @JsonProperty("PnPDeviceID")
     @Nullable
-    String pnpDeviceId;
+    public abstract String pnpDeviceId();
 
     /**
      * The unique interface index number used by the network stack.
@@ -64,7 +71,7 @@ public class MsftNetAdapter {
      */
     @JsonProperty("InterfaceIndex")
     @Nullable
-    Long interfaceIndex;
+    public abstract Long interfaceIndex();
 
     /**
      * Name of the network adapter interface.
@@ -72,14 +79,14 @@ public class MsftNetAdapter {
      */
     @JsonProperty("InterfaceName")
     @Nullable
-    String interfaceName;
+    public abstract String interfaceName();
 
     /**
      * Type of interface as defined by the IANA Interface Type registry.
      */
     @JsonProperty("InterfaceType")
     @Nullable
-    Long interfaceType;
+    public abstract Long interfaceType();
 
     /**
      * Interface Description, also known as "ifDesc" or display name
@@ -88,7 +95,7 @@ public class MsftNetAdapter {
      */
     @JsonProperty("InterfaceDescription")
     @Nullable
-    String interfaceDescription;
+    public abstract String interfaceDescription();
 
     /**
      * Friendly alias name assigned to the network interface by the operating system or user.
@@ -96,7 +103,7 @@ public class MsftNetAdapter {
      */
     @JsonProperty("InterfaceAlias")
     @Nullable
-    String interfaceAlias;
+    public abstract String interfaceAlias();
 
     /**
      * Current operational status of the network adapter interface.
@@ -113,7 +120,7 @@ public class MsftNetAdapter {
      */
     @JsonProperty("InterfaceOperationalStatus")
     @Nullable
-    Long interfaceOperationalStatus;
+    public abstract Long interfaceOperationalStatus();
 
     /**
      * Indicates whether this adapter represents a virtual interface.
@@ -121,19 +128,22 @@ public class MsftNetAdapter {
      */
     @JsonProperty("Virtual")
     @Nullable
-    Boolean virtual;
+    public abstract Boolean virtual();
+
     /**
      * Indicates whether the adapter supports full-duplex mode.
      */
     @JsonProperty("FullDuplex")
     @Nullable
-    Boolean fullDuplex;
+    public abstract Boolean fullDuplex();
+
     /**
      * Indicates whether the adapter is hidden from the user interface.
      */
     @JsonProperty("Hidden")
     @Nullable
-    Boolean hidden;
+    public abstract Boolean hidden();
+
     /**
      * Current operational status of the net adapter device.
      * <p>Possible OPERATIONAL values:</p>
@@ -160,60 +170,69 @@ public class MsftNetAdapter {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
+    public abstract String status();
+
     /**
      * The physical (MAC) address of the network adapter.
      * <p>Example: "00:1A:2B:3C:4D:5E"</p>
      */
     @JsonProperty("LinkLayerAddress")
     @Nullable
-    String linkLayerAddress;
+    public abstract String linkLayerAddress();
+
     /**
      * The current link speed as a formatted string, if available.
      * <p>Example: "1 Gbps"</p>
      */
     @JsonProperty("LinkSpeed")
     @Nullable
-    String linkSpeed;
+    public abstract String linkSpeed();
+
     /**
      * Raw value of the current receive link speed in bits per second.
      */
     @JsonProperty("ReceiveLinkSpeed")
     @Nullable
-    Long receiveLinkSpeedRaw;
+    public abstract Long receiveLinkSpeedRaw();
+
     /**
      * Raw value of the current transmit link speed in bits per second.
      */
     @JsonProperty("TransmitLinkSpeed")
     @Nullable
-    Long transmitLinkSpeedRaw;
+    public abstract Long transmitLinkSpeedRaw();
+
     /**
      * Name of the network adapter driver.
      * <p>Example: "rt640x64.sys"</p>
      */
     @JsonProperty("DriverName")
     @Nullable
-    String driverName;
+    public abstract String driverName();
+
     /**
      * Version number of the network adapter driver.
      * <p>Example: "12.18.9.10"</p>
      */
     @JsonProperty("DriverVersion")
     @Nullable
-    String driverVersion;
+    public abstract String driverVersion();
+
     /**
      * Date of the currently installed driver.
      */
     @JsonProperty("DriverDate")
     @Nullable
-    String driverDate;
+    public abstract String driverDate();
+
     /**
      * Maximum Transmission Unit (MTU) size of the adapter, in bytes.
      * <p>Example: 1500</p>
      */
     @JsonProperty("MtuSize")
     @Nullable
-    Long mtuSize;
+    public abstract Long mtuSize();
+
     /**
      * The current media connection state of the adapter.
      * <p>Possible values: </p>
@@ -225,7 +244,8 @@ public class MsftNetAdapter {
      */
     @JsonProperty("MediaConnectState")
     @Nullable
-    Long mediaConnectState;
+    public abstract Long mediaConnectState();
+
     /**
      * Network adapter media type.
      * Numeric equivalent of {@link #mediaType}
@@ -255,7 +275,8 @@ public class MsftNetAdapter {
      */
     @JsonProperty("NdisMedium")
     @Nullable
-    Long ndisMedium;
+    public abstract Long ndisMedium();
+
     /**
      * The types of physical media that the network adapter supports.
      * Numeric equivalent of {@link #physicalMediaType}
@@ -285,14 +306,16 @@ public class MsftNetAdapter {
      */
     @JsonProperty("NdisPhysicalMedium")
     @Nullable
-    Long ndisPhysicalMedium;
+    public abstract Long ndisPhysicalMedium();
+
     /**
      * Type of network media currently in use (for example, Ethernet or Wi-Fi).
      * String equivalent of {@link #ndisMedium}
      */
     @JsonProperty("MediaType")
     @Nullable
-    String mediaType;
+    public abstract String mediaType();
+
     /**
      * Physical type of network media
      * String equivalent of {@link #ndisPhysicalMedium}
@@ -300,27 +323,14 @@ public class MsftNetAdapter {
      */
     @JsonProperty("PhysicalMediaType")
     @Nullable
-    String physicalMediaType;
-
-    public @Nullable Boolean isVirtual() {
-        return virtual;
-    }
-
-    public @Nullable Boolean isFullDuplex() {
-        return fullDuplex;
-    }
-
-    public @Nullable Boolean isHidden() {
-        return hidden;
-    }
+    public abstract String physicalMediaType();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.compounded;
 
 
+import io.github.eggy03.cimari.entity.compounded.ImmutableWin32NetworkAdapterToConfiguration;
 import io.github.eggy03.cimari.entity.compounded.Win32NetworkAdapterToConfiguration;
 import io.github.eggy03.cimari.mapping.compounded.Win32NetworkAdapterToConfigurationMapper;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
@@ -38,7 +39,7 @@ class Win32NetworkAdapterToConfigurationServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final Win32NetworkAdapterToConfiguration expectedObject
-            = Win32NetworkAdapterToConfiguration.builder()
+            = new ImmutableWin32NetworkAdapterToConfiguration.Builder()
             .deviceId("1L")
             .build();
 

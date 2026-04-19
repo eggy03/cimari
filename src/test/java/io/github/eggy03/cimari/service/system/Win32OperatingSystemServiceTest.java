@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.system;
 
 
+import io.github.eggy03.cimari.entity.system.ImmutableWin32OperatingSystem;
 import io.github.eggy03.cimari.entity.system.Win32OperatingSystem;
 import io.github.eggy03.cimari.mapping.system.Win32OperatingSystemMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -37,7 +38,7 @@ class Win32OperatingSystemServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32OperatingSystem expectedOs = Win32OperatingSystem.builder()
+    private final Win32OperatingSystem expectedOs = new ImmutableWin32OperatingSystem.Builder()
             .name("Microsoft Windows 11 Pro|C:\\WINDOWS|\\Device\\Harddisk0\\Partition4")
             .caption("Microsoft Windows 11 Pro")
             .installDate("20240101000000.000000+330")

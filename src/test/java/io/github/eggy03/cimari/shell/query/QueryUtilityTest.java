@@ -18,7 +18,7 @@ class QueryUtilityTest {
     @Test
     void getWmiClassNameFromWmiClassAnnotation_success() {
         String expectedString = "testClass";
-        String actualString = QueryUtility.getPropertiesFromWmiClass(MockWmiAnnotatedClass.class);
+        String actualString = QueryUtility.getClassNameFromWmiClass(MockWmiAnnotatedClass.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
@@ -28,24 +28,24 @@ class QueryUtilityTest {
 
         assertThrows(
                 AnnotationNotFoundException.class,
-                () -> QueryUtility.getPropertiesFromWmiClass(MockNonWmiAnnotatedClass.class)
+                () -> QueryUtility.getClassNameFromWmiClass(MockNonWmiAnnotatedClass.class)
         );
     }
 
     @Test
-    void getPropertiesFromJsonProperty_withAnnotatedFields_success() {
+    void getPropertiesFromJsonProperty_withAnnotatedMethods_success() {
 
-        String expectedString = "field_one, field_three, field_two";
-        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockWithAnnotatedFields.class);
+        String expectedString = "method_one, method_three, method_two";
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockWithAnnotatedMethods.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
 
     @Test
-    void getPropertiesFromJsonProperty_withoutAnnotatedFields_success() {
+    void getPropertiesFromJsonProperty_withoutAnnotatedMethods_returnsEmptyString() {
 
-        String expectedString = "fieldOne, fieldThree, fieldTwo";
-        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockWithoutAnnotatedFields.class);
+        String expectedString = "";
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockWithoutAnnotatedMethods.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
@@ -53,15 +53,15 @@ class QueryUtilityTest {
     @Test
     void getPropertiesFromJsonProperty_withAbstractClass_success_emptyString() {
 
-        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockAbstractClass.class);
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(MockEmptyClass.class);
         assertThat(actualString).isNotNull().isEmpty();
     }
 
     @Test
-    void getFromJsonProperties_withAnnotatedFields_inheritedPropertiesFromAnotherClass_success() {
+    void getFromJsonProperties_withAnnotatedMethods_inheritedPropertiesFromAnotherClass_success() {
 
-        String expectedString = "field_four"; // inherited fields are not included
-        String actualString = QueryUtility.getPropertiesFromJsonProperty(ExtensionOfMockWithAnnotatedFields.class);
+        String expectedString = "method_four"; // inherited methods are not included
+        String actualString = QueryUtility.getPropertiesFromJsonProperty(ExtensionOfMockWithAnnotatedMethods.class);
 
         assertThat(expectedString).isEqualTo(actualString);
     }
@@ -69,42 +69,44 @@ class QueryUtilityTest {
     @Test
     @SuppressWarnings("all")
     void testBothMethodsForNullInputs_throwsException() {
-        NullPointerException ex1 = assertThrows(NullPointerException.class, () -> QueryUtility.getPropertiesFromWmiClass(null));
+        NullPointerException ex1 = assertThrows(NullPointerException.class, () -> QueryUtility.getClassNameFromWmiClass(null));
         NullPointerException ex2 = assertThrows(NullPointerException.class, () -> QueryUtility.getPropertiesFromJsonProperty(null));
         assertThat(ex1.getMessage()).isEqualTo("tClass cannot be null");
         assertThat(ex2.getMessage()).isEqualTo("tClass cannot be null");
     }
 
     @SuppressWarnings("unused")
-    static class MockWithAnnotatedFields { // inner test class where fields are annotated with Jackson's @JsonProperty
+    abstract static class MockWithAnnotatedMethods { // inner test class where methods are annotated with Jackson's @JsonProperty
 
-        @JsonProperty("field_one")
-        String fieldOne;
+        @JsonProperty("method_one")
+        public abstract String methodOne();
 
-        @JsonProperty("field_two")
-        String fieldTwo;
+        @JsonProperty("method_two")
+        public abstract String methodTwo();
 
-        @JsonProperty("field_three")
-        String fieldThree;
+        @JsonProperty("method_three")
+        public abstract String methodThree();
     }
 
     @SuppressWarnings("unused")
-    static class MockWithoutAnnotatedFields {
+    abstract static class MockWithoutAnnotatedMethods {
 
-        String fieldOne;
-        String fieldTwo;
-        String fieldThree;
+        public abstract String methodOne();
+
+        public abstract String methodTwo();
+
+        public abstract String methodThree();
     }
 
-    static class MockAbstractClass {
+    abstract static class MockEmptyClass {
 
     }
 
     @SuppressWarnings("unused")
-    static class ExtensionOfMockWithAnnotatedFields extends MockWithAnnotatedFields {
+    abstract static class ExtensionOfMockWithAnnotatedMethods extends MockWithAnnotatedMethods {
 
-        @JsonProperty("field_four")
-        String fieldFour;
+        @JsonProperty("method_four")
+        public abstract String methodFour();
     }
 
     @SuppressWarnings("unused")

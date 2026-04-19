@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.display;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a monitor device on a Windows system.
@@ -22,7 +26,11 @@ import tools.jackson.databind.ObjectMapper;
  */
 @WmiClass(className = "Win32_DesktopMonitor")
 @NullMarked
-public class Win32DesktopMonitor {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32DesktopMonitor.class)
+@JsonDeserialize(as = ImmutableWin32DesktopMonitor.class)
+public abstract class Win32DesktopMonitor {
 
     /**
      * Unique identifier of the desktop monitor on the system.
@@ -31,7 +39,7 @@ public class Win32DesktopMonitor {
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Label by which the object is known.
@@ -40,7 +48,7 @@ public class Win32DesktopMonitor {
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Windows Plug and Play device identifier of the monitor.
@@ -49,7 +57,7 @@ public class Win32DesktopMonitor {
      */
     @JsonProperty("PNPDeviceID")
     @Nullable
-    String pnpDeviceId;
+    public abstract String pnpDeviceId();
 
     /**
      * Current operational status of the monitor device.
@@ -77,7 +85,7 @@ public class Win32DesktopMonitor {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
+    public abstract String status();
 
     /**
      * Name of the manufacturer of the monitor.
@@ -86,7 +94,7 @@ public class Win32DesktopMonitor {
      */
     @JsonProperty("MonitorManufacturer")
     @Nullable
-    String monitorManufacturer;
+    public abstract String monitorManufacturer();
 
     /**
      * Type of monitor.
@@ -95,29 +103,28 @@ public class Win32DesktopMonitor {
      */
     @JsonProperty("MonitorType")
     @Nullable
-    String monitorType;
+    public abstract String monitorType();
 
     /**
      * Resolution along the x-axis (horizontal direction) of the monitor.
      */
     @JsonProperty("PixelsPerXLogicalInch")
     @Nullable
-    Integer pixelsPerXLogicalInch;
+    public abstract Integer pixelsPerXLogicalInch();
 
     /**
      * Resolution along the y-axis (vertical direction) of the monitor.
      */
     @JsonProperty("PixelsPerYLogicalInch")
     @Nullable
-    Integer pixelsPerYLogicalInch;
+    public abstract Integer pixelsPerYLogicalInch();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

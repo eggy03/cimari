@@ -43,8 +43,8 @@ import java.util.Objects;
  */
 public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceInterface<MsftNetAdapterToIpAndDnsAndProfile> {
 
-    private final TerminalService terminalService;
-    private final MsftNetAdapterToIpAndDnsAndProfileMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull MsftNetAdapterToIpAndDnsAndProfileMapper mapper;
 
     /**
      * Creates {@link MsftNetAdapterToIpAndDnsAndProfileService} with default configuration.

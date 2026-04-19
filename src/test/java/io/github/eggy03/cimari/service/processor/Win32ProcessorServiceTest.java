@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.processor;
 
 
+import io.github.eggy03.cimari.entity.processor.ImmutableWin32Processor;
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
 import io.github.eggy03.cimari.mapping.processor.Win32ProcessorMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -37,7 +38,7 @@ class Win32ProcessorServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32Processor expectedProcessor = Win32Processor.builder()
+    private final Win32Processor expectedProcessor = new ImmutableWin32Processor.Builder()
             .deviceId("CPU0")
             .name("Intel(R) Core(TM) i9-13900K")
             .numberOfCores(24)

@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32LogicalDiskService implements CommonServiceInterface<Win32LogicalDisk> {
 
-    private final TerminalService terminalService;
-    private final Win32LogicalDiskMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32LogicalDiskMapper mapper;
 
     /**
      * Creates {@link Win32LogicalDiskService} with default configuration.

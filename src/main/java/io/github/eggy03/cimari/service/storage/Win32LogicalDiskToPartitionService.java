@@ -36,8 +36,8 @@ import java.util.Objects;
  */
 public class Win32LogicalDiskToPartitionService implements CommonServiceInterface<Win32LogicalDiskToPartition> {
 
-    private final TerminalService terminalService;
-    private final Win32LogicalDiskToPartitionMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32LogicalDiskToPartitionMapper mapper;
 
     /**
      * Creates {@link Win32LogicalDiskToPartitionService} with default configuration.

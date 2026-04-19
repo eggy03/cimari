@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.storage;
 
 
+import io.github.eggy03.cimari.entity.storage.ImmutableWin32DiskDrive;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.mapping.storage.Win32DiskDriveMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -39,7 +40,7 @@ class Win32DiskDriveServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32DiskDrive expectedDiskDrive1 = Win32DiskDrive.builder()
+    private final Win32DiskDrive expectedDiskDrive1 = new ImmutableWin32DiskDrive.Builder()
             .deviceId("\\\\.\\PHYSICALDRIVE0")
             .caption("Samsung SSD 970 EVO")
             .model("MZ-V7E1T0")
@@ -53,7 +54,7 @@ class Win32DiskDriveServiceTest {
             .capabilities(Arrays.asList(3, 4))
             .capabilityDescriptions(Arrays.asList("desc1", "desc2"))
             .build();
-    private final Win32DiskDrive expectedDiskDrive2 = Win32DiskDrive.builder()
+    private final Win32DiskDrive expectedDiskDrive2 = new ImmutableWin32DiskDrive.Builder()
             .deviceId("\\\\.\\PHYSICALDRIVE1")
             .caption("Seagate BarraCuda 2TB")
             .model("ST2000DM008")

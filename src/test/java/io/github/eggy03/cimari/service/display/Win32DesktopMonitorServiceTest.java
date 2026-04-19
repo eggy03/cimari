@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.display;
 
 
+import io.github.eggy03.cimari.entity.display.ImmutableWin32DesktopMonitor;
 import io.github.eggy03.cimari.entity.display.Win32DesktopMonitor;
 import io.github.eggy03.cimari.mapping.display.Win32DesktopMonitorMapper;
 import io.github.eggy03.cimari.shell.query.Cimv2;
@@ -38,7 +39,7 @@ class Win32DesktopMonitorServiceTest {
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
-    private final Win32DesktopMonitor expectedMonitor1 = Win32DesktopMonitor.builder()
+    private final Win32DesktopMonitor expectedMonitor1 = new ImmutableWin32DesktopMonitor.Builder()
             .deviceId("MON1")
             .name("Dell U2720Q")
             .pnpDeviceId("DISPLAY\\\\DELA0B1\\\\5&12345&0&UID4352")
@@ -49,7 +50,7 @@ class Win32DesktopMonitorServiceTest {
             .pixelsPerYLogicalInch(96)
             .build();
 
-    private final Win32DesktopMonitor expectedMonitor2 = Win32DesktopMonitor.builder()
+    private final Win32DesktopMonitor expectedMonitor2 = new ImmutableWin32DesktopMonitor.Builder()
             .deviceId("MON2")
             .name("LG UltraGear 27GL850")
             .pnpDeviceId("DISPLAY\\\\LGD1234\\\\5&67890&0&UID9832")

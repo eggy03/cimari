@@ -40,8 +40,8 @@ import java.util.Objects;
  */
 public class Win32ProcessorToCacheMemoryService implements CommonServiceInterface<Win32ProcessorToCacheMemory> {
 
-    private final TerminalService terminalService;
-    private final Win32ProcessorToCacheMemoryMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32ProcessorToCacheMemoryMapper mapper;
 
     /**
      * Creates {@link Win32ProcessorToCacheMemoryService} with default configuration.

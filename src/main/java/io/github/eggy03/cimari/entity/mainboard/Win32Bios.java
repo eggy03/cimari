@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.mainboard;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a BIOS entity on a Windows system.
@@ -22,42 +26,47 @@ import tools.jackson.databind.ObjectMapper;
  */
 @WmiClass(className = "Win32_BIOS")
 @NullMarked
-public class Win32Bios {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32Bios.class)
+@JsonDeserialize(as = ImmutableWin32Bios.class)
+public abstract class Win32Bios {
 
     /**
      * The BIOS name.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Short description of the BIOS.
      */
     @JsonProperty("Caption")
     @Nullable
-    String caption;
+    public abstract String caption();
 
     /**
      * Manufacturer of the BIOS.
      */
     @JsonProperty("Manufacturer")
     @Nullable
-    String manufacturer;
+    public abstract String manufacturer();
 
     /**
      * BIOS release date in UTC format (YYYYMMDDHHMMSS.MMMMMM±OOO).
      */
     @JsonProperty("ReleaseDate")
     @Nullable
-    String releaseDate;
+    public abstract String releaseDate();
 
     /**
      * If true, the SMBIOS is available on this computer system.
      */
     @JsonProperty("SMBIOSPresent")
     @Nullable
-    Boolean smbiosPresent;
+    public abstract Boolean smbiosPresent();
+
     /**
      * Current operational status of the BIOS.
      * <p>Possible OPERATIONAL values:</p>
@@ -84,47 +93,42 @@ public class Win32Bios {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
+    public abstract String status();
+
     /**
      * Version of the BIOS. This string is created by the BIOS manufacturer.
      */
     @JsonProperty("Version")
     @Nullable
-    String version;
+    public abstract String version();
+
     /**
      * Name of the current BIOS language.
      */
     @JsonProperty("CurrentLanguage")
     @Nullable
-    String currentLanguage;
+    public abstract String currentLanguage();
+
     /**
      * BIOS version as reported by SMBIOS.
      */
     @JsonProperty("SMBIOSBIOSVersion")
     @Nullable
-    String smbiosBiosVersion;
+    public abstract String smbiosBiosVersion();
+
     /**
      * If TRUE, this is the primary BIOS of the computer system.
      */
     @JsonProperty("PrimaryBIOS")
     @Nullable
-    Boolean primaryBios;
-
-    public @Nullable Boolean isSMBIOSPresent() {
-        return smbiosPresent;
-    }
-
-    public @Nullable Boolean isPrimaryBios() {
-        return primaryBios;
-    }
+    public abstract Boolean primaryBios();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

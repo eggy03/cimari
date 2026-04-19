@@ -5,7 +5,8 @@
  */
 package io.github.eggy03.cimari.service.network;
 
-
+import io.github.eggy03.cimari.entity.network.ImmutableDatetime;
+import io.github.eggy03.cimari.entity.network.ImmutableMsftNetIpAddress;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
 import io.github.eggy03.cimari.mapping.network.MsftNetIpAddressMapper;
 import io.github.eggy03.cimari.shell.query.StandardCimv2;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MsftNetIpAddressServiceTest {
 
-    static MsftNetIpAddress.Datetime lifetime = MsftNetIpAddress.Datetime.builder()
+    static final MsftNetIpAddress.Datetime lifetime = new ImmutableDatetime.Builder()
             .days(9999L)
             .hours(0L)
             .minutes(0L)
@@ -43,7 +44,7 @@ class MsftNetIpAddressServiceTest {
     private final TerminalResult validTerminalResult = new TerminalResult("{}", "");
     private final TerminalResult invalidTerminalResult = new TerminalResult("invalid json", "");
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
-    private final MsftNetIpAddress expectedIPv4Address = MsftNetIpAddress.builder()
+    private final MsftNetIpAddress expectedIPv4Address = new ImmutableMsftNetIpAddress.Builder()
             .interfaceIndex(1L)
             .interfaceAlias("Ethernet")
             .addressFamily(2L) // IPv4
@@ -58,7 +59,7 @@ class MsftNetIpAddressServiceTest {
             .validLifeTime(lifetime)
             .build();
 
-    private final MsftNetIpAddress expectedIPv6Address = MsftNetIpAddress.builder()
+    private final MsftNetIpAddress expectedIPv6Address = new ImmutableMsftNetIpAddress.Builder()
             .interfaceIndex(2L)
             .interfaceAlias("Wi-Fi")
             .addressFamily(23L) // IPv6

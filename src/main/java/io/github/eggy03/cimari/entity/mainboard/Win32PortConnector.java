@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.mainboard;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -18,7 +22,7 @@ import java.util.List;
  * <p>
  * Fields correspond to properties retrieved from the {@code Win32_PortConnector} WMI class.
  * </p>
- *
+ * <p>
  * {@link Win32Baseboard} contains the details of the motherboard this port belongs to.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-portconnector">Win32_PortConnector Documentation</a>
@@ -26,7 +30,11 @@ import java.util.List;
  */
 @WmiClass(className = "Win32_PortConnector")
 @NullMarked
-public class Win32PortConnector {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32PortConnector.class)
+@JsonDeserialize(as = ImmutableWin32PortConnector.class)
+public abstract class Win32PortConnector {
 
     /**
      * Unique identifier of a port connection on the computer system.
@@ -35,7 +43,7 @@ public class Win32PortConnector {
      */
     @JsonProperty("Tag")
     @Nullable
-    String tag;
+    public abstract String tag();
 
     /**
      * External reference designator of the port. External reference designators are identifiers
@@ -44,7 +52,7 @@ public class Win32PortConnector {
      */
     @JsonProperty("ExternalReferenceDesignator")
     @Nullable
-    String externalReferenceDesignator;
+    public abstract String externalReferenceDesignator();
 
     /**
      * Internal reference designator of the port. Internal reference designators are specific
@@ -53,7 +61,7 @@ public class Win32PortConnector {
      */
     @JsonProperty("InternalReferenceDesignator")
     @Nullable
-    String internalReferenceDesignator;
+    public abstract String internalReferenceDesignator();
 
     /**
      * Function of the port.
@@ -98,7 +106,7 @@ public class Win32PortConnector {
      */
     @JsonProperty("PortType")
     @Nullable
-    Integer portType;
+    public abstract Integer portType();
 
     /**
      * Array of physical attributes of the connector used by this port.
@@ -107,15 +115,14 @@ public class Win32PortConnector {
      */
     @JsonProperty("ConnectorType")
     @Nullable
-    List<@Nullable Integer> connectorType;
+    public abstract List<@Nullable Integer> connectorType();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

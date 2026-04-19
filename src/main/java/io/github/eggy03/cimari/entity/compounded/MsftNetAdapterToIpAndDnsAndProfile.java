@@ -6,13 +6,17 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.entity.network.MsftDnsClientServerAddress;
 import io.github.eggy03.cimari.entity.network.MsftNetAdapter;
 import io.github.eggy03.cimari.entity.network.MsftNetConnectionProfile;
 import io.github.eggy03.cimari.entity.network.MsftNetIpAddress;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -37,7 +41,6 @@ import java.util.List;
  * {@code Win32_NetworkAdapter} is deprecated by Microsoft in favor of the MSFT classes.
  * </p>
  *
- *
  * @see MsftNetAdapter
  * @see MsftNetIpAddress
  * @see MsftDnsClientServerAddress
@@ -45,50 +48,53 @@ import java.util.List;
  * @since 1.0.0
  */
 @NullMarked
-public class MsftNetAdapterToIpAndDnsAndProfile {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableMsftNetAdapterToIpAndDnsAndProfile.class)
+@JsonDeserialize(as = ImmutableMsftNetAdapterToIpAndDnsAndProfile.class)
+public abstract class MsftNetAdapterToIpAndDnsAndProfile {
 
     /**
      * The unique index identifying the {@link MsftNetAdapter} instance
      */
     @JsonProperty("InterfaceIndex")
     @Nullable
-    Long interfaceIndex;
+    public abstract Long interfaceIndex();
 
     /**
      * The {@link MsftNetAdapter} associated with the index: {@link #interfaceIndex}
      */
     @JsonProperty("NetworkAdapter")
     @Nullable
-    MsftNetAdapter adapter;
+    public abstract MsftNetAdapter adapter();
 
     /**
      * A list of {@link MsftNetIpAddress} associated with the index: {@link #interfaceIndex}
      */
     @JsonProperty("IPAddresses")
     @Nullable
-    List<@Nullable MsftNetIpAddress> ipAddressList;
+    public abstract List<@Nullable MsftNetIpAddress> ipAddressList();
 
     /**
      * A list of {@link MsftDnsClientServerAddress} associated with the index: {@link #interfaceIndex}
      */
     @JsonProperty("DNSServers")
     @Nullable
-    List<@Nullable MsftDnsClientServerAddress> dnsClientServerAddressList;
+    public abstract List<@Nullable MsftDnsClientServerAddress> dnsClientServerAddressList();
 
     /**
      * A list of {@link MsftNetConnectionProfile} associated with the index: {@link #interfaceIndex}
      */
     @JsonProperty("Profile")
     @Nullable
-    List<@Nullable MsftNetConnectionProfile> netConnectionProfileList;
+    public abstract List<@Nullable MsftNetConnectionProfile> netConnectionProfileList();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

@@ -38,7 +38,7 @@ class QueryUtility {
      * @throws AnnotationNotFoundException if the class to be inspected does not have the {@link WmiClass} annotation
      * @since 1.0.0
      */
-    static @NonNull <T> String getPropertiesFromWmiClass(@NonNull Class<T> tClass) {
+    static @NonNull <T> String getClassNameFromWmiClass(@NonNull Class<T> tClass) {
 
         Objects.requireNonNull(tClass, "tClass cannot be null");
 
@@ -51,31 +51,30 @@ class QueryUtility {
     }
 
     /**
-     * Retrieves all {@link JsonProperty} values declared on the fields of the specified class
+     * Retrieves all {@link JsonProperty} values declared on the methods of the specified class
      * and returns them as a comma-separated string.
      *
-     * <p>If a field does not declare a {@link JsonProperty} annotation,
-     * its actual field name is used instead.</p>
+     * <p>Skips methods not having the {@link JsonProperty} annotation</p>
      *
-     * <p>The method inspects only fields declared directly within the provided class;
-     * inherited fields are not included.</p>
+     * <p>The method inspects only methods declared directly within the provided class.
+     * Inherited class methods are not included.</p>
      *
-     * @param tClass the class whose fields should be inspected
+     * @param tClass the class whose methods should be inspected
      * @param <T>    the type of the class
      * @return a comma-separated string containing either the "Value" of each
-     * {@link JsonProperty} annotation or the field name if the annotation is absent, in alphabetical order
+     * {@link JsonProperty} annotation or the method name if the annotation is absent, in alphabetical order
      * @since 1.0.0
      */
     static @NonNull <T> String getPropertiesFromJsonProperty(@NonNull Class<T> tClass) {
 
         Objects.requireNonNull(tClass, "tClass cannot be null");
 
-        return Arrays.stream(tClass.getDeclaredFields())
-                .filter(field -> !field.isSynthetic()) // filter out synthetic fields since JaCoCo creates $jacocoData field during tests which fails the assertions. This behavior is not observed in scenarios where code coverage is not run
-                .map(field -> {
-                    JsonProperty property = field.getAnnotation(JsonProperty.class);
-                    return property != null ? property.value() : field.getName();
-                })
+        return Arrays.stream(tClass.getDeclaredMethods())
+                .filter(method -> !method.isSynthetic()) // filter out synthetic methods since JaCoCo creates $jacocoData method during tests which fails the assertions. This behavior is not observed in scenarios where code coverage is not run
+                .map(method -> method.getAnnotation(JsonProperty.class))
+                .filter(Objects::nonNull)
+                .map(JsonProperty::value)
+                .filter(Objects::nonNull)
                 .sorted()
                 .collect(Collectors.joining(", "));
     }

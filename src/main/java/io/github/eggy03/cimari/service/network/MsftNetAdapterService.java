@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdapter> {
 
-    private final TerminalService terminalService;
-    private final MsftNetAdapterMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull MsftNetAdapterMapper mapper;
 
     /**
      * Creates {@link MsftNetAdapterService} with default configuration.

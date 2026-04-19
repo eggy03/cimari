@@ -6,13 +6,17 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.entity.storage.Win32DiskDrive;
 import io.github.eggy03.cimari.entity.storage.Win32DiskPartition;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDisk;
 import io.github.eggy03.cimari.entity.storage.Win32LogicalDiskToPartition;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -41,7 +45,11 @@ import java.util.List;
  * @since 1.0.0
  */
 @NullMarked
-public class Win32DiskPartitionToLogicalDisk {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32DiskPartitionToLogicalDisk.class)
+@JsonDeserialize(as = ImmutableWin32DiskPartitionToLogicalDisk.class)
+public abstract class Win32DiskPartitionToLogicalDisk {
 
     /**
      * The unique identifier for the {@link Win32DiskPartition} instance.
@@ -51,7 +59,7 @@ public class Win32DiskPartitionToLogicalDisk {
      */
     @JsonProperty("PartitionID")
     @Nullable
-    String partitionId;
+    public abstract String partitionId();
 
     /**
      * The {@link Win32DiskPartition} entity associated with the {@link #partitionId}.
@@ -61,7 +69,7 @@ public class Win32DiskPartitionToLogicalDisk {
      */
     @JsonProperty("Partition")
     @Nullable
-    Win32DiskPartition diskPartition;
+    public abstract Win32DiskPartition diskPartition();
 
     /**
      * A list of {@link Win32LogicalDisk} entities associated with the {@link #partitionId}.
@@ -71,15 +79,14 @@ public class Win32DiskPartitionToLogicalDisk {
      */
     @JsonProperty("LogicalDisks")
     @Nullable
-    List<@Nullable Win32LogicalDisk> logicalDiskList;
+    public abstract List<@Nullable Win32LogicalDisk> logicalDiskList();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

@@ -6,9 +6,13 @@
 package io.github.eggy03.cimari.entity.compounded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a hardware identity (HWID) in a Windows system.
@@ -67,7 +71,11 @@ import tools.jackson.databind.ObjectMapper;
  * @since 1.0.0
  */
 @NullMarked
-public class HardwareId {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableHardwareId.class)
+@JsonDeserialize(as = ImmutableHardwareId.class)
+public abstract class HardwareId {
 
     /**
      * Collection of IDs for several components, grouped together by a de-limiter.
@@ -77,7 +85,7 @@ public class HardwareId {
      */
     @JsonProperty("HWIDRaw")
     @Nullable
-    String rawHWID;
+    public abstract String rawHWID();
 
     /**
      * SHA-256 hash of the {@link #rawHWID}
@@ -85,15 +93,14 @@ public class HardwareId {
      */
     @JsonProperty("HWIDHash")
     @Nullable
-    String hashHWID;
+    public abstract String hashHWID();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

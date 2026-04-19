@@ -6,11 +6,15 @@
 package io.github.eggy03.cimari.entity.storage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
 import io.github.eggy03.cimari.shell.query.Cimv2;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Immutable representation of a {@link Win32DiskPartition} association with {@link Win32LogicalDisk}.
@@ -42,35 +46,37 @@ import tools.jackson.databind.ObjectMapper;
  * <p>See {@link Win32DiskPartition} for related partitions on a physical disk.</p>
  * <p>See {@link Win32LogicalDisk} for partition info for partitions on a physical disk</p>
  *
- *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-logicaldisktopartition">Win32_LogicalDiskToPartition Documentation</a>
  * @since 1.0.0
  */
 @WmiClass(className = "Win32_LogicalDiskToPartition")
 @NullMarked
-public class Win32LogicalDiskToPartition {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32LogicalDiskToPartition.class)
+@JsonDeserialize(as = ImmutableWin32LogicalDiskToPartition.class)
+public abstract class Win32LogicalDiskToPartition {
 
     /**
      * Contains the {@code deviceId} field value of {@link Win32DiskPartition}
      */
     @JsonProperty("DiskPartitionDeviceID")
     @Nullable
-    String diskPartitionDeviceId;
+    public abstract String diskPartitionDeviceId();
 
     /**
      * Contains the {@code deviceId} field value of {@link Win32LogicalDisk}
      */
     @JsonProperty("LogicalDiskDeviceID")
     @Nullable
-    String logicalDiskDeviceId;
+    public abstract String logicalDiskDeviceId();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

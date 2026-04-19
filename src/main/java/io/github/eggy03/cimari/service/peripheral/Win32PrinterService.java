@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class Win32PrinterService implements CommonServiceInterface<Win32Printer> {
 
-    private final TerminalService terminalService;
-    private final Win32PrinterMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull Win32PrinterMapper mapper;
 
     /**
      * Creates {@link Win32PrinterService} with default configuration.

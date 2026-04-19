@@ -6,10 +6,14 @@
 package io.github.eggy03.cimari.entity.peripheral;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -24,35 +28,39 @@ import java.util.List;
  */
 @WmiClass(className = "Win32_Battery")
 @NullMarked
-public class Win32Battery {
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32Battery.class)
+@JsonDeserialize(as = ImmutableWin32Battery.class)
+public abstract class Win32Battery {
 
     /**
      * Identifier of the battery.
      */
     @JsonProperty("DeviceID")
     @Nullable
-    String deviceId;
+    public abstract String deviceId();
 
     /**
      * Short, one-line description of the battery object.
      */
     @JsonProperty("Caption")
     @Nullable
-    String caption;
+    public abstract String caption();
 
     /**
      * Description of the battery.
      */
     @JsonProperty("Description")
     @Nullable
-    String description;
+    public abstract String description();
 
     /**
      * Label by which the battery is known.
      */
     @JsonProperty("Name")
     @Nullable
-    String name;
+    public abstract String name();
 
     /**
      * Current operational status of the battery device.
@@ -80,7 +88,7 @@ public class Win32Battery {
      */
     @JsonProperty("Status")
     @Nullable
-    String status;
+    public abstract String status();
 
     /**
      * Array of specific power-related capabilities supported by the battery.
@@ -98,14 +106,15 @@ public class Win32Battery {
      */
     @JsonProperty("PowerManagementCapabilities")
     @Nullable
-    List<@Nullable Integer> powerManagementCapabilities;
+    public abstract List<@Nullable Integer> powerManagementCapabilities();
 
     /**
      * Indicates whether the battery can be power-managed.
      */
     @JsonProperty("PowerManagementSupported")
     @Nullable
-    Boolean powerManagementSupported;
+    public abstract Boolean powerManagementSupported();
+
     /**
      * Status of the battery.
      * <p>Possible values:</p>
@@ -125,7 +134,8 @@ public class Win32Battery {
      */
     @JsonProperty("BatteryStatus")
     @Nullable
-    Integer batteryStatus;
+    public abstract Integer batteryStatus();
+
     /**
      * Type of battery chemistry.
      * <p>Possible values:</p>
@@ -142,43 +152,42 @@ public class Win32Battery {
      */
     @JsonProperty("Chemistry")
     @Nullable
-    Integer chemistry;
+    public abstract Integer chemistry();
+
     /**
      * Design capacity of the battery in milliwatt-hours.
      */
     @JsonProperty("DesignCapacity")
     @Nullable
-    Integer designCapacity;
+    public abstract Integer designCapacity();
+
     /**
      * Design voltage of the battery in millivolts.
      */
     @JsonProperty("DesignVoltage")
     @Nullable
-    Integer designVoltage;
+    public abstract Integer designVoltage();
+
     /**
      * Estimated percentage of full charge remaining.
      */
     @JsonProperty("EstimatedChargeRemaining")
     @Nullable
-    Long estimatedChargeRemaining;
+    public abstract Long estimatedChargeRemaining();
+
     /**
      * Estimated remaining runtime of the battery in minutes.
      */
     @JsonProperty("EstimatedRunTime")
     @Nullable
-    Long estimatedRunTime;
-
-    public @Nullable Boolean isPowerManagementSupported() {
-        return powerManagementSupported;
-    }
+    public abstract Long estimatedRunTime();
 
     /**
      * Retrieves the entity in a JSON pretty-print formatted string
      *
      * @return the {@link String} value of the object in JSON pretty-print format
      */
-    @Override
-    public String toString() {
+    public String toJson() {
         return new ObjectMapper()
                 .writerWithDefaultPrettyPrinter()
                 .writeValueAsString(this);

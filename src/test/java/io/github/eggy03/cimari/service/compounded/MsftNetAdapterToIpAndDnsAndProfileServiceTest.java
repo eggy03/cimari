@@ -6,6 +6,7 @@
 package io.github.eggy03.cimari.service.compounded;
 
 
+import io.github.eggy03.cimari.entity.compounded.ImmutableMsftNetAdapterToIpAndDnsAndProfile;
 import io.github.eggy03.cimari.entity.compounded.MsftNetAdapterToIpAndDnsAndProfile;
 import io.github.eggy03.cimari.mapping.compounded.MsftNetAdapterToIpAndDnsAndProfileMapper;
 import io.github.eggy03.cimari.shell.script.ScriptEnum;
@@ -38,7 +39,7 @@ class MsftNetAdapterToIpAndDnsAndProfileServiceTest {
     private final TerminalResult emptyTerminalResult = new TerminalResult("", "");
 
     private final MsftNetAdapterToIpAndDnsAndProfile expectedObject
-            = MsftNetAdapterToIpAndDnsAndProfile.builder()
+            = new ImmutableMsftNetAdapterToIpAndDnsAndProfile.Builder()
             .interfaceIndex(1L)
             .build();
 

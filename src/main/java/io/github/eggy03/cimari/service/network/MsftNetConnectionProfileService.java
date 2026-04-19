@@ -34,8 +34,8 @@ import java.util.Objects;
  */
 public class MsftNetConnectionProfileService implements CommonServiceInterface<MsftNetConnectionProfile> {
 
-    private final TerminalService terminalService;
-    private final MsftNetConnectionProfileMapper mapper;
+    private final @NonNull TerminalService terminalService;
+    private final @NonNull MsftNetConnectionProfileMapper mapper;
 
     /**
      * Creates {@link MsftNetConnectionProfileService} with default configuration.
