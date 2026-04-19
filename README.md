@@ -1,5 +1,5 @@
 [![Project Stats](https://img.shields.io/badge/OpenHub-cimari-yellow?style=for-the-badge)](https://openhub.net/p/cimari)
-[![License](https://img.shields.io/github/license/eggy03/cimari?style=for-the-badge&color=white)](https://github.com/eggy03/cimari/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/eggy03/cimari?style=for-the-badge)](https://github.com/eggy03/cimari/blob/main/LICENSE)
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/cimari?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 ![Minimum JDK Version](https://img.shields.io/badge/Minimum%20JDK%20Version-8-blue?style=for-the-badge)
 
@@ -17,22 +17,26 @@
 
 # About
 
-Cimari is a fork of FerrumX-Windows 4.1.0, created to introduce fundamental changes to the entity classes, in
-an attempt to make them immutable.
+Cimari is a project derived from [ferrumx-windows](https://github.com/eggy03/ferrumx-windows), created to introduce
+architectural changes to the entity classes, most notable of which is, making them deeply immutable.
 
 FerrumX-Windows relies on [Lombok](https://projectlombok.org/) for a lot of boilerplate code generation for
-its entity classes. While Lombok supports basic immutability, it has no support for nested immutability and without
-that, entity classes cannot be guaranteed to be thread-safe.
+its entity classes. While Lombok supports basic immutability, it does not make
+Collections or Maps immutable, without which, entity classes can only be considered to be shallow immutable.
 
-The goal of this fork is to address the immutability issue by switching to [Immutables](https://immutables.github.io/),
-which supports immutability of nested objects and collections.
+Cimari addresses this issue by switching to [Immutables](https://immutables.github.io/),
+which supports deep immutability.
 
 In addition, Cimari removes the dependency on [jPowerShell](https://github.com/profesorfalken/jPowerShell) along with
 the service methods built around it.
+
+The list doesn't end here. Besides the mentioned changes, there are other internal refactors which attempt to make
+the project more readable and maintainable.
+
 The full list of changes can be found in [Migration Guide](/docs/MIGRATION.md) and [Changelog](/CHANGELOG.md).
 
-I will continue maintaining FerrumX-Windows separately for as long as I can. However, all new features may not be ported
-to it.
+I will continue maintaining FerrumX-Windows separately for as long as I can.
+However, all new features may not be backported.
 
 # Introduction
 
@@ -49,8 +53,7 @@ Both CIM and SMBIOS standards are defined by Distributed Management Task Force.
 Written entirely in Java, the wrapper's primary job is to query the PowerShell for these classes and deserialize
 provided [SMBIOS](https://www.dmtf.org/standards/smbios) output into typed entities.
 Each entity, to which the output is deserialized, represents a loose mapping of an equivalent `Win32 Provider` or an
-`MSFT`
-class.
+`MSFT`class.
 For example, the [Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor)
 provider class has an equivalent `Win32Processor.java` entity which is composed of only the read-only properties of the
 provider class.
@@ -93,7 +96,15 @@ See [WMF availability across Windows Systems](https://learn.microsoft.com/en-us/
 
 # CI Stats
 
-// TODO
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eggy03/cimari/.github%2Fworkflows%2Fbuild.yml)
+![Commits to main since latest release](https://img.shields.io/github/commits-since/eggy03/cimari/latest)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=coverage)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
 
 # Download
 
@@ -121,15 +132,15 @@ in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 
 # Documentation
 
-- [Javadocs]()
+- [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
 - [Developer Docs](/docs/DEVELOPER_DOCS.md)
 - [Migration Guide](/docs/MIGRATION.md)
-- [Examples]()
+- [Examples](//todo)
 
 # Usage
 
 > [!IMPORTANT]
-> More usage examples can be found [here]().
+> More usage examples can be found [here](//todo).
 
 ```java
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
