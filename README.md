@@ -121,7 +121,7 @@ in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 
 # Documentation
 
-- [Javadocs](//todo)
+- [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
 - [Developer Docs](/docs/DEVELOPER_DOCS.md)
 - [Migration Guide](/docs/MIGRATION.md)
 - [Examples](//todo)

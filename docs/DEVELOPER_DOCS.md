@@ -663,7 +663,7 @@ public class Win32ProcessorExample {
 
 # References
 
-- [Javadocs](// todo)
+- [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
 - [Examples](// todo)
 - [Microsoft Docs for Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor)
 - [Additional Helpful Docs from `powershell.one`](https://powershell.one/wmi/root/cimv2)
