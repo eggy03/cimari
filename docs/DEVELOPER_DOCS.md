@@ -1,12 +1,11 @@
-# TODO - Update to match cimari's syntax
-
 This documentation outlines the principal architecture of the library
 and provides an overview of how its internal components work together.
 
-_Last Updated: March 23, 2026_
+_Last Updated: April 19, 2026_
 
 > [!NOTE]
-> This documentation reflects the workings of v4.1.0 of the library. Older or newer versions may have altered structure,
+> This documentation reflects the workings of v1.0.0-alpha1 of the library. Older or newer versions may have altered
+> structure,
 > behavior, or implementation.
 > This documentation may be updated periodically to reflect the latest changes.
 
@@ -16,7 +15,7 @@ _Last Updated: March 23, 2026_
 src
 ├───main
 │   ├───java
-│   │   └───io.github.eggy.ferrumx.windows
+│   │   └───io.github.eggy.cimari
 │   │       ├───annotation
 │   │       ├───entity
 │   │       ├───exception
@@ -27,7 +26,7 @@ src
 │   └───resources
 └───test
     ├───java
-    │   └───unit
+    │   └───io.github.eggy.cimari
     │       ├───mapper
     │       ├───service
     │       ├───shell
@@ -135,13 +134,14 @@ While the class exposes a large number of properties, it may not be necessary to
 We begin by executing a PowerShell command to retrieve selected properties in JSON format:
 
 ```shell
-Get-CimInstance -ClassName Win32_Processor | Select-Object Name, NumberOfCores, Manufacturer | ConvertTo-Json
+Get-CimInstance -ClassName Win32_Processor | Select-Object DeviceID, Name, NumberOfCores, Manufacturer | ConvertTo-Json
 ```
 
 Executing this query produces output similar to:
 
 ```json
 {
+  "DeviceID": "CPU0",
   "Name": "AMD Ryzen 5 5600G with Radeon Graphics",
   "NumberOfCores": 6,
   "Manufacturer": "AuthenticAMD"
@@ -150,18 +150,18 @@ Executing this query produces output similar to:
 
 Since this query is executed every time a caller requests Win32_Processor information, we store it in an enum.
 
-Our enum will reside in the `io.github.eggy.ferrumx.windows.shell.query*` package.
+Our enum will reside in the `io.github.eggy.cimari.shell.query` package.
 
 We define an enum named `Cimv2`, derived from the namespace to which `Win32_Processor` belongs.
 
 ```java
+package io.github.eggy.cimari.shell.query;
 
-@SuppressWarnings("LombokGetterMayBeUsed")
 public enum Cimv2 {
 
     WIN32_PROCESSOR(
             "Get-CimInstance -ClassName Win32_Processor |" +
-                    " Select-Object Name, NumberOfCores, Manufacturer |" +
+                    " Select-Object DeviceID, Name, NumberOfCores, Manufacturer |" +
                     " ConvertTo-Json"
     );
 
@@ -182,57 +182,64 @@ This will allow us to fetch the entire query by just calling `Cimv2.WIN32_PROCES
 
 In the next section, we will refactor this enum to dynamically construct the properties and the class name required
 to build the query, at runtime, via reflection.
-We will also use `Lombok` to reduce boilerplate code.
 
 ### Designing the Entity Class
 
 Based on the fields we want, we will now design our entity class.
 
-All entity classes can be found in the `io.github.eggy.ferrumx.windows.entity.*` package.
+All entity classes can be found in the `io.github.eggy.cimari.entity.*` package.
 For processor-related mappings, a dedicated subpackage `entity.processor` is used.
 
-As of v4.1.0, this package includes:
+As of v1.0.0-alpha1, this package includes:
 
 - `Win32_Processor`
 - `Win32_CacheMemory`
 - `Win32_AssociatedProcessorMemory`
 
+Our entity class is going to be an abstract class and based on this class, Immutables will generate an immutable
+representation of this class which extends the abstract class.
+
 ```java
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
-import io.github.eggy03.ferrumx.windows.annotation.ShallowImmutable;
-import io.github.eggy03.ferrumx.windows.annotation.WmiClass;
-import lombok.Builder;
-import lombok.Value;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+package io.github.eggy03.cimari.entity.processor;
 
-@Value
-@Builder(toBuilder = true)
-@ShallowImmutable
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
+import io.github.eggy03.cimari.annotation.WmiClass;
+import org.immutables.value.Value;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+
 @WmiClass(className = "Win32_Processor")
-public class Win32Processor {
+@NullMarked
+@Value.Immutable
+@ImmutableEntityStyle
+@JsonSerialize(as = ImmutableWin32Processor.class)
+@JsonDeserialize(as = ImmutableWin32Processor.class)
+public abstract class Win32Processor {
 
-  @SerializedName("Name")
+  @JsonProperty("DeviceID")
   @Nullable
-  String name;
+  public abstract String deviceId();
 
-  @SerializedName("NumberOfCores")
+  @JsonProperty("Name")
   @Nullable
-  Integer numberOfCores;
+  public abstract String name();
 
-  @SerializedName("Manufacturer")
+  @JsonProperty("NumberOfCores")
   @Nullable
-  String manufacturer;
+  public abstract Integer numberOfCores();
 
-  @Override
-  @NotNull
-  public String toString() {
-    return new GsonBuilder()
-            .serializeNulls()
-            .setPrettyPrinting()
-            .create()
-            .toJson(this);
+  @JsonProperty("Manufacturer")
+  @Nullable
+  public abstract String manufacturer();
+
+  public String toJson() {
+    return new ObjectMapper()
+            .writerWithDefaultPrettyPrinter()
+            .writeValueAsString(this);
   }
 }
 ```
@@ -241,83 +248,75 @@ What we have here is an annotation heavy entity class that's designed based on t
 
 Let's talk about the annotations and their purpose:
 
-`@Value` is from Lombok, and it makes the class shallowly immutable.
-
-- Marks the class as shallowly immutable
-- Generates:
-  - private final fields
-  - all-arguments constructor
-  - getters
-
-This ensures that field references cannot be reassigned after construction.
-
-However, this does not guarantee deep immutability:
-
-- If a field is a collection (List, Map, etc.), the reference is immutable
-- But, the underlying collection may still be mutable depending on how it is constructed
-
-In our implementation, collection fields (if present) remain mutable unless explicitly wrapped.
-
-`@Builder` is from Lombok, and it provides a builder pattern for the entity.
-
-Although the mapping layer typically deserializes JSON directly into the entity (bypassing the builder),
-the builder is useful for:
-
-- creating partial objects in tests
-- creating modified objects in workflows from the source object
-
-Without a builder, creating an instance with nullable fields would require:
-
-```text
-new Win32Processor(null, null, null);
-```
-
-This approach quickly becomes impractical as the number of fields increases.
-
-Using the builder, the same can be expressed more clearly and flexibly:
-
-```text
-Win32Processor.builder().build();
-```
-
-Additionally, only the required fields can be set while leaving others unset:
-
-```text
-Win32Processor.builder()
-    .name("AMD Ryzen 5 5600G")
-    .build();
-```
-
-Note that `toBuilder()` creates a new instance of the builder class with the current values from the original object
-but does not recursively clone or deep copy mutable fields such as collections or other objects.
-
-The shallow copy means that if fields in the original object point to mutable objects, changes to these objects via
-the builder will reflect on the original instance.
-
-`@ShallowImmutable` is a custom annotation, and it lets the callers know that:
-
-- All fields are final and cannot be reassigned
-- Objects referenced by the fields may be mutable and can be modified externally
-- The class is not inherently thread-safe
-
 `@WmiClass` is a custom annotation, and it serves the following purposes:
 
 - It holds information about the actual WMI class name.
 - The annotation allows us to get the class name during dynamic construction of queries during runtime.
 
-`@SerializedName` is from GSON and it serves the following purposes:
+`@Value.Immutable`
 
-- It holds information about the actual WMI property name that the field corresponds to. Due to different naming
-  conventions, we need to explicitly tell GSON that a property with the given name must be mapped to the given field.
+- Instructs the Immutables annotation processor to generate immutable implementation of abstract value type.
+
+`@ImmutableEntityStyle`
+
+- A custom annotation that uses `@Value.Style` from Immutables to control how the implementations of the abstract
+  entity classes are generated.
+
+```java
+package io.github.eggy03.cimari.annotation;
+
+import org.immutables.value.Value;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ElementType.PACKAGE, ElementType.TYPE})
+@Retention(RetentionPolicy.CLASS) // Make it class retention for incremental compilation
+@Value.Style(
+        typeAbstract = {"*"}, // No prefix or suffix will be detected and trimmed
+        typeImmutable = "Immutable*", // generated immutable types will have Immutable as prefix
+        visibility = Value.Style.ImplementationVisibility.PUBLIC, // Generated class will be always public
+        builder = "new", // construct builder using 'new' instead of factory method (required for Jackson).
+        // Generated builders will have attributes annotated with @JsonProperty so deserialization will work properly.
+        defaults = @Value.Immutable(copy = true), // Enable copy methods
+        passAnnotations = WmiClass.class // this annotation is needed to build queries at runtime from @JsonProperty values
+)
+@SuppressWarnings("all") // only included in this example. actual implementation does not have this
+public @interface ImmutableEntityStyle {
+}
+```
+
+`@JsonSerialize(as = ImmutableWin32Processor.class)` and `@JsonDeserialize(as = ImmutableWin32Processor.class)`
+
+- These annotations, especially `@JsonDeserialize`, tells our mapping layer which generated implementation it should use
+  during JSON deserialization into entity classes. If you take a look at the interface,`CommonMappingInterface`
+  and it's implementations in `Win32ProcessorMapper`, both of which are found in `io.github.eggy03.cimari.mapper`, you
+  will
+  notice that the deserialization class type is of the abstract type, the one we wrote here, i.e., the `Win32Processor`.
+  However, without a concrete implementation, deserialization cannot occur. `@JsonDeserialize` internally tells Jackson
+  to deserialize JSON into an instance of `ImmutableWin32Processor.class` and then convert it to our abstract version
+  since,the latter extends from the abstract class.
+  You will get to know more about this during mapping layer discussions.
+
+`@JsonProperty` is from Jackson and it serves the following purposes:
+
+- It holds information about the actual WMI property name that the abstract methods correspond to. Due to different
+  naming conventions, we need to explicitly tell Jackson that a property with the given name must be mapped to the given
+  method.
 
 - The annotation allows us to get the property name during dynamic construction of queries during runtime.
 
-`@Nullable` and `@NotNull` are from JetBrains Annotations, and they're strictly used to tell users and static analysis
-tools about the nullity of the given fields. It is always safe to assume that all fields for a given entity may be
-null at some point or for different systems.
+`@Nullable` and `@NullMarked`
 
-We also have a custom `toString()` implementation that returns a pretty printed JSON formatted String value of the
-objects of the class.
+- These annotations from Jspecify, and they're strictly used to tell users and static analysis
+  tools about the nullity of the given abstract methods. It is always safe to assume that all the abstract methods which
+  are explicitly marked with `@Nullable`, for a given entity may be
+  null at some point or for different systems. On the other hand `@NullMarked` allows us to assume that unless something
+  is explicitly marked as `@Nullable`, we can safely assume that it will be non-null by contract.
+
+We also have a `toJson()` function that returns a pretty printed JSON representation of the abstract class.
 
 ### Dynamically Generating Queries
 
@@ -327,24 +326,36 @@ and the properties to be queried.
 Take a look at the following refactor:
 
 ```java
-import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
-import io.github.eggy03.ferrumx.windows.shell.query.QueryUtility;
+package io.github.eggy03.cimari.shell.query;
 
-@RequiredArgsConstructor
-@Getter
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.shell.query.QueryUtility;
+import org.jspecify.annotations.NonNull;
+
+import java.util.Objects;
+
 public enum Cimv2 {
 
   WIN32_PROCESSOR(generateQuery(Win32Processor.class));
 
-  @NonNull
-  private final String query;
+  private final @NonNull String query;
 
-  @NotNull
-  private static <T> String generateQuery(@NonNull Class<T> wmiClass) {
-    return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClassAnnotation(wmiClass) +
-            " | Select-Object -Property " + QueryUtility.getPropertiesFromSerializedNameAnnotation(wmiClass) +
+  Cimv2(@NonNull String query) {
+    this.query = Objects.requireNonNull(query, "query cannot be null");
+  }
+
+  private static <T> @NonNull String generateQuery(@NonNull Class<T> wmiClass) {
+
+    Objects.requireNonNull(wmiClass, "wmiClass cannot be null");
+
+    return "Get-CimInstance -ClassName " + QueryUtility.getClassNameFromWmiClass(wmiClass) +
+            " | Select-Object -Property " + QueryUtility.getPropertiesFromJsonProperty(wmiClass) +
             " | ConvertTo-Json";
 
+  }
+
+  public @NonNull String getQuery() {
+    return this.query;
   }
 }
 ```
@@ -352,40 +363,40 @@ public enum Cimv2 {
 We have introduced a Utility Class called `QueryUtility` which uses reflection to get the class name and properties
 from our `Win32Processor` class during runtime.
 
-`@WmiClass(className = "Win32_Processor")` and `@SerializedName("...")` provides all the data required to fetch the
+`@WmiClass(className = "Win32_Processor")` and `@JsonProperty("...")` provides all the data required to fetch the
 class name and the properties to be queried, respectively.
 
 We just need to pass `Win32Processor.class` as an argument and the utility will inspect the class.
-The utility resides in the `io.github.eggy.ferrumx.windows.shell.query*` package.
-
-We have also used Lombok to remove some constructor and getter boilerplate.
+The utility resides in the `io.github.eggy.cimari.shell.query*` package.
 
 ### Designing the Mapper
 
 The mappers are responsible for deserializing the JSON output from PowerShell into typed entities.
 
-All entity mappers reside in the `io.github.eggy.ferrumx.windows.mapping*` package.
+All entity mappers reside in the `io.github.eggy.cimari.mapping*` package.
 We have an interface called `CommonMappingInterface` with default methods which are usually enough to deserialize any
-JSON into typed entities. We achieve this via Google GSON.
+JSON into typed entities, using Jackson
 
 The following pseudocode shows the interface with the default methods.
-For full definition and implementation, check out `io.github.eggy.ferrumx.windows.mapping.CommonMappingInterface`.
+For full definition and implementation, check out `io.github.eggy.cimari.mapping.CommonMappingInterface`.
 
 ```java
-import com.google.gson.Gson;
+package io.github.eggy03.cimari.mapping;
+
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Optional;
 
 // simplified representation
+// actual implementation may vary
 public interface CommonMappingInterface<S> {
 
-  @NotNull
-  Gson GSON = new Gson();
+  default @NonNull ObjectMapper configureObjectMapper() {
+    // allow for plugging in a custom configuration of Jackson's ObjectMapper or rely on the default implementation
+  }
 
-  @NotNull
-  @Unmodifiable
-  default List<S> mapToList(@NonNull String json, @NonNull Class<S> objectClass) {
+  default @NonNull List<S> mapToList(@NonNull String json, @NonNull Class<S> objectClass) {
         /*
          if JSON starts with "[" it means it's an array, and therefore we will serialize it into a List of type S
          However, there might be cases wherein, you expect an array of objects but get a single object instead.
@@ -400,8 +411,7 @@ public interface CommonMappingInterface<S> {
         */
   }
 
-  @NotNull
-  default Optional<S> mapToObject(@NonNull String json, @NonNull Class<S> objectClass) {
+  default @NonNull Optional<S> mapToObject(@NonNull String json, @NonNull Class<S> objectClass) {
     // You can use this method if you are 100% sure that the JSON will always serialize into a single object
     // One such example is Win32_ComputerSystem. It's documentation states that it always returns a single object.
   }
@@ -414,8 +424,10 @@ Till now, the mappers for all the entities have used the default implementation 
 We will define our mapper by creating an empty class that implements the interface.
 
 ```java
-import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
-import io.github.eggy03.ferrumx.windows.mapping.CommonMappingInterface;
+package io.github.eggy03.cimari.mapping.processor;
+
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.mapping.CommonMappingInterface;
 
 public class Win32ProcessorMapper implements CommonMappingInterface<Win32Processor> {
   // usually not needed, but you can write your custom implementations here
@@ -434,7 +446,7 @@ Service classes are responsible for orchestrating the full workflow of:
 - retrieving output
 - mapping results into entities
 
-All service classes reside in the `io.github.eggy.ferrumx.windows.service*` package.
+All service classes reside in the `io.github.eggy.cimari.service*` package.
 
 At a minimum, a service method should:
 
@@ -446,7 +458,7 @@ At a minimum, a service method should:
 
 Service classes may also:
 
-1) Manage the lifecycle of PowerShell sessions when not provided by the caller
+1) Manage the lifecycle of PowerShell sessions
 2) Handle failures in session creation or execution
 3) Handle malformed, empty, or unexpected outputs (usually handled by the mappers)
 4) Clearly document concurrency characteristics (e.g., whether a session is reusable across threads)
@@ -454,30 +466,22 @@ Service classes may also:
 Let's take a look at the two interfaces that all the service classes implement.
 
 ```java
-import com.profesorfalken.jpowershell.PowerShell;
+package io.github.eggy03.cimari.service;
 
 import java.util.List;
 
 public interface CommonServiceInterface<S> {
-
-  List<S> get();
-
-  List<S> get(PowerShell powerShell);
 
   List<S> get(long timeout);
 }
 ```
 
 ```java
-import com.profesorfalken.jpowershell.PowerShell;
+package io.github.eggy03.cimari.service;
 
 import java.util.Optional;
 
 public interface OptionalCommonServiceInterface<S> {
-
-  Optional<S> get();
-
-  Optional<S> get(PowerShell powerShell);
 
   Optional<S> get(long timeout);
 }
@@ -489,67 +493,130 @@ implement these interfaces must override these methods to have their own definit
 Let's create a `service.processor` subpackage and provide a concrete definition for `Win32Processor`.
 
 ```java
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
-import io.github.eggy03.ferrumx.windows.annotation.IsolatedPowerShell;
-import io.github.eggy03.ferrumx.windows.annotation.UsesJPowerShell;
-import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
-import io.github.eggy03.ferrumx.windows.mapping.processor.Win32ProcessorMapper;
-import io.github.eggy03.ferrumx.windows.shell.query.Cimv2;
-import io.github.eggy03.ferrumx.windows.utility.TerminalUtility;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
+package io.github.eggy03.cimari.service.processor;
 
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.mapping.processor.Win32ProcessorMapper;
+import io.github.eggy03.cimari.service.CommonServiceInterface;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.terminal.TerminalResult;
+import io.github.eggy03.cimari.terminal.TerminalService;
+import org.jspecify.annotations.NonNull;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
 
-  @Override
-  @UsesJPowerShell
-  public @NotNull @Unmodifiable List<Win32Processor> get() {
-    PowerShellResponse response = PowerShell.executeSingleCommand(Cimv2.WIN32_PROCESSOR.getQuery());
-    return new Win32ProcessorMapper().mapToList(response.getCommandOutput(), Win32Processor.class);
+  private final @NonNull TerminalService terminalService;
+  private final @NonNull Win32ProcessorMapper mapper;
+
+
+  public Win32ProcessorService() {
+    this(new TerminalService(), new Win32ProcessorMapper());
   }
 
-  @Override
-  @UsesJPowerShell
-  public @NotNull @Unmodifiable List<Win32Processor> get(@NonNull PowerShell powerShell) {
-    PowerShellResponse response = powerShell.executeCommand(Cimv2.WIN32_PROCESSOR.getQuery());
-    return new Win32ProcessorMapper().mapToList(response.getCommandOutput(), Win32Processor.class);
+  Win32ProcessorService(TerminalService terminalService, Win32ProcessorMapper mapper) {
+    this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
+    this.mapper = Objects.requireNonNull(mapper, "mapper cannot be null");
   }
 
+
   @Override
-  @IsolatedPowerShell
-  public @NotNull @Unmodifiable List<Win32Processor> get(long timeout) {
-    String command = Cimv2.WIN32_PROCESSOR.getQuery();
-    String response = TerminalUtility.executeCommand(command, timeout);
-    return new Win32ProcessorMapper().mapToList(response, Win32Processor.class);
+  public @NonNull List<Win32Processor> get(long timeout) {
+    TerminalResult result = terminalService.executeQuery(Cimv2.WIN32_PROCESSOR, timeout);
+    return mapper.mapToList(result.getResult(), Win32Processor.class);
   }
 }
+
 ```
-
-`get()`
-
-- Uses an auto-managed PowerShell session
-- Session is scoped within the current method call and cannot be re-used
-- Annotated with `@UsesJPowerShell`, indicating that it relies on the `jPowerShell` library
-  and that its current implementation is not suitable for concurrent usage
-
-`get(PowerShell)`
-
-- Uses a caller-provided session
-- Session scope is controlled by the caller, which gives them full lifecycle control, allowing re-use
-- Annotated with `@UsesJPowerShell`, indicating that it relies on the `jPowerShell` library
-  and that its current implementation is not suitable for concurrent usage
 
 `get(long timeout)`
 
-- Uses an alternative auto-managed PowerShell session via `TerminalUtility` and does not require `jPowerShell`
-- Session is scoped within the current method call and cannot be re-used
-- Annotated with @IsolatedPowerShell, indicating that it does not rely on the `jPowerShell` library
-  and that its current implementation is suitable for concurrent usage
+- Creates a scope-limited PowerShell session via `TerminalService`
+- Session is scoped within the current method call and cannot be re-used once the script or command passed to it has
+  been executed
+- Deserializes the terminal output to a list of Win32Processor instances
 
-`TerminalUtility` is found in the `io.github.eggy03.ferrumx.windows.utility` package
+`TerminalService` and `TerminalResult` are found in the `io.github.eggy03.cimari.terminal` package
+
+### Terminal Service
+
+The `io.github.eggy03.cimari.terminal` package consists of two classes:
+
+- `TerminalService`
+- `TerminalResult`
+
+TerminalResult wraps PowerShell's stdout and stderr and provides convenient getters to access them.
+
+```java
+package io.github.eggy03.cimari.terminal;
+
+import org.jspecify.annotations.NonNull;
+
+import java.util.Objects;
+
+@SuppressWarnings("all") // actual implementation does not include this
+public class TerminalResult {
+
+  private final @NonNull String result;
+  private final @NonNull String error;
+
+  public TerminalResult(@NonNull String result, @NonNull String error) {
+    this.result = Objects.requireNonNull(result, "result cannot be null");
+    this.error = Objects.requireNonNull(error, "error cannot be null");
+  }
+
+  public @NonNull String getResult() {
+    return result;
+  }
+
+  public @NonNull String getError() {
+    return error;
+  }
+
+}
+```
+
+TerminalService handles PowerShell sessions and query executions
+
+```java
+package io.github.eggy03.cimari.terminal;
+
+import io.github.eggy03.cimari.exception.TerminalIOException;
+import io.github.eggy03.cimari.shell.query.Cimv2;
+import io.github.eggy03.cimari.shell.query.StandardCimv2;
+import io.github.eggy03.cimari.shell.script.ScriptEnum;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.ExecuteWatchdog;
+import org.apache.commons.exec.PumpStreamHandler;
+import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Objects;
+
+// simplified implementation
+// actual implementation may vary
+public class TerminalService {
+
+  public @NonNull TerminalResult executeQuery(@NonNull Cimv2 queryEnum, long timeoutSeconds) {
+    Objects.requireNonNull(queryEnum, "queryEnum cannot be null");
+    return execute(queryEnum.getQuery(), timeoutSeconds);
+  }
+
+  @NonNull TerminalResult execute(@NonNull String command, long timeout) {
+    // code for launching, managing PowerShell sessions, executing commands and returning the wrapped result
+  }
+}
+
+```
 
 ### Writing Tests
 
@@ -564,8 +631,10 @@ The following example retrieves processor information using an isolated PowerShe
 seconds.
 
 ```java
-import io.github.eggy03.ferrumx.windows.entity.processor.Win32Processor;
-import io.github.eggy03.ferrumx.windows.service.processor.Win32ProcessorService;
+import io.github.eggy03.cimari.entity.processor.ImmutableWin32Processor;
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.service.processor.Win32ProcessorService;
 
 import java.util.List;
 
@@ -574,14 +643,27 @@ public class Win32ProcessorExample {
 
   public static void main(String[] args) {
     List<Win32Processor> cpuList = new Win32ProcessorService().get(15);
-    cpuList.forEach(System.out::println);
+    cpuList.forEach(cpu -> System.out.println(cpu.toJson()));
+
+    // You can access individual fields like this
+    Win32Processor cpuFirst = cpuList.getFirst(); // java 21+
+    cpuFirst.addressWidth();
+    cpuFirst.processorId();
+
+    // If you want to create a copy of your received Win32Processor instance and then replace with your own data
+    // you can do so via
+
+    ImmutableWin32Processor immutableCustomCpu = ImmutableWin32Processor
+            .copyOf(cpuFirst) // create a copy first
+            .withCaption("NEW VALUE") // then make edits
+            .withDeviceId("NEW VALUE TWO");
   }
 }
 ```
 
 # References
 
-- [Javadocs](https://eggy03.github.io/ferrumx-windows-documentation/)
-- [Examples](https://github.com/eggy03/ferrumx-windows-examples)
+- [Javadocs](// todo)
+- [Examples](// todo)
 - [Microsoft Docs for Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor)
 - [Additional Helpful Docs from `powershell.one`](https://powershell.one/wmi/root/cimv2)
