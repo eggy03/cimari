@@ -1,5 +1,5 @@
 [![Project Stats](https://img.shields.io/badge/OpenHub-cimari-yellow?style=for-the-badge)](https://openhub.net/p/cimari)
-[![License](https://img.shields.io/github/license/eggy03/cimari?style=for-the-badge&color=white)](https://github.com/eggy03/cimari/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/eggy03/cimari?style=for-the-badge)](https://github.com/eggy03/cimari/blob/main/LICENSE)
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/cimari?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 ![Minimum JDK Version](https://img.shields.io/badge/Minimum%20JDK%20Version-8-blue?style=for-the-badge)
 
@@ -96,7 +96,15 @@ See [WMF availability across Windows Systems](https://learn.microsoft.com/en-us/
 
 # CI Stats
 
-// TODO
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eggy03/cimari/.github%2Fworkflows%2Fbuild.yml)
+![Commits to main since latest release](https://img.shields.io/github/commits-since/eggy03/cimari/latest)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=coverage)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
 
 # Download
 
