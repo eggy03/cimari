@@ -18,9 +18,9 @@ Before contributing, please make sure you have checked out the following:
 
 - [Project Readme](/README.md)
 - [Code of Conduct](/CODE_OF_CONDUCT.md)
-- [Javadocs]()
+- [Javadocs](//todo)
 - [Other Docs](/docs)
-- [Examples]()
+- [Examples](//todo)
 - [Existing Issues](https://github.com/eggy03/cimari/issues)
 
 ## Types Of Contribution
@@ -47,7 +47,7 @@ using the `suggestions` template.
 
 ### Contributing to the Examples
 
-The [cimari-examples repository]()
+The [cimari-examples repository](//todo)
 could always use more examples and or cleaner, easier versions of examples than what is already there. You can either
 create a PR with your additions/changes
 or suggest changes by raising an issue either here or in the example repository.
