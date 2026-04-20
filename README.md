@@ -13,6 +13,7 @@
 - [Download](#download)
 - [Documentation](#documentation)
 - [Usage](#usage)
+- [Projects Using Cimari](#projects-using-cimari)
 - [License](#license)
 
 # About
@@ -168,6 +169,14 @@ public class ProcessorExample {
     }
 }
 ```
+
+# Projects Using Cimari
+
+1) [Nautilus](https://github.com/eggy03/Nautilus) - A cross-platform Swing based GUI application for displaying computer
+   information
+
+If you want to add your project to this list, simply create an [issue](https://github.com/eggy03/cimari/issues)
+with the showcase template and provide the required information.
 
 # License
 
