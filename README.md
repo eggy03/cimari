@@ -3,6 +3,11 @@
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/cimari?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 ![Minimum JDK Version](https://img.shields.io/badge/Minimum%20JDK%20Version-8-blue?style=for-the-badge)
 
+> [!NOTE]  
+> The API is currently in rapid development stage.
+> While the core functionalities have been tested and is considered stable,
+> the public API contract may evolve continuously, in form of breaking changes, until a stable API is achieved.
+
 # Table Of Contents
 
 - [About](#about)
@@ -13,6 +18,7 @@
 - [Download](#download)
 - [Documentation](#documentation)
 - [Usage](#usage)
+- [Projects Using Cimari](#projects-using-cimari)
 - [License](#license)
 
 # About
@@ -135,24 +141,32 @@ in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 - [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
 - [Developer Docs](/docs/DEVELOPER_DOCS.md)
 - [Migration Guide](/docs/MIGRATION.md)
-- [Examples](//todo)
+- [Examples](/docs/EXAMPLES.md)
 
 # Usage
 
 > [!IMPORTANT]
-> More usage examples can be found [here](//todo).
+> More usage examples can be found [here](/docs/EXAMPLES.md).
 
 ```java
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.service.processor.Win32ProcessorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class ProcessorExample {
+
+    Logger log = LoggerFactory.getLogger(ProcessorExample.class);
 
     static void main(String[] args) {
 
         List<Win32Processor> processorList = new Win32ProcessorService().get(15L); // time after which the session will auto close
+        processorList.forEach(cpu -> log.info(cpu.toJson())); // JSON pretty print each cpu instance
 
         // individual fields are accessible via getter methods
-        Win32Processor processor = processorList.getFirst();
+        Win32Processor processor = processorList.getFirst(); // Java 21+ equivalent of (get(0))
 
         log.info("Processor Name: {}", processor.name());
         log.info("Processor Manufacturer: {}", processor.manufacturer());
@@ -160,6 +174,14 @@ public class ProcessorExample {
     }
 }
 ```
+
+# Projects Using Cimari
+
+1) [Nautilus](https://github.com/eggy03/Nautilus) - A cross-platform Swing based GUI application for displaying computer
+   information
+
+If you want to add your project to this list, simply create an [issue](https://github.com/eggy03/cimari/issues)
+with the showcase template and provide the required information.
 
 # License
 

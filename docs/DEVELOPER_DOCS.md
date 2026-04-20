@@ -653,7 +653,7 @@ public class Win32ProcessorExample {
     // If you want to create a copy of your received Win32Processor instance and then replace with your own data
     // you can do so via
 
-    ImmutableWin32Processor immutableCustomCpu = ImmutableWin32Processor
+    Win32Processor immutableCustomCpu = ImmutableWin32Processor
             .copyOf(cpuFirst) // create a copy first
             .withCaption("NEW VALUE") // then make edits
             .withDeviceId("NEW VALUE TWO");
@@ -664,6 +664,6 @@ public class Win32ProcessorExample {
 # References
 
 - [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
-- [Examples](// todo)
+- [Examples](/docs/EXAMPLES.md)
 - [Microsoft Docs for Win32_Processor](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor)
 - [Additional Helpful Docs from `powershell.one`](https://powershell.one/wmi/root/cimv2)
