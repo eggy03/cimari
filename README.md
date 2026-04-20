@@ -97,7 +97,7 @@ See [WMF availability across Windows Systems](https://learn.microsoft.com/en-us/
 # CI Stats
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eggy03/cimari/.github%2Fworkflows%2Fbuild.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eggy03/cimari/.github%2Fworkflows%2Fbuild-and-test.yml)
 ![Commits to main since latest release](https://img.shields.io/github/commits-since/eggy03/cimari/latest)
 
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=eggy03_cimari&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=eggy03_cimari)
