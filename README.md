@@ -3,6 +3,11 @@
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.eggy03/cimari?style=for-the-badge&color=pink)](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 ![Minimum JDK Version](https://img.shields.io/badge/Minimum%20JDK%20Version-8-blue?style=for-the-badge)
 
+> [!NOTE]  
+> The API is currently in rapid development stage.
+> While the core functionalities have been tested and is considered stable,
+> the public API contract may evolve continuously, in form of breaking changes, until a stable API is achieved.
+
 # Table Of Contents
 
 - [About](#about)
