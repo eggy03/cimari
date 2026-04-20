@@ -1,4 +1,4 @@
-name: CI with Sonar Analysis
+name: Build and Test
 
 on:
   push:
@@ -6,24 +6,36 @@ on:
   pull_request:
     types: [ opened, synchronize, reopened ]
 
+env:
+  ACTIONS_CHECKOUT_VERSION: v6
+  ACTIONS_SETUP_JAVA_VERSION: v5
+  CACHE_VERSION: v5
+  UPLOAD_ARTIFACT_VERSION: v7
+  DOWNLOAD_ARTIFACT_VERSION: v8
+
+  JDK_WINDOWS: 25
+  JDK_SONAR: 17
+
+  SONAR_PLUGIN_VERSION: 5.5.0.6356
+
 jobs:
   windows-tests:
     name: Build and Test (Windows)
     runs-on: windows-latest
     permissions:
-      contents: write
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@${{ env.ACTIONS_CHECKOUT_VERSION }}
 
-      - name: Set up JDK 25
-        uses: actions/setup-java@v4
+      - name: Set up JDK
+        uses: actions/setup-java@${{ env.ACTIONS_SETUP_JAVA_VERSION }}
         with:
-          java-version: 25
+          java-version: ${{ env.JDK_WINDOWS }}
           distribution: temurin
 
       - name: Cache Maven packages
-        uses: actions/cache@v4
+        uses: actions/cache@${{ env.CACHE_VERSION }}
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -33,7 +45,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Upload test & coverage reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@${{ env.UPLOAD_ARTIFACT_VERSION }}
         with:
           name: test-artifacts
           path: |
@@ -45,27 +57,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: windows-tests
     permissions:
-      contents: write
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@${{ env.ACTIONS_CHECKOUT_VERSION }}
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up JDK
+        uses: actions/setup-java@${{ env.ACTIONS_SETUP_JAVA_VERSION }}
         with:
-          java-version: 17
+          java-version: ${{ env.JDK_SONAR }}
           distribution: temurin
 
       - name: Download test artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@${{ env.DOWNLOAD_ARTIFACT_VERSION }}
         with:
           name: test-artifacts
           path: target
 
       - name: Cache SonarQube packages
-        uses: actions/cache@v4
+        uses: actions/cache@${{ env.CACHE_VERSION }}
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -75,4 +87,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run:
-          mvn -B verify -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=eggy03_cimari -Dsonar.coverage.exclusions=**/annotation/**,**/entity/**,**/exception/**,**/shell**
+          mvn -B verify -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:${{ env.SONAR_PLUGIN_VERSION }}:sonar -Dsonar.projectKey=eggy03_cimari -Dsonar.coverage.exclusions=**/annotation/**,**/entity/**,**/exception/**,**/shell**
