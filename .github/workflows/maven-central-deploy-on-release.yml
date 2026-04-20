@@ -1,4 +1,4 @@
-name: Maven Library Publish
+name: Deploy To Maven Central On Release
 permissions:
   contents: read
 
@@ -7,21 +7,26 @@ on:
     types: [created]
   workflow_dispatch:  
 
+env:
+  ACTIONS_CHECKOUT_VERSION: v6
+  ACTIONS_SETUP_JAVA_VERSION: v5
+
+  JDK_VERSION: 25
+
 jobs:
   deploy:
 
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@${{ env.ACTIONS_CHECKOUT_VERSION }}
 
-      # Set up JDK 21
-      - name: Set up Java 21
-        uses: actions/setup-java@v3
+      - name: Set up JDK
+        uses: actions/setup-java@${{ env.ACTIONS_SETUP_JAVA_VERSION }}
         with:
           distribution: temurin
-          java-version: 21
+          java-version: ${{ env.JDK_VERSION }}
 
       # Configure Maven settings with OSSRH credentials
       - name: Configure Maven settings
@@ -42,7 +47,6 @@ jobs:
           </settings>
           EOF
 
-      # Deploy to OSSRH staging with Simplify4U signing
       - name: Deploy to OSSRH staging
         env:
           SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
