@@ -135,24 +135,32 @@ in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 - [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
 - [Developer Docs](/docs/DEVELOPER_DOCS.md)
 - [Migration Guide](/docs/MIGRATION.md)
-- [Examples](//todo)
+- [Examples](/docs/EXAMPLES.md)
 
 # Usage
 
 > [!IMPORTANT]
-> More usage examples can be found [here](//todo).
+> More usage examples can be found [here](/docs/EXAMPLES.md).
 
 ```java
 import io.github.eggy03.cimari.entity.processor.Win32Processor;
+import io.github.eggy03.cimari.service.processor.Win32ProcessorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class ProcessorExample {
+
+    Logger log = LoggerFactory.getLogger(ProcessorExample.class);
 
     static void main(String[] args) {
 
         List<Win32Processor> processorList = new Win32ProcessorService().get(15L); // time after which the session will auto close
+        processorList.forEach(cpu -> log.info(cpu.toJson())); // JSON pretty print each cpu instance
 
         // individual fields are accessible via getter methods
-        Win32Processor processor = processorList.getFirst();
+        Win32Processor processor = processorList.getFirst(); // Java 21+ equivalent of (get(0))
 
         log.info("Processor Name: {}", processor.name());
         log.info("Processor Manufacturer: {}", processor.manufacturer());

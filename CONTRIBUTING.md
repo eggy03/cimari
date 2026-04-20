@@ -20,7 +20,7 @@ Before contributing, please make sure you have checked out the following:
 - [Code of Conduct](/CODE_OF_CONDUCT.md)
 - [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
 - [Other Docs](/docs)
-- [Examples](//todo)
+- [Examples](/docs/EXAMPLES.md)
 - [Existing Issues](https://github.com/eggy03/cimari/issues)
 
 ## Types Of Contribution
@@ -47,7 +47,7 @@ using the `suggestions` template.
 
 ### Contributing to the Examples
 
-The [cimari-examples repository](//todo)
+The [examples documentation](/docs/EXAMPLES.md)
 could always use more examples and or cleaner, easier versions of examples than what is already there. You can either
 create a PR with your additions/changes
 or suggest changes by raising an issue either here or in the example repository.
