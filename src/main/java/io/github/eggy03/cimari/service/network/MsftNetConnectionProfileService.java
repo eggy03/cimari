@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<MsftNetConnectionProfile> profiles = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class MsftNetConnectionProfileService implements CommonServiceInterface<MsftNetConnectionProfile> {
 
@@ -40,7 +40,7 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
     /**
      * Creates {@link MsftNetConnectionProfileService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public MsftNetConnectionProfileService() {
         this(new TerminalService(), new MsftNetConnectionProfileMapper());
@@ -51,7 +51,7 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MsftNetConnectionProfileService(TerminalService terminalService, MsftNetConnectionProfileMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class MsftNetConnectionProfileService implements CommonServiceInterface<M
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link MsftNetConnectionProfile} objects representing the connection profiles.
      * Returns a {@link Collections#emptyList()} if no profiles are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<MsftNetConnectionProfile> get(long timeout) {

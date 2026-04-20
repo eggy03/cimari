@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32DiskDrive> drives = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDrive> {
 
@@ -40,7 +40,7 @@ public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDr
     /**
      * Creates {@link Win32DiskDriveService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32DiskDriveService() {
         this(new TerminalService(), new Win32DiskDriveMapper());
@@ -51,7 +51,7 @@ public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDr
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32DiskDriveService(TerminalService terminalService, Win32DiskDriveMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32DiskDriveService implements CommonServiceInterface<Win32DiskDr
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32DiskDrive} objects representing the disk drives.
      * Returns a {@link Collections#emptyList()} if no disk drives are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32DiskDrive> get(long timeout) {

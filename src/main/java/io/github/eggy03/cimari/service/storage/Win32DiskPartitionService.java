@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32DiskPartition> partitions = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32DiskPartitionService implements CommonServiceInterface<Win32DiskPartition> {
 
@@ -40,7 +40,7 @@ public class Win32DiskPartitionService implements CommonServiceInterface<Win32Di
     /**
      * Creates {@link Win32DiskPartitionService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32DiskPartitionService() {
         this(new TerminalService(), new Win32DiskPartitionMapper());
@@ -51,7 +51,7 @@ public class Win32DiskPartitionService implements CommonServiceInterface<Win32Di
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32DiskPartitionService(TerminalService terminalService, Win32DiskPartitionMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -68,7 +68,7 @@ public class Win32DiskPartitionService implements CommonServiceInterface<Win32Di
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32DiskPartition} objects representing the disk partitions.
      * Returns a {@link Collections#emptyList()} if no partitions are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32DiskPartition> get(long timeout) {

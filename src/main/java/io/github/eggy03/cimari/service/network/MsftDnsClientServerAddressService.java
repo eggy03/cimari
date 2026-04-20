@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<MsftDnsClientServerAddress> dns = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class MsftDnsClientServerAddressService implements CommonServiceInterface<MsftDnsClientServerAddress> {
 
@@ -40,7 +40,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
     /**
      * Creates {@link MsftDnsClientServerAddressService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public MsftDnsClientServerAddressService() {
         this(new TerminalService(), new MsftDnsClientServerAddressMapper());
@@ -51,7 +51,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MsftDnsClientServerAddressService(TerminalService terminalService, MsftDnsClientServerAddressMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class MsftDnsClientServerAddressService implements CommonServiceInterface
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link MsftDnsClientServerAddress} objects representing the DNS configs.
      * Returns a {@link Collections#emptyList()} if no configs are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<MsftDnsClientServerAddress> get(long timeout) {

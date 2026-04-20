@@ -8,7 +8,7 @@ package io.github.eggy03.cimari.exception;
 /**
  * Indicates that a given annotation is not found during runtime.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class AnnotationNotFoundException extends RuntimeException {
 

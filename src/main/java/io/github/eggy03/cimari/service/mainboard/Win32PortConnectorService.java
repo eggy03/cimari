@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32PortConnector> ports = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32PortConnectorService implements CommonServiceInterface<Win32PortConnector> {
 
@@ -40,7 +40,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
     /**
      * Creates {@link Win32PortConnectorService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32PortConnectorService() {
         this(new TerminalService(), new Win32PortConnectorMapper());
@@ -51,7 +51,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32PortConnectorService(TerminalService terminalService, Win32PortConnectorMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32PortConnectorService implements CommonServiceInterface<Win32Po
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32PortConnector} objects representing the system's mainboard ports.
      * Returns a {@link Collections#emptyList()} if no ports are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32PortConnector> get(long timeout) {

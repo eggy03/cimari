@@ -36,7 +36,7 @@ import java.util.Objects;
  * @see Win32AssociatedProcessorMemoryService
  * @see Win32ProcessorService
  * @see Win32CacheMemoryService
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32ProcessorToCacheMemoryService implements CommonServiceInterface<Win32ProcessorToCacheMemory> {
 
@@ -46,7 +46,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
     /**
      * Creates {@link Win32ProcessorToCacheMemoryService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32ProcessorToCacheMemoryService() {
         this(new TerminalService(), new Win32ProcessorToCacheMemoryMapper());
@@ -57,7 +57,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32ProcessorToCacheMemoryService(TerminalService terminalService, Win32ProcessorToCacheMemoryMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -75,7 +75,7 @@ public class Win32ProcessorToCacheMemoryService implements CommonServiceInterfac
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32ProcessorToCacheMemory} objects
      * Returns a {@link Collections#emptyList()} if no processors and related cache information are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32ProcessorToCacheMemory> get(long timeout) {

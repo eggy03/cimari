@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32SoundDevice> devices = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32SoundDeviceService implements CommonServiceInterface<Win32SoundDevice> {
 
@@ -40,7 +40,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
     /**
      * Creates {@link Win32SoundDeviceService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32SoundDeviceService() {
         this(new TerminalService(), new Win32SoundDeviceMapper());
@@ -51,7 +51,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32SoundDeviceService(TerminalService terminalService, Win32SoundDeviceMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32SoundDeviceService implements CommonServiceInterface<Win32Soun
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32SoundDevice} objects representing the system's sound devices.
      * If no sound devices are present, returns a {@link Collections#emptyList()}.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32SoundDevice> get(long timeout) {

@@ -39,7 +39,7 @@ import java.util.Objects;
  * @see MsftDnsClientServerAddressService
  * @see MsftNetConnectionProfileService
  * @see Win32NetworkAdapterToConfigurationService
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceInterface<MsftNetAdapterToIpAndDnsAndProfile> {
 
@@ -49,7 +49,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
     /**
      * Creates {@link MsftNetAdapterToIpAndDnsAndProfileService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public MsftNetAdapterToIpAndDnsAndProfileService() {
         this(new TerminalService(), new MsftNetAdapterToIpAndDnsAndProfileMapper());
@@ -60,7 +60,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MsftNetAdapterToIpAndDnsAndProfileService(TerminalService terminalService, MsftNetAdapterToIpAndDnsAndProfileMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -78,7 +78,7 @@ public class MsftNetAdapterToIpAndDnsAndProfileService implements CommonServiceI
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link MsftNetAdapterToIpAndDnsAndProfile} objects.
      * Returns a {@link Collections#emptyList()} if no data is found.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<MsftNetAdapterToIpAndDnsAndProfile> get(long timeout) {

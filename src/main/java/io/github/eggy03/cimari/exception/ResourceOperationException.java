@@ -8,7 +8,7 @@ package io.github.eggy03.cimari.exception;
 /**
  * Usually thrown to indicate that necessary I/O operations on a resource has failed
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 
 public class ResourceOperationException extends RuntimeException {

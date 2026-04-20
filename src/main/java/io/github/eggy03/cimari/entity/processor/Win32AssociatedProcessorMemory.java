@@ -47,7 +47,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>See {@link Win32CacheMemory} for related CPU Cache information.</p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-associatedprocessormemory">Win32_AssociatedProcessorMemory Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_AssociatedProcessorMemory")
 @NullMarked

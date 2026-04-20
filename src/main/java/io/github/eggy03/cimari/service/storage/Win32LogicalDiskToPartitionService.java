@@ -32,7 +32,7 @@ import java.util.Objects;
  * List<Win32LogicalDiskToPartition> ldt = ddtService.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32LogicalDiskToPartitionService implements CommonServiceInterface<Win32LogicalDiskToPartition> {
 
@@ -42,7 +42,7 @@ public class Win32LogicalDiskToPartitionService implements CommonServiceInterfac
     /**
      * Creates {@link Win32LogicalDiskToPartitionService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32LogicalDiskToPartitionService() {
         this(new TerminalService(), new Win32LogicalDiskToPartitionMapper());
@@ -53,7 +53,7 @@ public class Win32LogicalDiskToPartitionService implements CommonServiceInterfac
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32LogicalDiskToPartitionService(TerminalService terminalService, Win32LogicalDiskToPartitionMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -72,7 +72,7 @@ public class Win32LogicalDiskToPartitionService implements CommonServiceInterfac
      * @return an unmodifiable {@link List} of {@link Win32LogicalDiskToPartition} objects representing the association between
      * a {@link Win32DiskPartition} and a {@link Win32LogicalDisk}.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32LogicalDiskToPartition> get(long timeout) {

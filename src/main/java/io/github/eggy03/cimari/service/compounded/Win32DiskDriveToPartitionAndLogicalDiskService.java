@@ -41,7 +41,7 @@ import java.util.Objects;
  * @see Win32LogicalDiskService
  * @see Win32DiskDriveToDiskPartitionService
  * @see Win32LogicalDiskToPartitionService
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonServiceInterface<Win32DiskDriveToPartitionAndLogicalDisk> {
 
@@ -51,7 +51,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
     /**
      * Creates {@link Win32DiskDriveToPartitionAndLogicalDiskService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32DiskDriveToPartitionAndLogicalDiskService() {
         this(new TerminalService(), new Win32DiskDriveToPartitionAndLogicalDiskMapper());
@@ -62,7 +62,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32DiskDriveToPartitionAndLogicalDiskService(TerminalService terminalService, Win32DiskDriveToPartitionAndLogicalDiskMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -80,7 +80,7 @@ public class Win32DiskDriveToPartitionAndLogicalDiskService implements CommonSer
      *                the process
      * @return an unmodifiable {@link List} of {@link Win32DiskDriveToPartitionAndLogicalDisk} objects representing connected physical disks
      * with their partitions and logical disks. Returns a {@link Collections#emptyList()} if no data is found.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32DiskDriveToPartitionAndLogicalDisk> get(long timeout) {

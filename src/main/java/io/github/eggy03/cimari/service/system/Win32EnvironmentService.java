@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32Environment> env = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32EnvironmentService implements CommonServiceInterface<Win32Environment> {
 
@@ -40,7 +40,7 @@ public class Win32EnvironmentService implements CommonServiceInterface<Win32Envi
     /**
      * Creates {@link Win32EnvironmentService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32EnvironmentService() {
         this(new TerminalService(), new Win32EnvironmentMapper());
@@ -51,7 +51,7 @@ public class Win32EnvironmentService implements CommonServiceInterface<Win32Envi
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32EnvironmentService(TerminalService terminalService, Win32EnvironmentMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32EnvironmentService implements CommonServiceInterface<Win32Envi
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32Environment} objects representing the env variables.
      * Returns a {@link Collections#emptyList()} if no env variables are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32Environment> get(long timeout) {

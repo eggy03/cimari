@@ -33,7 +33,7 @@ import java.util.List;
  * <p>See {@link MsftNetIpAddress}, for IP address configuration information of a network adapter.</p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/dnsclientcimprov/msft-dnsclientserveraddress">MSFT_DNSClientServerAddress Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "MSFT_DNSClientServerAddress")
 @NullMarked

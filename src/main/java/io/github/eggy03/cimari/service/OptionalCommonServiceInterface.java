@@ -20,7 +20,7 @@ import java.util.Optional;
  *
  * @param <S> the entity type returned by the service implementation
  * @see CommonServiceInterface
- * @since 1.0.0
+ * @since 0.1.0
  */
 public interface OptionalCommonServiceInterface<S> {
 
@@ -32,7 +32,7 @@ public interface OptionalCommonServiceInterface<S> {
      *
      * @param timeout the maximum time (in seconds) to wait for the PowerShell command to complete before terminating the process
      * @return an {@link Optional} entity of type {@code <S>} defined by the caller
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Optional<S> get(long timeout);
 }

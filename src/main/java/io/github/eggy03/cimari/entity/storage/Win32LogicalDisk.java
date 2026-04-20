@@ -27,7 +27,7 @@ import java.math.BigInteger;
  * <p>See {@link Win32DiskPartition} for information about partitions in a physical disk.</p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-logicaldisk">Win32_LogicalDisk Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_LogicalDisk")
 @NullMarked

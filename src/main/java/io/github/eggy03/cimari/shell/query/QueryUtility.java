@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * <p>
  * <b>For internal use only</b>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class QueryUtility {
 
@@ -36,7 +36,7 @@ class QueryUtility {
      * @param <T>    the type of the class
      * @return the annotation value
      * @throws AnnotationNotFoundException if the class to be inspected does not have the {@link WmiClass} annotation
-     * @since 1.0.0
+     * @since 0.1.0
      */
     static @NonNull <T> String getClassNameFromWmiClass(@NonNull Class<T> tClass) {
 
@@ -63,7 +63,7 @@ class QueryUtility {
      * @param <T>    the type of the class
      * @return a comma-separated string containing either the "Value" of each
      * {@link JsonProperty} annotation or the method name if the annotation is absent, in alphabetical order
-     * @since 1.0.0
+     * @since 0.1.0
      */
     static @NonNull <T> String getPropertiesFromJsonProperty(@NonNull Class<T> tClass) {
 

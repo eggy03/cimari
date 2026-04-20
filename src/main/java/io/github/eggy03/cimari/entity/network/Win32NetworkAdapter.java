@@ -24,7 +24,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * {@link Win32NetworkAdapterConfiguration} contains related network configuration details.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadapter">Win32_NetworkAdapter Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_NetworkAdapter")
 @NullMarked

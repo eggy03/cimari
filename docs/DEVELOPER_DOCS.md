@@ -4,7 +4,7 @@ and provides an overview of how its internal components work together.
 _Last Updated: April 19, 2026_
 
 > [!NOTE]
-> This documentation reflects the workings of v1.0.0-alpha1 of the library. Older or newer versions may have altered
+> This documentation reflects the workings of v0.1.0 of the library. Older or newer versions may have altered
 > structure,
 > behavior, or implementation.
 > This documentation may be updated periodically to reflect the latest changes.
@@ -190,7 +190,7 @@ Based on the fields we want, we will now design our entity class.
 All entity classes can be found in the `io.github.eggy.cimari.entity.*` package.
 For processor-related mappings, a dedicated subpackage `entity.processor` is used.
 
-As of v1.0.0-alpha1, this package includes:
+As of v0.1.0, this package includes:
 
 - `Win32_Processor`
 - `Win32_CacheMemory`

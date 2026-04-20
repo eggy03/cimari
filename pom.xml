@@ -4,7 +4,7 @@
 
     <groupId>io.github.eggy03</groupId>
     <artifactId>cimari</artifactId>
-    <version>1.0.0-alpha1</version>
+    <version>0.1.0</version>
 
     <properties>
         <maven.compiler.release>8</maven.compiler.release>

@@ -29,7 +29,7 @@ import java.util.Objects;
  * Win32BaseboardService service = new Win32BaseboardService();
  * List<Win32Baseboard> mainboardList = service.get(10);
  * }</pre>
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32BaseboardService implements CommonServiceInterface<Win32Baseboard> {
 
@@ -39,7 +39,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
     /**
      * Creates {@link Win32BaseboardService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32BaseboardService() {
         this(new TerminalService(), new Win32BaseboardMapper());
@@ -50,7 +50,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32BaseboardService(TerminalService terminalService, Win32BaseboardMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -68,7 +68,7 @@ public class Win32BaseboardService implements CommonServiceInterface<Win32Basebo
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32Baseboard} objects representing the system motherboards.
      * Returns a {@link Collections#emptyList()} if no motherboard entries are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32Baseboard> get(long timeout) {

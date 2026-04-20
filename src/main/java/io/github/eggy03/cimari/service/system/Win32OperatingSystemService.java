@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32OperatingSystem> operatingSystems = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32OperatingSystemService implements CommonServiceInterface<Win32OperatingSystem> {
 
@@ -40,7 +40,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
     /**
      * Creates {@link Win32OperatingSystemService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32OperatingSystemService() {
         this(new TerminalService(), new Win32OperatingSystemMapper());
@@ -51,7 +51,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32OperatingSystemService(TerminalService terminalService, Win32OperatingSystemMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32OperatingSystemService implements CommonServiceInterface<Win32
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32OperatingSystem} objects representing the system's operating systems.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32OperatingSystem> get(long timeout) {

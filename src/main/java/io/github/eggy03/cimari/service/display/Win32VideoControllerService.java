@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32VideoController> controllers = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32VideoControllerService implements CommonServiceInterface<Win32VideoController> {
 
@@ -40,7 +40,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
     /**
      * Creates {@link Win32VideoControllerService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32VideoControllerService() {
         this(new TerminalService(), new Win32VideoControllerMapper());
@@ -51,7 +51,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32VideoControllerService(TerminalService terminalService, Win32VideoControllerMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32VideoControllerService implements CommonServiceInterface<Win32
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32VideoController} objects representing the video controllers.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32VideoController> get(long timeout) {

@@ -12,7 +12,7 @@ import io.github.eggy03.cimari.mapping.CommonMappingInterface;
  * Provides a type-safe implementation of {@link CommonMappingInterface}
  * and maps the received JSON strings to objects or lists of {@link Win32AssociatedProcessorMemory}
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32AssociatedProcessorMemoryMapper implements CommonMappingInterface<Win32AssociatedProcessorMemory> {
 }

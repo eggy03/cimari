@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32LogicalDisk> logicalDisks = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32LogicalDiskService implements CommonServiceInterface<Win32LogicalDisk> {
 
@@ -40,7 +40,7 @@ public class Win32LogicalDiskService implements CommonServiceInterface<Win32Logi
     /**
      * Creates {@link Win32LogicalDiskService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32LogicalDiskService() {
         this(new TerminalService(), new Win32LogicalDiskMapper());
@@ -51,7 +51,7 @@ public class Win32LogicalDiskService implements CommonServiceInterface<Win32Logi
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32LogicalDiskService(TerminalService terminalService, Win32LogicalDiskMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32LogicalDiskService implements CommonServiceInterface<Win32Logi
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32LogicalDisk} objects representing the logical volumes.
      * Returns a {@link Collections#emptyList()} if no volumes are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32LogicalDisk> get(long timeout) {

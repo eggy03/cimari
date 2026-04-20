@@ -9,7 +9,7 @@ package io.github.eggy03.cimari.exception;
  * Used to indicate that a critical resource could not be resolved, without which, it is impossible to
  * proceed with further operations.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class ResourceNotFoundException extends RuntimeException {
 
