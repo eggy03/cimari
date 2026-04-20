@@ -653,7 +653,7 @@ public class Win32ProcessorExample {
     // If you want to create a copy of your received Win32Processor instance and then replace with your own data
     // you can do so via
 
-    ImmutableWin32Processor immutableCustomCpu = ImmutableWin32Processor
+    Win32Processor immutableCustomCpu = ImmutableWin32Processor
             .copyOf(cpuFirst) // create a copy first
             .withCaption("NEW VALUE") // then make edits
             .withDeviceId("NEW VALUE TWO");
