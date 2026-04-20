@@ -7,12 +7,6 @@ on:
     types: [ opened, synchronize, reopened ]
 
 env:
-  ACTIONS_CHECKOUT_VERSION: v6
-  ACTIONS_SETUP_JAVA_VERSION: v5
-  CACHE_VERSION: v5
-  UPLOAD_ARTIFACT_VERSION: v7
-  DOWNLOAD_ARTIFACT_VERSION: v8
-
   JDK_WINDOWS: 25
   JDK_SONAR: 17
 
@@ -26,16 +20,16 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@${{ env.ACTIONS_CHECKOUT_VERSION }}
+      - uses: actions/checkout@v6
 
       - name: Set up JDK
-        uses: actions/setup-java@${{ env.ACTIONS_SETUP_JAVA_VERSION }}
+        uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JDK_WINDOWS }}
           distribution: temurin
 
       - name: Cache Maven packages
-        uses: actions/cache@${{ env.CACHE_VERSION }}
+        uses: actions/cache@v5
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -45,7 +39,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Upload test & coverage reports
-        uses: actions/upload-artifact@${{ env.UPLOAD_ARTIFACT_VERSION }}
+        uses: actions/upload-artifact@v7
         with:
           name: test-artifacts
           path: |
@@ -60,24 +54,24 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@${{ env.ACTIONS_CHECKOUT_VERSION }}
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@${{ env.ACTIONS_SETUP_JAVA_VERSION }}
+        uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JDK_SONAR }}
           distribution: temurin
 
       - name: Download test artifacts
-        uses: actions/download-artifact@${{ env.DOWNLOAD_ARTIFACT_VERSION }}
+        uses: actions/download-artifact@v8
         with:
           name: test-artifacts
           path: target
 
       - name: Cache SonarQube packages
-        uses: actions/cache@${{ env.CACHE_VERSION }}
+        uses: actions/cache@v5
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar

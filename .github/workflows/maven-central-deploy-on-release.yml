@@ -8,9 +8,6 @@ on:
   workflow_dispatch:  
 
 env:
-  ACTIONS_CHECKOUT_VERSION: v6
-  ACTIONS_SETUP_JAVA_VERSION: v5
-
   JDK_VERSION: 25
 
 jobs:
@@ -20,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@${{ env.ACTIONS_CHECKOUT_VERSION }}
+        uses: actions/checkout@v6
 
       - name: Set up JDK
-        uses: actions/setup-java@${{ env.ACTIONS_SETUP_JAVA_VERSION }}
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: ${{ env.JDK_VERSION }}
