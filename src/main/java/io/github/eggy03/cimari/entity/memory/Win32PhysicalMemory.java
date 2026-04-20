@@ -24,7 +24,7 @@ import java.math.BigInteger;
  * </p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-physicalmemory">Win32_PhysicalMemory Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_PhysicalMemory")
 @NullMarked

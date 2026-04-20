@@ -38,49 +38,49 @@ import java.util.Objects;
  * and returns the result in JSON format.
  * </p>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public enum Cimv2 {
 
     /**
      * Query to fetch the properties of {@code Win32_Battery} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_BATTERY(generateQuery(Win32Battery.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DesktopMonitor} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_DESKTOP_MONITOR(generateQuery(Win32DesktopMonitor.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_VideoController} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_VIDEO_CONTROLLER(generateQuery(Win32VideoController.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Processor} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_PROCESSOR(generateQuery(Win32Processor.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_CacheMemory} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_CACHE_MEMORY(generateQuery(Win32CacheMemory.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_AssociatedProcessorMemory} class in a custom object
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_ASSOCIATED_PROCESSOR_MEMORY(
             "Get-CimInstance Win32_AssociatedProcessorMemory " +
@@ -91,49 +91,49 @@ public enum Cimv2 {
     /**
      * Query to fetch the properties of {@code Win32_BIOS} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_BIOS(generateQuery(Win32Bios.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Baseboard} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_BASEBOARD(generateQuery(Win32Baseboard.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PortConnector} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_PORT_CONNECTOR(generateQuery(Win32PortConnector.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_PhysicalMemory} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_PHYSICAL_MEMORY(generateQuery(Win32PhysicalMemory.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapter} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_NETWORK_ADAPTER(generateQuery(Win32NetworkAdapter.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapterConfiguration} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_NETWORK_ADAPTER_CONFIGURATION(generateQuery(Win32NetworkAdapterConfiguration.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_NetworkAdapterSetting} in a custom object
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_NETWORK_ADAPTER_SETTING(
             "Get-CimInstance Win32_NetworkAdapterSetting " +
@@ -144,35 +144,35 @@ public enum Cimv2 {
     /**
      * Query to fetch the properties of {@code Win32_OperatingSystem} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_OPERATING_SYSTEM(generateQuery(Win32OperatingSystem.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskDrive} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_DISK_DRIVE(generateQuery(Win32DiskDrive.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskPartition} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_DISK_PARTITION(generateQuery(Win32DiskPartition.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_LogicalDisk} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_LOGICAL_DISK(generateQuery(Win32LogicalDisk.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_DiskDriveToDiskPartition} class in a custom object
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_DISK_DRIVE_TO_DISK_PARTITION(
             "Get-CimInstance Win32_DiskDriveToDiskPartition " +
@@ -183,7 +183,7 @@ public enum Cimv2 {
     /**
      * Query to fetch the properties of {@code Win32_LogicalDiskToPartition} class in a custom object
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_LOGICAL_DISK_TO_PARTITION(
             "Get-CimInstance Win32_LogicalDiskToPartition " +
@@ -194,42 +194,42 @@ public enum Cimv2 {
     /**
      * Query to fetch the properties of {@code Win32_ComputerSystem} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_COMPUTER_SYSTEM(generateQuery(Win32ComputerSystem.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Environment} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_ENVIRONMENT(generateQuery(Win32Environment.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_Printer} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_PRINTER(generateQuery(Win32Printer.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_UserAccount} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_USER_ACCOUNT(generateQuery(Win32UserAccount.class)),
 
     /**
      * Query to fetch some select properties of {@code Win32_Process} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_PROCESS(generateQuery(Win32Process.class)),
 
     /**
      * Query to fetch the properties of {@code Win32_SoundDevice} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     WIN32_SOUND_DEVICE(generateQuery(Win32SoundDevice.class)),
 

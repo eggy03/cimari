@@ -29,7 +29,7 @@ import java.util.Objects;
  * <b>Mostly for internal use </b>
  * </p>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class TerminalService {
 
@@ -78,7 +78,7 @@ public class TerminalService {
      * @param timeout Time in seconds after which the session will be force stopped, must not be null.
      * @return The result of the command executed, wrapped in {@link TerminalResult}
      * @throws IllegalArgumentException if timeout is in negative.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @NonNull TerminalResult execute(@NonNull String command, long timeout) {
 

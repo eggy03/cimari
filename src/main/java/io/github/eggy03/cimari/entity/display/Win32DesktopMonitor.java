@@ -22,7 +22,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * </p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-desktopmonitor">Win32_DesktopMonitor Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_DesktopMonitor")
 @NullMarked

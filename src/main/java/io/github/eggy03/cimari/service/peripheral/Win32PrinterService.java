@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32Printer> printers = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32PrinterService implements CommonServiceInterface<Win32Printer> {
 
@@ -40,7 +40,7 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
     /**
      * Creates {@link Win32PrinterService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32PrinterService() {
         this(new TerminalService(), new Win32PrinterMapper());
@@ -51,7 +51,7 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32PrinterService(TerminalService terminalService, Win32PrinterMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32PrinterService implements CommonServiceInterface<Win32Printer>
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32Printer} objects representing the system's printers.
      * If no printers are present, returns a {@link Collections#emptyList()}.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32Printer> get(long timeout) {

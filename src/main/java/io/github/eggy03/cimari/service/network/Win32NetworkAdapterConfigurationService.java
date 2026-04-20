@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32NetworkAdapterConfiguration> configs = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32NetworkAdapterConfigurationService implements CommonServiceInterface<Win32NetworkAdapterConfiguration> {
 
@@ -40,7 +40,7 @@ public class Win32NetworkAdapterConfigurationService implements CommonServiceInt
     /**
      * Creates {@link Win32NetworkAdapterConfigurationService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32NetworkAdapterConfigurationService() {
         this(new TerminalService(), new Win32NetworkAdapterConfigurationMapper());
@@ -51,7 +51,7 @@ public class Win32NetworkAdapterConfigurationService implements CommonServiceInt
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32NetworkAdapterConfigurationService(TerminalService terminalService, Win32NetworkAdapterConfigurationMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32NetworkAdapterConfigurationService implements CommonServiceInt
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32NetworkAdapterConfiguration} objects representing the system's network adapters.
      * Returns a {@link Collections#emptyList()} if no configurations are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32NetworkAdapterConfiguration> get(long timeout) {

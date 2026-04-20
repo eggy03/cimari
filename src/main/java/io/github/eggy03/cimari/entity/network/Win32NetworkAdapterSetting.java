@@ -47,7 +47,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>See {@link Win32NetworkAdapterConfiguration} for related adapter config info.</p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-networkadaptersetting">Win32_NetworkAdapterSetting Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_NetworkAdapterSetting")
 @NullMarked

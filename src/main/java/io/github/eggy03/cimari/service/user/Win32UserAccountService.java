@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32UserAccount> ua = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32UserAccountService implements CommonServiceInterface<Win32UserAccount> {
 
@@ -49,7 +49,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32UserAccountService(TerminalService terminalService, Win32UserAccountMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -67,7 +67,7 @@ public class Win32UserAccountService implements CommonServiceInterface<Win32User
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32UserAccount} objects.
      * Returns a {@link Collections#emptyList()} if no user accounts are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32UserAccount> get(long timeout) {

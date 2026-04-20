@@ -60,7 +60,7 @@ import java.util.List;
  * @see Win32LogicalDisk
  * @see Win32DiskDriveToDiskPartition
  * @see Win32LogicalDiskToPartition
- * @since 1.0.0
+ * @since 0.1.0
  */
 @NullMarked
 @Value.Immutable

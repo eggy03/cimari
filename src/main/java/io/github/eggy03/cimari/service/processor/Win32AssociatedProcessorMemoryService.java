@@ -32,7 +32,7 @@ import java.util.Objects;
  * List<Win32AssociatedProcessorMemory> apm = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32AssociatedProcessorMemoryService implements CommonServiceInterface<Win32AssociatedProcessorMemory> {
 
@@ -42,7 +42,7 @@ public class Win32AssociatedProcessorMemoryService implements CommonServiceInter
     /**
      * Creates {@link Win32AssociatedProcessorMemoryService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32AssociatedProcessorMemoryService() {
         this(new TerminalService(), new Win32AssociatedProcessorMemoryMapper());
@@ -53,7 +53,7 @@ public class Win32AssociatedProcessorMemoryService implements CommonServiceInter
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32AssociatedProcessorMemoryService(TerminalService terminalService, Win32AssociatedProcessorMemoryMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -72,7 +72,7 @@ public class Win32AssociatedProcessorMemoryService implements CommonServiceInter
      * @return an unmodifiable {@link List} of {@link Win32AssociatedProcessorMemory} objects representing the association between
      * a {@link Win32Processor} and it's {@link Win32CacheMemory}.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32AssociatedProcessorMemory> get(long timeout) {

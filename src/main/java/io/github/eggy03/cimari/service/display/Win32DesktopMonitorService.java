@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32DesktopMonitor> monitors = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32DesktopMonitorService implements CommonServiceInterface<Win32DesktopMonitor> {
 
@@ -40,7 +40,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
     /**
      * Creates {@link Win32DesktopMonitorService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32DesktopMonitorService() {
         this(new TerminalService(), new Win32DesktopMonitorMapper());
@@ -51,7 +51,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32DesktopMonitorService(TerminalService terminalService, Win32DesktopMonitorMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32DesktopMonitorService implements CommonServiceInterface<Win32D
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32DesktopMonitor} objects representing connected monitors.
      * Returns a {@link Collections#emptyList()} if no monitors are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32DesktopMonitor> get(long timeout) {

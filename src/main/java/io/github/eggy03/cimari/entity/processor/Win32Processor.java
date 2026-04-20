@@ -24,7 +24,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * See {@link Win32CacheMemory} for related cache information.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor">Win32_Processor Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_Processor")
 @NullMarked

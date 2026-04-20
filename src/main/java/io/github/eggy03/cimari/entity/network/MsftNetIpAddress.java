@@ -32,7 +32,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * <p>See {@link MsftNetConnectionProfile}, for information regarding the current profile of a network adapter.</p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/nettcpipprov/msft-netipaddress">MSFT_NetIPAddress Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "MSFT_NetIPAddress")
 @NullMarked

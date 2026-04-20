@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32Battery> batteries = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32BatteryService implements CommonServiceInterface<Win32Battery> {
 
@@ -40,7 +40,7 @@ public class Win32BatteryService implements CommonServiceInterface<Win32Battery>
     /**
      * Creates {@link Win32BatteryService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32BatteryService() {
         this(new TerminalService(), new Win32BatteryMapper());
@@ -51,7 +51,7 @@ public class Win32BatteryService implements CommonServiceInterface<Win32Battery>
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32BatteryService(TerminalService terminalService, Win32BatteryMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32BatteryService implements CommonServiceInterface<Win32Battery>
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32Battery} objects representing the system's batteries.
      * If no batteries are present, returns a {@link Collections#emptyList()}.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32Battery> get(long timeout) {

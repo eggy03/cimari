@@ -28,7 +28,7 @@ import java.util.List;
  * <p>See {@link Win32LogicalDisk} for information about the logical volumes on this disk.</p>
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskdrive">Win32_DiskDrive Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_DiskDrive")
 @NullMarked

@@ -27,7 +27,7 @@ import java.util.Optional;
  * </p>
  *
  * @param <S> the entity type returned by the service implementation
- * @since 1.0.0
+ * @since 0.1.0
  */
 public interface CommonMappingInterface<S> {
 
@@ -44,7 +44,7 @@ public interface CommonMappingInterface<S> {
      * </p>
      *
      * @return the {@link ObjectMapper} to use
-     * @since 1.0.0
+     * @since 0.1.0
      */
     default @NonNull ObjectMapper configureObjectMapper() {
         return new ObjectMapper();
@@ -66,7 +66,7 @@ public interface CommonMappingInterface<S> {
      * @throws NullPointerException     if {@code inputJson} or {@code objectClass} is null
      * @throws JacksonException         if {@code inputJson} is parsing fails or deserialization to {@code objectClass} fails
      * @throws IllegalArgumentException if {@code inputJson} is not a JSON Array or Object
-     * @since 1.0.0
+     * @since 0.1.0
      */
     default @NonNull List<S> mapToList(@NonNull String inputJson, @NonNull Class<S> objectClass) {
 
@@ -106,7 +106,7 @@ public interface CommonMappingInterface<S> {
      * @throws NullPointerException     if {@code inputJson} or {@code objectClass} is null
      * @throws JacksonException         if {@code inputJson} is parsing fails or deserialization to {@code objectClass} fails
      * @throws IllegalArgumentException if {@code inputJson} is not a JSON Object
-     * @since 1.0.0
+     * @since 0.1.0
      */
     default @NonNull Optional<S> mapToObject(@NonNull String inputJson, @NonNull Class<S> objectClass) {
 

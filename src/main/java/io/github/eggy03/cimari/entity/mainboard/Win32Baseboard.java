@@ -25,7 +25,7 @@ import tools.jackson.databind.annotation.JsonSerialize;
  * {@link Win32PortConnector} contains details about ports on this mainboard.
  *
  * @see <a href="https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-baseboard">Win32_Baseboard Documentation</a>
- * @since 1.0.0
+ * @since 0.1.0
  */
 @WmiClass(className = "Win32_Baseboard")
 @NullMarked

@@ -32,7 +32,7 @@ import java.util.Objects;
  * List<Win32NetworkAdapterSetting> nas = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32NetworkAdapterSettingService implements CommonServiceInterface<Win32NetworkAdapterSetting> {
 
@@ -42,7 +42,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
     /**
      * Creates {@link Win32NetworkAdapterSettingService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32NetworkAdapterSettingService() {
         this(new TerminalService(), new Win32NetworkAdapterSettingMapper());
@@ -53,7 +53,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32NetworkAdapterSettingService(TerminalService terminalService, Win32NetworkAdapterSettingMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -72,7 +72,7 @@ public class Win32NetworkAdapterSettingService implements CommonServiceInterface
      * @return an unmodifiable {@link List} of {@link Win32NetworkAdapterSetting} objects representing the association between
      * a {@link Win32NetworkAdapter} and it's {@link Win32NetworkAdapterConfiguration}.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32NetworkAdapterSetting> get(long timeout) {

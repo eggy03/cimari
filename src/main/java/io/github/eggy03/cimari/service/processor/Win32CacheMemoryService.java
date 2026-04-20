@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32CacheMemory> caches = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32CacheMemoryService implements CommonServiceInterface<Win32CacheMemory> {
 
@@ -40,7 +40,7 @@ public class Win32CacheMemoryService implements CommonServiceInterface<Win32Cach
     /**
      * Creates {@link Win32CacheMemoryService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32CacheMemoryService() {
         this(new TerminalService(), new Win32CacheMemoryMapper());
@@ -51,7 +51,7 @@ public class Win32CacheMemoryService implements CommonServiceInterface<Win32Cach
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32CacheMemoryService(TerminalService terminalService, Win32CacheMemoryMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32CacheMemoryService implements CommonServiceInterface<Win32Cach
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32CacheMemory} objects representing the CPU caches.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32CacheMemory> get(long timeout) {

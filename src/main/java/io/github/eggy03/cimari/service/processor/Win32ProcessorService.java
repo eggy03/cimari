@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32Processor> processors = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32ProcessorService implements CommonServiceInterface<Win32Processor> {
 
@@ -40,7 +40,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
     /**
      * Creates {@link Win32ProcessorService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32ProcessorService() {
         this(new TerminalService(), new Win32ProcessorMapper());
@@ -51,7 +51,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32ProcessorService(TerminalService terminalService, Win32ProcessorMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32ProcessorService implements CommonServiceInterface<Win32Proces
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32Processor} objects representing the CPU(s).
      * Returns a {@link Collections#emptyList()} if no processors are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32Processor> get(long timeout) {

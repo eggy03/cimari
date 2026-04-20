@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32PnPEntity> pnpEntityList = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEntity> {
 
@@ -40,7 +40,7 @@ public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEnt
     /**
      * Creates {@link Win32PnPEntityService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32PnPEntityService() {
         this(new TerminalService(), new Win32PnPEntityMapper());
@@ -51,7 +51,7 @@ public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEnt
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32PnPEntityService(TerminalService terminalService, Win32PnPEntityMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32PnPEntityService implements CommonServiceInterface<Win32PnPEnt
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32PnPEntity} objects representing the system's pnp entities.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32PnPEntity> get(long timeout) {

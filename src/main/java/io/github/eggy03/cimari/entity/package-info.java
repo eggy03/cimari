@@ -14,6 +14,6 @@
  * represent custom entities which is modeled after multiple Win32 Provider or MSFT classes grouped together
  * </p>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 package io.github.eggy03.cimari.entity;

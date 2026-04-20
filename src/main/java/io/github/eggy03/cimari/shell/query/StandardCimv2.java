@@ -20,7 +20,7 @@ import java.util.Objects;
  * and returns the result in JSON format.
  * </p>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public enum StandardCimv2 {
 
@@ -28,28 +28,28 @@ public enum StandardCimv2 {
      * Query to fetch the properties of the {@code MSFT_NetAdapter} class
      * <p>Will not show hidden physical or logical network adapters unless explicitly stated</p>
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MSFT_NET_ADAPTER(generateQuery("Get-NetAdapter", MsftNetAdapter.class)),
 
     /**
      * Query to fetch the properties of the {@code MSFT_NetIPAddress} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MSFT_NET_IP_ADDRESS(generateQuery("Get-NetIPAddress", MsftNetIpAddress.class)),
 
     /**
      * Query to fetch the properties of the {@code MSFT_NetDNSClientServerAddress} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MSFT_NET_DNS_CLIENT_SERVER_ADDRESS(generateQuery("Get-DNSClientServerAddress", MsftDnsClientServerAddress.class)),
 
     /**
      * Query to fetch the properties of the {@code MSFT_NetConnectionProfile} class
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MSFT_NET_CONNECTION_PROFILE(generateQuery("Get-NetConnectionProfile", MsftNetConnectionProfile.class));
 

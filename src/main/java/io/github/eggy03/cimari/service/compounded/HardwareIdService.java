@@ -29,7 +29,7 @@ import java.util.Optional;
  * Optional<HardwareId> hwid = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class HardwareIdService implements OptionalCommonServiceInterface<HardwareId> {
 
@@ -39,7 +39,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
     /**
      * Creates {@link HardwareIdService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public HardwareIdService() {
         this(new TerminalService(), new HardwareIdMapper());
@@ -50,7 +50,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     HardwareIdService(TerminalService terminalService, HardwareIdMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class HardwareIdService implements OptionalCommonServiceInterface<Hardwar
      * @return an {@link Optional} of {@link HardwareId} representing
      * the HWID. Returns {@link Optional#empty()} if no information
      * is detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull Optional<HardwareId> get(long timeout) {

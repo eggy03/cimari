@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32Bios> biosList = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
 
@@ -40,7 +40,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
     /**
      * Creates {@link Win32BiosService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32BiosService() {
         this(new TerminalService(), new Win32BiosMapper());
@@ -51,7 +51,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32BiosService(TerminalService terminalService, Win32BiosMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32BiosService implements CommonServiceInterface<Win32Bios> {
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32Bios} objects representing the system BIOS.
      * Returns a {@link Collections#emptyList()} if no BIOS entries are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32Bios> get(long timeout) {

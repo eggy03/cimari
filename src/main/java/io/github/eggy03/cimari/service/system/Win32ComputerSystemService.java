@@ -29,7 +29,7 @@ import java.util.Optional;
  * Optional<Win32ComputerSystem> system = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32ComputerSystemService implements OptionalCommonServiceInterface<Win32ComputerSystem> {
 
@@ -39,7 +39,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
     /**
      * Creates {@link Win32ComputerSystemService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32ComputerSystemService() {
         this(new TerminalService(), new Win32ComputerSystemMapper());
@@ -50,7 +50,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32ComputerSystemService(TerminalService terminalService, Win32ComputerSystemMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32ComputerSystemService implements OptionalCommonServiceInterfac
      * @return an {@link Optional} of {@link Win32ComputerSystem} representing
      * the HWID. Returns {@link Optional#empty()} if no information
      * is detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull Optional<Win32ComputerSystem> get(long timeout) {

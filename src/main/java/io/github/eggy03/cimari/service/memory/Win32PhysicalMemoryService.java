@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<Win32PhysicalMemory> memories = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32PhysicalMemory> {
 
@@ -40,7 +40,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
     /**
      * Creates {@link Win32PhysicalMemoryService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32PhysicalMemoryService() {
         this(new TerminalService(), new Win32PhysicalMemoryMapper());
@@ -51,7 +51,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32PhysicalMemoryService(TerminalService terminalService, Win32PhysicalMemoryMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class Win32PhysicalMemoryService implements CommonServiceInterface<Win32P
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link Win32PhysicalMemory} objects representing the system's RAM.
      * Returns a {@link Collections#emptyList()} if no memory modules are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32PhysicalMemory> get(long timeout) {

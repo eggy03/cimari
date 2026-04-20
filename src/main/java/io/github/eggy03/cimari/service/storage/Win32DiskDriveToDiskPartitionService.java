@@ -32,7 +32,7 @@ import java.util.Objects;
  * List<Win32DiskDriveToDiskPartition> ddt = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterface<Win32DiskDriveToDiskPartition> {
 
@@ -42,7 +42,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
     /**
      * Creates {@link Win32DiskDriveToDiskPartitionService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Win32DiskDriveToDiskPartitionService() {
         this(new TerminalService(), new Win32DiskDriveToDiskPartitionMapper());
@@ -53,7 +53,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     Win32DiskDriveToDiskPartitionService(TerminalService terminalService, Win32DiskDriveToDiskPartitionMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -72,7 +72,7 @@ public class Win32DiskDriveToDiskPartitionService implements CommonServiceInterf
      * @return an unmodifiable {@link List} of {@link Win32DiskDriveToDiskPartition} objects representing the association between
      * a {@link Win32DiskDrive} and it's {@link Win32DiskPartition}.
      * Returns a {@link Collections#emptyList()} if none are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<Win32DiskDriveToDiskPartition> get(long timeout) {

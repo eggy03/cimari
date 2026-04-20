@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<MsftNetAdapter> adapters = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdapter> {
 
@@ -40,7 +40,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
     /**
      * Creates {@link MsftNetAdapterService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public MsftNetAdapterService() {
         this(new TerminalService(), new MsftNetAdapterMapper());
@@ -51,7 +51,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MsftNetAdapterService(TerminalService terminalService, MsftNetAdapterMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class MsftNetAdapterService implements CommonServiceInterface<MsftNetAdap
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link MsftNetAdapter} objects representing the system's network adapters.
      * Returns a {@link Collections#emptyList()} if no adapters are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<MsftNetAdapter> get(long timeout) {

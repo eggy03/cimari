@@ -30,7 +30,7 @@ import java.util.Objects;
  * List<MsftNetIpAddress> address = service.get(10);
  * }</pre>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIpAddress> {
 
@@ -40,7 +40,7 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
     /**
      * Creates {@link MsftNetIpAddressService} with default configuration.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public MsftNetIpAddressService() {
         this(new TerminalService(), new MsftNetIpAddressMapper());
@@ -51,7 +51,7 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
      *
      * @param terminalService the {@link TerminalService} instance to use, must not be {@code null}
      * @param mapper          the mapper instance to use, must not be {@code null}
-     * @since 1.0.0
+     * @since 0.1.0
      */
     MsftNetIpAddressService(TerminalService terminalService, MsftNetIpAddressMapper mapper) {
         this.terminalService = Objects.requireNonNull(terminalService, "terminalService cannot be null");
@@ -69,7 +69,7 @@ public class MsftNetIpAddressService implements CommonServiceInterface<MsftNetIp
      *                command to complete before terminating the process
      * @return an unmodifiable {@link List} of {@link MsftNetIpAddress} objects representing the IPv4 and IPv6 configs.
      * Returns a {@link Collections#emptyList()} if no configs are detected.
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public @NonNull List<MsftNetIpAddress> get(long timeout) {

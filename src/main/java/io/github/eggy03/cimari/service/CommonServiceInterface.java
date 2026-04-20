@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @param <S> the entity type returned by the service implementation
  * @see OptionalCommonServiceInterface
- * @since 1.0.0
+ * @since 0.1.0
  */
 public interface CommonServiceInterface<S> {
 
@@ -32,7 +32,7 @@ public interface CommonServiceInterface<S> {
      *
      * @param timeout the maximum time (in seconds) to wait for the PowerShell command to complete before terminating the process
      * @return a {@link List} of entities of type {@code <S>} defined by the caller
-     * @since 1.0.0
+     * @since 0.1.0
      */
     List<S> get(long timeout);
 }

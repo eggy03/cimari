@@ -25,7 +25,7 @@ import java.util.Objects;
  * <b>For Internal Use Only</b>
  * </p>
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class ScriptUtility {
 
@@ -41,7 +41,7 @@ class ScriptUtility {
      * @param scriptPath the location of the script resource (e.g. {@code "/script.ps1"})
      * @return a {@link BufferedReader} for the requested script
      * @throws ResourceNotFoundException if the script resource cannot be found
-     * @since 1.0.0
+     * @since 0.1.0
      */
     static @NonNull BufferedReader loadAsBufferedReader(@NonNull String scriptPath) {
 
@@ -69,7 +69,7 @@ class ScriptUtility {
      * @return the normalized script contents as a {@link String}
      * @throws ResourceNotFoundException  if the script resource cannot be found
      * @throws ResourceOperationException when I/O operations on the resource fail
-     * @since 1.0.0
+     * @since 0.1.0
      */
     static @NonNull String loadScript(@NonNull String scriptPath) {
 

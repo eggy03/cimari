@@ -19,6 +19,6 @@ The following headings may be used while categorizing the list of changes made i
 - Documentation
 - Known Issues
 
-## [1.0.0-alpha1] - April 20, 2026
+## [0.1.0] - April 20, 2026
 
 - Initial Release
