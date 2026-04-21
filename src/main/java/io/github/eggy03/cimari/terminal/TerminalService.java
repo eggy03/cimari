@@ -33,7 +33,7 @@ import java.util.Objects;
  */
 public class TerminalService {
 
-    public static final Logger log = LoggerFactory.getLogger(TerminalService.class);
+    public final Logger log = LoggerFactory.getLogger(TerminalService.class);
 
     /**
      * Launches a standalone PowerShell session, executes {@link Cimv2} queries and returns the result
