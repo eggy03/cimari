@@ -136,6 +136,24 @@ implementation group: 'io.github.eggy03', name: 'cimari', version: 'VERSION'
 Replace `VERSION` with the latest version available
 in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 
+# Building from source
+
+### Clone the Repository
+
+```shell
+git clone https://github.com/eggy03/cimari.git
+```
+
+```shell
+cd cimari
+```
+
+### Install using Maven
+
+```shell
+mvn -Pdist clean install
+```
+
 # Documentation
 
 - [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
