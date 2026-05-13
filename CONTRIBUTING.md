@@ -118,7 +118,7 @@ git checkout -b bugfix-branch
 Make sure you can build the project and run tests.
 
 ```shell
-mvn clean test
+mvn -Pdist clean test
 ```
 
 - All tests must pass.
