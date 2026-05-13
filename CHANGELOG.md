@@ -19,6 +19,21 @@ The following headings may be used while categorizing the list of changes made i
 - Documentation
 - Known Issues
 
+## [0.2.0] - May 13, 2026
+
+### New Features
+
+- Add experimental native image support via generated reachability metadata in an attempt to make cimari run out of the
+  box with GraalVM native image
+
+### Removed Features
+
+- Removed `toJson()` methods from entities
+
+### Non-Breaking Changes
+
+- Build mode is now separated to two maven profiles: `dist` and `native`
+
 ## [0.1.0] - April 20, 2026
 
 - Initial Release

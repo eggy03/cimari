@@ -13,7 +13,6 @@ import io.github.eggy03.cimari.entity.processor.Win32Processor;
 import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 
@@ -77,14 +76,4 @@ public abstract class Win32ProcessorToCacheMemory {
     @Nullable
     public abstract List<@Nullable Win32CacheMemory> cacheMemoryList();
 
-    /**
-     * Retrieves the entity in a JSON pretty-print formatted string
-     *
-     * @return the {@link String} value of the object in JSON pretty-print format
-     */
-    public String toJson() {
-        return new ObjectMapper()
-                .writerWithDefaultPrettyPrinter()
-                .writeValueAsString(this);
-    }
 }

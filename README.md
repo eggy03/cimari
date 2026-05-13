@@ -18,6 +18,7 @@
 - [Download](#download)
 - [Documentation](#documentation)
 - [Usage](#usage)
+- [GraalVM Native Image Support](#native-image-support)
 - [Projects Using Cimari](#projects-using-cimari)
 - [License](#license)
 
@@ -136,6 +137,24 @@ implementation group: 'io.github.eggy03', name: 'cimari', version: 'VERSION'
 Replace `VERSION` with the latest version available
 in [central](https://central.sonatype.com/artifact/io.github.eggy03/cimari)
 
+# Building from source
+
+### Clone the Repository
+
+```shell
+git clone https://github.com/eggy03/cimari.git
+```
+
+```shell
+cd cimari
+```
+
+### Install using Maven
+
+```shell
+mvn -Pdist clean install
+```
+
 # Documentation
 
 - [Javadocs](https://javadoc.io/doc/io.github.eggy03/cimari)
@@ -174,6 +193,16 @@ public class ProcessorExample {
     }
 }
 ```
+
+# Native Image Support
+
+Starting from v0.2.0, cimari provides experimental support for native building. The library now comes
+bundled with [reachability metadata](https://www.graalvm.org/latest/reference-manual/native-image/metadata/),
+enabling it to work out of the box
+with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/).
+
+Please note that support for native builds is experimental and may sometimes require additional configuration
+or metadata.
 
 # Projects Using Cimari
 
