@@ -18,6 +18,7 @@
 - [Download](#download)
 - [Documentation](#documentation)
 - [Usage](#usage)
+- [GraalVM Native Image Support](#native-image-support)
 - [Projects Using Cimari](#projects-using-cimari)
 - [License](#license)
 
@@ -192,6 +193,16 @@ public class ProcessorExample {
     }
 }
 ```
+
+# Native Image Support
+
+Starting from v0.2.0, cimari provides experimental support for native building. The library now comes
+bundled with [reachability metadata](https://www.graalvm.org/latest/reference-manual/native-image/metadata/),
+enabling it to work out of the box
+with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/).
+
+Please note that support for native builds is experimental and may sometimes require additional configuration
+or metadata.
 
 # Projects Using Cimari
 
