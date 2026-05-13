@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -11,11 +12,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <project.name>cimari</project.name>
-        <project.description>A wrapper around a few Win32 Provider and MSFT classes, that deserializes read-only SMBIOS output into type-safe entities.</project.description>
+        <project.description>A wrapper around a few Win32 Provider and MSFT classes, that deserializes read-only SMBIOS
+            output into type-safe entities.
+        </project.description>
         <project.url>https://github.com/eggy03/cimari</project.url>
 
         <project.license.name>The MIT License</project.license.name>
-        <project.license.url>https://raw.githubusercontent.com/eggy03/cimari/refs/heads/main/LICENSE</project.license.url>
+        <project.license.url>https://raw.githubusercontent.com/eggy03/cimari/refs/heads/main/LICENSE
+        </project.license.url>
 
         <project.developer.id>Egg-03</project.developer.id>
         <project.developer.name>Sayan Bhattacharjee</project.developer.name>
@@ -182,6 +186,16 @@
             <id>dist</id>
             <build>
                 <plugins>
+                    <!-- Configure Tests To Run -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven.surefire.plugin.version}</version>
+                        <!-- Don't run the reachability-generation tests when using -Pdist-->
+                        <configuration>
+                            <excludedGroups>reachability-metadata-generation</excludedGroups>
+                        </configuration>
+                    </plugin>
                     <!-- Add Generated Sources -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
