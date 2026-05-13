@@ -8,11 +8,9 @@ package io.github.eggy03.cimari.entity.network;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.eggy03.cimari.annotation.ImmutableEntityStyle;
 import io.github.eggy03.cimari.annotation.WmiClass;
-
 import org.immutables.value.Value;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 
@@ -151,16 +149,6 @@ public abstract class MsftNetIpAddress {
     @Nullable
     public abstract Datetime validLifeTime();
 
-    /**
-     * Prints the entity in a JSON pretty-print format
-     *
-     * @return the {@link String} value of the object in JSON pretty-print format
-     */
-    public String toJson() {
-        return new ObjectMapper()
-                .writerWithDefaultPrettyPrinter()
-                .writeValueAsString(this);
-    }
 
     /**
      * Lifetime over which the address is preferred. The default value is infinite.
@@ -188,16 +176,5 @@ public abstract class MsftNetIpAddress {
         @Nullable
         public abstract Long seconds();
 
-        /**
-         * Retrieves the entity in a JSON pretty-print formatted string
-         *
-         * @return the {@link String} value of the object in JSON pretty-print format
-         */
-        @Override
-        public String toString() {
-            return new ObjectMapper()
-                    .writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(this);
-        }
     }
 }
