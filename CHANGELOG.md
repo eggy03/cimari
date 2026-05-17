@@ -19,6 +19,13 @@ The following headings may be used while categorizing the list of changes made i
 - Documentation
 - Known Issues
 
+## [0.2.1] - May 18, 2026
+
+### Removed Features
+
+- Removed Native Image Support
+- Removed `native` profile from Maven
+
 ## [0.2.0] - May 13, 2026
 
 ### New Features
